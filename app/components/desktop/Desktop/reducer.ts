@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import type { WindowProps } from '../Window';
+import { WindowSizingMode, type WindowProps } from '../Window';
 
 function createWindow(props?: Omit<Partial<WindowProps>, 'id'>): WindowProps {
   return {
@@ -14,6 +14,9 @@ function createWindow(props?: Omit<Partial<WindowProps>, 'id'>): WindowProps {
 
     minWidth: 200,
     minHeight: 200,
+
+    sizingX: WindowSizingMode.FIXED,
+    sizingY: WindowSizingMode.FIXED,
 
     ...props,
   };

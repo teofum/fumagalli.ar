@@ -5,6 +5,14 @@ import { useDesktop } from '../Desktop/context';
 import cn from 'classnames';
 import Button from '~/components/ui/Button';
 
+export enum WindowSizingMode {
+  RESIZABLE = 'standard',
+  FIXED = 'fixed',
+  AUTO = 'auto',
+  MIN_CONTENT = 'min-content',
+  MAX_CONTENT = 'max-content',
+}
+
 export interface WindowProps {
   id: string;
 
@@ -23,10 +31,37 @@ export interface WindowProps {
   minHeight: number;
   maxWidth?: number;
   maxHeight?: number;
+
+  // Sizing mode
+  sizingX: WindowSizingMode;
+  sizingY: WindowSizingMode;
+}
+
+function getSizeValue(mode: WindowSizingMode, value: number) {
+  if (mode === WindowSizingMode.AUTO) return 'auto';
+  if (mode === WindowSizingMode.MIN_CONTENT) return 'min-content';
+  if (mode === WindowSizingMode.MAX_CONTENT) return 'max-content';
+  return `${value}px`;
+}
+
+function getWindowStyleProps({
+  top,
+  left,
+  width,
+  height,
+  sizingX,
+  sizingY,
+}: WindowProps) {
+  return {
+    top: `${top}px`,
+    left: `${left}px`,
+    width: getSizeValue(sizingX, width),
+    height: getSizeValue(sizingY, height),
+  };
 }
 
 export default function Window(props: WindowProps) {
-  const { id, title, icon = 'app', top, left, width, height } = props;
+  const { id, title, icon = 'app', sizingX, sizingY } = props;
   const desktop = useDesktop();
 
   /**
@@ -49,45 +84,73 @@ export default function Window(props: WindowProps) {
   const resizeHandlerSW = useResizeWindow(props, windowRef, 'sw');
   const resizeHandlerW = useResizeWindow(props, windowRef, 'w');
 
+  const canResizeEW = sizingX === WindowSizingMode.RESIZABLE;
+  const canResizeNS = sizingY === WindowSizingMode.RESIZABLE;
+  const canResizeNSEW = canResizeEW && canResizeNS;
+
   const resizeHandles = [
     <div
       key="handle-nw"
-      className="cursor-nwse-resize origin-top-left scale-[2]"
+      className={cn(
+        'cursor-nwse-resize row-start-1 col-start-1',
+        'origin-top-left scale-[2]',
+        { hidden: !canResizeNSEW },
+      )}
       onPointerDown={resizeHandlerNW}
     />,
     <div
       key="handle-n"
-      className="cursor-ns-resize"
+      className={cn('cursor-ns-resize row-start-1 col-start-2', {
+        hidden: !canResizeNS,
+      })}
       onPointerDown={resizeHandlerN}
     />,
     <div
       key="handle-ne"
-      className="cursor-nesw-resize origin-top-right scale-[2]"
+      className={cn(
+        'cursor-nesw-resize row-start-1 col-start-3',
+        'origin-top-right scale-[2]',
+        { hidden: !canResizeNSEW },
+      )}
       onPointerDown={resizeHandlerNE}
     />,
     <div
       key="handle-w"
-      className="cursor-ew-resize"
+      className={cn('cursor-ew-resize row-start-2 col-start-1', {
+        hidden: !canResizeEW,
+      })}
       onPointerDown={resizeHandlerW}
     />,
     <div
       key="handle-e"
-      className="cursor-ew-resize"
+      className={cn('cursor-ew-resize row-start-2 col-start-3', {
+        hidden: !canResizeEW,
+      })}
       onPointerDown={resizeHandlerE}
     />,
     <div
       key="handle-sw"
-      className="cursor-nesw-resize origin-bottom-left scale-[2]"
+      className={cn(
+        'cursor-nesw-resize row-start-3 col-start-1',
+        'origin-bottom-left scale-[2]',
+        { hidden: !canResizeNSEW },
+      )}
       onPointerDown={resizeHandlerSW}
     />,
     <div
       key="handle-s"
-      className="cursor-ns-resize"
+      className={cn('cursor-ns-resize row-start-3 col-start-2', {
+        hidden: !canResizeNS,
+      })}
       onPointerDown={resizeHandlerS}
     />,
     <div
       key="handle-se"
-      className="cursor-nwse-resize origin-bottom-right scale-[2]"
+      className={cn(
+        'cursor-nwse-resize row-start-3 col-start-3',
+        'origin-bottom-right scale-[2]',
+        { hidden: !canResizeNSEW },
+      )}
       onPointerDown={resizeHandlerSE}
     />,
   ];
@@ -110,12 +173,7 @@ export default function Window(props: WindowProps) {
         grid grid-cols-[0.25rem_1fr_0.25rem] grid-rows-[0.25rem_1fr_0.25rem]
         bg-surface bevel-window
       "
-      style={{
-        top: `${top}px`,
-        left: `${left}px`,
-        width: `${width}px`,
-        height: `${height}px`,
-      }}
+      style={getWindowStyleProps(props)}
       onPointerDown={() => desktop.dispatch({ type: 'focus', id })}
     >
       <div className="col-start-2 row-start-2 grid grid-rows-[auto_1fr]">
