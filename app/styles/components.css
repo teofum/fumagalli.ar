@@ -1,5 +1,38 @@
 @layer components {
+  /* Buttons */
   .button {
     @apply bg-surface bevel cursor-default active:bevel-inset p-0.5 select-none;
+  }
+
+  .button:focus {
+    outline: none;
+  }
+
+  .button:focus > * {
+    outline: 1px dotted theme('textColor.default');
+  }
+
+  /* Menus */
+  .menu-content {
+    @apply bg-surface bevel p-1;
+  }
+
+  .menu-item {
+    @apply select-none py-0.5 grid gap-1.5 outline-none;
+
+    grid-template-columns: 1rem 1fr;
+    min-width: 10rem;
+  }
+
+  .menu-item[data-highlighted] {
+    @apply bg-selection text-selection;
+  }
+
+  .menu-item-icon {
+    @apply col-start-1;
+  }
+
+  .menu-item-label {
+    @apply col-start-2;
   }
 }

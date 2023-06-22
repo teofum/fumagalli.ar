@@ -11,6 +11,7 @@ const Button = React.forwardRef<
         className="
           group-active:translate-x-px group-active:translate-y-px
           group-data-[active]:translate-x-px group-data-[active]:translate-y-px
+          group-data-[state=open]:translate-x-px group-data-[state=open]:translate-y-px
         "
       >
         {children}

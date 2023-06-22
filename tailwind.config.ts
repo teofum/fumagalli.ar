@@ -49,6 +49,7 @@ export default {
     extend: {
       backgroundColor: {
         default: 'rgb(var(--color-background) / <alpha-value>)',
+        selection: 'rgb(var(--color-selection-bg) / <alpha-value>)',
       },
       textColor: {
         default: 'rgb(var(--color-text) / <alpha-value>)',
@@ -61,6 +62,8 @@ export default {
         accent: 'rgb(var(--color-text-accent) / <alpha-value>)',
         link: 'rgb(var(--color-text-link) / <alpha-value>)',
         visited: 'rgb(var(--color-text-visited) / <alpha-value>)',
+
+        selection: 'rgb(var(--color-selection-text) / <alpha-value>)',
       },
       borderColor: {
         default: 'rgb(var(--color-text) / <alpha-value>)',

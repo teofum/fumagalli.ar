@@ -23,6 +23,9 @@
   
     --color-text-link: 0 102 204;
     --color-text-visited: 85 26 139;
+
+    --color-selection-bg: 0 0 128;
+    --color-selection-text: 255 255 255;
   
     --color-border: var(--color-darker);
   }
