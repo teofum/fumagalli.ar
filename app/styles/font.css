@@ -1,5 +1,11 @@
 @font-face {
-  font-family: 'DOS-JPN12';
+  font-family: 'HP100LX';
   font-weight: 400;
   src: url('/font/Web437_HP_100LX_6x8.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'DOSJPN12';
+  font-weight: 400;
+  src: url('/font/Web437_DOS-V_re_JPN12.woff') format('woff');
 }

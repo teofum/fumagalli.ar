@@ -107,7 +107,11 @@ export default function Window({ id }: WindowProps) {
             })}
           />
 
-          <span className={cn('bold', { 'text-disabled': !active })}>
+          <span
+            className={cn('font-title text-lg', {
+              'text-disabled': !active,
+            })}
+          >
             Window title
           </span>
 

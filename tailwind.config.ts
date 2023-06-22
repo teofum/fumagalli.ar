@@ -5,10 +5,13 @@ export default {
   content: ['./app/**/*.{js,jsx,ts,tsx}'],
   theme: {
     fontFamily: {
-      sans: 'DOS-JPN12',
+      sans: 'HP100LX',
+      title: 'DOSJPN12',
     },
     fontSize: {
       base: ['0.5rem', '1rem'],
+      lg: ['0.75rem', '1rem'],
+      xl: ['1rem', '1rem']
     },
     fontWeight: {
       normal: '400',
