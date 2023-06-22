@@ -8,6 +8,10 @@ import Button from '~/components/ui/Button';
 export interface WindowProps {
   id: string;
 
+  // Decoration
+  title: string;
+  icon?: string;
+
   // Size and position
   top: number;
   left: number;
@@ -22,7 +26,7 @@ export interface WindowProps {
 }
 
 export default function Window(props: WindowProps) {
-  const { id, top, left, width, height } = props;
+  const { id, title, icon = 'app', top, left, width, height } = props;
   const desktop = useDesktop();
 
   /**
@@ -88,6 +92,13 @@ export default function Window(props: WindowProps) {
     />,
   ];
 
+  const titlebarSpacerClass = cn(
+    'flex-1 h-1.5 border-t border-b border-light',
+    {
+      'border-disabled drop-shadow-disabled': !active,
+    },
+  );
+
   /**
    * Component markup
    */
@@ -112,25 +123,19 @@ export default function Window(props: WindowProps) {
           className="select-none flex flex-row items-center gap-2 px-0.5 py-px mb-0.5"
           onPointerDown={moveHandler}
         >
-          <div
-            className={cn('flex-1 h-1.5 border-t border-b border-light', {
-              'border-disabled drop-shadow-disabled': !active,
-            })}
-          />
+          <img src={`/img/icon/${icon}_16.png`} alt="" />
+
+          <div className={titlebarSpacerClass} />
 
           <span
             className={cn('font-title text-lg', {
               'text-disabled': !active,
             })}
           >
-            Window title
+            {title}
           </span>
 
-          <div
-            className={cn('flex-1 h-1.5 border-t border-b border-light', {
-              'border-disabled drop-shadow-disabled': !active,
-            })}
-          />
+          <div className={titlebarSpacerClass} />
 
           <Button onClick={() => desktop.dispatch({ type: 'close', id })}>
             <img src="/img/ui/close.png" alt="Close" />

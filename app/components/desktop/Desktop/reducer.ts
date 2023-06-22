@@ -5,6 +5,8 @@ function createWindow(props?: Omit<Partial<WindowProps>, 'id'>): WindowProps {
   return {
     id: nanoid(),
 
+    title: 'New Window',
+
     top: 200,
     left: 200,
     width: 640,
