@@ -1,9 +1,11 @@
 import About from './About';
 import Intro from './Intro';
+import Minesweeper from './Minesweeper';
 
 export enum ApplicationType {
   ABOUT = 'about',
   INTRO = 'intro',
+  MINESWEEPER = 'minesweeper',
 }
 
 interface AppOutletProps {
@@ -16,6 +18,8 @@ export default function AppOutlet({ type }: AppOutletProps) {
       return <About />;
     case ApplicationType.INTRO:
       return <Intro />;
+    case ApplicationType.MINESWEEPER:
+      return <Minesweeper />;
     default:
       return <div>Unknown application {type}</div>;
   }

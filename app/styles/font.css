@@ -33,3 +33,9 @@
   font-weight: 400;
   src: url('/font/Web437_Paradise132_7x16.woff') format('woff');
 }
+
+@font-face {
+  font-family: 'Nix8810_M15';
+  font-weight: 400;
+  src: url('/font/Web437_Nix8810_M15.woff') format('woff');
+}

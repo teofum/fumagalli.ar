@@ -68,6 +68,11 @@
       inset 1px 1px 0 0 theme('colors.surface-lighter');
   }
 
+  .bevel-light-inset {
+    box-shadow: inset -1px -1px 0 0 theme('colors.surface-lighter'),
+      inset 1px 1px 0 0 theme('colors.surface-dark');
+  }
+
   /* Alt version of regular bevel, used for windows */
   .bevel-window {
     box-shadow: inset -1px -1px 0 0 theme('colors.surface-darker'),

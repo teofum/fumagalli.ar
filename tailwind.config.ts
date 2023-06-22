@@ -9,6 +9,7 @@ export default {
       title: '"MS Sans Serif"',
       display: 'DOSJPN24',
       text: 'Paradise132',
+      minesweeper: 'Nix8810_M15',
     },
     fontSize: {
       base: ['0.6875rem', '1rem'],

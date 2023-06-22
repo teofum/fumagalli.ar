@@ -6,6 +6,7 @@ import cn from 'classnames';
 import Button from '~/components/ui/Button';
 import type { ApplicationType } from '~/components/apps/renderApp';
 import AppOutlet from '~/components/apps/renderApp';
+import { WindowProvider } from './context';
 
 export enum WindowSizingMode {
   RESIZABLE = 'standard',
@@ -248,7 +249,9 @@ export default function Window(props: WindowProps) {
           </div>
         </div>
 
-        <AppOutlet type={appType} />
+        <WindowProvider value={props}>
+          <AppOutlet type={appType} />
+        </WindowProvider>
       </div>
 
       {!maximized ? resizeHandles : null}

@@ -3,6 +3,7 @@ import Button from '../ui/Button';
 import Menu from '../ui/Menu';
 import { about } from '../apps/About';
 import { intro } from '../apps/Intro';
+import { minesweeper } from '../apps/Minesweeper';
 
 export default function StartMenu() {
   const { launch } = useDesktop();
@@ -16,7 +17,7 @@ export default function StartMenu() {
       }
       contentProps={{ side: 'top' }}
     >
-      {[about, intro].map((app) => (
+      {[about, intro, minesweeper].map((app) => (
         <Menu.Item
           key={app.appType}
           label={app.title ?? ''}

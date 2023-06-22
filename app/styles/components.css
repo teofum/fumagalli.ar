@@ -18,21 +18,13 @@
   }
 
   .menu-item {
-    @apply select-none py-0.5 grid gap-1.5 outline-none;
+    @apply select-none p-0.5 grid gap-1 outline-none;
 
     grid-template-columns: 1rem 1fr;
-    min-width: 10rem;
+    min-width: 8rem;
   }
 
   .menu-item[data-highlighted] {
     @apply bg-selection text-selection;
-  }
-
-  .menu-item-icon {
-    @apply col-start-1;
-  }
-
-  .menu-item-label {
-    @apply col-start-2;
   }
 }

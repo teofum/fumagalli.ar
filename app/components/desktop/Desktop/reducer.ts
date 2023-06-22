@@ -76,8 +76,6 @@ export default function desktopReducer(
   state: DesktopState,
   action: DesktopAction,
 ): DesktopState {
-  console.log(action.type);
-
   switch (action.type) {
     case 'create': {
       const previous = state.windows.map((window) => ({
