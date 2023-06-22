@@ -14,7 +14,7 @@
 
   /* Menus */
   .menu-content {
-    @apply bg-surface bevel p-1;
+    @apply bg-surface bevel p-1 z-2000;
   }
 
   .menu-item {

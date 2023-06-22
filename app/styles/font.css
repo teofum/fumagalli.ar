@@ -11,9 +11,9 @@
 }
 
 @font-face {
-  font-family: 'px_sans_nouveaux';
+  font-family: 'MS Sans Serif';
   font-weight: 400;
-  src: url('/font/px_sans_nouveaux.woff2') format('woff2');
+  src: url('/font/MS_Sans_Serif.woff2') format('woff2');
 }
 
 @font-face {

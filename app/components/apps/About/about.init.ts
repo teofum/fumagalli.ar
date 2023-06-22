@@ -7,7 +7,9 @@ export const about: WindowInit = {
   title: 'About this website',
   icon: 'info',
 
-  width: 320,
+  top: 100,
+  left: 100,
+  width: 400,
 
   sizingX: WindowSizingMode.FIXED,
   sizingY: WindowSizingMode.AUTO,

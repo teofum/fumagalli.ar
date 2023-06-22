@@ -5,13 +5,13 @@ export default {
   content: ['./app/**/*.{js,jsx,ts,tsx}'],
   theme: {
     fontFamily: {
-      sans: 'px_sans_nouveaux',
-      title: 'px_sans_nouveaux',
+      sans: '"MS Sans Serif"',
+      title: '"MS Sans Serif"',
       display: 'DOSJPN24',
       text: 'Paradise132',
     },
     fontSize: {
-      base: ['0.5rem', '1rem'],
+      base: ['0.6875rem', '1rem'],
       lg: ['0.75rem', '1rem'],
       xl: ['1rem', '1.25rem'],
       '2xl': ['1.5rem', '1'],
@@ -45,6 +45,14 @@ export default {
     },
     dropShadow: {
       disabled: '1px 1px 0 rgb(var(--color-text-disabled-shadow))',
+    },
+    zIndex: {
+      1000: '1000',
+      2000: '2000',
+      3000: '3000',
+      4000: '4000',
+      5000: '5000',
+      6000: '6000',
     },
     extend: {
       backgroundColor: {
