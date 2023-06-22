@@ -4,8 +4,8 @@ export default function About() {
   return (
     <div className="bg-surface bevel-content p-8 text-center select-none flex flex-col">
       <h1 className="font-display text-4xl text-inset mb-6">
-        <span className="tracking-[-4px] mr-1.5">Te</span>
-        <span>OS</span>
+        <span className="mr-1">Te</span>
+        <span className="tracking-[2px]">OS</span>
       </h1>
 
       <p>TeOS v{VERSION}</p>

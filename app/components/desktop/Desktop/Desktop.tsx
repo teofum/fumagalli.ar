@@ -3,10 +3,11 @@ import Window from '../Window';
 import desktopReducer, { createWindow } from './reducer';
 import { DesktopProvider } from './context';
 import { about } from '~/components/apps/About';
+import { intro } from '~/components/apps/Intro';
 
 export default function Desktop() {
   const [state, dispatch] = useReducer(desktopReducer, {
-    windows: [createWindow(about)],
+    windows: [createWindow(about), createWindow(intro)],
   });
 
   return (

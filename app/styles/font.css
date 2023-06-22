@@ -11,7 +11,13 @@
 }
 
 @font-face {
-  font-family: 'DOSANK24';
+  font-family: 'DOSJPN24';
   font-weight: 400;
-  src: url('/font/Web437_DOS-V_re_ANK24.woff') format('woff');
+  src: url('/font/Web437_DOS-V_re_JPN24.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Paradise132';
+  font-weight: 400;
+  src: url('/font/Web437_Paradise132_7x16.woff') format('woff');
 }
