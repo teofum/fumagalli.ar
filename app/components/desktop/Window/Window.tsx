@@ -3,6 +3,7 @@ import useMoveWindow from './useMoveWindow';
 import useResizeWindow from './useResizeWindow';
 import { useDesktop } from '../Desktop/context';
 import cn from 'classnames';
+import Button from '~/components/ui/Button';
 
 const defaultStyle = {
   top: 0,
@@ -88,28 +89,41 @@ export default function Window({ id }: WindowProps) {
     <div
       ref={windowRef}
       className="
-        touch-none fixed bg-white
+        touch-none fixed
         grid grid-cols-[0.25rem_1fr_0.25rem] grid-rows-[0.25rem_1fr_0.25rem]
+        bg-surface bevel-window
       "
       style={defaultStyle}
       onPointerDown={() => desktop.dispatch({ type: 'focus', id })}
     >
       <div className="col-start-2 row-start-2 grid grid-rows-[auto_1fr]">
         <div
-          className={cn('select-none flex flex-row items-center', {
-            'bg-blue-400': active,
-            'bg-gray-400': !active,
-          })}
+          className="select-none flex flex-row items-center gap-2 px-0.5 py-px mb-0.5"
           onPointerDown={moveHandler}
         >
-          <span>Hi! I'm {id}</span>
+          <div
+            className={cn('flex-1 h-1.5 border-t border-b border-light', {
+              'border-disabled drop-shadow-disabled': !active,
+            })}
+          />
 
-          <button
-            className="px-1 bg-red-500 text-white ml-auto"
-            onClick={() => desktop.dispatch({ type: 'close', id })}
-          >
-            x
-          </button>
+          <span className={cn('bold', { 'text-disabled': !active })}>
+            Window title
+          </span>
+
+          <div
+            className={cn('flex-1 h-1.5 border-t border-b border-light', {
+              'border-disabled drop-shadow-disabled': !active,
+            })}
+          />
+
+          <Button onClick={() => desktop.dispatch({ type: 'close', id })}>
+            <img src="/img/ui/close.png" alt="Close" />
+          </Button>
+        </div>
+
+        <div className="bg-default bevel-content">
+          <div className="w-full h-full p-4">Hi! I'm window {id}</div>
         </div>
       </div>
 

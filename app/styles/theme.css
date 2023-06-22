@@ -1,0 +1,29 @@
+@layer base {
+  :root {
+    --color-desktop: 0 128 128;
+    --color-background: 255 255 255;
+    --color-highlight: 255 255 128;
+  
+    --color-surface: 192 192 192;
+    --color-dark: 128 128 128;
+    --color-darker: 0 0 0;
+    --color-light: 222 222 222;
+    --color-lighter: 255 255 255;
+  
+    --color-title: var(--color-darker);
+    --color-text: var(--color-darker);
+    --color-text-heading: var(--color-text);
+    --color-text-heading-2: var(--color-text-heading);
+    --color-text-heading-3: var(--color-text-heading);
+  
+    --color-text-light: var(--color-dark);
+    --color-text-disabled: var(--color-dark);
+    --color-text-disabled-shadow: var(--color-lighter);
+    --color-text-accent: 0 128 128;
+  
+    --color-text-link: 0 102 204;
+    --color-text-visited: 85 26 139;
+  
+    --color-border: var(--color-darker);
+  }
+}
