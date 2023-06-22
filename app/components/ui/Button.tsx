@@ -6,15 +6,13 @@ const Button = React.forwardRef<
   React.ComponentProps<'button'>
 >(function Button({ children, className, ...props }, ref) {
   return (
-    <button
-      className={cn(
-        'bg-surface bevel cursor-default group active:bevel-inset p-0.5',
-        className,
-      )}
-      {...props}
-      ref={ref}
-    >
-      <div className="group-active:translate-x-px group-active:translate-y-px">
+    <button className={cn('button group', className)} {...props} ref={ref}>
+      <div
+        className="
+          group-active:translate-x-px group-active:translate-y-px
+          group-data-[active]:translate-x-px group-data-[active]:translate-y-px
+        "
+      >
         {children}
       </div>
     </button>

@@ -15,6 +15,8 @@ export function createWindow(props: WindowInit): WindowProps {
     height: 480,
 
     maximized: false,
+    focused: true,
+    order: 0,
 
     minWidth: 200,
     minHeight: 200,
@@ -74,21 +76,40 @@ export default function desktopReducer(
   state: DesktopState,
   action: DesktopAction,
 ): DesktopState {
+  console.log(action.type);
+
   switch (action.type) {
     case 'create': {
+      const previous = state.windows.map((window) => ({
+        ...window,
+        focused: false,
+      }));
+
+      const newWindow = createWindow(action.data);
+      newWindow.order = previous.length;
+
       return {
         ...state,
-        windows: [...state.windows, createWindow(action.data)],
+        windows: [...previous, newWindow],
       };
     }
     case 'focus': {
       const target = state.windows.find(({ id }) => id === action.id);
-      const rest = state.windows.filter(({ id }) => id !== action.id);
-
       if (!target) return state;
+
+      const topOrder = state.windows.length - 1;
       return {
         ...state,
-        windows: [...rest, target],
+        windows: state.windows.map((window) => ({
+          ...window,
+          focused: window.id === target.id,
+          order:
+            window.id === target.id
+              ? topOrder // Bring target to top
+              : window.order > target.order
+              ? window.order - 1 // Lower any window that was on top of target by 1
+              : window.order, // Keep the rest the same
+        })),
       };
     }
     case 'moveAndResize': {

@@ -5,8 +5,8 @@ export default {
   content: ['./app/**/*.{js,jsx,ts,tsx}'],
   theme: {
     fontFamily: {
-      sans: 'HP100LX',
-      title: 'DOSJPN12',
+      sans: 'px_sans_nouveaux',
+      title: 'px_sans_nouveaux',
       display: 'DOSJPN24',
       text: 'Paradise132',
     },

@@ -1,0 +1,5 @@
+@layer components {
+  .button {
+    @apply bg-surface bevel cursor-default active:bevel-inset p-0.5 select-none;
+  }
+}

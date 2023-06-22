@@ -1,14 +1,14 @@
 @import './tailwind.css';
-@import './theme.css';
-@import './utils.css';
 @import './font.css';
+@import './theme.css';
+@import './components.css';
+@import './utils.css';
 
 @layer base {
   body {
     @apply text-base;
 
     overflow: hidden;
-    filter: grayscale(0.00001); /* Font antialiasing hack */
   }
 
   img {

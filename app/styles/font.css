@@ -5,6 +5,18 @@
 }
 
 @font-face {
+  font-family: 'IBMModel3x';
+  font-weight: 400;
+  src: url('/font/Web437_IBM_Model3x_Alt1.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'px_sans_nouveaux';
+  font-weight: 400;
+  src: url('/font/px_sans_nouveaux.woff2') format('woff2');
+}
+
+@font-face {
   font-family: 'DOSJPN12';
   font-weight: 400;
   src: url('/font/Web437_DOS-V_re_JPN12.woff') format('woff');

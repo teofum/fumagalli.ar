@@ -31,6 +31,8 @@ export interface WindowProps {
 
   // State
   maximized: boolean;
+  focused: boolean;
+  order: number;
 
   // Constraints
   minWidth: number;
@@ -46,7 +48,10 @@ export interface WindowProps {
   maximizable: boolean;
 }
 
-export type WindowInit = Omit<Partial<WindowProps>, 'id' | 'appType'> &
+export type WindowInit = Omit<
+  Partial<WindowProps>,
+  'id' | 'focused' | 'order' | 'appType'
+> &
   Pick<WindowProps, 'appType'>;
 
 function getSizeValue(mode: WindowSizingMode, value: number) {
@@ -64,6 +69,7 @@ function getWindowStyleProps({
   sizingX,
   sizingY,
   maximized,
+  order,
 }: WindowProps) {
   if (maximized)
     return {
@@ -71,6 +77,7 @@ function getWindowStyleProps({
       left: '0',
       width: '100%',
       height: '100%',
+      zIndex: order,
     };
 
   return {
@@ -78,17 +85,13 @@ function getWindowStyleProps({
     left: `${left}px`,
     width: getSizeValue(sizingX, width),
     height: getSizeValue(sizingY, height),
+    zIndex: order,
   };
 }
 
 export default function Window(props: WindowProps) {
-  const { id, appType, title, icon, sizingX, sizingY, maximized } = props;
+  const { id, appType, title, icon, maximized, focused } = props;
   const desktop = useDesktop();
-
-  /**
-   * Derived window props
-   */
-  const active = desktop.state.windows.at(-1)?.id === id;
 
   /**
    * Move/resize handling
@@ -105,8 +108,8 @@ export default function Window(props: WindowProps) {
   const resizeHandlerSW = useResizeWindow(props, windowRef, 'sw');
   const resizeHandlerW = useResizeWindow(props, windowRef, 'w');
 
-  const canResizeEW = sizingX === WindowSizingMode.RESIZABLE;
-  const canResizeNS = sizingY === WindowSizingMode.RESIZABLE;
+  const canResizeEW = props.sizingX === WindowSizingMode.RESIZABLE;
+  const canResizeNS = props.sizingY === WindowSizingMode.RESIZABLE;
   const canResizeNSEW = canResizeEW && canResizeNS;
 
   const resizeHandles = [
@@ -179,7 +182,7 @@ export default function Window(props: WindowProps) {
   const titlebarSpacerClass = cn(
     'flex-1 h-1.5 border-t border-b border-light',
     {
-      'border-disabled drop-shadow-disabled': !active,
+      'border-disabled drop-shadow-disabled': !focused,
     },
   );
 
@@ -217,11 +220,11 @@ export default function Window(props: WindowProps) {
         >
           <img src={`/img/icon/${icon}_16.png`} alt="" />
 
-          <div className={titlebarSpacerClass} />
+          {/* <div className={titlebarSpacerClass} /> */}
 
           <span
-            className={cn('font-title text-lg', {
-              'text-disabled': !active,
+            className={cn('font-title bold', {
+              'text-disabled': !focused,
             })}
           >
             {title}
@@ -234,7 +237,7 @@ export default function Window(props: WindowProps) {
               <Button onClick={toggleMaximized}>
                 {maximized ? (
                   <img src="/img/ui/restore.png" alt="Restore" />
-                  ) : (
+                ) : (
                   <img src="/img/ui/max.png" alt="Maximize" />
                 )}
               </Button>
