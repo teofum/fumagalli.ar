@@ -18,13 +18,16 @@ export interface WindowProps {
 
   // Decoration
   title: string;
-  icon?: string;
+  icon: string;
 
   // Size and position
   top: number;
   left: number;
   width: number;
   height: number;
+
+  // State
+  maximized: boolean;
 
   // Constraints
   minWidth: number;
@@ -35,6 +38,9 @@ export interface WindowProps {
   // Sizing mode
   sizingX: WindowSizingMode;
   sizingY: WindowSizingMode;
+
+  // Features
+  maximizable: boolean;
 }
 
 function getSizeValue(mode: WindowSizingMode, value: number) {
@@ -51,7 +57,16 @@ function getWindowStyleProps({
   height,
   sizingX,
   sizingY,
+  maximized,
 }: WindowProps) {
+  if (maximized)
+    return {
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: '100%',
+    };
+
   return {
     top: `${top}px`,
     left: `${left}px`,
@@ -61,7 +76,7 @@ function getWindowStyleProps({
 }
 
 export default function Window(props: WindowProps) {
-  const { id, title, icon = 'app', sizingX, sizingY } = props;
+  const { id, title, icon, sizingX, sizingY, maximized } = props;
   const desktop = useDesktop();
 
   /**
@@ -74,7 +89,7 @@ export default function Window(props: WindowProps) {
    */
   const windowRef = useRef<HTMLDivElement>(null);
 
-  const moveHandler = useMoveWindow(id, windowRef);
+  const moveHandler = useMoveWindow(props, windowRef);
   const resizeHandlerNW = useResizeWindow(props, windowRef, 'nw');
   const resizeHandlerN = useResizeWindow(props, windowRef, 'n');
   const resizeHandlerNE = useResizeWindow(props, windowRef, 'ne');
@@ -163,6 +178,18 @@ export default function Window(props: WindowProps) {
   );
 
   /**
+   * Helper functions
+   */
+  const toggleMaximized = () => {
+    if (!props.maximizable) return;
+    desktop.dispatch({ type: 'toggleMaximized', id });
+  };
+
+  const close = () => {
+    desktop.dispatch({ type: 'close', id });
+  };
+
+  /**
    * Component markup
    */
   return (
@@ -179,7 +206,8 @@ export default function Window(props: WindowProps) {
       <div className="col-start-2 row-start-2 grid grid-rows-[auto_1fr]">
         <div
           className="select-none flex flex-row items-center gap-2 px-0.5 py-px mb-0.5"
-          onPointerDown={moveHandler}
+          onPointerDown={maximized ? undefined : moveHandler}
+          onDoubleClick={toggleMaximized}
         >
           <img src={`/img/icon/${icon}_16.png`} alt="" />
 
@@ -195,9 +223,20 @@ export default function Window(props: WindowProps) {
 
           <div className={titlebarSpacerClass} />
 
-          <Button onClick={() => desktop.dispatch({ type: 'close', id })}>
-            <img src="/img/ui/close.png" alt="Close" />
-          </Button>
+          <div className="flex flex-row">
+            {props.maximizable ? (
+              <Button onClick={toggleMaximized}>
+                {maximized ? (
+                  <img src="/img/ui/restore.png" alt="Restore" />
+                  ) : (
+                  <img src="/img/ui/max.png" alt="Maximize" />
+                )}
+              </Button>
+            ) : null}
+            <Button onClick={close}>
+              <img src="/img/ui/close.png" alt="Close" />
+            </Button>
+          </div>
         </div>
 
         <div className="bg-default bevel-content">
@@ -205,7 +244,7 @@ export default function Window(props: WindowProps) {
         </div>
       </div>
 
-      {resizeHandles}
+      {!maximized ? resizeHandles : null}
     </div>
   );
 }

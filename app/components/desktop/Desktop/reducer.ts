@@ -6,17 +6,22 @@ function createWindow(props?: Omit<Partial<WindowProps>, 'id'>): WindowProps {
     id: nanoid(),
 
     title: 'New Window',
+    icon: 'app',
 
     top: 200,
     left: 200,
     width: 640,
     height: 480,
 
+    maximized: false,
+
     minWidth: 200,
     minHeight: 200,
 
     sizingX: WindowSizingMode.FIXED,
     sizingY: WindowSizingMode.FIXED,
+
+    maximizable: true,
 
     ...props,
   };
@@ -47,6 +52,11 @@ interface MoveAndResizeAction {
   };
 }
 
+interface ToggleMaximizedAction {
+  type: 'toggleMaximized';
+  id: string;
+}
+
 interface CloseAction {
   type: 'close';
   id: string;
@@ -56,6 +66,7 @@ type DesktopAction =
   | CreateAction
   | FocusAction
   | MoveAndResizeAction
+  | ToggleMaximizedAction
   | CloseAction;
 
 export default function desktopReducer(
@@ -86,6 +97,20 @@ export default function desktopReducer(
 
       if (!updated) return state;
 
+      return {
+        ...state,
+        windows: updated,
+      };
+    }
+    case 'toggleMaximized': {
+      const target = state.windows.find(({ id }) => id === action.id);
+      if (!target || !target.maximizable) return state;
+
+      const updated = state.windows.map((window) =>
+        window.id === action.id
+          ? { ...window, maximized: !window.maximized }
+          : window,
+      );
       return {
         ...state,
         windows: updated,

@@ -1,8 +1,9 @@
 import { useDesktop } from '../Desktop/context';
+import type { WindowProps } from './Window';
 import useDrag from './useDrag';
 
 export default function useMoveWindow(
-  id: string,
+  { id, maximized }: WindowProps,
   windowRef: React.RefObject<HTMLDivElement>,
 ) {
   const desktop = useDesktop();
@@ -31,8 +32,8 @@ export default function useMoveWindow(
     const newX = ev.clientX + offsetX;
     const newY = ev.clientY + offsetY;
 
-    el.style.setProperty('top', `${~~(newY)}px`);
-    el.style.setProperty('left', `${~~(newX)}px`);
+    el.style.setProperty('top', `${~~newY}px`);
+    el.style.setProperty('left', `${~~newX}px`);
   };
 
   const onDragEnd = () => {
