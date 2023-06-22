@@ -18,8 +18,8 @@ function createWindow(props?: Omit<Partial<WindowProps>, 'id'>): WindowProps {
     minWidth: 200,
     minHeight: 200,
 
-    sizingX: WindowSizingMode.FIXED,
-    sizingY: WindowSizingMode.FIXED,
+    sizingX: WindowSizingMode.RESIZABLE,
+    sizingY: WindowSizingMode.RESIZABLE,
 
     maximizable: true,
 
