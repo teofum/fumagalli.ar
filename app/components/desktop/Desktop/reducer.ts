@@ -1,13 +1,18 @@
 import { nanoid } from 'nanoid';
 import type { WindowProps } from '../Window';
 
-function createWindow(props?: Partial<WindowProps>): WindowProps {
+function createWindow(props?: Omit<Partial<WindowProps>, 'id'>): WindowProps {
   return {
     id: nanoid(),
+
     top: 200,
     left: 200,
     width: 640,
     height: 480,
+
+    minWidth: 200,
+    minHeight: 200,
+
     ...props,
   };
 }
@@ -18,6 +23,7 @@ interface DesktopState {
 
 interface CreateAction {
   type: 'create';
+  data?: Omit<Partial<WindowProps>, 'id'>;
 }
 
 interface FocusAction {
@@ -55,7 +61,7 @@ export default function desktopReducer(
     case 'create': {
       return {
         ...state,
-        windows: [...state.windows, createWindow()],
+        windows: [...state.windows, createWindow(action.data)],
       };
     }
     case 'focus': {

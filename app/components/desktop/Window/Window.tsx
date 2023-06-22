@@ -8,13 +8,21 @@ import Button from '~/components/ui/Button';
 export interface WindowProps {
   id: string;
 
+  // Size and position
   top: number;
   left: number;
   width: number;
   height: number;
+
+  // Constraints
+  minWidth: number;
+  minHeight: number;
+  maxWidth?: number;
+  maxHeight?: number;
 }
 
-export default function Window({ id, top, left, width, height }: WindowProps) {
+export default function Window(props: WindowProps) {
+  const { id, top, left, width, height } = props;
   const desktop = useDesktop();
 
   /**
@@ -28,14 +36,14 @@ export default function Window({ id, top, left, width, height }: WindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
 
   const moveHandler = useMoveWindow(id, windowRef);
-  const resizeHandlerNW = useResizeWindow(id, windowRef, 'nw');
-  const resizeHandlerN = useResizeWindow(id, windowRef, 'n');
-  const resizeHandlerNE = useResizeWindow(id, windowRef, 'ne');
-  const resizeHandlerE = useResizeWindow(id, windowRef, 'e');
-  const resizeHandlerSE = useResizeWindow(id, windowRef, 'se');
-  const resizeHandlerS = useResizeWindow(id, windowRef, 's');
-  const resizeHandlerSW = useResizeWindow(id, windowRef, 'sw');
-  const resizeHandlerW = useResizeWindow(id, windowRef, 'w');
+  const resizeHandlerNW = useResizeWindow(props, windowRef, 'nw');
+  const resizeHandlerN = useResizeWindow(props, windowRef, 'n');
+  const resizeHandlerNE = useResizeWindow(props, windowRef, 'ne');
+  const resizeHandlerE = useResizeWindow(props, windowRef, 'e');
+  const resizeHandlerSE = useResizeWindow(props, windowRef, 'se');
+  const resizeHandlerS = useResizeWindow(props, windowRef, 's');
+  const resizeHandlerSW = useResizeWindow(props, windowRef, 'sw');
+  const resizeHandlerW = useResizeWindow(props, windowRef, 'w');
 
   const resizeHandles = [
     <div
@@ -79,8 +87,6 @@ export default function Window({ id, top, left, width, height }: WindowProps) {
       onPointerDown={resizeHandlerSE}
     />,
   ];
-
-  console.log('render', id);
 
   /**
    * Component markup
