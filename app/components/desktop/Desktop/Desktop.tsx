@@ -1,19 +1,17 @@
 import { useReducer } from 'react';
 import Window from '../Window';
-import desktopReducer from './reducer';
+import desktopReducer, { createWindow } from './reducer';
 import { DesktopProvider } from './context';
-import Button from '~/components/ui/Button';
+import { about } from '~/components/apps/About';
 
 export default function Desktop() {
-  const [state, dispatch] = useReducer(desktopReducer, { windows: [] });
+  const [state, dispatch] = useReducer(desktopReducer, {
+    windows: [createWindow(about)],
+  });
 
   return (
     <DesktopProvider state={state} dispatch={dispatch}>
       <div className="w-screen h-screen bg-desktop">
-        <Button onClick={() => dispatch({ type: 'create' })}>
-          <div className="px-1 py-0.5">New window</div>
-        </Button>
-
         {state.windows.map((window) => (
           <Window key={window.id} {...window} />
         ))}

@@ -9,3 +9,9 @@
   font-weight: 400;
   src: url('/font/Web437_DOS-V_re_JPN12.woff') format('woff');
 }
+
+@font-face {
+  font-family: 'DOSANK24';
+  font-weight: 400;
+  src: url('/font/Web437_DOS-V_re_ANK24.woff') format('woff');
+}

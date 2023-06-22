@@ -4,6 +4,8 @@ import useResizeWindow from './useResizeWindow';
 import { useDesktop } from '../Desktop/context';
 import cn from 'classnames';
 import Button from '~/components/ui/Button';
+import type { ApplicationType } from '~/components/apps/renderApp';
+import AppOutlet from '~/components/apps/renderApp';
 
 export enum WindowSizingMode {
   RESIZABLE = 'standard',
@@ -15,6 +17,7 @@ export enum WindowSizingMode {
 
 export interface WindowProps {
   id: string;
+  appType: ApplicationType;
 
   // Decoration
   title: string;
@@ -42,6 +45,9 @@ export interface WindowProps {
   // Features
   maximizable: boolean;
 }
+
+export type WindowInit = Omit<Partial<WindowProps>, 'id' | 'appType'> &
+  Pick<WindowProps, 'appType'>;
 
 function getSizeValue(mode: WindowSizingMode, value: number) {
   if (mode === WindowSizingMode.AUTO) return 'auto';
@@ -76,7 +82,7 @@ function getWindowStyleProps({
 }
 
 export default function Window(props: WindowProps) {
-  const { id, title, icon, sizingX, sizingY, maximized } = props;
+  const { id, appType, title, icon, sizingX, sizingY, maximized } = props;
   const desktop = useDesktop();
 
   /**
@@ -239,9 +245,7 @@ export default function Window(props: WindowProps) {
           </div>
         </div>
 
-        <div className="bg-default bevel-content">
-          <div className="w-full h-full p-4">Hi! I'm window {id}</div>
-        </div>
+        <AppOutlet type={appType} />
       </div>
 
       {!maximized ? resizeHandles : null}

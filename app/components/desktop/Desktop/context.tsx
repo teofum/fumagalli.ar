@@ -5,24 +5,30 @@ import type {
   ReducerState,
 } from 'react';
 import { createContext, useContext } from 'react';
+
 import type desktopReducer from './reducer';
+import type { WindowInit } from '../Window';
 
 interface DesktopContextType {
   state: ReducerState<typeof desktopReducer>;
   dispatch: Dispatch<ReducerAction<typeof desktopReducer>>;
+  launch: (app: WindowInit) => void;
 }
 
 const DesktopContext = createContext<DesktopContextType>(
   {} as DesktopContextType,
 );
 
-export function DesktopProvider({
-  state,
-  dispatch,
-  children,
-}: PropsWithChildren<DesktopContextType>) {
+type ProviderProps = PropsWithChildren<{
+  state: ReducerState<typeof desktopReducer>;
+  dispatch: Dispatch<ReducerAction<typeof desktopReducer>>;
+}>;
+
+export function DesktopProvider({ state, dispatch, children }: ProviderProps) {
+  const launch = (app: WindowInit) => dispatch({ type: 'create', data: app });
+
   return (
-    <DesktopContext.Provider value={{ state, dispatch }}>
+    <DesktopContext.Provider value={{ state, dispatch, launch }}>
       {children}
     </DesktopContext.Provider>
   );

@@ -7,11 +7,15 @@ export default {
     fontFamily: {
       sans: 'HP100LX',
       title: 'DOSJPN12',
+      display: 'DOSANK24',
     },
     fontSize: {
       base: ['0.5rem', '1rem'],
       lg: ['0.75rem', '1rem'],
-      xl: ['1rem', '1rem']
+      xl: ['1rem', '1'],
+      '2xl': ['1.5rem', '1'],
+      '3xl': ['2rem', '1'],
+      '4xl': ['3rem', '1'],
     },
     fontWeight: {
       normal: '400',

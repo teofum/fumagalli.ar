@@ -1,7 +1,8 @@
 import { nanoid } from 'nanoid';
-import { WindowSizingMode, type WindowProps } from '../Window';
+import type { WindowProps, WindowInit } from '../Window';
+import { WindowSizingMode } from '../Window';
 
-function createWindow(props?: Omit<Partial<WindowProps>, 'id'>): WindowProps {
+export function createWindow(props: WindowInit): WindowProps {
   return {
     id: nanoid(),
 
@@ -33,7 +34,7 @@ interface DesktopState {
 
 interface CreateAction {
   type: 'create';
-  data?: Omit<Partial<WindowProps>, 'id'>;
+  data: WindowInit;
 }
 
 interface FocusAction {

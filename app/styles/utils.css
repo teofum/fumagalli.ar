@@ -9,6 +9,12 @@
     @apply drop-shadow-disabled;
   }
 
+  .text-inset {
+    color: theme('colors.surface');
+    text-shadow: -1px -1px theme('colors.surface-dark'),
+      1px 1px theme('colors.surface-lighter');
+  }
+
   .bevel {
     box-shadow: inset -1px -1px 0 0 theme('colors.surface-darker'),
       inset 1px 1px 0 0 theme('colors.surface-lighter'),

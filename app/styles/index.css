@@ -14,4 +14,13 @@
   img {
     image-rendering: pixelated;
   }
+
+  a {
+    color: theme('textColor.link');
+    text-decoration: underline 1px solid;
+  }
+
+  a:visited {
+    color: theme('textColor.visited');
+  }
 }
