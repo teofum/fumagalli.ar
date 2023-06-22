@@ -1,6 +1,8 @@
 import { useRef } from 'react';
 import useMoveWindow from './useMoveWindow';
 import useResizeWindow from './useResizeWindow';
+import { useDesktop } from '../Desktop/context';
+import cn from 'classnames';
 
 const defaultStyle = {
   top: 0,
@@ -9,7 +11,21 @@ const defaultStyle = {
   height: 400,
 };
 
-export default function Window() {
+export interface WindowProps {
+  id: string;
+}
+
+export default function Window({ id }: WindowProps) {
+  const desktop = useDesktop();
+
+  /**
+   * Derived window props
+   */
+  const active = desktop.state.windows.at(-1)?.id === id;
+
+  /**
+   * Move/resize handling
+   */
   const windowRef = useRef<HTMLDivElement>(null);
 
   const moveHandler = useMoveWindow(windowRef);
@@ -65,6 +81,9 @@ export default function Window() {
     />,
   ];
 
+  /**
+   * Component markup
+   */
   return (
     <div
       ref={windowRef}
@@ -73,13 +92,24 @@ export default function Window() {
         grid grid-cols-[0.25rem_1fr_0.25rem] grid-rows-[0.25rem_1fr_0.25rem]
       "
       style={defaultStyle}
+      onPointerDown={() => desktop.dispatch({ type: 'focus', id })}
     >
-      <div className="col-start-2 row-start-2">
+      <div className="col-start-2 row-start-2 grid grid-rows-[auto_1fr]">
         <div
-          className="w-full bg-blue-300 border-b border-black p-1 select-none"
+          className={cn('select-none flex flex-row items-center', {
+            'bg-blue-400': active,
+            'bg-gray-400': !active,
+          })}
           onPointerDown={moveHandler}
         >
-          <span>Hi</span>
+          <span>Hi! I'm {id}</span>
+
+          <button
+            className="px-1 bg-red-500 text-white ml-auto"
+            onClick={() => desktop.dispatch({ type: 'close', id })}
+          >
+            x
+          </button>
         </div>
       </div>
 

@@ -1,6 +1,5 @@
 import type { V2_MetaFunction } from '@remix-run/node';
 import Desktop from '~/components/desktop/Desktop';
-import Window from '~/components/desktop/Window';
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -11,8 +10,6 @@ export const meta: V2_MetaFunction = () => {
 
 export default function Index() {
   return (
-    <Desktop>
-      <Window />
-    </Desktop>
+    <Desktop />
   );
 }
