@@ -1,0 +1,84 @@
+import useDrag from './useDrag';
+
+export default function useResizeWindow(
+  windowRef: React.RefObject<HTMLDivElement>,
+  direction: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw',
+) {
+  const onDragStart = (ev: PointerEvent) => {
+    const el = windowRef.current;
+    if (!el) return;
+
+    // Save starting window position and size to DOM data attributes temporarily
+    const { x, y, width, height } = el.getBoundingClientRect();
+    el.dataset.windowX = x.toString();
+    el.dataset.windowY = y.toString();
+    el.dataset.windowWidth = width.toString();
+    el.dataset.windowHeight = height.toString();
+
+    // Save pointer start position to DOM data attributes temporarily
+    el.dataset.initialX = ev.clientX.toString();
+    el.dataset.initialY = ev.clientY.toString();
+  };
+
+  const onDragMove = (ev: PointerEvent) => {
+    const el = windowRef.current;
+    if (!el) return;
+
+    // Calculate cursor delta
+    const initialX = Number(el.dataset.initialX || '0');
+    const initialY = Number(el.dataset.initialY || '0');
+    const deltaX = ev.clientX - initialX;
+    const deltaY = ev.clientY - initialY;
+
+    // Horizontal resizing
+    if (direction.includes('e')) {
+      const windowWidth = Number(el.dataset.windowWidth || '0');
+      const newWidth = windowWidth + deltaX;
+      el.style.setProperty('width', `${newWidth}px`);
+    } else if (direction.includes('w')) {
+      const windowWidth = Number(el.dataset.windowWidth || '0');
+      const windowX = Number(el.dataset.windowX || '0');
+
+      const newWidth = windowWidth - deltaX;
+      const newX = windowX + deltaX;
+
+      el.style.setProperty('width', `${newWidth}px`);
+      el.style.setProperty('left', `${newX}px`);
+    }
+
+    // Vertical resizing
+    if (direction.includes('s')) {
+      const windowHeight = Number(el.dataset.windowHeight || '0');
+      const newHeight = windowHeight + deltaY;
+      el.style.setProperty('height', `${newHeight}px`);
+    } else if (direction.includes('n')) {
+      const windowHeight = Number(el.dataset.windowHeight || '0');
+      const windowY = Number(el.dataset.windowY || '0');
+
+      const newHeight = windowHeight - deltaY;
+      const newY = windowY + deltaY;
+
+      el.style.setProperty('height', `${newHeight}px`);
+      el.style.setProperty('top', `${newY}px`);
+    }
+  };
+
+  const onDragEnd = (ev: PointerEvent) => {
+    const el = windowRef.current;
+    if (!el) return;
+
+    // Reset offset data attributes
+    delete el.dataset.initialX;
+    delete el.dataset.initialY;
+    delete el.dataset.windowX;
+    delete el.dataset.windowY;
+    delete el.dataset.windowWidth;
+    delete el.dataset.windowHeight;
+  };
+
+  return useDrag({
+    onDragStart,
+    onDragMove,
+    onDragEnd,
+  });
+}
