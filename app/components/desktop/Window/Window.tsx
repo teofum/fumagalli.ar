@@ -5,18 +5,16 @@ import { useDesktop } from '../Desktop/context';
 import cn from 'classnames';
 import Button from '~/components/ui/Button';
 
-const defaultStyle = {
-  top: 0,
-  left: 0,
-  width: 600,
-  height: 400,
-};
-
 export interface WindowProps {
   id: string;
+
+  top: number;
+  left: number;
+  width: number;
+  height: number;
 }
 
-export default function Window({ id }: WindowProps) {
+export default function Window({ id, top, left, width, height }: WindowProps) {
   const desktop = useDesktop();
 
   /**
@@ -29,15 +27,15 @@ export default function Window({ id }: WindowProps) {
    */
   const windowRef = useRef<HTMLDivElement>(null);
 
-  const moveHandler = useMoveWindow(windowRef);
-  const resizeHandlerNW = useResizeWindow(windowRef, 'nw');
-  const resizeHandlerN = useResizeWindow(windowRef, 'n');
-  const resizeHandlerNE = useResizeWindow(windowRef, 'ne');
-  const resizeHandlerE = useResizeWindow(windowRef, 'e');
-  const resizeHandlerSE = useResizeWindow(windowRef, 'se');
-  const resizeHandlerS = useResizeWindow(windowRef, 's');
-  const resizeHandlerSW = useResizeWindow(windowRef, 'sw');
-  const resizeHandlerW = useResizeWindow(windowRef, 'w');
+  const moveHandler = useMoveWindow(id, windowRef);
+  const resizeHandlerNW = useResizeWindow(id, windowRef, 'nw');
+  const resizeHandlerN = useResizeWindow(id, windowRef, 'n');
+  const resizeHandlerNE = useResizeWindow(id, windowRef, 'ne');
+  const resizeHandlerE = useResizeWindow(id, windowRef, 'e');
+  const resizeHandlerSE = useResizeWindow(id, windowRef, 'se');
+  const resizeHandlerS = useResizeWindow(id, windowRef, 's');
+  const resizeHandlerSW = useResizeWindow(id, windowRef, 'sw');
+  const resizeHandlerW = useResizeWindow(id, windowRef, 'w');
 
   const resizeHandles = [
     <div
@@ -82,6 +80,8 @@ export default function Window({ id }: WindowProps) {
     />,
   ];
 
+  console.log('render', id);
+
   /**
    * Component markup
    */
@@ -93,7 +93,12 @@ export default function Window({ id }: WindowProps) {
         grid grid-cols-[0.25rem_1fr_0.25rem] grid-rows-[0.25rem_1fr_0.25rem]
         bg-surface bevel-window
       "
-      style={defaultStyle}
+      style={{
+        top: `${top}px`,
+        left: `${left}px`,
+        width: `${width}px`,
+        height: `${height}px`,
+      }}
       onPointerDown={() => desktop.dispatch({ type: 'focus', id })}
     >
       <div className="col-start-2 row-start-2 grid grid-rows-[auto_1fr]">

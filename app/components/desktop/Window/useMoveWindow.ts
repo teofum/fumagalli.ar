@@ -1,8 +1,12 @@
+import { useDesktop } from '../Desktop/context';
 import useDrag from './useDrag';
 
 export default function useMoveWindow(
+  id: string,
   windowRef: React.RefObject<HTMLDivElement>,
 ) {
+  const desktop = useDesktop();
+
   const onDragStart = (ev: PointerEvent) => {
     const el = windowRef.current;
     if (!el) return;
@@ -27,17 +31,30 @@ export default function useMoveWindow(
     const newX = ev.clientX + offsetX;
     const newY = ev.clientY + offsetY;
 
-    el.style.setProperty('top', `${newY}px`);
-    el.style.setProperty('left', `${newX}px`);
+    el.style.setProperty('top', `${~~(newY)}px`);
+    el.style.setProperty('left', `${~~(newX)}px`);
   };
 
-  const onDragEnd = (ev: PointerEvent) => {
+  const onDragEnd = () => {
     const el = windowRef.current;
     if (!el) return;
 
     // Reset offset data attributes
     delete el.dataset.offsetX;
     delete el.dataset.offsetY;
+
+    // Commit window changes to application state
+    const { top, left, width, height } = el.getBoundingClientRect();
+    desktop.dispatch({
+      type: 'moveAndResize',
+      id,
+      data: {
+        top,
+        left,
+        width,
+        height,
+      },
+    });
   };
 
   return useDrag({

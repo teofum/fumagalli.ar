@@ -1,9 +1,13 @@
+import { useDesktop } from '../Desktop/context';
 import useDrag from './useDrag';
 
 export default function useResizeWindow(
+  id: string,
   windowRef: React.RefObject<HTMLDivElement>,
   direction: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw',
 ) {
+  const desktop = useDesktop();
+
   const onDragStart = (ev: PointerEvent) => {
     const el = windowRef.current;
     if (!el) return;
@@ -34,7 +38,7 @@ export default function useResizeWindow(
     if (direction.includes('e')) {
       const windowWidth = Number(el.dataset.windowWidth || '0');
       const newWidth = windowWidth + deltaX;
-      el.style.setProperty('width', `${newWidth}px`);
+      el.style.setProperty('width', `${~~(newWidth)}px`);
     } else if (direction.includes('w')) {
       const windowWidth = Number(el.dataset.windowWidth || '0');
       const windowX = Number(el.dataset.windowX || '0');
@@ -42,15 +46,15 @@ export default function useResizeWindow(
       const newWidth = windowWidth - deltaX;
       const newX = windowX + deltaX;
 
-      el.style.setProperty('width', `${newWidth}px`);
-      el.style.setProperty('left', `${newX}px`);
+      el.style.setProperty('width', `${~~(newWidth)}px`);
+      el.style.setProperty('left', `${~~(newX)}px`);
     }
 
     // Vertical resizing
     if (direction.includes('s')) {
       const windowHeight = Number(el.dataset.windowHeight || '0');
       const newHeight = windowHeight + deltaY;
-      el.style.setProperty('height', `${newHeight}px`);
+      el.style.setProperty('height', `${~~(newHeight)}px`);
     } else if (direction.includes('n')) {
       const windowHeight = Number(el.dataset.windowHeight || '0');
       const windowY = Number(el.dataset.windowY || '0');
@@ -58,8 +62,8 @@ export default function useResizeWindow(
       const newHeight = windowHeight - deltaY;
       const newY = windowY + deltaY;
 
-      el.style.setProperty('height', `${newHeight}px`);
-      el.style.setProperty('top', `${newY}px`);
+      el.style.setProperty('height', `${~~(newHeight)}px`);
+      el.style.setProperty('top', `${~~(newY)}px`);
     }
   };
 
@@ -74,6 +78,19 @@ export default function useResizeWindow(
     delete el.dataset.windowY;
     delete el.dataset.windowWidth;
     delete el.dataset.windowHeight;
+
+    // Commit window changes to application state
+    const { top, left, width, height } = el.getBoundingClientRect();
+    desktop.dispatch({
+      type: 'moveAndResize',
+      id,
+      data: {
+        top,
+        left,
+        width,
+        height,
+      },
+    });
   };
 
   return useDrag({

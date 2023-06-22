@@ -1,6 +1,17 @@
 import { nanoid } from 'nanoid';
 import type { WindowProps } from '../Window';
 
+function createWindow(props?: Partial<WindowProps>): WindowProps {
+  return {
+    id: nanoid(),
+    top: 200,
+    left: 200,
+    width: 640,
+    height: 480,
+    ...props,
+  };
+}
+
 interface DesktopState {
   windows: WindowProps[];
 }
@@ -14,12 +25,27 @@ interface FocusAction {
   id: string;
 }
 
+interface MoveAndResizeAction {
+  type: 'moveAndResize';
+  id: string;
+  data: {
+    top?: number;
+    left?: number;
+    width?: number;
+    height?: number;
+  };
+}
+
 interface CloseAction {
   type: 'close';
   id: string;
 }
 
-type DesktopAction = CreateAction | FocusAction | CloseAction;
+type DesktopAction =
+  | CreateAction
+  | FocusAction
+  | MoveAndResizeAction
+  | CloseAction;
 
 export default function desktopReducer(
   state: DesktopState,
@@ -29,17 +55,29 @@ export default function desktopReducer(
     case 'create': {
       return {
         ...state,
-        windows: [...state.windows, { id: nanoid() }],
+        windows: [...state.windows, createWindow()],
       };
     }
     case 'focus': {
-      const focus = state.windows.find(({ id }) => id === action.id);
+      const target = state.windows.find(({ id }) => id === action.id);
       const rest = state.windows.filter(({ id }) => id !== action.id);
 
-      if (!focus) return state;
+      if (!target) return state;
       return {
         ...state,
-        windows: [...rest, focus],
+        windows: [...rest, target],
+      };
+    }
+    case 'moveAndResize': {
+      const updated = state.windows.map((window) =>
+        window.id === action.id ? { ...window, ...action.data } : window,
+      );
+
+      if (!updated) return state;
+
+      return {
+        ...state,
+        windows: updated,
       };
     }
     case 'close': {
