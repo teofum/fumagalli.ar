@@ -1,6 +1,14 @@
+import { useDesktop } from '~/components/desktop/Desktop/context';
 import Button from '~/components/ui/Button';
+import { files } from '../Files';
 
 export default function Intro() {
+  const { launch } = useDesktop();
+
+  const openFolder = (path: string) => {
+    launch(files({ initialPath: path }));
+  };
+
   return (
     <div className="bg-default bevel-content p-0.5 flex flex-row gap-2">
       <div className="flex flex-col flex-1 p-8 gap-2">
@@ -22,9 +30,15 @@ export default function Intro() {
         </p>
 
         <div className="flex flex-row gap-1">
-          <Button className="py-1 px-2">Projects</Button>
-          <Button className="py-1 px-2">Articles</Button>
-          <Button className="py-1 px-2">Photos</Button>
+          <Button className="py-1 px-2" onClick={() => openFolder('/Projects')}>
+            Projects
+          </Button>
+          <Button className="py-1 px-2" onClick={() => openFolder('/Articles')}>
+            Articles
+          </Button>
+          <Button className="py-1 px-2" onClick={() => openFolder('/Photos')}>
+            Photos
+          </Button>
         </div>
 
         <p className="font-text text-xl mt-auto">

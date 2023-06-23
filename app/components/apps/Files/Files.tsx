@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import root, { type FSObject } from '~/content/dir';
 import useDirectory from './useDirectory';
 import Button from '~/components/ui/Button';
@@ -9,19 +9,41 @@ import FilesGridView from './views/FilesGridView';
 import Menu from '~/components/ui/Menu';
 import { useWindow } from '~/components/desktop/Window/context';
 
+function parsePath(path: string) {
+  if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
+  return path.split('/');
+}
+
 type FilesViewMode = 'list' | 'grid';
 
-export default function Files() {
+export interface FilesProps {
+  initialView?: FilesViewMode;
+  initialPath?: string;
+}
+
+export default function Files({
+  initialView = 'grid',
+  initialPath = '/',
+}: FilesProps) {
   const { launch, dispatch } = useDesktop();
   const { id } = useWindow();
 
   const [status, setStatus] = useState(true);
-  const [view, setView] = useState('grid');
-  const [path, setPath] = useState<string[]>([]);
+  const [view, setView] = useState<FilesViewMode>(initialView ?? 'grid');
+  const [path, setPath] = useState<string[]>(parsePath(initialPath));
   const [selected, setSelected] = useState<FSObject | null>(null);
 
   const pwd = `${root.name}/${path.join('/')}`;
   const dir = useDirectory(path);
+
+  useEffect(() => {
+    if (dir)
+      dispatch({
+        type: 'setTitle',
+        id,
+        title: dir.name,
+      });
+  }, [dispatch, dir, id]);
 
   const open = (item: FSObject) => {
     if (item.class === 'dir') {
@@ -56,7 +78,10 @@ export default function Files() {
 
           <Menu.Separator />
 
-          <Menu.RadioGroup value={view} onValueChange={setView}>
+          <Menu.RadioGroup
+            value={view}
+            onValueChange={(value) => setView(value as FilesViewMode)}
+          >
             <Menu.RadioItem value="grid" label="Icons" />
             <Menu.RadioItem value="list" label="List" />
           </Menu.RadioGroup>

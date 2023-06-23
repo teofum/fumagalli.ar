@@ -24,7 +24,7 @@ export default function AppOutlet({ type, props }: AppOutletProps) {
     case ApplicationType.INTRO:
       return <Intro />;
     case ApplicationType.FILES:
-      return <Files />;
+      return <Files {...(props as React.ComponentProps<typeof Files>)} />;
     case ApplicationType.PREVIEW:
       return <Preview {...(props as React.ComponentProps<typeof Preview>)} />;
     case ApplicationType.MINESWEEPER:

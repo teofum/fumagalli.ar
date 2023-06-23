@@ -1,5 +1,5 @@
 import TestMD from '~/content/test.md';
-import UntitledAppMD from '~/content/untitled-app.md';
+import UntitledAppMD from '~/content/projects/untitled-app.md';
 
 type MarkdownComponent = React.ComponentType<
   Readonly<Record<string, unknown>> & {
@@ -62,28 +62,33 @@ const root: Directory = {
         {
           class: 'file',
           type: 'md',
-          name: 'Untitled Recipes App.md',
+          name: 'Recipes App.md',
           component: UntitledAppMD,
         },
+      ],
+    },
+    {
+      class: 'dir',
+      name: 'Articles',
+      items: [],
+    },
+    {
+      class: 'dir',
+      name: 'Photos',
+      items: [
         {
           class: 'file',
-          type: 'md',
-          name: 'test.md',
-          component: TestMD,
-        },
-        {
-          class: 'dir',
-          name: 'Pics',
-          items: [
-            {
-              class: 'file',
-              type: 'image',
-              name: 'result.png',
-              src: '/img/result.png',
-            },
-          ],
+          type: 'image',
+          name: 'result.png',
+          src: '/img/result.png',
         },
       ],
+    },
+    {
+      class: 'file',
+      type: 'md',
+      name: 'test.md',
+      component: TestMD,
     },
   ],
 };
