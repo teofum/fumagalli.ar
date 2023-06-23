@@ -14,9 +14,10 @@ export enum ApplicationType {
 
 interface AppOutletProps {
   type: ApplicationType;
+  props: unknown;
 }
 
-export default function AppOutlet({ type }: AppOutletProps) {
+export default function AppOutlet({ type, props }: AppOutletProps) {
   switch (type) {
     case ApplicationType.ABOUT:
       return <About />;
@@ -25,7 +26,7 @@ export default function AppOutlet({ type }: AppOutletProps) {
     case ApplicationType.FILES:
       return <Files />;
     case ApplicationType.PREVIEW:
-      return <Preview />;
+      return <Preview {...(props as React.ComponentProps<typeof Preview>)} />;
     case ApplicationType.MINESWEEPER:
       return <Minesweeper />;
     default:

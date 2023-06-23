@@ -1,4 +1,5 @@
 import TestMD from '~/content/test.md';
+import UntitledAppMD from '~/content/untitled-app.md';
 
 type MarkdownComponent = React.ComponentType<
   Readonly<Record<string, unknown>> & {
@@ -62,7 +63,7 @@ const root: Directory = {
           class: 'file',
           type: 'md',
           name: 'Untitled Recipes App.md',
-          component: TestMD,
+          component: UntitledAppMD,
         },
         {
           class: 'file',

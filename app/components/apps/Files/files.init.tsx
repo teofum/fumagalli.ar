@@ -5,5 +5,5 @@ export const files: WindowInit = {
   appType: ApplicationType.FILES,
 
   title: 'File Explorer',
-  icon: 'info',
+  icon: 'files',
 };

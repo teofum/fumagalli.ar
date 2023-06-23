@@ -1,9 +1,15 @@
-import TestMD from '~/content/test.md';
+import type { MarkdownFile } from '~/content/dir';
 
-export default function Preview() {
+interface PreviewProps {
+  file?: MarkdownFile;
+}
+
+export default function Preview({ file }: PreviewProps) {
+  if (!file) return null;
+
   return (
     <div className="bg-default bevel-content p-1">
-      <TestMD />
+      <file.component />
     </div>
   );
 }

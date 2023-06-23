@@ -19,6 +19,7 @@ export enum WindowSizingMode {
 export interface WindowProps {
   id: string;
   appType: ApplicationType;
+  appProps: unknown;
 
   // Decoration
   title: string;
@@ -91,7 +92,7 @@ function getWindowStyleProps({
 }
 
 export default function Window(props: WindowProps) {
-  const { id, appType, title, icon, maximized, focused } = props;
+  const { id, appType, appProps, title, icon, maximized, focused } = props;
   const desktop = useDesktop();
 
   /**
@@ -250,7 +251,7 @@ export default function Window(props: WindowProps) {
         </div>
 
         <WindowProvider value={props}>
-          <AppOutlet type={appType} />
+          <AppOutlet type={appType} props={appProps} />
         </WindowProvider>
       </div>
 
