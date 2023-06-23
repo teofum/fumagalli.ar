@@ -4,13 +4,15 @@ import desktopReducer, { createWindow } from './reducer';
 import { DesktopProvider } from './context';
 import { about } from '~/components/apps/About';
 import { intro } from '~/components/apps/Intro';
+import { files } from '~/components/apps/Files';
 import Taskbar from '../Taskbar';
 
 export default function Desktop() {
   const [state, dispatch] = useReducer(desktopReducer, {
     windows: [
       { ...createWindow(about), order: 0, focused: false },
-      { ...createWindow(intro), order: 1, focused: true },
+      { ...createWindow(intro), order: 1, focused: false },
+      { ...createWindow(files), order: 2, focused: true },
     ],
   });
 

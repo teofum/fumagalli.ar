@@ -1,0 +1,17 @@
+import root from '~/content/dir';
+
+export default function useDirectory(path: string[]) {
+  let dir = root;
+  let relativePath = path.slice();
+
+  while (relativePath.length > 0) {
+    const [child, ...rest] = relativePath;
+    const next = dir.items.find((item) => item.name === child);
+    if (!next || next.class !== 'dir') return null;
+
+    dir = next;
+    relativePath = rest;
+  }
+
+  return dir;
+}
