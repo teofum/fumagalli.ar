@@ -12,9 +12,9 @@
   
     --color-title: var(--color-darker);
     --color-text: var(--color-darker);
-    --color-text-heading: var(--color-text);
-    --color-text-heading-2: var(--color-text-heading);
-    --color-text-heading-3: var(--color-text-heading);
+    --color-heading: var(--color-text);
+    --color-heading-2: var(--color-heading);
+    --color-heading-3: 0 0 128;
   
     --color-text-light: var(--color-dark);
     --color-text-disabled: var(--color-dark);

@@ -1,41 +1,34 @@
-@font-face {
-  font-family: 'HP100LX';
-  font-weight: 400;
-  src: url('/font/Web437_HP_100LX_6x8.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'IBMModel3x';
-  font-weight: 400;
-  src: url('/font/Web437_IBM_Model3x_Alt1.woff') format('woff');
-}
-
+/* Default UI font */
 @font-face {
   font-family: 'MS Sans Serif';
   font-weight: 400;
   src: url('/font/MS_Sans_Serif.woff2') format('woff2');
 }
 
-@font-face {
-  font-family: 'DOSJPN12';
-  font-weight: 400;
-  src: url('/font/Web437_DOS-V_re_JPN12.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'DOSJPN24';
-  font-weight: 400;
-  src: url('/font/Web437_DOS-V_re_JPN24.woff') format('woff');
-}
-
+/* Text font (paragraph) */
 @font-face {
   font-family: 'Paradise132';
   font-weight: 400;
   src: url('/font/Web437_Paradise132_7x16.woff') format('woff');
 }
 
+/* Heading font */
 @font-face {
-  font-family: 'Nix8810_M15';
+  font-family: 'ToshibaTxL1';
+  font-weight: 400;
+  src: url('/font/Web437_ToshibaTxL1_8x16.woff') format('woff');
+}
+
+/* Display font (large headings) */
+@font-face {
+  font-family: 'DOS/V re. JPN24';
+  font-weight: 400;
+  src: url('/font/Web437_DOS-V_re_JPN24.woff') format('woff');
+}
+
+/* Used for minesweeper numbers */
+@font-face {
+  font-family: 'Nix8810 M15';
   font-weight: 400;
   src: url('/font/Web437_Nix8810_M15.woff') format('woff');
 }

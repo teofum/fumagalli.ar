@@ -65,12 +65,26 @@ interface CloseAction {
   id: string;
 }
 
+interface SetTitleAction {
+  type: 'setTitle';
+  id: string;
+  title: string;
+}
+
+interface SetIconAction {
+  type: 'setIcon';
+  id: string;
+  icon: string;
+}
+
 type DesktopAction =
   | CreateAction
   | FocusAction
   | MoveAndResizeAction
   | ToggleMaximizedAction
-  | CloseAction;
+  | CloseAction
+  | SetTitleAction
+  | SetIconAction;
 
 export default function desktopReducer(
   state: DesktopState,
@@ -115,8 +129,6 @@ export default function desktopReducer(
         window.id === action.id ? { ...window, ...action.data } : window,
       );
 
-      if (!updated) return state;
-
       return {
         ...state,
         windows: updated,
@@ -140,6 +152,26 @@ export default function desktopReducer(
       return {
         ...state,
         windows: [...state.windows.filter(({ id }) => id !== action.id)],
+      };
+    }
+    case 'setTitle': {
+      const updated = state.windows.map((window) =>
+        window.id === action.id ? { ...window, title: action.title } : window,
+      );
+
+      return {
+        ...state,
+        windows: updated,
+      };
+    }
+    case 'setIcon': {
+      const updated = state.windows.map((window) =>
+        window.id === action.id ? { ...window, icon: action.icon } : window,
+      );
+
+      return {
+        ...state,
+        windows: updated,
       };
     }
     default:

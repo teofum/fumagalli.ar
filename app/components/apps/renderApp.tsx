@@ -14,7 +14,7 @@ export enum ApplicationType {
 
 interface AppOutletProps {
   type: ApplicationType;
-  props: unknown;
+  props?: unknown;
 }
 
 export default function AppOutlet({ type, props }: AppOutletProps) {

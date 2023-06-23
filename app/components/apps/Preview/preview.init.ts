@@ -8,4 +8,6 @@ export const preview = (file?: MarkdownFile): WindowInit => ({
 
   title: 'Document Viewer',
   icon: 'preview',
+
+  minWidth: 320,
 });

@@ -19,7 +19,7 @@ export enum WindowSizingMode {
 export interface WindowProps {
   id: string;
   appType: ApplicationType;
-  appProps: unknown;
+  appProps?: unknown;
 
   // Decoration
   title: string;
@@ -208,7 +208,7 @@ export default function Window(props: WindowProps) {
       ref={windowRef}
       className="
         touch-none fixed
-        grid grid-cols-[0.25rem_1fr_0.25rem] grid-rows-[0.25rem_1fr_0.25rem]
+        grid grid-cols-[0.25rem_calc(100%-0.5rem)_0.25rem] grid-rows-[0.25rem_calc(100%-0.5rem)_0.25rem]
         bg-surface bevel-window
       "
       style={getWindowStyleProps(props)}
