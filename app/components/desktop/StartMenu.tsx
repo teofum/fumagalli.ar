@@ -11,7 +11,7 @@ export default function StartMenu() {
   return (
     <Menu.Root
       trigger={
-        <Button className="py-1 px-2 bold data-[state=open]:bevel-inset">
+        <Button className="py-1 px-2 bold data-[state=open]:bevel-inset w-16">
           Start
         </Button>
       }

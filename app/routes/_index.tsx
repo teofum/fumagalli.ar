@@ -9,7 +9,5 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export default function Index() {
-  return (
-    <Desktop />
-  );
+  return <Desktop />;
 }
