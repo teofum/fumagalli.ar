@@ -4,11 +4,11 @@
     @apply bg-surface cursor-default select-none;
   }
 
-  .button:focus {
+  .button:focus-visible {
     outline: none;
   }
 
-  .button:focus > * {
+  .button:focus-visible > * {
     outline: 1px dotted theme('textColor.default');
   }
 

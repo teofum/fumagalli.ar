@@ -2,6 +2,7 @@ import React from 'react';
 import cn from 'classnames';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import Check from './icons/Check';
+import Dot from './icons/Dot';
 
 type MenuProps = React.PropsWithChildren<
   {
@@ -81,6 +82,29 @@ function CheckboxItem({ label, className, ...props }: CheckboxItemProps) {
   );
 }
 
+type RadioGroupProps = React.ComponentProps<typeof DropdownMenu.RadioGroup>;
+
+function RadioGroup({ children, ...props }: RadioGroupProps) {
+  return (
+    <DropdownMenu.RadioGroup {...props}>{children}</DropdownMenu.RadioGroup>
+  );
+}
+
+type RadioItemProps = {
+  label: string;
+} & React.ComponentProps<typeof DropdownMenu.RadioItem>;
+
+function RadioItem({ label, className, ...props }: RadioItemProps) {
+  return (
+    <DropdownMenu.RadioItem className={cn('menu-item', className)} {...props}>
+      <DropdownMenu.ItemIndicator className="col-start-1">
+        <Dot />
+      </DropdownMenu.ItemIndicator>
+      <span className="col-start-2">{label}</span>
+    </DropdownMenu.RadioItem>
+  );
+}
+
 function Separator() {
   return <DropdownMenu.Separator className="h-0.5 m-1 bevel-light-inset" />;
 }
@@ -90,5 +114,7 @@ export default {
   Trigger,
   Item,
   CheckboxItem,
+  RadioGroup,
+  RadioItem,
   Separator,
 };
