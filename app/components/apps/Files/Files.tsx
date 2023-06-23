@@ -4,11 +4,13 @@ import useDirectory from './useDirectory';
 import Button from '~/components/ui/Button';
 import { useDesktop } from '~/components/desktop/Desktop/context';
 import { preview } from '../Preview';
+import FilesListView from './views/FilesListView';
 
 export default function Files() {
   const { launch } = useDesktop();
 
   const [path, setPath] = useState<string[]>([]);
+  const [selected, setSelected] = useState<FSObject | null>(null);
 
   const pwd = `${root.name}/${path.join('/')}`;
   const dir = useDirectory(path);
@@ -16,6 +18,7 @@ export default function Files() {
   const open = (item: FSObject) => {
     if (item.class === 'dir') {
       setPath([...path, item.name]);
+      setSelected(null);
     } else if (item.type === 'md') {
       launch(preview(item));
     } else {
@@ -24,27 +27,38 @@ export default function Files() {
   };
 
   return (
-    <div className="bg-default bevel-content p-1">
-      <div>{pwd}</div>
-      <ul>
-        {path.length > 0 ? (
-          <li>
-            <Button
-              className="px-2"
-              onDoubleClick={() => setPath(path.slice(0, -1))}
-            >
-              ..
-            </Button>
-          </li>
-        ) : null}
-        {dir?.items.map((item) => (
-          <li key={item.name}>
-            <Button className="px-2" onDoubleClick={() => open(item)}>
-              [{item.class}] {item.name}
-            </Button>
-          </li>
-        ))}
-      </ul>
+    <div className="flex flex-col gap-0.5 min-w-0">
+      <div className="flex flex-row gap-1">
+        <Button
+          variant="light"
+          className="p-1"
+          onClick={() => setPath(path.slice(0, -1))}
+          disabled={path.length === 0}
+        >
+          <img src="/img/ui/files-up.png" alt="" />
+        </Button>
+
+        <div className="flex-1 bg-default bevel-inset p-1 flex flex-row items-center">
+          <span>{pwd}</span>
+        </div>
+      </div>
+
+      {dir ? (
+        <FilesListView
+          dir={dir}
+          open={open}
+          selected={selected}
+          select={setSelected}
+        />
+      ) : null}
+
+      <div className="flex flex-row gap-0.5">
+        <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
+          {dir?.items.length || 'No'} object{dir?.items.length === 1 ? '' : 's'}
+        </div>
+
+        <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1"></div>
+      </div>
     </div>
   );
 }

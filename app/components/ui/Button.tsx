@@ -3,10 +3,21 @@ import React from 'react';
 
 const Button = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<'button'>
->(function Button({ children, className, ...props }, ref) {
+  React.ComponentProps<'button'> & { variant?: 'normal' | 'light' }
+>(function Button({ children, className, variant = 'normal', ...props }, ref) {
   return (
-    <button className={cn('button group', className)} {...props} ref={ref}>
+    <button
+      className={cn(
+        'button group',
+        {
+          'button-normal': variant === 'normal',
+          'button-light': variant === 'light',
+        },
+        className,
+      )}
+      {...props}
+      ref={ref}
+    >
       <div
         className="
           group-active:translate-x-px group-active:translate-y-px

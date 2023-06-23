@@ -214,7 +214,7 @@ export default function Window(props: WindowProps) {
       style={getWindowStyleProps(props)}
       onPointerDown={() => desktop.dispatch({ type: 'focus', id })}
     >
-      <div className="col-start-2 row-start-2 grid grid-rows-[auto_1fr]">
+      <div className="col-start-2 row-start-2 grid grid-rows-[1.125rem_calc(100%-1.125rem)]">
         <div
           className="select-none flex flex-row items-center gap-2 px-0.5 py-px mb-0.5"
           onPointerDown={maximized ? undefined : moveHandler}

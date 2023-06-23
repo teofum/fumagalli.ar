@@ -89,6 +89,14 @@
       inset 2px 2px 0 0 theme('colors.surface-darker');
   }
 
+  /* Content bevel rendered outside element, used for scroll area */
+  .bevel-content-outside {
+    box-shadow: -0.5px -0.5px 0 0.5px theme('colors.surface-darker'),
+     0 0 0 1px theme('colors.surface-light'),
+     -0.5px -0.5px 0 1.5px theme('colors.surface-dark'),
+     0 0 0 2px theme('colors.surface-lighter');
+  }
+
   /* Special bevel for taskbar */
   .bevel-top {
     box-shadow: inset 0 1px 0 0 theme('colors.surface-lighter'),

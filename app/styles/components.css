@@ -1,7 +1,7 @@
 @layer components {
   /* Buttons */
   .button {
-    @apply bg-surface bevel cursor-default active:bevel-inset p-0.5 select-none;
+    @apply bg-surface cursor-default select-none;
   }
 
   .button:focus {
@@ -10,6 +10,22 @@
 
   .button:focus > * {
     outline: 1px dotted theme('textColor.default');
+  }
+
+  .button:disabled {
+    pointer-events: none;
+  }
+
+  .button:disabled img {
+    @apply grayscale;
+  }
+
+  .button-normal {
+    @apply bevel active:bevel-inset p-0.5;
+  }
+
+  .button-light {
+    @apply hover:bevel-light active:bevel-light-inset p-0.5;
   }
 
   /* Menus */
