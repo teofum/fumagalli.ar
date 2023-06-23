@@ -158,7 +158,7 @@ export default function Minesweeper() {
 
   const exit = () => {
     dispatch({ type: 'close', id });
-  }
+  };
 
   // This genuinely only ever needs to run once, on first render
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -377,7 +377,21 @@ export default function Minesweeper() {
                     'group-active:hidden': cell.flag !== FlagStatus.FLAGGED,
                   },
                 )}
-              />
+              >
+                <img
+                  src="/img/ui/mine/flag.png"
+                  className={cn({ hidden: cell.flag !== FlagStatus.FLAGGED })}
+                  alt="F"
+                />
+
+                <img
+                  src="/img/ui/mine/flag-question.png"
+                  className={cn({
+                    hidden: cell.flag !== FlagStatus.QUESTION_MARK,
+                  })}
+                  alt="?"
+                />
+              </div>
             </button>
           ))}
         </div>
