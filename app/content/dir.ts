@@ -1,11 +1,8 @@
 import type { Directory } from './types';
 
-/**
- * The fake filesystem
- */
-const root: Directory = {
+const FS_ROOT: Directory = {
   class: 'dir',
-  name: 'Desktop',
+  name: 'My Computer',
   items: [
     {
       class: 'dir',
@@ -13,19 +10,9 @@ const root: Directory = {
       items: [
         {
           class: 'dir',
-          name: 'Projects',
-          items: [
-            {
-              class: 'file',
-              type: 'md',
-              name: 'Recipes App.md',
-            },
-          ],
-        },
-        {
-          class: 'dir',
           name: 'Articles',
-          items: [],
+          items: [
+          ],
         },
         {
           class: 'dir',
@@ -39,13 +26,47 @@ const root: Directory = {
           ],
         },
         {
+          class: 'dir',
+          name: 'Projects',
+          items: [
+            {
+              class: 'file',
+              type: 'md',
+              name: 'Recipes App.md',
+            },
+          ],
+        },
+        {
           class: 'file',
           type: 'md',
           name: 'test.md',
         },
       ],
     },
+    {
+      class: 'dir',
+      name: 'system',
+      items: [
+        {
+          class: 'dir',
+          name: 'Applications',
+          items: [
+            {
+              class: 'dir',
+              name: 'intro',
+              items: [
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'me.png',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
   ],
 };
 
-export default root;
+export default FS_ROOT;
