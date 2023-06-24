@@ -53,12 +53,140 @@ const FS_ROOT: Directory = {
           items: [
             {
               class: 'dir',
+              name: 'about',
+              items: [
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_16.png',
+                },
+              ],
+            },
+            {
+              class: 'dir',
+              name: 'files',
+              items: [
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_16.png',
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_32.png',
+                },
+              ],
+            },
+            {
+              class: 'dir',
               name: 'intro',
               items: [
                 {
                   class: 'file',
                   type: 'image',
+                  name: 'icon_16.png',
+                },
+                {
+                  class: 'file',
+                  type: 'image',
                   name: 'me.png',
+                },
+              ],
+            },
+            {
+              class: 'dir',
+              name: 'minesweeper',
+              items: [
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_16.png',
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_32.png',
+                },
+              ],
+            },
+            {
+              class: 'dir',
+              name: 'preview',
+              items: [
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_16.png',
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_32.png',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          class: 'dir',
+          name: 'Resources',
+          items: [
+            {
+              class: 'dir',
+              name: 'Icons',
+              items: [
+                {
+                  class: 'dir',
+                  name: 'FileType',
+                  items: [
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'dir_16.png',
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'dir_32.png',
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'image_16.png',
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'image_32.png',
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'md_16.png',
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'md_32.png',
+                    },
+                  ],
+                },
+                {
+                  class: 'dir',
+                  name: 'UI',
+                  items: [
+                  ],
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'app_16.png',
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'app_32.png',
                 },
               ],
             },

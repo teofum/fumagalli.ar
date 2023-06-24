@@ -91,7 +91,7 @@ function getWindowStyleProps({
 }
 
 export default function Window(props: WindowProps) {
-  const { id, appType, appProps, title, icon, maximized, focused } = props;
+  const { id, appType, appProps, title, maximized, focused } = props;
   const desktop = useDesktop();
 
   /**
@@ -219,7 +219,7 @@ export default function Window(props: WindowProps) {
           onPointerDown={maximized ? undefined : moveHandler}
           onDoubleClick={toggleMaximized}
         >
-          <img src={`/img/icon/${icon}_16.png`} alt="" />
+          <img src={`/fs/system/Applications/${appType}/icon_16.png`} alt="" />
 
           {/* <div className={titlebarSpacerClass} /> */}
 

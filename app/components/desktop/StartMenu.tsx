@@ -21,7 +21,7 @@ export default function StartMenu() {
         <Menu.Item
           key={app.appType}
           label={app.title ?? ''}
-          icon={app.icon}
+          icon={`/fs/system/Applications/${app.appType}/icon_16.png`}
           onSelect={() => launch(app)}
         />
       ))}

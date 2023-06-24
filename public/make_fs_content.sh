@@ -11,7 +11,7 @@ function get_file_type {
 }
 
 function get_file_name {
-  name="$(echo $1 | sed -E "s/.*\/([^/]+)$/\1/g" | sed -E "s/_/ /g")"
+  name="$(echo $1 | sed -E "s/.*\/([^/]+)$/\1/g" | sed -E "s/__/ /g")"
 }
 
 function directory {

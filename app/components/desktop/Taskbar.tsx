@@ -27,7 +27,7 @@ export default function Taskbar() {
             onClick={() => dispatch({ type: 'focus', id: window.id })}
           >
             <div className="flex flex-row gap-1.5">
-              <img src={`/img/icon/${window.icon}_16.png`} alt="" />
+              <img src={`/fs/system/Applications/${window.appType}/icon_16.png`} alt="" />
               <span
                 className={cn(
                   'whitespace-nowrap overflow-hidden text-ellipsis',

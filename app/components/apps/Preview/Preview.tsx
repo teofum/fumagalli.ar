@@ -35,7 +35,7 @@ export default function Preview({ file, filePath }: PreviewProps) {
 
   if (!file || !filePath) return null;
 
-  const resourceUrl = '/fs' + filePath.replaceAll(' ', '_');
+  const resourceUrl = '/fs' + filePath.replaceAll(' ', '__');
   const Component = getPreviewMode(file.type);
   return (
     <PreviewAppProvider file={file} resourceUrl={resourceUrl}>

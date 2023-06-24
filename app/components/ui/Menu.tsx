@@ -57,7 +57,7 @@ function Item({ label, icon, className, ...props }: ItemProps) {
   return (
     <DropdownMenu.Item className={cn('menu-item', className)} {...props}>
       {icon ? (
-        <img className="col-start-1" src={`/img/icon/${icon}_16.png`} alt="" />
+        <img className="col-start-1" src={icon} alt="" />
       ) : null}
       <span className="col-start-2">{label}</span>
     </DropdownMenu.Item>

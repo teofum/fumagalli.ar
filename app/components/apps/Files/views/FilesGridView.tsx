@@ -33,20 +33,23 @@ export default function FilesGridView({
                 }}
               >
                 <span className="relative">
-                  <img src={`/img/icon/fs/${type}_32.png`} alt={type} />
+                  <img
+                    src={`/fs/system/Resources/Icons/FileType/${type}_32.png`}
+                    alt={type}
+                  />
                   <span
                     className={cn(
                       'absolute inset-0 bg-selection bg-opacity-50',
                       { hidden: !isSelected },
                     )}
                     style={{
-                      WebkitMaskImage: `url(/img/icon/fs/${type}_32.png)`,
+                      WebkitMaskImage: `url(/fs/system/Resources/Icons/FileType/${type}_32.png)`,
                     }}
                   />
                 </span>
                 <div className="max-h-8 z-[1]">
                   <div
-                    className={cn('px-0.5', {
+                    className={cn('px-0.5 break-words', {
                       'bg-selection text-selection': isSelected,
                       'line-clamp-2': !isSelected,
                     })}

@@ -33,14 +33,17 @@ export default function FilesListView({
                 }}
               >
                 <span className="relative">
-                  <img src={`/img/icon/fs/${type}_16.png`} alt={type} />
+                  <img
+                    src={`/fs/system/Resources/Icons/FileType/${type}_16.png`}
+                    alt={type}
+                  />
                   <span
                     className={cn(
                       'absolute inset-0 bg-selection bg-opacity-50',
                       { hidden: !isSelected },
                     )}
                     style={{
-                      WebkitMaskImage: `url(/img/icon/fs/${type}_16.png)`,
+                      WebkitMaskImage: `url(/fs/system/Resources/Icons/FileType/${type}_16.png)`,
                     }}
                   />
                 </span>
