@@ -10,7 +10,7 @@ export default function Taskbar() {
   const { state, dispatch } = useDesktop();
 
   return (
-    <div className="bg-surface bevel-top absolute bottom-0 left-0 w-full pt-0.5 px-1 z-1000">
+    <div className="bg-surface bevel-top pt-0.5 px-1 relative z-1000">
       <div className="flex flex-row gap-1 py-0.5">
         <StartMenu />
 

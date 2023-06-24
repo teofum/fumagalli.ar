@@ -206,7 +206,7 @@ export default function Window(props: WindowProps) {
     <div
       ref={windowRef}
       className="
-        touch-none fixed
+        touch-none absolute
         grid grid-cols-[0.25rem_calc(100%-0.5rem)_0.25rem] grid-rows-[0.25rem_calc(100%-0.5rem)_0.25rem]
         bg-surface bevel-window
       "

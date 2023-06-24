@@ -16,12 +16,13 @@ export default function Desktop() {
 
   return (
     <DesktopProvider state={state} dispatch={dispatch}>
-      <div className="w-screen h-screen bg-desktop">
+      <div className="w-screen h-screen bg-desktop flex flex-col">
+        <div className="relative flex-1">
+          {state.windows.map((window) => (
+            <Window key={window.id} {...window} />
+          ))}
+        </div>
         <Taskbar />
-
-        {state.windows.map((window) => (
-          <Window key={window.id} {...window} />
-        ))}
       </div>
     </DesktopProvider>
   );
