@@ -1,35 +1,26 @@
-import About from './About';
-import Intro from './Intro';
-import Files from './Files';
-import Preview from './Preview';
-import Minesweeper from './Minesweeper';
+import About, { about } from './About';
+import Intro, { intro } from './Intro';
+import Files, { files } from './Files';
+import Preview, { preview } from './Preview';
+import Minesweeper, { minesweeper } from './Minesweeper';
 
-export enum ApplicationType {
-  ABOUT = 'about',
-  INTRO = 'intro',
-  FILES = 'files',
-  PREVIEW = 'preview',
-  MINESWEEPER = 'minesweeper',
-}
+const applications = [
+  { Component: About, meta: about },
+  { Component: Intro, meta: intro },
+  { Component: Files, meta: files() },
+  { Component: Preview, meta: preview() },
+  { Component: Minesweeper, meta: minesweeper },
+];
 
 interface AppOutletProps {
-  type: ApplicationType;
+  type: string;
   props?: unknown;
 }
 
 export default function AppOutlet({ type, props }: AppOutletProps) {
-  switch (type) {
-    case ApplicationType.ABOUT:
-      return <About />;
-    case ApplicationType.INTRO:
-      return <Intro />;
-    case ApplicationType.FILES:
-      return <Files {...(props as React.ComponentProps<typeof Files>)} />;
-    case ApplicationType.PREVIEW:
-      return <Preview {...(props as React.ComponentProps<typeof Preview>)} />;
-    case ApplicationType.MINESWEEPER:
-      return <Minesweeper />;
-    default:
-      return <div>Unknown application {type}</div>;
-  }
+  const app = applications.find(({ meta }) => meta.appType === type);
+  if (!app) return <div>Unknown application {type}</div>;
+
+  const { Component } = app;
+  return <Component {...(props as React.ComponentProps<typeof Component>)} />;
 }

@@ -1,8 +1,7 @@
 import { WindowSizingMode, type WindowInit } from '~/components/desktop/Window';
-import { ApplicationType } from '../renderApp';
 
 export const about: WindowInit = {
-  appType: ApplicationType.ABOUT,
+  appType: 'about',
 
   title: 'About this website',
   icon: 'info',

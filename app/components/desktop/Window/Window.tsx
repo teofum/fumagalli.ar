@@ -4,7 +4,6 @@ import useResizeWindow from './useResizeWindow';
 import { useDesktop } from '../Desktop/context';
 import cn from 'classnames';
 import Button from '~/components/ui/Button';
-import type { ApplicationType } from '~/components/apps/renderApp';
 import AppOutlet from '~/components/apps/renderApp';
 import { WindowProvider } from './context';
 
@@ -18,7 +17,7 @@ export enum WindowSizingMode {
 
 export interface WindowProps {
   id: string;
-  appType: ApplicationType;
+  appType: string;
   appProps?: unknown;
 
   // Decoration

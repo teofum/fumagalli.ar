@@ -1,8 +1,7 @@
 import { WindowSizingMode, type WindowInit } from '~/components/desktop/Window';
-import { ApplicationType } from '../renderApp';
 
 export const minesweeper: WindowInit = {
-  appType: ApplicationType.MINESWEEPER,
+  appType: 'minesweeper',
 
   title: 'Minesweeper',
   icon: 'mine',
