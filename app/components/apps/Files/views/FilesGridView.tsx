@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import ScrollContainer from '~/components/ui/ScrollContainer';
-import type { Directory, FSObject } from '~/content/dir';
+import type { Directory, FSObject } from '~/content/types';
 
 interface FilesGridViewProps {
   dir: Directory;

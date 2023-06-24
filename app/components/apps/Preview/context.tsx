@@ -1,12 +1,13 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
-import type { ImageFile, MarkdownFile } from '~/content/dir';
+import type { ImageFile, MarkdownFile } from '~/content/types';
 
 export const previewSupportedFileTypes = ['md', 'image'];
 export type PreviewSupportedFile = MarkdownFile | ImageFile;
 
 interface PreviewAppContextType {
   file: PreviewSupportedFile;
+  resourceUrl: string;
 }
 
 const PreviewAppContext = createContext<PreviewAppContextType>(
@@ -15,9 +16,9 @@ const PreviewAppContext = createContext<PreviewAppContextType>(
 
 type ProviderProps = PropsWithChildren<PreviewAppContextType>;
 
-export function PreviewAppProvider({ file, children }: ProviderProps) {
+export function PreviewAppProvider({ file, resourceUrl, children }: ProviderProps) {
   return (
-    <PreviewAppContext.Provider value={{ file }}>
+    <PreviewAppContext.Provider value={{ file, resourceUrl }}>
       {children}
     </PreviewAppContext.Provider>
   );

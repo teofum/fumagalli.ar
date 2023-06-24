@@ -16,7 +16,7 @@ export default function PreviewImage() {
   const { dispatch } = useDesktop();
   const { id, minWidth, minHeight } = useWindow();
 
-  const { file } = usePreviewApp();
+  const { file, resourceUrl } = usePreviewApp();
   if (file.type !== 'image') throw new Error('Wrong file type');
 
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -76,7 +76,7 @@ export default function PreviewImage() {
 
   const download = () => {
     const a = document.createElement('a');
-    a.href = file.src;
+    a.href = resourceUrl;
     a.download = '';
     document.body.appendChild(a);
     a.click();
@@ -195,7 +195,7 @@ export default function PreviewImage() {
         <div className="flex w-min border border-default bg-surface select-none">
           <img
             ref={imageRef}
-            src={file.src}
+            src={resourceUrl}
             alt={file.altText}
             style={{ width, minWidth: width }}
           />

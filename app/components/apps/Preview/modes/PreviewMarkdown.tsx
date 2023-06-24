@@ -1,14 +1,30 @@
 import ScrollContainer from '~/components/ui/ScrollContainer';
 import { usePreviewApp } from '../context';
+import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import { useEffect, useState } from 'react';
 
 export default function PreviewMarkdown() {
-  const { file } = usePreviewApp();
+  const { file, resourceUrl } = usePreviewApp();
   if (file.type !== 'md') throw new Error('Wrong file type');
+
+  const [content, setContent] = useState('No content available');
+  useEffect(() => {
+    if (!resourceUrl) return;
+
+    const fetchMarkdown = async () => {
+      const res = await fetch(resourceUrl);
+      if (res.ok) {
+        setContent(await res.text());
+      }
+    };
+
+    fetchMarkdown();
+  }, [resourceUrl]);
 
   return (
     <ScrollContainer>
       <div className="p-4 max-w-5xl">
-        <file.component
+        <ReactMarkdown
           components={{
             h1: (props) => (
               <h1 className="font-display text-2xl text-h1" {...props} />
@@ -28,7 +44,9 @@ export default function PreviewMarkdown() {
             p: (props) => <p className="text-default mt-2" {...props} />,
             strong: (props) => <span className="bold" {...props} />,
           }}
-        />
+        >
+          {content}
+        </ReactMarkdown>
       </div>
     </ScrollContainer>
   );

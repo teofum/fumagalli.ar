@@ -14,11 +14,12 @@ const getPreviewMode = (fileType: PreviewSupportedFile['type']) => {
   }
 };
 
-interface PreviewProps {
+export interface PreviewProps {
   file?: PreviewSupportedFile;
+  filePath?: string;
 }
 
-export default function Preview({ file }: PreviewProps) {
+export default function Preview({ file, filePath }: PreviewProps) {
   const { dispatch } = useDesktop();
   const { id } = useWindow();
 
@@ -32,11 +33,12 @@ export default function Preview({ file }: PreviewProps) {
       });
   }, [dispatch, file, id]);
 
-  if (!file) return null;
+  if (!file || !filePath) return null;
 
+  const resourceUrl = '/fs' + filePath.replaceAll(' ', '_');
   const Component = getPreviewMode(file.type);
   return (
-    <PreviewAppProvider file={file}>
+    <PreviewAppProvider file={file} resourceUrl={resourceUrl}>
       <Component />
     </PreviewAppProvider>
   );

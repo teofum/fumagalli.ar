@@ -30,13 +30,22 @@ export default function Intro() {
         </p>
 
         <div className="flex flex-row gap-1">
-          <Button className="py-1 px-2" onClick={() => openFolder('/Projects')}>
+          <Button
+            className="py-1 px-2"
+            onClick={() => openFolder('/Documents/Projects')}
+          >
             Projects
           </Button>
-          <Button className="py-1 px-2" onClick={() => openFolder('/Articles')}>
+          <Button
+            className="py-1 px-2"
+            onClick={() => openFolder('/Documents/Articles')}
+          >
             Articles
           </Button>
-          <Button className="py-1 px-2" onClick={() => openFolder('/Photos')}>
+          <Button
+            className="py-1 px-2"
+            onClick={() => openFolder('/Documents/Photos')}
+          >
             Photos
           </Button>
         </div>
@@ -47,7 +56,11 @@ export default function Intro() {
         </p>
       </div>
 
-      <img src="/img/result.png" alt="me" className="self-end mt-6" />
+      <img
+        src="/fs/system/Applications/intro/me.png"
+        alt="me"
+        className="self-end mt-6"
+      />
     </div>
   );
 }

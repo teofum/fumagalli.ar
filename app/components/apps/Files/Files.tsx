@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import root, { type FSObject } from '~/content/dir';
+import type { FSObject } from '~/content/types';
 import useDirectory from './useDirectory';
 import Button from '~/components/ui/Button';
 import { useDesktop } from '~/components/desktop/Desktop/context';
@@ -34,7 +34,7 @@ export default function Files({
   const [path, setPath] = useState<string[]>(parsePath(initialPath));
   const [selected, setSelected] = useState<FSObject | null>(null);
 
-  const pwd = `${root.name}/${path.join('/')}`;
+  const pwd = `/${path.join('/')}`;
   const dir = useDirectory(path);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function Files({
       setPath([...path, item.name]);
       setSelected(null);
     } else if (previewSupportedFileTypes.includes(item.type)) {
-      launch(preview(item));
+      launch(preview({ file: item, filePath: `${pwd}/${item.name}` }));
     } else {
       // Unhandled file type
       console.log('open file', item.name);

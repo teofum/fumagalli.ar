@@ -1,9 +1,9 @@
 import type { WindowInit } from '~/components/desktop/Window';
-import type { PreviewSupportedFile } from './context';
+import type { PreviewProps } from './Preview';
 
-export const preview = (file?: PreviewSupportedFile): WindowInit => ({
+export const preview = (props?: PreviewProps): WindowInit => ({
   appType: 'preview',
-  appProps: { file },
+  appProps: props,
 
   title: 'Preview',
   icon: 'preview',
