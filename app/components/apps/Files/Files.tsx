@@ -9,6 +9,9 @@ import FilesGridView from './views/FilesGridView';
 import Menu from '~/components/ui/Menu';
 import { useWindow } from '~/components/desktop/Window/context';
 import { previewSupportedFileTypes } from '../Preview/context';
+import { getAppResourcesUrl } from '~/content/utils';
+
+const resources = getAppResourcesUrl('files');
 
 function parsePath(path: string) {
   if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
@@ -97,7 +100,7 @@ export default function Files({
           onClick={() => setPath(path.slice(0, -1))}
           disabled={path.length === 0}
         >
-          <img src="/img/ui/files-up.png" alt="" />
+          <img src={`${resources}/go-up.png`} alt="" />
         </Button>
 
         <div className="flex-1 bg-default bevel-inset p-1 flex flex-row items-center">

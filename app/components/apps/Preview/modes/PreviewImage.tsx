@@ -5,6 +5,9 @@ import { useDesktop } from '~/components/desktop/Desktop/context';
 import { useWindow } from '~/components/desktop/Window/context';
 import { useEffect, useRef, useState } from 'react';
 import Button from '~/components/ui/Button';
+import { getAppResourcesUrl } from '~/content/utils';
+
+const resources = getAppResourcesUrl('preview');
 
 const MAX_INITIAL_SIZE = { x: 800, y: 600 };
 const UI_SIZE = { x: 30, y: 100 };
@@ -157,7 +160,7 @@ export default function PreviewImage() {
             onClick={zoomOut}
             disabled={zoom <= (ZOOM_STOPS.at(0) ?? 0)}
           >
-            <img src="/img/ui/zoom-out.png" alt="Zoom out" />
+            <img src={`${resources}/zoom-out.png`} alt="Zoom out" />
           </Button>
           <Button
             variant="light"
@@ -165,7 +168,7 @@ export default function PreviewImage() {
             onClick={zoomIn}
             disabled={zoom >= (ZOOM_STOPS.at(-1) ?? 0)}
           >
-            <img src="/img/ui/zoom-in.png" alt="Zoom in" />
+            <img src={`${resources}/zoom-in.png`} alt="Zoom in" />
           </Button>
           <Button
             variant="light"

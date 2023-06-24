@@ -12,7 +12,11 @@ export default function MinesweeperNumberDisplay({ value }: Props) {
   return (
     <div className="bg-surface bevel-light-inset p-px flex flex-row">
       {digits.map((d, i) => (
-        <img key={i} src={`/img/ui/mine/num${d}.png`} alt={d.toString()} />
+        <img
+          key={i}
+          src={`/fs/system/Applications/minesweeper/resources/num${d}.png`}
+          alt={d.toString()}
+        />
       ))}
     </div>
   );

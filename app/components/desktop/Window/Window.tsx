@@ -237,14 +237,17 @@ export default function Window(props: WindowProps) {
             {props.maximizable ? (
               <Button onClick={toggleMaximized}>
                 {maximized ? (
-                  <img src="/img/ui/restore.png" alt="Restore" />
+                  <img
+                    src="/fs/system/Resources/UI/restore.png"
+                    alt="Restore"
+                  />
                 ) : (
-                  <img src="/img/ui/max.png" alt="Maximize" />
+                  <img src="/fs/system/Resources/UI/max.png" alt="Maximize" />
                 )}
               </Button>
             ) : null}
             <Button onClick={close}>
-              <img src="/img/ui/close.png" alt="Close" />
+              <img src="/fs/system/Resources/UI/close.png" alt="Close" />
             </Button>
           </div>
         </div>

@@ -5,6 +5,9 @@ import Button from '~/components/ui/Button';
 import Menu from '~/components/ui/Menu';
 import { useDesktop } from '~/components/desktop/Desktop/context';
 import { useWindow } from '~/components/desktop/Window/context';
+import { getAppResourcesUrl } from '~/content/utils';
+
+const resources = getAppResourcesUrl('minesweeper');
 
 enum GameState {
   NEW = 'new',
@@ -297,25 +300,25 @@ export default function Minesweeper() {
 
           <Button onClick={() => reset(settings)} className="mx-auto">
             <img
-              src="/img/ui/mine/smiley.png"
+              src={`${resources}/smiley.png`}
               className={cn('group-active/game:hidden', { hidden: !playing })}
               alt=":)"
             />
 
             <img
-              src="/img/ui/mine/smiley-click.png"
+              src={`${resources}/smiley-click.png`}
               className={cn('hidden', { 'group-active/game:inline': playing })}
               alt=":o"
             />
 
             <img
-              src="/img/ui/mine/smiley-dead.png"
+              src={`${resources}/smiley-dead.png`}
               className={cn({ hidden: gameState !== GameState.LOST })}
               alt="X("
             />
 
             <img
-              src="/img/ui/mine/smiley-win.png"
+              src={`${resources}/smiley-win.png`}
               className={cn({ hidden: gameState !== GameState.WON })}
               alt="B)"
             />
@@ -361,9 +364,15 @@ export default function Minesweeper() {
                 )}
               >
                 {cell.hasMine ? (
-                  <img src="/img/ui/mine/mine.png" alt="mine" />
+                  <img
+                    src={`${resources}/mine.png`}
+                    alt="mine"
+                  />
                 ) : cell.flag === FlagStatus.FLAGGED ? (
-                  <img src="/img/ui/mine/wrong.png" alt="mine" />
+                  <img
+                    src={`${resources}/wrong.png`}
+                    alt="mine"
+                  />
                 ) : (
                   cell.nearMines || ''
                 )}
@@ -379,13 +388,13 @@ export default function Minesweeper() {
                 )}
               >
                 <img
-                  src="/img/ui/mine/flag.png"
+                  src={`${resources}/flag.png`}
                   className={cn({ hidden: cell.flag !== FlagStatus.FLAGGED })}
                   alt="F"
                 />
 
                 <img
-                  src="/img/ui/mine/flag-question.png"
+                  src={`${resources}/flag-question.png`}
                   className={cn({
                     hidden: cell.flag !== FlagStatus.QUESTION_MARK,
                   })}
