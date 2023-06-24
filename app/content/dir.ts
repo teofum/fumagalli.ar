@@ -82,6 +82,12 @@ const root: Directory = {
           name: 'result.png',
           src: '/img/result.png',
         },
+        {
+          class: 'file',
+          type: 'image',
+          name: 'bigpic.jpg',
+          src: '/img/bigpic.jpg',
+        },
       ],
     },
     {
