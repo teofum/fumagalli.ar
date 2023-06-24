@@ -8,6 +8,7 @@ import FilesListView from './views/FilesListView';
 import FilesGridView from './views/FilesGridView';
 import Menu from '~/components/ui/Menu';
 import { useWindow } from '~/components/desktop/Window/context';
+import { previewSupportedFileTypes } from '../Preview/context';
 
 function parsePath(path: string) {
   if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
@@ -49,9 +50,10 @@ export default function Files({
     if (item.class === 'dir') {
       setPath([...path, item.name]);
       setSelected(null);
-    } else if (item.type === 'md') {
+    } else if (previewSupportedFileTypes.includes(item.type)) {
       launch(preview(item));
     } else {
+      // Unhandled file type
       console.log('open file', item.name);
     }
   };

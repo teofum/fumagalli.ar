@@ -1,11 +1,11 @@
 import type { WindowInit } from '~/components/desktop/Window';
-import type { MarkdownFile } from '~/content/dir';
+import type { PreviewSupportedFile } from './context';
 
-export const preview = (file?: MarkdownFile): WindowInit => ({
+export const preview = (file?: PreviewSupportedFile): WindowInit => ({
   appType: 'preview',
   appProps: { file },
 
-  title: 'Document Viewer',
+  title: 'Preview',
   icon: 'preview',
 
   minWidth: 320,
