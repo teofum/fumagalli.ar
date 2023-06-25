@@ -55,7 +55,7 @@ export default function FilesGridView({
                 </span>
                 <div className="max-h-8 z-[1]">
                   <div
-                    className={cn('px-0.5 break-words', {
+                    className={cn('px-0.5 [overflow-wrap:anywhere]', {
                       'bg-selection text-selection': isSelected,
                       'line-clamp-2': !isSelected,
                     })}

@@ -23,7 +23,7 @@ export default function PreviewMarkdown() {
 
   return (
     <ScrollContainer>
-      <div className="p-4 max-w-5xl">
+      <div className="p-4 max-w-3xl">
         <ReactMarkdown
           components={{
             h1: (props) => (
@@ -43,6 +43,18 @@ export default function PreviewMarkdown() {
             ),
             p: (props) => <p className="text-default mt-2" {...props} />,
             strong: (props) => <span className="bold" {...props} />,
+            em: (props) => <em className="not-italic text-accent" {...props} />,
+            a: ({ children, ...props }) => (
+              <a {...props} target="_blank">
+                {children}
+              </a>
+            ),
+            li: (props) => (
+              <li
+                className="mt-2 list-outside list-['>__'] marker:bold ml-4"
+                {...props}
+              />
+            ),
           }}
         >
           {content}

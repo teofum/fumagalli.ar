@@ -195,7 +195,7 @@ export default function PreviewImage() {
       </div>
 
       <ScrollContainer className="flex-1" ref={viewportRef}>
-        <div className="flex w-min border border-default bg-surface select-none">
+        <div className="flex w-min border border-default bg-surface-light bg-checkered-lg select-none">
           <img
             ref={imageRef}
             src={resourceUrl}

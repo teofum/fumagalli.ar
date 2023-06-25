@@ -587,6 +587,27 @@ const FS_ROOT: Directory = {
           name: 'Projects',
           items: [
             {
+              class: 'dir',
+              name: 'screenshots',
+              items: [
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'DitherOS.png',
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'DitherOS.webp',
+                },
+              ],
+            },
+            {
+              class: 'file',
+              type: 'md',
+              name: 'DitherOS.md',
+            },
+            {
               class: 'file',
               type: 'md',
               name: 'Recipes App.md',
@@ -963,6 +984,11 @@ const FS_ROOT: Directory = {
                   class: 'file',
                   type: 'image',
                   name: 'delete.png',
+                },
+                {
+                  class: 'file',
+                  type: 'svg',
+                  name: 'dot.svg',
                 },
                 {
                   class: 'file',
