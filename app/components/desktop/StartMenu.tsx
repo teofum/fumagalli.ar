@@ -4,6 +4,7 @@ import Menu from '../ui/Menu';
 import { about } from '../apps/About';
 import { intro } from '../apps/Intro';
 import { minesweeper } from '../apps/Minesweeper';
+import { files } from '../apps/Files';
 
 const ICON_PATH = '/fs/system/Resources/Icons/Start';
 
@@ -41,7 +42,7 @@ export default function StartMenu() {
                 />
               ))}
             </Menu.Sub>
-            {[about, intro].map((app) => (
+            {[files({ initialPath: '/Documents' }), about, intro].map((app) => (
               <Menu.Item
                 key={app.appType}
                 label={app.title ?? ''}
@@ -55,8 +56,37 @@ export default function StartMenu() {
             label="Documents"
             icon={`${ICON_PATH}/documents.png`}
           >
-            <Menu.Item label="[EMPTY]" disabled />
+            <Menu.Item
+              label="My Documents"
+              icon="/fs/system/Applications/files/icon_16.png"
+              onSelect={() => launch(files({ initialPath: '/Documents' }))}
+            />
+
+            <Menu.Separator />
+
+            <Menu.Item
+              label="Articles"
+              icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+              onSelect={() =>
+                launch(files({ initialPath: '/Documents/Articles' }))
+              }
+            />
+            <Menu.Item
+              label="Photos"
+              icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+              onSelect={() =>
+                launch(files({ initialPath: '/Documents/Photos' }))
+              }
+            />
+            <Menu.Item
+              label="Projects"
+              icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+              onSelect={() =>
+                launch(files({ initialPath: '/Documents/Projects' }))
+              }
+            />
           </Menu.Sub>
+
           <Menu.Sub
             className="gap-2 w-44"
             label="Settings"
@@ -69,6 +99,9 @@ export default function StartMenu() {
             label="Help"
             icon={`${ICON_PATH}/help.png`}
           />
+
+          <Menu.Separator />
+
           <Menu.Item
             className="gap-2 w-44"
             label="Shut down..."
