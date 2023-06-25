@@ -221,7 +221,7 @@ export default function Window(props: WindowProps) {
         >
           <img src={`/fs/system/Applications/${appType}/icon_16.png`} alt="" />
 
-          {/* <div className={titlebarSpacerClass} /> */}
+          <div className={titlebarSpacerClass} />
 
           <span
             className={cn('font-title bold', {

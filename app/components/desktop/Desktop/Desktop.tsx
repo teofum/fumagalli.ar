@@ -10,7 +10,7 @@ export default function Desktop() {
   const [state, dispatch] = useReducer(desktopReducer, {
     windows: [
       { ...createWindow(about), order: 0, focused: false },
-      { ...createWindow(intro), order: 1, focused: false },
+      { ...createWindow(intro), order: 1, focused: true },
     ],
   });
 
