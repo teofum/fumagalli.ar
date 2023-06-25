@@ -5,15 +5,15 @@ export default {
   content: ['./app/**/*.{js,jsx,ts,tsx}'],
   theme: {
     fontFamily: {
-      sans: '"MS Sans Serif"',
-      title: '"MS Sans Serif"',
+      sans: '"PX Sans Nouveaux"',
+      title: '"PX Sans Nouveaux"',
       text: 'Paradise132',
       heading: 'ToshibaTxL1',
       display: '"DOS/V re. JPN24"',
       minesweeper: '"Nix8810 M15"',
     },
     fontSize: {
-      base: ['0.6875rem', '1rem'],
+      base: ['0.5rem', '1rem'],
       lg: ['0.75rem', '1rem'],
       xl: ['1rem', '1.25rem'],
       '2xl': ['1.5rem', '1'],

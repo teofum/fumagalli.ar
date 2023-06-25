@@ -1,8 +1,8 @@
 /* Default UI font */
 @font-face {
-  font-family: 'MS Sans Serif';
+  font-family: 'PX Sans Nouveaux';
   font-weight: 400;
-  src: url('/font/MS_Sans_Serif.woff2') format('woff2');
+  src: url('/font/px_sans_nouveaux.woff2') format('woff2');
 }
 
 /* Text font (paragraph) */

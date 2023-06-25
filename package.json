@@ -4,7 +4,9 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev -p 3200",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "convert-images": "cd .photos-original && ./convert.sh",
+    "make-fs": "cd public && ./make_fs.sh fs > ../app/content/dir.ts"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.0.5",
