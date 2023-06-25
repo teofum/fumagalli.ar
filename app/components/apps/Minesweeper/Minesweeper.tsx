@@ -7,7 +7,7 @@ import { useDesktop } from '~/components/desktop/Desktop/context';
 import { useWindow } from '~/components/desktop/Window/context';
 import { getAppResourcesUrl } from '~/content/utils';
 
-const resources = getAppResourcesUrl('minesweeper');
+const resources = getAppResourcesUrl('mine');
 
 enum GameState {
   NEW = 'new',

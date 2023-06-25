@@ -30,17 +30,31 @@
 
   /* Menus */
   .menu-content {
-    @apply bg-surface bevel p-1 z-2000;
+    @apply bg-surface bevel-window p-[0.1875rem] z-2000;
   }
 
   .menu-item {
-    @apply select-none p-0.5 grid gap-1 outline-none;
+    @apply select-none p-0.5 grid items-center gap-1 outline-none;
 
-    grid-template-columns: 1rem 1fr;
+    grid-template-columns: minmax(1rem, auto) 1fr;
     min-width: 8rem;
   }
 
-  .menu-item[data-highlighted] {
+  .menu-item[data-highlighted],
+  .menu-sub[data-state="open"] {
     @apply bg-selection text-selection;
+  }
+
+  .menu-item[data-disabled] > span,
+  .menu-item[data-disabled] > svg {
+    @apply text-disabled;
+  }
+
+  .menu-item[data-disabled] > img {
+    @apply grayscale;
+  }
+
+  .menu-item.menu-sub {
+    grid-template-columns: minmax(1rem, auto) 1fr minmax(0.75rem, auto);
   }
 }

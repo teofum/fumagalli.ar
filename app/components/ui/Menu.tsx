@@ -3,6 +3,7 @@ import cn from 'classnames';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import Check from './icons/Check';
 import Dot from './icons/Dot';
+import ArrowSubmenu from './icons/ArrowSubmenu';
 
 type MenuProps = React.PropsWithChildren<
   {
@@ -56,9 +57,7 @@ type ItemProps = {
 function Item({ label, icon, className, ...props }: ItemProps) {
   return (
     <DropdownMenu.Item className={cn('menu-item', className)} {...props}>
-      {icon ? (
-        <img className="col-start-1" src={icon} alt="" />
-      ) : null}
+      {icon ? <img className="col-start-1" src={icon} alt="" /> : null}
       <span className="col-start-2">{label}</span>
     </DropdownMenu.Item>
   );
@@ -109,6 +108,42 @@ function Separator() {
   return <DropdownMenu.Separator className="h-0.5 m-1 bevel-light-inset" />;
 }
 
+type SubProps = {
+  label: string;
+  icon?: string;
+  contentProps?: React.ComponentProps<typeof DropdownMenu.SubContent>;
+} & React.ComponentProps<typeof DropdownMenu.SubTrigger>;
+
+function Sub({
+  label,
+  icon,
+  className,
+  contentProps,
+  children,
+  ...props
+}: SubProps) {
+  return (
+    <DropdownMenu.Sub>
+      <DropdownMenu.SubTrigger className={cn('menu-item menu-sub', className)} {...props}>
+        {icon ? <img className="col-start-1" src={icon} alt="" /> : null}
+        <span className="col-start-2">{label}</span>
+        <ArrowSubmenu />
+      </DropdownMenu.SubTrigger>
+
+      <DropdownMenu.Portal>
+        <DropdownMenu.SubContent
+          sideOffset={-4}
+          alignOffset={-2}
+          {...contentProps}
+          className={cn('menu-content', contentProps?.className)}
+        >
+          {children}
+        </DropdownMenu.SubContent>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Sub>
+  );
+}
+
 export default {
   Root,
   Trigger,
@@ -117,4 +152,5 @@ export default {
   RadioGroup,
   RadioItem,
   Separator,
+  Sub,
 };
