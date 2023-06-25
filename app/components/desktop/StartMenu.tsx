@@ -8,7 +8,7 @@ import { minesweeper } from '../apps/Minesweeper';
 const ICON_PATH = '/fs/system/Resources/Icons/Start';
 
 export default function StartMenu() {
-  const { launch } = useDesktop();
+  const { launch, shutdown } = useDesktop();
 
   return (
     <Menu.Root
@@ -73,6 +73,7 @@ export default function StartMenu() {
             className="gap-2 w-44"
             label="Shut down..."
             icon={`${ICON_PATH}/shutdown.png`}
+            onSelect={shutdown}
           />
         </div>
       </div>

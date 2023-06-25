@@ -13,13 +13,10 @@ type ScrollContainerProps = {
 } & React.ComponentProps<typeof ScrollArea>;
 
 const ScrollContainer = React.forwardRef<HTMLDivElement, ScrollContainerProps>(
-  function ScrollContainer({
-    children,
-    className,
-    type = 'always',
-    viewportProps,
-    ...props
-  }, ref) {
+  function ScrollContainer(
+    { children, className, type = 'always', viewportProps, ...props },
+    ref,
+  ) {
     return (
       <ScrollArea
         type={type}

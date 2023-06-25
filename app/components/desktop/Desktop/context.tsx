@@ -13,6 +13,7 @@ interface DesktopContextType {
   state: ReducerState<typeof desktopReducer>;
   dispatch: Dispatch<ReducerAction<typeof desktopReducer>>;
   launch: (app: WindowInit) => void;
+  shutdown: () => void;
 }
 
 const DesktopContext = createContext<DesktopContextType>(
@@ -22,13 +23,19 @@ const DesktopContext = createContext<DesktopContextType>(
 type ProviderProps = PropsWithChildren<{
   state: ReducerState<typeof desktopReducer>;
   dispatch: Dispatch<ReducerAction<typeof desktopReducer>>;
+  shutdown: () => void;
 }>;
 
-export function DesktopProvider({ state, dispatch, children }: ProviderProps) {
+export function DesktopProvider({
+  state,
+  dispatch,
+  shutdown,
+  children,
+}: ProviderProps) {
   const launch = (app: WindowInit) => dispatch({ type: 'create', data: app });
 
   return (
-    <DesktopContext.Provider value={{ state, dispatch, launch }}>
+    <DesktopContext.Provider value={{ state, dispatch, launch, shutdown }}>
       {children}
     </DesktopContext.Provider>
   );
