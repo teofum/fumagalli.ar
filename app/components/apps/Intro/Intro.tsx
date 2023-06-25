@@ -57,7 +57,7 @@ export default function Intro() {
       </div>
 
       <img
-        src="/fs/system/Applications/intro/me.png"
+        src="/fs/system/Applications/intro/resources/me.png"
         alt="me"
         className="self-end mt-6"
       />

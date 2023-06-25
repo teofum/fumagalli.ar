@@ -24,3 +24,10 @@ export default function AppOutlet({ type, props }: AppOutletProps) {
   const { Component } = app;
   return <Component {...(props as React.ComponentProps<typeof Component>)} />;
 }
+
+export function getApp(type: string) {
+  const app = applications.find(({ meta }) => meta.appType === type);
+  if (!app) return null;
+
+  return app.meta;
+}

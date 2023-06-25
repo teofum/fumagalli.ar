@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { FSObject } from '~/content/types';
+import type { AnyFile, FSObject } from '~/content/types';
 import useDirectory from './useDirectory';
 import Button from '~/components/ui/Button';
 import { useDesktop } from '~/components/desktop/Desktop/context';
@@ -8,14 +8,20 @@ import FilesListView from './views/FilesListView';
 import FilesGridView from './views/FilesGridView';
 import Menu from '~/components/ui/Menu';
 import { useWindow } from '~/components/desktop/Window/context';
+import type { PreviewSupportedFile } from '../Preview/context';
 import { previewSupportedFileTypes } from '../Preview/context';
 import { getAppResourcesUrl } from '~/content/utils';
+import { getApp } from '../renderApp';
 
 const resources = getAppResourcesUrl('files');
 
 function parsePath(path: string) {
   if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
   return path.split('/');
+}
+
+function isPreviewable(file: AnyFile): file is PreviewSupportedFile {
+  return previewSupportedFileTypes.includes(file.type);
 }
 
 type FilesViewMode = 'list' | 'grid';
@@ -53,11 +59,14 @@ export default function Files({
     if (item.class === 'dir') {
       setPath([...path, item.name]);
       setSelected(null);
-    } else if (previewSupportedFileTypes.includes(item.type)) {
+    } else if (isPreviewable(item)) {
       launch(preview({ file: item, filePath: `${pwd}/${item.name}` }));
+    } else if (item.type === 'app') {
+      const app = getApp(item.name.split('.')[0]);
+      if (app) launch(app);
     } else {
       // Unhandled file type
-      console.log('open file', item.name);
+      console.log('open unknown file');
     }
   };
 

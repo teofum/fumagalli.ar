@@ -25,6 +25,10 @@ export interface MarkdownFile extends FileBase {
   type: 'md';
 }
 
-export type AnyFile = ImageFile | MarkdownFile;
+export interface AppFile extends FileBase {
+  type: 'app';
+}
+
+export type AnyFile = ImageFile | MarkdownFile | AppFile;
 
 export type FSObject = Directory | AnyFile;

@@ -22,6 +22,12 @@ export default function FilesGridView({
           const isSelected = item.name === selected?.name;
           const type = item.class === 'file' ? item.type : item.class;
 
+          let iconUrl = `/fs/system/Resources/Icons/FileType/${type}_32.png`;
+          if (type === 'app') {
+            const appName = item.name.split('.')[0];
+            iconUrl = `/fs/system/Applications/${appName}/icon_32.png`;
+          }
+
           return (
             <li key={item.name}>
               <button
@@ -34,7 +40,7 @@ export default function FilesGridView({
               >
                 <span className="relative">
                   <img
-                    src={`/fs/system/Resources/Icons/FileType/${type}_32.png`}
+                    src={iconUrl}
                     alt={type}
                   />
                   <span
@@ -43,7 +49,7 @@ export default function FilesGridView({
                       { hidden: !isSelected },
                     )}
                     style={{
-                      WebkitMaskImage: `url(/fs/system/Resources/Icons/FileType/${type}_32.png)`,
+                      WebkitMaskImage: `url(${iconUrl})`,
                     }}
                   />
                 </span>

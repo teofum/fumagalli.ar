@@ -1,7 +1,7 @@
 import { WindowSizingMode, type WindowInit } from '~/components/desktop/Window';
 
 export const minesweeper: WindowInit = {
-  appType: 'minesweeper',
+  appType: 'mine',
 
   title: 'Minesweeper',
   icon: 'mine',

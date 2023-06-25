@@ -57,8 +57,18 @@ const FS_ROOT: Directory = {
               items: [
                 {
                   class: 'file',
+                  type: 'app',
+                  name: 'about.app',
+                },
+                {
+                  class: 'file',
                   type: 'image',
                   name: 'icon_16.png',
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_32.png',
                 },
               ],
             },
@@ -79,6 +89,11 @@ const FS_ROOT: Directory = {
                 },
                 {
                   class: 'file',
+                  type: 'app',
+                  name: 'files.app',
+                },
+                {
+                  class: 'file',
                   type: 'image',
                   name: 'icon_16.png',
                 },
@@ -94,6 +109,17 @@ const FS_ROOT: Directory = {
               name: 'intro',
               items: [
                 {
+                  class: 'dir',
+                  name: 'resources',
+                  items: [
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'me.png',
+                    },
+                  ],
+                },
+                {
                   class: 'file',
                   type: 'image',
                   name: 'icon_16.png',
@@ -101,13 +127,18 @@ const FS_ROOT: Directory = {
                 {
                   class: 'file',
                   type: 'image',
-                  name: 'me.png',
+                  name: 'icon_32.png',
+                },
+                {
+                  class: 'file',
+                  type: 'app',
+                  name: 'intro.app',
                 },
               ],
             },
             {
               class: 'dir',
-              name: 'minesweeper',
+              name: 'mine',
               items: [
                 {
                   class: 'dir',
@@ -220,6 +251,11 @@ const FS_ROOT: Directory = {
                   type: 'image',
                   name: 'icon_32.png',
                 },
+                {
+                  class: 'file',
+                  type: 'app',
+                  name: 'mine.app',
+                },
               ],
             },
             {
@@ -252,6 +288,11 @@ const FS_ROOT: Directory = {
                   type: 'image',
                   name: 'icon_32.png',
                 },
+                {
+                  class: 'file',
+                  type: 'app',
+                  name: 'preview.app',
+                },
               ],
             },
           ],
@@ -271,12 +312,32 @@ const FS_ROOT: Directory = {
                     {
                       class: 'file',
                       type: 'image',
+                      name: 'app_16.png',
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'app_32.png',
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
                       name: 'dir_16.png',
                     },
                     {
                       class: 'file',
                       type: 'image',
                       name: 'dir_32.png',
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'file_16.png',
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'file_32.png',
                     },
                     {
                       class: 'file',
@@ -299,16 +360,6 @@ const FS_ROOT: Directory = {
                       name: 'md_32.png',
                     },
                   ],
-                },
-                {
-                  class: 'file',
-                  type: 'image',
-                  name: 'app_16.png',
-                },
-                {
-                  class: 'file',
-                  type: 'image',
-                  name: 'app_32.png',
                 },
               ],
             },
