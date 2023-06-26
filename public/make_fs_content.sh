@@ -18,11 +18,27 @@ function get_file_name {
   name="$(echo "$1" | sed -E "s/.*\/([^/]+)$/\1/g")"
 }
 
+function get_file_size {
+  size="$(wc -c <"$1" | sed -E "s/ //g")"
+}
+
+function get_file_created {
+  created="$(stat -f '%B' "$1")"
+}
+
+function get_file_modified {
+  modified="$(stat -f '%m' "$1")"
+}
+
 function directory {
   echo "$2{"
   echo "$2  class: 'dir',"
   get_file_name "$1"
   echo "$2  name: '$name',"
+  get_file_created "$1"
+  echo "$2  created: $created,"
+  get_file_modified "$1"
+  echo "$2  modified: $modified,"
   echo "$2  items: ["
   $0 "$1" "  $2" # recursively print contents of directory
   echo "$2  ],"
@@ -36,6 +52,12 @@ function file {
   echo "$2  type: '$type',"
   get_file_name "$1"
   echo "$2  name: '$name',"
+  get_file_created "$1"
+  echo "$2  created: $created,"
+  get_file_modified "$1"
+  echo "$2  modified: $modified,"
+  get_file_size "$1"
+  echo "$2  size: $size,"
   echo "$2},"
 }
 

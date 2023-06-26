@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import colors from 'tailwindcss/colors';
+import defaultTheme from 'tailwindcss/defaultTheme';
 
 export default {
   content: ['./app/**/*.{js,jsx,ts,tsx}'],
@@ -57,6 +58,12 @@ export default {
       6000: '6000',
     },
     extend: {
+      maxWidth: {
+        ...defaultTheme.spacing,
+      },
+      minWidth: {
+        ...defaultTheme.spacing,
+      },
       backgroundColor: {
         default: 'rgb(var(--color-background) / <alpha-value>)',
         selection: 'rgb(var(--color-selection-bg) / <alpha-value>)',

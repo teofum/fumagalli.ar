@@ -12,6 +12,8 @@ import type { PreviewSupportedFile } from '../Preview/context';
 import { previewSupportedFileTypes } from '../Preview/context';
 import { getAppResourcesUrl } from '~/content/utils';
 import { getApp } from '../renderApp';
+import getReadableSize from './utils/getReadableSize';
+import FilesDetailsView from './views/FilesDetailsView';
 
 const resources = getAppResourcesUrl('files');
 
@@ -24,7 +26,7 @@ function isPreviewable(file: AnyFile): file is PreviewSupportedFile {
   return previewSupportedFileTypes.includes(file.type);
 }
 
-type FilesViewMode = 'list' | 'grid';
+type FilesViewMode = 'list' | 'grid' | 'details';
 
 export interface FilesProps {
   initialView?: FilesViewMode;
@@ -74,7 +76,9 @@ export default function Files({
     dispatch({ type: 'close', id });
   };
 
-  const ViewComponent = view === 'grid' ? FilesGridView : FilesListView;
+  let ViewComponent = FilesGridView;
+  if (view === 'list') ViewComponent = FilesListView;
+  else if (view === 'details') ViewComponent = FilesDetailsView;
 
   return (
     <div className="flex flex-col gap-0.5 min-w-0">
@@ -98,6 +102,7 @@ export default function Files({
           >
             <Menu.RadioItem value="grid" label="Icons" />
             <Menu.RadioItem value="list" label="List" />
+            <Menu.RadioItem value="details" label="Details" />
           </Menu.RadioGroup>
         </Menu.Root>
       </div>
@@ -133,7 +138,16 @@ export default function Files({
             {dir?.items.length === 1 ? '' : 's'}
           </div>
 
-          <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1" />
+          <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
+            {selected ? (
+              <span>
+                {selected.name}:{' '}
+                {selected.class === 'file'
+                  ? `File (${getReadableSize(selected.size)})`
+                  : `Folder (${selected.items.length} objects)`}
+              </span>
+            ) : null}
+          </div>
         </div>
       ) : null}
     </div>

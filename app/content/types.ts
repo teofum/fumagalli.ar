@@ -3,6 +3,8 @@
  */
 interface FSObjectBase {
   name: string;
+  created: number;
+  modified: number;
 }
 
 export interface Directory extends FSObjectBase {
@@ -13,6 +15,11 @@ export interface Directory extends FSObjectBase {
 
 export interface FileBase extends FSObjectBase {
   class: 'file';
+  size: number;
+}
+
+export interface GenericFile extends FileBase {
+  type: 'file';
 }
 
 export interface ImageFile extends FileBase {
@@ -29,6 +36,6 @@ export interface AppFile extends FileBase {
   type: 'app';
 }
 
-export type AnyFile = ImageFile | MarkdownFile | AppFile;
+export type AnyFile = ImageFile | MarkdownFile | AppFile | GenericFile;
 
 export type FSObject = Directory | AnyFile;
