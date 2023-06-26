@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDesktop } from '~/components/desktop/Desktop/context';
+import useDesktopStore from '~/components/desktop/Desktop/store';
 import { useWindow } from '~/components/desktop/Window/context';
 import { PreviewAppProvider, type PreviewSupportedFile } from './context';
 import PreviewMarkdown from './modes/PreviewMarkdown';
@@ -20,18 +20,13 @@ export interface PreviewProps {
 }
 
 export default function Preview({ file, filePath }: PreviewProps) {
-  const { dispatch } = useDesktop();
+  const { setWindowProps } = useDesktopStore();
   const { id } = useWindow();
 
   // Set window title to file title
   useEffect(() => {
-    if (file)
-      dispatch({
-        type: 'setTitle',
-        id,
-        title: `${file.name} - Preview`,
-      });
-  }, [dispatch, file, id]);
+    if (file) setWindowProps(id, { title: `${file.name} - Preview` });
+  }, [setWindowProps, file, id]);
 
   if (!file || !filePath) return null;
 

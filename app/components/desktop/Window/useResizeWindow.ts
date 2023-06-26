@@ -1,4 +1,4 @@
-import { useDesktop } from '../Desktop/context';
+import useDesktopStore from '../Desktop/store';
 import type { WindowProps } from './Window';
 import useDrag from './useDrag';
 
@@ -15,7 +15,7 @@ export default function useResizeWindow(
   windowRef: React.RefObject<HTMLDivElement>,
   direction: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw',
 ) {
-  const desktop = useDesktop();
+  const { moveAndResize } = useDesktopStore();
 
   const onDragStart = (ev: PointerEvent) => {
     const el = windowRef.current;
@@ -52,7 +52,7 @@ export default function useResizeWindow(
     } else if (direction.includes('w')) {
       const windowWidth = Number(el.dataset.windowWidth || '0');
       const newWidth = clamp(windowWidth - deltaX, minWidth, maxWidth);
-      
+
       const windowX = Number(el.dataset.windowX || '0');
       const maxDeltaX = windowWidth - minWidth;
       const minDeltaX = windowWidth - (maxWidth ?? Number.MAX_VALUE);
@@ -71,7 +71,7 @@ export default function useResizeWindow(
     } else if (direction.includes('n')) {
       const windowHeight = Number(el.dataset.windowHeight || '0');
       const newHeight = clamp(windowHeight - deltaY, minHeight, maxHeight);
-      
+
       const windowY = Number(el.dataset.windowY || '0');
       const maxDeltaY = windowHeight - minHeight;
       const minDeltaY = windowHeight - (maxHeight ?? Number.MAX_VALUE);
@@ -96,15 +96,11 @@ export default function useResizeWindow(
 
     // Commit window changes to application state
     const { top, left, width, height } = el.getBoundingClientRect();
-    desktop.dispatch({
-      type: 'moveAndResize',
-      id,
-      data: {
-        top,
-        left,
-        width,
-        height,
-      },
+    moveAndResize(id, {
+      top,
+      left,
+      width,
+      height,
     });
   };
 

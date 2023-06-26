@@ -1,11 +1,11 @@
 import { useRef } from 'react';
 import useMoveWindow from './useMoveWindow';
 import useResizeWindow from './useResizeWindow';
-import { useDesktop } from '../Desktop/context';
 import cn from 'classnames';
 import Button from '~/components/ui/Button';
 import AppOutlet from '~/components/apps/renderApp';
 import { WindowProvider } from './context';
+import useDesktopStore from '../Desktop/store';
 
 export enum WindowSizingMode {
   RESIZABLE = 'standard',
@@ -92,7 +92,7 @@ function getWindowStyleProps({
 
 export default function Window(props: WindowProps) {
   const { id, appType, appProps, title, maximized, focused } = props;
-  const desktop = useDesktop();
+  const { focus, close, toggleMaximized } = useDesktopStore();
 
   /**
    * Move/resize handling
@@ -188,18 +188,6 @@ export default function Window(props: WindowProps) {
   );
 
   /**
-   * Helper functions
-   */
-  const toggleMaximized = () => {
-    if (!props.maximizable) return;
-    desktop.dispatch({ type: 'toggleMaximized', id });
-  };
-
-  const close = () => {
-    desktop.dispatch({ type: 'close', id });
-  };
-
-  /**
    * Component markup
    */
   return (
@@ -211,13 +199,13 @@ export default function Window(props: WindowProps) {
         bg-surface bevel-window
       "
       style={getWindowStyleProps(props)}
-      onPointerDown={() => desktop.dispatch({ type: 'focus', id })}
+      onPointerDown={() => focus(id)}
     >
       <div className="col-start-2 row-start-2 grid grid-rows-[1.125rem_calc(100%-1.125rem)]">
         <div
           className="select-none flex flex-row items-center gap-2 px-0.5 py-px mb-0.5"
           onPointerDown={maximized ? undefined : moveHandler}
-          onDoubleClick={toggleMaximized}
+          onDoubleClick={() => toggleMaximized(id)}
         >
           <img src={`/fs/system/Applications/${appType}/icon_16.png`} alt="" />
 
@@ -235,7 +223,7 @@ export default function Window(props: WindowProps) {
 
           <div className="flex flex-row">
             {props.maximizable ? (
-              <Button onClick={toggleMaximized}>
+              <Button onClick={() => toggleMaximized(id)}>
                 {maximized ? (
                   <img
                     src="/fs/system/Resources/UI/restore.png"
@@ -246,7 +234,7 @@ export default function Window(props: WindowProps) {
                 )}
               </Button>
             ) : null}
-            <Button onClick={close}>
+            <Button onClick={() => close(id)}>
               <img src="/fs/system/Resources/UI/close.png" alt="Close" />
             </Button>
           </div>

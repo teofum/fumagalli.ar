@@ -1,13 +1,13 @@
 import cn from 'classnames';
 
-import { useDesktop } from './Desktop/context';
+import useDesktopStore from './Desktop/store';
 import Button from '~/components/ui/Button';
 import StartMenu from './StartMenu';
 import Divider from '../ui/Divider';
 import Clock from './Clock';
 
 export default function Taskbar() {
-  const { state, dispatch } = useDesktop();
+  const { windows, focus } = useDesktopStore();
 
   return (
     <div className="bg-surface bevel-top pt-0.5 px-1 relative z-1000">
@@ -16,7 +16,7 @@ export default function Taskbar() {
 
         <Divider orientation="vertical" />
 
-        {state.windows.map((window) => (
+        {windows.map((window) => (
           <Button
             key={window.id}
             className={cn('p-1 pr-2 w-40', {
@@ -24,7 +24,7 @@ export default function Taskbar() {
               'bevel-inset bg-checkered': window.focused,
             })}
             data-active={window.focused ? true : undefined}
-            onClick={() => dispatch({ type: 'focus', id: window.id })}
+            onClick={() => focus(window.id)}
           >
             <div className="flex flex-row gap-1.5">
               <img src={`/fs/system/Applications/${window.appType}/icon_16.png`} alt="" />

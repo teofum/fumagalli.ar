@@ -1,9 +1,9 @@
-import { useDesktop } from '~/components/desktop/Desktop/context';
+import useDesktopStore from '~/components/desktop/Desktop/store';
 import Button from '~/components/ui/Button';
 import { files } from '../Files';
 
 export default function Intro() {
-  const { launch } = useDesktop();
+  const { launch } = useDesktopStore();
 
   const openFolder = (path: string) => {
     launch(files({ initialPath: path }));

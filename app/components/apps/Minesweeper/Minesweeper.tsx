@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import MinesweeperNumberDisplay from './MinesweeperNumberDisplay';
 import Button from '~/components/ui/Button';
 import Menu from '~/components/ui/Menu';
-import { useDesktop } from '~/components/desktop/Desktop/context';
 import { useWindow } from '~/components/desktop/Window/context';
 import { getAppResourcesUrl } from '~/content/utils';
+import useDesktopStore from '~/components/desktop/Desktop/store';
 
 const resources = getAppResourcesUrl('mine');
 
@@ -105,7 +105,7 @@ function newBoard(settings: MinesweeperSettings) {
 }
 
 export default function Minesweeper() {
-  const { dispatch } = useDesktop();
+  const { close } = useDesktopStore();
   const { id } = useWindow();
 
   /**
@@ -157,10 +157,6 @@ export default function Minesweeper() {
   const loseGame = () => {
     setGameState(GameState.LOST);
     stopTimer();
-  };
-
-  const exit = () => {
-    dispatch({ type: 'close', id });
   };
 
   // This genuinely only ever needs to run once, on first render
@@ -290,7 +286,7 @@ export default function Minesweeper() {
 
           <Menu.Separator />
 
-          <Menu.Item label="Exit" onSelect={exit} />
+          <Menu.Item label="Exit" onSelect={() => close(id)} />
         </Menu.Root>
       </div>
 

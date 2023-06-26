@@ -1,4 +1,4 @@
-import { useDesktop } from '../Desktop/context';
+import useDesktopStore from '../Desktop/store';
 import type { WindowProps } from './Window';
 import useDrag from './useDrag';
 
@@ -6,7 +6,7 @@ export default function useMoveWindow(
   { id, maximized }: WindowProps,
   windowRef: React.RefObject<HTMLDivElement>,
 ) {
-  const desktop = useDesktop();
+  const { moveAndResize } = useDesktopStore();
 
   const onDragStart = (ev: PointerEvent) => {
     const el = windowRef.current;
@@ -46,15 +46,11 @@ export default function useMoveWindow(
 
     // Commit window changes to application state
     const { top, left, width, height } = el.getBoundingClientRect();
-    desktop.dispatch({
-      type: 'moveAndResize',
-      id,
-      data: {
-        top,
-        left,
-        width,
-        height,
-      },
+    moveAndResize(id, {
+      top,
+      left,
+      width,
+      height,
     });
   };
 

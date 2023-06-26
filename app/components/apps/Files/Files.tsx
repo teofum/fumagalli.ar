@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import type { AnyFile, FSObject } from '~/content/types';
 import useDirectory from './useDirectory';
 import Button from '~/components/ui/Button';
-import { useDesktop } from '~/components/desktop/Desktop/context';
 import { preview } from '../Preview';
 import FilesListView from './views/FilesListView';
 import FilesGridView from './views/FilesGridView';
@@ -14,6 +13,7 @@ import { getAppResourcesUrl } from '~/content/utils';
 import { getApp } from '../renderApp';
 import getReadableSize from './utils/getReadableSize';
 import FilesDetailsView from './views/FilesDetailsView';
+import useDesktopStore from '~/components/desktop/Desktop/store';
 
 const resources = getAppResourcesUrl('files');
 
@@ -37,7 +37,7 @@ export default function Files({
   initialView = 'grid',
   initialPath = '/',
 }: FilesProps) {
-  const { launch, dispatch } = useDesktop();
+  const { launch, setWindowProps, close } = useDesktopStore();
   const { id } = useWindow();
 
   const [status, setStatus] = useState(true);
@@ -49,13 +49,8 @@ export default function Files({
   const dir = useDirectory(path);
 
   useEffect(() => {
-    if (dir)
-      dispatch({
-        type: 'setTitle',
-        id,
-        title: dir.name,
-      });
-  }, [dispatch, dir, id]);
+    if (dir) setWindowProps(id, { title: dir.name });
+  }, [setWindowProps, dir, id]);
 
   const open = (item: FSObject) => {
     if (item.class === 'dir') {
@@ -72,10 +67,6 @@ export default function Files({
     }
   };
 
-  const close = () => {
-    dispatch({ type: 'close', id });
-  };
-
   let ViewComponent = FilesGridView;
   if (view === 'list') ViewComponent = FilesListView;
   else if (view === 'details') ViewComponent = FilesDetailsView;
@@ -84,7 +75,7 @@ export default function Files({
     <div className="flex flex-col gap-0.5 min-w-0">
       <div className="flex flex-row gap-1">
         <Menu.Root trigger={<Menu.Trigger>File</Menu.Trigger>}>
-          <Menu.Item label="Close" onSelect={close} />
+          <Menu.Item label="Close" onSelect={() => close(id)} />
         </Menu.Root>
 
         <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>
