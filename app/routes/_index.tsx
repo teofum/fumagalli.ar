@@ -3,8 +3,8 @@ import Desktop from '~/components/desktop/Desktop';
 
 export const meta: V2_MetaFunction = () => {
   return [
-    { title: 'New Remix App' },
-    { name: 'description', content: 'Welcome to Remix!' },
+    { title: 'Teo Fumagalli' },
+    { name: 'description', content: 'Welcome to my site!' },
   ];
 };
 
