@@ -1,16 +1,13 @@
 import cn from 'classnames';
 import { useEffect, useReducer, useRef, useState } from 'react';
-import MinesweeperNumberDisplay from './MinesweeperNumberDisplay';
-import Button from '~/components/ui/Button';
 import Menu from '~/components/ui/Menu';
 import { useWindow } from '~/components/desktop/Window/context';
-import { getAppResourcesUrl } from '~/content/utils';
 import useDesktopStore from '~/components/desktop/Desktop/store';
-import { FlagStatus, MinesweeperState } from './types';
+import { MinesweeperState } from './types';
 import minesweeperReducer from './reducer';
 import { difficultyPresets, newBoard } from './game';
-
-const resources = getAppResourcesUrl('mine');
+import MinesweeperStatus from './MinesweeperStatus';
+import MinesweeperCell from './MinesweeperCell';
 
 export default function Minesweeper() {
   const { close } = useDesktopStore();
@@ -80,13 +77,12 @@ export default function Minesweeper() {
   /**
    * Utils
    */
-  const flagCount = board.cells.filter(
-    (cell) => cell.flag === FlagStatus.FLAGGED,
-  ).length;
-
   const playing =
     state === MinesweeperState.NEW || state === MinesweeperState.PLAYING;
 
+  /**
+   * Comopnent UI
+   */
   return (
     <div className="select-none">
       <div className="flex flex-row gap-1 mb-0.5">
@@ -118,106 +114,28 @@ export default function Minesweeper() {
       </div>
 
       <div className="bg-surface bevel flex flex-col p-2 gap-2 m-0.5 group/game">
-        <div className="bg-surface bevel-light-inset flex flex-row p-1 gap-1 items-center">
-          <MinesweeperNumberDisplay value={settings.mines - (flagCount ?? 0)} />
-
-          <Button onClick={() => reset(settings)} className="mx-auto">
-            <img
-              src={`${resources}/smiley.png`}
-              className={cn('group-active/game:hidden', { hidden: !playing })}
-              alt=":)"
-            />
-
-            <img
-              src={`${resources}/smiley-click.png`}
-              className={cn('hidden', { 'group-active/game:inline': playing })}
-              alt=":o"
-            />
-
-            <img
-              src={`${resources}/smiley-dead.png`}
-              className={cn({ hidden: state !== MinesweeperState.LOST })}
-              alt="X("
-            />
-
-            <img
-              src={`${resources}/smiley-win.png`}
-              className={cn({ hidden: state !== MinesweeperState.WON })}
-              alt="B)"
-            />
-          </Button>
-
-          <MinesweeperNumberDisplay value={time} />
-        </div>
+        <MinesweeperStatus
+          board={board}
+          state={state}
+          settings={settings}
+          time={time}
+          reset={reset}
+        />
 
         <div
           className={cn(
             'bg-surface bevel-content p-0.5 grid auto-rows-auto justify-start',
-            {
-              'pointer-events-none': !playing,
-            },
+            { 'pointer-events-none': !playing },
           )}
           style={{ gridTemplateColumns: `repeat(${board?.width}, auto)` }}
         >
           {board?.cells.map((cell, i) => (
-            <button
+            <MinesweeperCell
               key={i}
-              className="relative w-4 h-4 group border-r border-b border-light"
+              cell={cell}
               onClick={() => onCellClick(i)}
               onContextMenu={(ev) => onCellRightClick(ev, i)}
-            >
-              <div
-                className={cn(
-                  'w-full h-full grid place-items-center',
-                  'font-minesweeper text-xl',
-                  {
-                    'bg-[red]': cell.exploded,
-                    'group-active:hidden':
-                      !cell.revealed && cell.flag !== FlagStatus.FLAGGED,
-                    'text-[#0000ff]': cell.nearMines === 1,
-                    'text-[#008000]': cell.nearMines === 2,
-                    'text-[#ff0000]': cell.nearMines === 3,
-                    'text-[#000080]': cell.nearMines === 4,
-                    'text-[#800000]': cell.nearMines === 5,
-                    'text-[#008080]': cell.nearMines === 6,
-                    'text-[#800080]': cell.nearMines === 7,
-                    'text-[#505050]': cell.nearMines === 8,
-                  },
-                )}
-              >
-                {cell.hasMine ? (
-                  <img src={`${resources}/mine.png`} alt="mine" />
-                ) : cell.flag === FlagStatus.FLAGGED ? (
-                  <img src={`${resources}/wrong.png`} alt="mine" />
-                ) : (
-                  cell.nearMines || ''
-                )}
-              </div>
-
-              <div
-                className={cn(
-                  'absolute top-0 left-0 w-4 h-4 bg-surface bevel',
-                  {
-                    hidden: cell.revealed,
-                    'group-active:hidden': cell.flag !== FlagStatus.FLAGGED,
-                  },
-                )}
-              >
-                <img
-                  src={`${resources}/flag.png`}
-                  className={cn({ hidden: cell.flag !== FlagStatus.FLAGGED })}
-                  alt="F"
-                />
-
-                <img
-                  src={`${resources}/flag-question.png`}
-                  className={cn({
-                    hidden: cell.flag !== FlagStatus.QUESTION_MARK,
-                  })}
-                  alt="?"
-                />
-              </div>
-            </button>
+            />
           ))}
         </div>
       </div>
