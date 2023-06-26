@@ -32,12 +32,6 @@ export default function Intro() {
         <div className="flex flex-row gap-1">
           <Button
             className="py-1 px-2"
-            onClick={() => openFolder('/Documents/Projects')}
-          >
-            Projects
-          </Button>
-          <Button
-            className="py-1 px-2"
             onClick={() => openFolder('/Documents/Articles')}
           >
             Articles
@@ -47,6 +41,12 @@ export default function Intro() {
             onClick={() => openFolder('/Documents/Photos')}
           >
             Photos
+          </Button>
+          <Button
+            className="py-1 px-2"
+            onClick={() => openFolder('/Documents/Projects')}
+          >
+            Projects
           </Button>
         </div>
 

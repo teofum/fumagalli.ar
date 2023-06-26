@@ -20,6 +20,10 @@
     @apply grayscale;
   }
 
+  .button:disabled span {
+    @apply text-disabled;
+  }
+
   .button-normal {
     @apply bevel active:bevel-inset p-0.5;
   }

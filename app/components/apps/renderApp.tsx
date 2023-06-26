@@ -3,6 +3,8 @@ import Intro, { intro } from './Intro';
 import Files, { files } from './Files';
 import Preview, { preview } from './Preview';
 import Minesweeper, { minesweeper } from './Minesweeper';
+import Sudoku from './Sudoku/Sudoku';
+import { sudoku } from './Sudoku';
 
 const applications = [
   { Component: About, meta: about },
@@ -10,6 +12,7 @@ const applications = [
   { Component: Files, meta: files() },
   { Component: Preview, meta: preview() },
   { Component: Minesweeper, meta: minesweeper },
+  { Component: Sudoku, meta: sudoku },
 ];
 
 interface AppOutletProps {

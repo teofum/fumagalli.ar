@@ -873,6 +873,43 @@ const FS_ROOT: Directory = {
                 },
               ],
             },
+            {
+              class: 'dir',
+              name: 'sudoku',
+              items: [
+                {
+                  class: 'dir',
+                  name: 'resources',
+                  items: [
+                    {
+                      class: 'file',
+                      type: 'file',
+                      name: 'sudoku_hard.json',
+                    },
+                    {
+                      class: 'file',
+                      type: 'file',
+                      name: 'sudoku_medium.json',
+                    },
+                  ],
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_16.png',
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_32.png',
+                },
+                {
+                  class: 'file',
+                  type: 'app',
+                  name: 'sudoku.app',
+                },
+              ],
+            },
           ],
         },
         {
@@ -939,6 +976,42 @@ const FS_ROOT: Directory = {
                     },
                   ],
                 },
+                {
+                  class: 'dir',
+                  name: 'Start',
+                  items: [
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'applications.png',
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'documents.png',
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'help.png',
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'settings.png',
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'shutdown.png',
+                    },
+                  ],
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'shutdown.png',
+                },
               ],
             },
             {
@@ -987,7 +1060,7 @@ const FS_ROOT: Directory = {
                 },
                 {
                   class: 'file',
-                  type: 'svg',
+                  type: 'file',
                   name: 'dot.svg',
                 },
                 {
@@ -1086,6 +1159,11 @@ const FS_ROOT: Directory = {
                   name: 'scrollup.png',
                 },
               ],
+            },
+            {
+              class: 'file',
+              type: 'image',
+              name: 'shutdown.png',
             },
           ],
         },

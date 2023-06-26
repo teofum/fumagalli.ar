@@ -5,8 +5,12 @@ function get_file_type {
 
   if [ "$e" = "jpg" ] || [ "$e" = "jpeg" ] || [ "$e" = "png" ] || [ "$e" = "webp" ] || [ "$e" = "gif" ]; then
     type="image"
+  elif [ "$e" = "md" ]; then
+    type="md"
+  elif [ "$e" = "app" ]; then
+    type="app"
   else
-    type="$e"
+    type="file"
   fi
 }
 

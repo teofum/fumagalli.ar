@@ -5,6 +5,7 @@ import { about } from '../apps/About';
 import { intro } from '../apps/Intro';
 import { minesweeper } from '../apps/Minesweeper';
 import { files } from '../apps/Files';
+import { sudoku } from '../apps/Sudoku';
 
 const ICON_PATH = '/fs/system/Resources/Icons/Start';
 
@@ -33,7 +34,7 @@ export default function StartMenu() {
             icon={`${ICON_PATH}/applications.png`}
           >
             <Menu.Sub label="Games">
-              {[minesweeper].map((app) => (
+              {[minesweeper, sudoku].map((app) => (
                 <Menu.Item
                   key={app.appType}
                   label={app.title ?? ''}
