@@ -1,11 +1,11 @@
 import ScrollContainer from '~/components/ui/ScrollContainer';
 import { usePreviewApp } from '../context';
 import Menu from '~/components/ui/Menu';
-import { useDesktop } from '~/components/desktop/Desktop/context';
 import { useWindow } from '~/components/desktop/Window/context';
 import { useEffect, useRef, useState } from 'react';
 import Button from '~/components/ui/Button';
 import { getAppResourcesUrl } from '~/content/utils';
+import useDesktopStore from '~/components/desktop/Desktop/store';
 
 const resources = getAppResourcesUrl('preview');
 
@@ -16,7 +16,7 @@ const ZOOM_STOPS = [
 ];
 
 export default function PreviewImage() {
-  const { dispatch } = useDesktop();
+  const { moveAndResize, close } = useDesktopStore();
   const { id, minWidth, minHeight } = useWindow();
 
   const { file, resourceUrl } = usePreviewApp();
@@ -55,27 +55,23 @@ export default function PreviewImage() {
           }
 
           // And size window to the size the image ended up with
-          dispatch({
-            type: 'moveAndResize',
-            id,
-            data: {
-              width: actualWidth + UI_SIZE.x,
-              height: actualHeight + UI_SIZE.y,
-            },
+          moveAndResize(id, {
+            width: actualWidth + UI_SIZE.x,
+            height: actualHeight + UI_SIZE.y,
           });
         } else {
           // Size window to image
           const width = Math.max(minWidth, naturalWidth + UI_SIZE.x);
           const height = Math.max(minHeight, naturalHeight + UI_SIZE.y);
 
-          dispatch({ type: 'moveAndResize', id, data: { width, height } });
+          moveAndResize(id, { width, height });
         }
       };
 
       img.addEventListener('load', onload);
       return () => img.removeEventListener('load', onload);
     }
-  }, [dispatch, id, minHeight, minWidth]);
+  }, [moveAndResize, id, minHeight, minWidth]);
 
   const download = () => {
     const a = document.createElement('a');
@@ -84,10 +80,6 @@ export default function PreviewImage() {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-  };
-
-  const close = () => {
-    dispatch({ type: 'close', id });
   };
 
   const zoomOut = () => {
@@ -127,7 +119,7 @@ export default function PreviewImage() {
 
           <Menu.Separator />
 
-          <Menu.Item label="Close" onSelect={close} />
+          <Menu.Item label="Close" onSelect={() => close(id)} />
         </Menu.Root>
 
         <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>

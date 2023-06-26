@@ -1,6 +1,5 @@
 import { version } from 'package.json';
 
-import { useDesktop } from './Desktop/context';
 import Button from '../ui/Button';
 import Menu from '../ui/Menu';
 import { about } from '../apps/About';
@@ -8,11 +7,12 @@ import { intro } from '../apps/Intro';
 import { minesweeper } from '../apps/Minesweeper';
 import { files } from '../apps/Files';
 import { sudoku } from '../apps/Sudoku';
+import useDesktopStore from './Desktop/store';
 
 const ICON_PATH = '/fs/system/Resources/Icons/Start';
 
 export default function StartMenu() {
-  const { launch, shutdown } = useDesktop();
+  const { launch, shutdown } = useDesktopStore();
 
   return (
     <Menu.Root
@@ -109,7 +109,7 @@ export default function StartMenu() {
             className="gap-2 w-44"
             label="Shut down..."
             icon={`${ICON_PATH}/shutdown.png`}
-            onSelect={shutdown}
+            onSelect={() => shutdown()}
           />
         </div>
       </div>

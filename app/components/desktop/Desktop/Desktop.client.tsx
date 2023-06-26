@@ -1,42 +1,37 @@
-import { useReducer, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Window from '../Window';
-import desktopReducer, { createWindow } from './reducer';
-import { DesktopProvider } from './context';
-import { about } from '~/components/apps/About';
-import { intro } from '~/components/apps/Intro';
 import Taskbar from '../Taskbar';
 import Dialog, { DialogClose } from '~/components/ui/Dialog';
 import Button from '~/components/ui/Button';
+import useDesktopStore from './store';
+import { about } from '~/components/apps/About';
+import { intro } from '~/components/apps/Intro';
 
 export default function Desktop() {
+  const { windows, launch, shutdownDialog, shutdown } = useDesktopStore();
   const [isShutdown, setShutdown] = useState(false);
-  const [sdOpen, setSdOpen] = useState(false);
 
-  const [state, dispatch] = useReducer(desktopReducer, {
-    windows: [
-      { ...createWindow(about), order: 0, focused: false },
-      { ...createWindow(intro), order: 1, focused: true },
-    ],
-  });
-
-  const shutdown = () => setShutdown(true);
+  useEffect(() => {
+    if (windows.length === 0) {
+      launch(about);
+      launch(intro);
+    }
+  // This is only meant to run once on startup
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <DesktopProvider
-      state={state}
-      dispatch={dispatch}
-      shutdown={() => setSdOpen(true)}
-    >
+    <>
       <div className="w-screen h-screen bg-desktop flex flex-col">
         <div className="relative flex-1">
-          {state.windows.map((window) => (
+          {windows.map((window) => (
             <Window key={window.id} {...window} />
           ))}
         </div>
         <Taskbar />
       </div>
 
-      <Dialog title="Shut Down" open={sdOpen} onOpenChange={setSdOpen}>
+      <Dialog title="Shut Down" open={shutdownDialog} onOpenChange={shutdown}>
         <div className="flex flex-col gap-4 px-3 py-2">
           <div className="flex flex-row gap-4">
             <img src="/fs/system/Resources/Icons/shutdown.png" alt="" />
@@ -46,7 +41,7 @@ export default function Desktop() {
           <div className="flex flex-row justify-end gap-2">
             <Button
               className="w-20 p-1 outline outline-1 outline-black"
-              onClick={shutdown}
+              onClick={() => setShutdown(true)}
             >
               OK
             </Button>
@@ -67,6 +62,6 @@ export default function Desktop() {
           />
         </div>
       ) : null}
-    </DesktopProvider>
+    </>
   );
 }

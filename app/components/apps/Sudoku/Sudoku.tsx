@@ -4,10 +4,10 @@ import sudokuReducer from './reducer';
 import Menu from '~/components/ui/Menu';
 import cn from 'classnames';
 import Button from '~/components/ui/Button';
-import { useDesktop } from '~/components/desktop/Desktop/context';
 import { useWindow } from '~/components/desktop/Window/context';
 import { useFetcher } from '@remix-run/react';
 import Markdown from '~/components/ui/Markdown';
+import useDesktopStore from '~/components/desktop/Desktop/store';
 
 interface CellProps {
   index: number;
@@ -104,7 +104,7 @@ function SudokuCell({ index: i, value, fixed, state, dispatch }: CellProps) {
 }
 
 export default function Sudoku() {
-  const desktop = useDesktop();
+  const { close } = useDesktopStore();
   const { id } = useWindow();
 
   /**
@@ -232,7 +232,7 @@ export default function Sudoku() {
 
           <Menu.Item
             label="Exit"
-            onSelect={() => desktop.dispatch({ type: 'close', id })}
+            onSelect={() => close(id)}
           />
         </Menu.Root>
       </div>
