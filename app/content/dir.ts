@@ -883,6 +883,16 @@ const FS_ROOT: Directory = {
                   items: [
                     {
                       class: 'file',
+                      type: 'md',
+                      name: 'help.md',
+                    },
+                    {
+                      class: 'file',
+                      type: 'file',
+                      name: 'sudoku_easy.json',
+                    },
+                    {
+                      class: 'file',
                       type: 'file',
                       name: 'sudoku_hard.json',
                     },

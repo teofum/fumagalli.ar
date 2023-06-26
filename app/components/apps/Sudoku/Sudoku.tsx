@@ -7,6 +7,7 @@ import Button from '~/components/ui/Button';
 import { useDesktop } from '~/components/desktop/Desktop/context';
 import { useWindow } from '~/components/desktop/Window/context';
 import { useFetcher } from '@remix-run/react';
+import Markdown from '~/components/ui/Markdown';
 
 interface CellProps {
   index: number;
@@ -105,6 +106,23 @@ function SudokuCell({ index: i, value, fixed, state, dispatch }: CellProps) {
 export default function Sudoku() {
   const desktop = useDesktop();
   const { id } = useWindow();
+
+  /**
+   * Fetch help MD
+   */
+  const [helpContent, setHelpContent] = useState('');
+  useEffect(() => {
+    const fetchMarkdown = async () => {
+      const res = await fetch(
+        '/fs/system/Applications/sudoku/resources/help.md',
+      );
+      if (res.ok) {
+        setHelpContent(await res.text());
+      }
+    };
+
+    fetchMarkdown();
+  }, []);
 
   /**
    * Game state
@@ -259,7 +277,15 @@ export default function Sudoku() {
           })}
 
           {state.board === null ? (
-            <div className="col-span-9 w-[360px] h-[360px] p-4">help</div>
+            <div className="col-span-9 w-[360px] h-[360px] p-4">
+              <Markdown>
+                {helpContent}
+              </Markdown>
+
+              <Button className="py-1 px-4 mt-6" onClick={() => newGame()}>
+                Start game
+              </Button>
+            </div>
           ) : null}
 
           {state.won ? (
