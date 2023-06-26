@@ -2,6 +2,7 @@ import { nanoid } from 'nanoid';
 import type { WindowProps, WindowInit } from '../Window';
 import { WindowSizingMode } from '../Window';
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export function createWindow(props: WindowInit): WindowProps {
   return {
@@ -53,66 +54,71 @@ interface DesktopActions {
   shutdown: (open?: boolean) => void;
 }
 
-const useDesktopStore = create<DesktopState & DesktopActions>((set) => ({
-  windows: [],
-  shutdownDialog: false,
+const useDesktopStore = create<DesktopState & DesktopActions>()(
+  persist(
+    (set, get) => ({
+      windows: [],
+      shutdownDialog: false,
 
-  launch: (init) =>
-    set(({ windows }) => ({
-      windows: [
-        ...windows.map((window) => ({ ...window, focused: false })),
-        { ...createWindow(init), order: windows.length, focused: true },
-      ],
-    })),
-  focus: (id) =>
-    set(({ windows }) => {
-      const target = windows.find((window) => window.id === id);
-      if (!target) return {};
-
-      const top = windows.length - 1;
-      return {
-        windows: windows.map((window) => ({
-          ...window,
-          focused: window.id === id,
-          order:
-            window.id === target.id
-              ? top // Bring target to top
-              : window.order > target.order
-              ? window.order - 1 // Lower any window on top of target by 1
-              : window.order, // Keep the rest the same
+      launch: (init) =>
+        set(({ windows }) => ({
+          windows: [
+            ...windows.map((window) => ({ ...window, focused: false })),
+            { ...createWindow(init), order: windows.length, focused: true },
+          ],
         })),
-      };
-    }),
-  toggleMaximized: (id) =>
-    set(({ windows }) => {
-      const target = windows.find((window) => window.id === id);
-      if (!target) return {};
+      focus: (id) =>
+        set(({ windows }) => {
+          const target = windows.find((window) => window.id === id);
+          if (!target) return {};
 
-      return {
-        windows: windows.map((window) =>
-          window.id === id
-            ? { ...window, maximized: !window.maximized }
-            : window,
-        ),
-      };
+          const top = windows.length - 1;
+          return {
+            windows: windows.map((window) => ({
+              ...window,
+              focused: window.id === id,
+              order:
+                window.id === target.id
+                  ? top // Bring target to top
+                  : window.order > target.order
+                  ? window.order - 1 // Lower any window on top of target by 1
+                  : window.order, // Keep the rest the same
+            })),
+          };
+        }),
+      toggleMaximized: (id) =>
+        set(({ windows }) => {
+          const target = windows.find((window) => window.id === id);
+          if (!target) return {};
+
+          return {
+            windows: windows.map((window) =>
+              window.id === id
+                ? { ...window, maximized: !window.maximized }
+                : window,
+            ),
+          };
+        }),
+      close: (id) =>
+        set(({ windows }) => ({
+          windows: windows.filter((window) => window.id !== id),
+        })),
+      moveAndResize: (id, data) =>
+        set(({ windows }) => ({
+          windows: windows.map((window) =>
+            window.id === id ? { ...window, ...data } : window,
+          ),
+        })),
+      setWindowProps: (id, data) =>
+        set(({ windows }) => ({
+          windows: windows.map((window) =>
+            window.id === id ? { ...window, ...data } : window,
+          ),
+        })),
+      shutdown: (open = false) => set(() => ({ shutdownDialog: open })),
     }),
-  close: (id) =>
-    set(({ windows }) => ({
-      windows: windows.filter((window) => window.id !== id),
-    })),
-  moveAndResize: (id, data) =>
-    set(({ windows }) => ({
-      windows: windows.map((window) =>
-        window.id === id ? { ...window, ...data } : window,
-      ),
-    })),
-  setWindowProps: (id, data) =>
-    set(({ windows }) => ({
-      windows: windows.map((window) =>
-        window.id === id ? { ...window, ...data } : window,
-      ),
-    })),
-  shutdown: (open = false) => set(() => ({ shutdownDialog: open })),
-}));
+    { name: 'desktop-storage' },
+  ),
+);
 
 export default useDesktopStore;
