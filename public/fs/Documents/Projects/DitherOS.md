@@ -3,7 +3,7 @@
 [View site](https://fumagalli.ar/dither)  
 [Source code](https://github.com/teofum/dither)
 
-![Screenshot](/fs/Documents/Projects/Screenshots/DitherOS.webp)
+![Screenshot](/fs/Documents/Projects/screenshots/DitherOS.webp)
 
 ## About
 
