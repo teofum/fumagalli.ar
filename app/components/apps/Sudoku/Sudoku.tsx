@@ -1,5 +1,5 @@
 import type { Dispatch, ReducerAction, ReducerState } from 'react';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import sudokuReducer from './reducer';
 import Menu from '~/components/ui/Menu';
 import cn from 'classnames';
@@ -106,6 +106,9 @@ export default function Sudoku() {
   const desktop = useDesktop();
   const { id } = useWindow();
 
+  /**
+   * Game state
+   */
   const [state, dispatch] = useReducer(sudokuReducer, {
     board: null,
     selected: -1,
@@ -117,14 +120,44 @@ export default function Sudoku() {
     won: false,
   });
 
-  const { load, data } = useFetcher<number[]>();
+  /**
+   * Timer
+   */
+  const [time, setTime] = useState(0);
+  const [timer, setTimer] = useState<NodeJS.Timeout>();
 
+  useEffect(() => {
+    if (state.won && timer) clearInterval(timer);
+  }, [state.won, timer]);
+
+  const stopTimer = () => {
+    if (timer) clearInterval(timer);
+  };
+
+  const resetTimer = () => {
+    stopTimer();
+    setTime(0);
+  };
+
+  const startTimer = () => {
+    resetTimer();
+    const newTimer = setInterval(() => {
+      setTime((time) => Math.min(time + 1, 999));
+    }, 1000);
+    setTimer(newTimer);
+  };
+
+  /**
+   * New game logic
+   */
+  const { load, data } = useFetcher<number[]>();
   const newGame = (difficulty: string = state.settings.difficulty) => {
     load(`/api/sudoku?difficulty=${difficulty}`);
     dispatch({
       type: 'settings',
       settings: { difficulty: difficulty as typeof state.settings.difficulty },
     });
+    startTimer();
   };
 
   useEffect(() => {
@@ -134,6 +167,9 @@ export default function Sudoku() {
     dispatch({ type: 'newGame', board });
   }, [data]);
 
+  /**
+   * Component UI
+   */
   return (
     <div className="flex flex-col gap-0.5">
       <div className="flex flex-row">
@@ -223,9 +259,7 @@ export default function Sudoku() {
           })}
 
           {state.board === null ? (
-            <div className="col-span-9 w-[360px] h-[360px] p-4">
-              help
-            </div>
+            <div className="col-span-9 w-[360px] h-[360px] p-4">help</div>
           ) : null}
 
           {state.won ? (
@@ -235,6 +269,19 @@ export default function Sudoku() {
               </div>
             </div>
           ) : null}
+        </div>
+      </div>
+
+      <div className="flex flex-row gap-0.5">
+        <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
+          Time: {Math.floor(time / 60)}:
+          {(time % 60).toString().padStart(2, '0')}
+        </div>
+        <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
+          Difficulty: {state.settings.difficulty.toUpperCase()}
+        </div>
+        <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
+          {state.won ? 'Solved!' : ''}
         </div>
       </div>
     </div>

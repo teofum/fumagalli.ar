@@ -100,7 +100,7 @@ function checkBoard(state: GameState): GameState {
 
   const win = state.board.every(
     (cell, i) =>
-      state.board && getNeighborValues(state.board, i).has(cell.value),
+      state.board && !getNeighborValues(state.board, i).has(cell.value),
   );
 
   if (win) return { ...state, won: true, selected: -1 };
