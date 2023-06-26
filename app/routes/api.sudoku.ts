@@ -7,7 +7,7 @@ export async function loader({ request }: LoaderArgs) {
   // Yes, this loads an entire 300KB JSON file each time. Yes, it's dumb. It's
   // also fast enough that I don't need to bother with a database.
   const res = await fetch(
-    `http://localhost:3200/fs/system/Applications/sudoku/resources/sudoku_${difficulty}.json`,
+    `${url.origin}/fs/system/Applications/sudoku/resources/sudoku_${difficulty}.json`,
   );
   const data = (await res.json()) as { name: string; data: number[] }[];
 
