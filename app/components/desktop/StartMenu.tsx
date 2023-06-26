@@ -1,3 +1,5 @@
+import { version } from 'package.json';
+
 import { useDesktop } from './Desktop/context';
 import Button from '../ui/Button';
 import Menu from '../ui/Menu';
@@ -24,7 +26,7 @@ export default function StartMenu() {
       <div className="flex flex-row">
         <div className="bg-selection text-selection w-6 flex flex-row p-2">
           <span className="[writing-mode:vertical-rl] rotate-180 self-end bold">
-            TeOS 0.1.0
+            TeOS {version}
           </span>
         </div>
         <div>

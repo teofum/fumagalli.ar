@@ -1,4 +1,4 @@
-const VERSION = '0.0.0';
+import { version } from 'package.json';
 
 export default function About() {
   return (
@@ -8,7 +8,7 @@ export default function About() {
         <span className="tracking-[2px]">OS</span>
       </h1>
 
-      <p>TeOS v{VERSION}</p>
+      <p>TeOS v{version}</p>
       <p>Website by Teo Fumagalli</p>
       <p>
         Source code on{' '}
