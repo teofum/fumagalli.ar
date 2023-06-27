@@ -37,7 +37,7 @@ export default function Solitaire() {
       </div>
 
       <div className="flex-1 bg-[#008000] bevel-content p-2">
-        <div className="grid grid-cols-7 grid-rows-[auto_1fr] justify-items-center gap-2 mx-2">
+        <div className="grid grid-cols-7 grid-rows-[auto_1fr] justify-items-center gap-1 mx-2">
           {/* Deck */}
           <div className="relative">
             <button
@@ -67,8 +67,9 @@ export default function Solitaire() {
 
           {/* Drawn cards */}
           <div className="relative w-[71px] h-[96px]">
-            {drawn.map((card, i) => {
+            {drawn.map((card, i, { length }) => {
               const height = Math.floor(i / 10);
+              const top = i === length - 1;
 
               return (
                 <div
@@ -77,6 +78,11 @@ export default function Solitaire() {
                   style={{
                     transform: `translate(${height * 2}px, ${height}px)`,
                   }}
+                  onDoubleClick={
+                    top
+                      ? () => dispatch({ type: 'sendToStack', card })
+                      : undefined
+                  }
                 >
                   <Card suit={card.suit} number={card.number} turned />
                 </div>
@@ -88,20 +94,38 @@ export default function Solitaire() {
           <div />
 
           {/* Suit stacks */}
-          {[0, 1, 2, 3].map((i) => (
-            <div key={`suit_${i}`}>
+          {[0, 1, 2, 3].map((iStack) => (
+            <div key={`suit_${iStack}`} className="relative">
               <img
                 src={`${resources}/stack-empty.png`}
-                alt={`Suit stack ${i + 1}`}
+                alt={`Suit stack ${iStack + 1}`}
               />
+
+              {stacks[iStack].map((card, iCard, { length }) => {
+                const height = Math.floor(iCard / 4);
+                // const top = iCard === length - 1;
+
+                return (
+                  <div
+                    key={`${card.suit}-${card.number}`}
+                    className="absolute top-0 left-0"
+                    style={{
+                      transform: `translate(${height * 2}px, ${height}px)`,
+                    }}
+                  >
+                    <Card suit={card.suit} number={card.number} turned />
+                  </div>
+                );
+              })}
             </div>
           ))}
 
           {/* Row stacks */}
           {[0, 1, 2, 3, 4, 5, 6].map((iRow) => (
             <div key={`row_${iRow}`} className="relative w-[71px] h-[96px]">
-              {rows[iRow].unturned.map((card, iCard) => {
+              {rows[iRow].unturned.map((card, iCard, { length }) => {
                 const y = iCard * 3;
+                const top = iCard === length - 1;
 
                 return (
                   <div
@@ -110,14 +134,20 @@ export default function Solitaire() {
                     style={{
                       transform: `translateY(${y}px)`,
                     }}
+                    onClick={
+                      top
+                        ? () => dispatch({ type: 'reveal', rowIndex: iRow })
+                        : undefined
+                    }
                   >
                     <Card suit={card.suit} number={card.number} />
                   </div>
                 );
               })}
 
-              {rows[iRow].turned.map((card, iCard) => {
+              {rows[iRow].turned.map((card, iCard, { length }) => {
                 const y = iCard * 15 + rows[iRow].unturned.length * 3;
+                const top = iCard === length - 1;
 
                 return (
                   <div
@@ -126,6 +156,11 @@ export default function Solitaire() {
                     style={{
                       transform: `translateY(${y}px)`,
                     }}
+                    onDoubleClick={
+                      top
+                        ? () => dispatch({ type: 'sendToStack', card })
+                        : undefined
+                    }
                   >
                     <Card suit={card.suit} number={card.number} turned />
                   </div>
