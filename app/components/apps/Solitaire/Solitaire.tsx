@@ -1,4 +1,4 @@
-import { forwardRef, useReducer } from 'react';
+import { forwardRef, useEffect, useReducer, useRef } from 'react';
 import Menu from '~/components/ui/Menu';
 import { getAppResourcesUrl } from '~/content/utils';
 import solitaireReducer from './reducer';
@@ -31,11 +31,14 @@ const Card = forwardRef<HTMLImageElement, CardProps>(function Card(
 });
 
 export default function Solitaire() {
-  const [{ deck, drawn, stacks, rows }, dispatch] = useReducer(
+  const [{ deck, drawn, stacks, rows, state }, dispatch] = useReducer(
     solitaireReducer,
     deal(),
   );
 
+  /**
+   * Card drag handlers
+   */
   const onDragStart = (ev: PointerEvent, target: EventTarget | null) => {
     const el = target as HTMLElement;
 
@@ -155,6 +158,75 @@ export default function Solitaire() {
 
   const cardDragHandler = useDrag({ onDragStart, onDragMove, onDragEnd });
 
+  /**
+   * Win animation
+   */
+  const boardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (state === 'won' && boardRef.current) {
+      let i = 51;
+      const board = boardRef.current;
+
+      let vx = 0;
+      let vy = 0;
+      let x = 0;
+      let y = 0;
+      let z = 0;
+      let raf: { x: number | null} = { x: null };
+
+      const animate = () => {
+        const iStack = i % 4;
+        const iCard = Math.floor(i / 4) + 1;
+
+        const stack = board.querySelector(`#stack-suit-${iStack}`);
+        const card = stack?.children.item(iCard) as HTMLDivElement;
+        const image = card.firstElementChild as HTMLImageElement;
+
+        const { height, left, right } = board.getBoundingClientRect();
+
+        if (!card.dataset.animated) {
+          card.dataset.animated = 'true';
+          card.style.setProperty('z-index', `${100 - i}`);
+          vx = (Math.random() * 8 + 2) * (Math.random() > 0.5 ? -1 : 1);
+          vy = (Math.random() * 6 + 1) * (Math.random() > 0.2 ? -1 : 0.5);
+          x = 0;
+          y = 0;
+          z = 0;
+        } else {
+          const newEl = image.cloneNode() as HTMLImageElement;
+          newEl.style.setProperty('position', 'absolute');
+          newEl.style.setProperty('top', `${y}px`);
+          newEl.style.setProperty('left', `${x}px`);
+          newEl.style.setProperty('z-index', `${z}`);
+          card.appendChild(newEl);
+          x += vx;
+          y += vy;
+          z++;
+
+          vy += 1; // Gravity
+          if (y > height - 96 && vy > 0) {
+            vy *= -0.8; // Bounce!
+          }
+
+          const { left: elL, right: elR } = newEl.getBoundingClientRect();
+          const outOfBounds = elL > right || elR < left;
+          if (outOfBounds) i--;
+        }
+
+        if (i > 0) raf.x = requestAnimationFrame(animate);
+      };
+
+      animate();
+      return () => {
+        if (raf.x !== null) cancelAnimationFrame(raf.x);
+      }
+    }
+  }, [state]);
+
+  /**
+   * Component UI
+   */
   return (
     <div className="flex flex-col gap-0.5">
       <div className="flex flex-row gap-0.5">
@@ -163,8 +235,18 @@ export default function Solitaire() {
         </Menu.Root>
       </div>
 
-      <div className="flex-1 bg-[#008000] bevel-content p-2 select-none">
-        <div className="grid grid-cols-7 grid-rows-[auto_1fr] justify-items-center gap-1 mx-2">
+      <div
+        ref={boardRef}
+        className={cn('flex-1 bg-[#008000] bevel-content select-none p-0.5', {
+          'pointer-events-none': state === 'won',
+        })}
+      >
+        <div
+          className={cn(
+            'grid grid-cols-7 grid-rows-[auto_1fr] justify-items-center',
+            'gap-1 px-4 py-2 min-h-full overflow-hidden',
+          )}
+        >
           {/* Deck */}
           <div className="relative">
             <button

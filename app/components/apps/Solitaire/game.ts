@@ -35,7 +35,7 @@ export function newDeck() {
   return deck;
 }
 
-export function deal() {
+export function deal(cheat?: boolean): GameState {
   const deck = newDeck(); // Shuffled deck
 
   // Distribute row-stack cards
@@ -50,7 +50,20 @@ export function deal() {
     start = end;
   }
 
+  // Super development cheat code
+  // Used to debug win animation
+  if (cheat) return {
+    state: 'playing',
+    deck: [],
+    drawn: [{ suit: 'spades', number: 13 }],
+    rows: Array.from(Array(7), () => ({ unturned: [], turned: [] })),
+    stacks: SUITS.map((suit, i) =>
+      Array.from(Array(i === 3 ? 12 : 13), (_, k) => ({ suit, number: k + 1 })),
+    ),
+  };
+
   return {
+    state: 'playing',
     deck: deck.slice(28), // Rest of the cards go to the deck
     drawn: [],
 
@@ -100,4 +113,9 @@ export function removeCardsFromStack(stack: Card[], cards: Card[]) {
         ({ number, suit }) => card.number === number && card.suit === suit,
       ),
   );
+}
+
+export function isWin(state: GameState) {
+  // The only way to get a king on top of each suit stack is to win the game
+  return state.stacks.every((stack) => stack.at(-1)?.number === 13);
 }

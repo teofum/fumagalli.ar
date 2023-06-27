@@ -2,11 +2,14 @@ import {
   canMoveToRowStack,
   canMoveToSuitStack,
   deal,
+  isWin,
   removeCardsFromStack,
 } from './game';
 import type { Card } from './types';
 
 export interface GameState {
+  state: 'playing' | 'won';
+
   deck: Card[];
   drawn: Card[];
 
@@ -109,7 +112,7 @@ export default function solitaireReducer(
       if (target === -1) return state;
 
       // If we found a stack...
-      return {
+      const newState = {
         ...state,
         // We push the card to it...
         stacks: state.stacks.map((stack, i) =>
@@ -128,6 +131,12 @@ export default function solitaireReducer(
           ),
         })),
       };
+
+      return {
+        ...newState,
+        // Check for win condition
+        state: isWin(newState) ? 'won' : 'playing',
+      };
     }
     case 'move': {
       const { cards, to } = action;
@@ -141,13 +150,14 @@ export default function solitaireReducer(
 
           // If the stack will take the card...
           const { number, suit } = cards[0];
-          return {
+          const newState = {
             ...state,
             // We push the card to it...
-            stacks: state.stacks.map((stack, i) =>
-              i === to.index
-                ? [...stack, ...cards] // Push the card to target stack
-                : removeCardsFromStack(stack, cards), // Remove from others
+            stacks: state.stacks.map(
+              (stack, i) =>
+                i === to.index
+                  ? [...stack, ...cards] // Push the card to target stack
+                  : removeCardsFromStack(stack, cards), // Remove from others
             ),
             // And remove it from wherever it was
             drawn: state.drawn.filter(
@@ -160,9 +170,14 @@ export default function solitaireReducer(
               ),
             })),
           };
+
+          return {
+            ...newState,
+            // Check for win condition
+            state: isWin(newState) ? 'won' : 'playing',
+          };
         }
         case 'row': {
-
           // We'll assume the stack is valid, and only check the first card
           const target = state.rows[to.index];
           if (!canMoveToRowStack(target, cards[0])) return state;
