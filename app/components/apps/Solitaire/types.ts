@@ -8,4 +8,5 @@ export interface Card {
 export interface SolitaireSettings {
   rules: 'draw-one' | 'draw-three';
   scoring: 'none' | 'standard' | 'vegas';
+  back: number;
 }

@@ -52,6 +52,11 @@ interface MoveAction {
   to: { type: 'suit' | 'row'; index: number };
 }
 
+interface ChangeDeckAction {
+  type: 'changeDeck';
+  back: number;
+}
+
 interface EndWinAnimationAction {
   type: 'endWinAnimation';
 }
@@ -63,6 +68,7 @@ type Action =
   | RevealAction
   | StackAction
   | MoveAction
+  | ChangeDeckAction
   | EndWinAnimationAction;
 
 export default function solitaireReducer(
@@ -260,6 +266,9 @@ export default function solitaireReducer(
           };
         }
       }
+    }
+    case 'changeDeck': {
+      return { ...state, settings: { ...state.settings, back: action.back } };
     }
     case 'endWinAnimation': {
       return { ...state, state: 'won' };
