@@ -1,6 +1,6 @@
 import useDesktopStore from '../Desktop/store';
 import type { WindowProps } from './Window';
-import useDrag from './useDrag';
+import useDrag from '~/hooks/useDrag';
 
 export default function useMoveWindow(
   { id, maximized }: WindowProps,

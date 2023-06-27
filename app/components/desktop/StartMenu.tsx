@@ -8,6 +8,7 @@ import { minesweeper } from '../apps/Minesweeper';
 import { files } from '../apps/Files';
 import { sudoku } from '../apps/Sudoku';
 import useDesktopStore from './Desktop/store';
+import { solitaire } from '../apps/Solitaire';
 
 const ICON_PATH = '/fs/system/Resources/Icons/Start';
 
@@ -36,7 +37,7 @@ export default function StartMenu() {
             icon={`${ICON_PATH}/applications.png`}
           >
             <Menu.Sub label="Games">
-              {[minesweeper, sudoku].map((app) => (
+              {[minesweeper, solitaire, sudoku].map((app) => (
                 <Menu.Item
                   key={app.appType}
                   label={app.title ?? ''}

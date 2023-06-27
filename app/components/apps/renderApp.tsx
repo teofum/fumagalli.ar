@@ -3,8 +3,8 @@ import Intro, { intro } from './Intro';
 import Files, { files } from './Files';
 import Preview, { preview } from './Preview';
 import Minesweeper, { minesweeper } from './Minesweeper';
-import Sudoku from './Sudoku/Sudoku';
-import { sudoku } from './Sudoku';
+import Sudoku, { sudoku } from './Sudoku';
+import Solitaire, { solitaire } from './Solitaire';
 
 const applications = [
   { Component: About, meta: about },
@@ -12,6 +12,7 @@ const applications = [
   { Component: Files, meta: files() },
   { Component: Preview, meta: preview() },
   { Component: Minesweeper, meta: minesweeper },
+  { Component: Solitaire, meta: solitaire },
   { Component: Sudoku, meta: sudoku },
 ];
 
