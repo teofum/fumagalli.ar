@@ -38,6 +38,7 @@ export function newDeck() {
 const defaultSettings: SolitaireSettings = {
   rules: 'draw-three',
   scoring: 'standard',
+  back: 0,
 };
 
 export function deal(settings = defaultSettings, cheat?: boolean): GameState {
