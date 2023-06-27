@@ -5,7 +5,7 @@ import { useWindow } from '~/components/desktop/Window/context';
 import { useEffect, useRef, useState } from 'react';
 import Button from '~/components/ui/Button';
 import { getAppResourcesUrl } from '~/content/utils';
-import useDesktopStore from '~/components/desktop/Desktop/store';
+import useDesktopStore from '~/stores/desktop';
 
 const resources = getAppResourcesUrl('preview');
 

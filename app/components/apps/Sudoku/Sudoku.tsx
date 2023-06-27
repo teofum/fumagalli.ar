@@ -7,7 +7,7 @@ import Button from '~/components/ui/Button';
 import { useWindow } from '~/components/desktop/Window/context';
 import { useFetcher } from '@remix-run/react';
 import Markdown from '~/components/ui/Markdown';
-import useDesktopStore from '~/components/desktop/Desktop/store';
+import useDesktopStore from '~/stores/desktop';
 
 interface CellProps {
   index: number;

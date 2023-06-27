@@ -7,7 +7,7 @@ import { intro } from '../apps/Intro';
 import { minesweeper } from '../apps/Minesweeper';
 import { files } from '../apps/Files';
 import { sudoku } from '../apps/Sudoku';
-import useDesktopStore from './Desktop/store';
+import useDesktopStore from '~/stores/desktop';
 import { solitaire } from '../apps/Solitaire';
 
 const ICON_PATH = '/fs/system/Resources/Icons/Start';

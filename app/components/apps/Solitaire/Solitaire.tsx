@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useReducer, useRef, useState } from 'react';
 import cn from 'classnames';
 
 import { useWindow } from '~/components/desktop/Window/context';
-import useDesktopStore from '~/components/desktop/Desktop/store';
+import useDesktopStore from '~/stores/desktop';
 import Button from '~/components/ui/Button';
 import Menu from '~/components/ui/Menu';
 

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import useDesktopStore from '~/components/desktop/Desktop/store';
+import useDesktopStore from '~/stores/desktop';
 import { useWindow } from '~/components/desktop/Window/context';
 import { PreviewAppProvider, type PreviewSupportedFile } from './context';
 import PreviewMarkdown from './modes/PreviewMarkdown';

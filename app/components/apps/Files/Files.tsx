@@ -13,7 +13,7 @@ import { getAppResourcesUrl } from '~/content/utils';
 import { getApp } from '../renderApp';
 import getReadableSize from './utils/getReadableSize';
 import FilesDetailsView from './views/FilesDetailsView';
-import useDesktopStore from '~/components/desktop/Desktop/store';
+import useDesktopStore from '~/stores/desktop';
 
 const resources = getAppResourcesUrl('files');
 

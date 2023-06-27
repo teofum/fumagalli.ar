@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
-import type { WindowProps, WindowInit } from '../Window';
-import { WindowSizingMode } from '../Window';
+import type { WindowProps, WindowInit } from '../components/desktop/Window';
+import { WindowSizingMode } from '../components/desktop/Window';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 

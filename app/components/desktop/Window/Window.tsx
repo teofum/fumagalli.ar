@@ -5,7 +5,7 @@ import cn from 'classnames';
 import Button from '~/components/ui/Button';
 import AppOutlet from '~/components/apps/renderApp';
 import { WindowProvider } from './context';
-import useDesktopStore from '../Desktop/store';
+import useDesktopStore from '~/stores/desktop';
 
 export enum WindowSizingMode {
   RESIZABLE = 'standard',

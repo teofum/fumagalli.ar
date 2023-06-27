@@ -3,7 +3,7 @@ import Window from '../Window';
 import Taskbar from '../Taskbar';
 import Dialog, { DialogClose } from '~/components/ui/Dialog';
 import Button from '~/components/ui/Button';
-import useDesktopStore from './store';
+import useDesktopStore from '~/stores/desktop';
 import { about } from '~/components/apps/About';
 import { intro } from '~/components/apps/Intro';
 
