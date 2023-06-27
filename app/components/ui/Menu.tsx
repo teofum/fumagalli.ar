@@ -127,7 +127,7 @@ function Sub({
       <DropdownMenu.SubTrigger className={cn('menu-item menu-sub', className)} {...props}>
         {icon ? <img className="col-start-1" src={icon} alt="" /> : null}
         <span className="col-start-2">{label}</span>
-        <ArrowSubmenu />
+        <div className="w-3 h-3"><ArrowSubmenu /></div>
       </DropdownMenu.SubTrigger>
 
       <DropdownMenu.Portal>
