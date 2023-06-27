@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useReducer, useRef } from 'react';
+import { forwardRef, useEffect, useReducer, useRef, useState } from 'react';
 import Menu from '~/components/ui/Menu';
 import { getAppResourcesUrl } from '~/content/utils';
 import solitaireReducer from './reducer';
@@ -36,6 +36,44 @@ export default function Solitaire() {
     solitaireReducer,
     deal(),
   );
+
+  /**
+   * Timer
+   */
+  const [time, setTime] = useState(0);
+  const [timer, setTimer] = useState<NodeJS.Timeout>();
+
+  useEffect(() => {
+    if (state !== 'playing' && timer) {
+      // Stop timer on gamestate change
+      clearInterval(timer);
+      setTimer(undefined);
+    }
+  }, [state, timer]);
+
+  const resetTimer = () => {
+    if (timer) {
+      clearInterval(timer);
+      setTimer(undefined);
+    }
+
+    setTime(0);
+  }
+
+  const startTimer = () => {
+    if (timer) return;
+
+    setTime(0);
+    const newTimer = setInterval(() => {
+      setTime((time) => Math.min(time + 1, 999));
+    }, 1000);
+    setTimer(newTimer);
+  };
+
+  const newGame = () => {
+    dispatch({ type: 'deal' });
+    resetTimer();
+  };
 
   /**
    * Card drag handlers
@@ -233,7 +271,7 @@ export default function Solitaire() {
     <div className="flex flex-col gap-0.5">
       <div className="flex flex-row gap-0.5">
         <Menu.Root trigger={<Menu.Trigger>Game</Menu.Trigger>}>
-          <Menu.Item label="Deal" onSelect={() => dispatch({ type: 'deal' })} />
+          <Menu.Item label="Deal" onSelect={newGame} />
         </Menu.Root>
       </div>
 
@@ -252,6 +290,7 @@ export default function Solitaire() {
             'gap-1 px-4 py-2 min-h-full overflow-hidden',
             { 'pointer-events-none': state !== 'playing' },
           )}
+          onPointerDown={startTimer}
         >
           {/* Deck */}
           <div className="relative">
@@ -399,19 +438,33 @@ export default function Solitaire() {
           ))}
         </div>
 
+        {/* Win overlay */}
         {state === 'won' ? (
           <div className="absolute inset-0.5 bg-checkered-dark grid place-items-center z-5000">
             <div className="bg-surface bevel-window p-4 flex flex-col items-center gap-2">
               <div>You won. Congratulations!</div>
               <Button
                 className="py-1 px-4"
-                onClick={() => dispatch({ type: 'deal' })}
+                onClick={newGame}
               >
                 Deal again
               </Button>
             </div>
           </div>
         ) : null}
+      </div>
+
+      <div className="flex flex-row gap-0.5">
+        <div className="flex-[2] bg-surface bevel-light-inset py-0.5 px-1">
+          Solitaire
+        </div>
+        <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
+          Time: {Math.floor(time / 60)}:
+          {(time % 60).toString().padStart(2, '0')}
+        </div>
+        <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
+          Score: 0
+        </div>
       </div>
     </div>
   );
