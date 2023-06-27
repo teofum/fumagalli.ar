@@ -4,11 +4,13 @@ import {
   deal,
   isWin,
   removeCardsFromStack,
+  score,
 } from './game';
 import type { Card, SolitaireSettings } from './types';
 
 export interface GameState {
   state: 'playing' | 'win_anim' | 'won';
+  score: number;
 
   deck: Card[];
   drawn: Card[];
@@ -102,6 +104,11 @@ export default function solitaireReducer(
         deck: state.drawn.slice().reverse(),
         drawn: [],
         drawnOffset: 0,
+        score: score(
+          state,
+          'standard',
+          state.settings.rules === 'draw-one' ? -100 : -25,
+        ),
       };
     }
     case 'reveal': {
@@ -120,6 +127,7 @@ export default function solitaireReducer(
               }
             : row,
         ),
+        score: score(state, 'standard', 5), // 5 points for turning card
       };
     }
     case 'sendToStack': {
@@ -152,7 +160,10 @@ export default function solitaireReducer(
             (card) => card.number !== number || card.suit !== suit,
           ),
         })),
+        score: score(state, 'standard', 10), // 10 points for move to stack
       };
+
+      const fromDrawn = newState.drawn.length < state.drawn.length;
 
       return {
         ...newState,
@@ -160,10 +171,7 @@ export default function solitaireReducer(
         state: isWin(newState) ? 'win_anim' : 'playing',
         // Remove an offset card if a card was removed from the drawn pile
         // Kinda hacky, but it works
-        drawnOffset:
-          newState.drawn.length < state.drawn.length
-            ? state.drawnOffset - 1
-            : state.drawnOffset,
+        drawnOffset: fromDrawn ? state.drawnOffset - 1 : state.drawnOffset,
       };
     }
     case 'move': {
@@ -197,16 +205,16 @@ export default function solitaireReducer(
                 (card) => card.number !== number || card.suit !== suit,
               ),
             })),
+            score: score(state, 'standard', 10), // 10 points for move to stack
           };
+
+          const fromDrawn = newState.drawn.length < state.drawn.length;
 
           return {
             ...newState,
             // Check for win condition
             state: isWin(newState) ? 'win_anim' : 'playing',
-            drawnOffset:
-              newState.drawn.length < state.drawn.length
-                ? state.drawnOffset - 1
-                : state.drawnOffset,
+            drawnOffset: fromDrawn ? state.drawnOffset - 1 : state.drawnOffset,
           };
         }
         case 'row': {
@@ -233,12 +241,18 @@ export default function solitaireReducer(
             ),
           };
 
+          const fromDrawn = newState.drawn.length < state.drawn.length;
+          const fromStack = newState.stacks.some(
+            (stack, i) => stack.length < state.stacks[i].length,
+          );
+
+          const points = fromDrawn ? 5 : fromStack ? -15 : 0;
+
           return {
             ...newState,
-            drawnOffset:
-              newState.drawn.length < state.drawn.length
-                ? state.drawnOffset - 1
-                : state.drawnOffset,
+            drawnOffset: fromDrawn ? state.drawnOffset - 1 : state.drawnOffset,
+            // 5 points for drawn -> rows, -15 for suit -> rows
+            score: score(state, 'standard', points),
           };
         }
       }

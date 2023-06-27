@@ -35,7 +35,10 @@ export function newDeck() {
   return deck;
 }
 
-const defaultSettings: SolitaireSettings = { rules: 'draw-three' };
+const defaultSettings: SolitaireSettings = {
+  rules: 'draw-three',
+  scoring: 'standard',
+};
 
 export function deal(settings = defaultSettings, cheat?: boolean): GameState {
   const deck = newDeck(); // Shuffled deck
@@ -57,6 +60,7 @@ export function deal(settings = defaultSettings, cheat?: boolean): GameState {
   if (cheat)
     return {
       state: 'playing',
+      score: 0,
       deck: [],
       drawn: [{ suit: 'spades', number: 13 }],
       drawnOffset: 0,
@@ -72,6 +76,7 @@ export function deal(settings = defaultSettings, cheat?: boolean): GameState {
 
   return {
     state: 'playing',
+    score: 0,
     deck: deck.slice(28), // Rest of the cards go to the deck
     drawn: [],
     drawnOffset: 0,
@@ -129,4 +134,17 @@ export function removeCardsFromStack(stack: Card[], cards: Card[]) {
 export function isWin(state: GameState) {
   // The only way to get a king on top of each suit stack is to win the game
   return state.stacks.every((stack) => stack.at(-1)?.number === 13);
+}
+
+/**
+ * Helper function to simplify scoring in state updates
+ * @returns new score
+ */
+export function score(
+  state: GameState,
+  mode: SolitaireSettings['scoring'],
+  add: number,
+) {
+  if (state.settings.scoring === mode) return Math.max(0, state.score + add);
+  return state.score;
 }

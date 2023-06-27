@@ -1,14 +1,17 @@
 import { forwardRef, useEffect, useReducer, useRef, useState } from 'react';
+import cn from 'classnames';
+
+import { useWindow } from '~/components/desktop/Window/context';
+import useDesktopStore from '~/components/desktop/Desktop/store';
+import Button from '~/components/ui/Button';
 import Menu from '~/components/ui/Menu';
+
 import { getAppResourcesUrl } from '~/content/utils';
+
+import type { Card as CardType } from './types';
 import solitaireReducer from './reducer';
 import { deal } from './game';
-import type { Card as CardType } from './types';
-import useDrag from '~/hooks/useDrag';
-import cn from 'classnames';
-import Button from '~/components/ui/Button';
-import useDesktopStore from '~/components/desktop/Desktop/store';
-import { useWindow } from '~/components/desktop/Window/context';
+import useDragCard from './useDragCard';
 
 const resources = getAppResourcesUrl('solitaire');
 
@@ -38,7 +41,7 @@ export default function Solitaire() {
   const { id } = useWindow();
 
   const [
-    { deck, drawn, drawnOffset, stacks, rows, state, settings },
+    { deck, drawn, drawnOffset, stacks, rows, state, score, settings },
     dispatch,
   ] = useReducer(solitaireReducer, deal());
 
@@ -83,124 +86,7 @@ export default function Solitaire() {
   /**
    * Card drag handlers
    */
-  const onDragStart = (ev: PointerEvent, target: EventTarget | null) => {
-    const el = target as HTMLElement;
-
-    // Get drag target and all its siblings (cards on top in the stack)
-    const siblings = [el];
-    while (siblings.at(-1)?.nextElementSibling) {
-      const next = siblings.at(-1)?.nextElementSibling as HTMLElement;
-      siblings.push(next);
-    }
-
-    siblings.forEach((el) => {
-      // Calculate offset from mouse (or finger)
-      const { x, y } = el.getBoundingClientRect();
-      const offsetX = x - ev.clientX;
-      const offsetY = y - ev.clientY;
-
-      // Save offset to DOM data attributes temporarily
-      el.dataset.offsetX = offsetX.toString();
-      el.dataset.offsetY = offsetY.toString();
-
-      // Set position: fixed in element styles
-      el.style.setProperty('position', 'fixed');
-      el.style.setProperty('top', `${y}px`);
-      el.style.setProperty('left', `${x}px`);
-      el.style.setProperty('z-index', '9999'); // Make sure it's on top
-
-      // Save the transform in dataset and remove it to avoid shift
-      el.dataset.transform = el.style.transform;
-      el.style.removeProperty('transform');
-
-      // Set pointer-events: none, so the drag-end event's target is whichever
-      // element we happen to drop the card on top of
-      el.style.setProperty('pointer-events', 'none');
-    });
-  };
-
-  const onDragMove = (ev: PointerEvent, target: EventTarget | null) => {
-    const el = target as HTMLElement;
-
-    // Get drag target and all its siblings (cards on top in the stack)
-    const siblings = [el];
-    while (siblings.at(-1)?.nextElementSibling) {
-      const next = siblings.at(-1)?.nextElementSibling as HTMLElement;
-      siblings.push(next);
-    }
-
-    siblings.forEach((el) => {
-      // Calculate new window position from cursor + offset
-      const offsetX = Number(el.dataset.offsetX || '0');
-      const offsetY = Number(el.dataset.offsetY || '0');
-      const newX = ev.clientX + offsetX;
-      const newY = ev.clientY + offsetY;
-
-      el.style.setProperty('top', `${~~newY}px`);
-      el.style.setProperty('left', `${~~newX}px`);
-    });
-  };
-
-  const onDragEnd = (ev: PointerEvent, target: EventTarget | null) => {
-    const el = target as HTMLElement;
-
-    // Get drag target and all its siblings (cards on top in the stack)
-    const siblings = [el];
-    while (siblings.at(-1)?.nextElementSibling) {
-      const next = siblings.at(-1)?.nextElementSibling as HTMLElement;
-      siblings.push(next);
-    }
-
-    siblings.forEach((el) => {
-      // Drag ended, remove style attributes
-      el.style.removeProperty('position');
-      el.style.removeProperty('top');
-      el.style.removeProperty('left');
-      el.style.removeProperty('z-index');
-      el.style.removeProperty('pointer-events');
-
-      // Put the transform back
-      el.style.setProperty('transform', el.dataset.transform ?? '');
-      delete el.dataset.transform;
-
-      // Reset offset data attributes
-      delete el.dataset.offsetX;
-      delete el.dataset.offsetY;
-    });
-
-    // Now apply the actual game logic
-    // First, find out where the card was dropped
-    const dropTarget = ev.target as HTMLElement | null;
-    const dropId = dropTarget?.id;
-    const parentId = dropTarget?.parentElement?.id;
-
-    // We only care about two possibilities: a suit stack, or a row stack
-    // Might be dropping on a stack directly, or on a child element
-    const match =
-      dropId?.match(/^stack-(suit|row)-(\d+)$/) ??
-      parentId?.match(/^stack-(suit|row)-(\d+)$/);
-    if (match) {
-      // Figure out which card this even is
-      const cards = siblings
-        .map((el) => el.id.split('-'))
-        .map(
-          ([suit, cardNumber]) =>
-            ({ suit, number: Number(cardNumber) } as CardType),
-        );
-
-      const [, type, stackNumber] = match;
-      const index = Number(stackNumber);
-
-      // Dispatch the move event
-      dispatch({
-        type: 'move',
-        cards,
-        to: { type: type as 'suit' | 'row', index },
-      });
-    }
-  };
-
-  const cardDragHandler = useDrag({ onDragStart, onDragMove, onDragEnd });
+  const cardDragHandler = useDragCard(dispatch);
 
   /**
    * Win animation
@@ -483,14 +369,14 @@ export default function Solitaire() {
 
       <div className="flex flex-row gap-0.5">
         <div className="flex-[2] bg-surface bevel-light-inset py-0.5 px-1">
-          Solitaire
+          {settings.rules === 'draw-one' ? 'Draw one' : 'Draw three'}
         </div>
         <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
           Time: {Math.floor(time / 60)}:
           {(time % 60).toString().padStart(2, '0')}
         </div>
         <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
-          Score: 0
+          Score: { score }
         </div>
       </div>
     </div>
