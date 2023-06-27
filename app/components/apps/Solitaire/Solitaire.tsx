@@ -40,9 +40,34 @@ export default function Solitaire() {
         <div className="grid grid-cols-7 grid-rows-[auto_1fr] justify-items-center gap-2 mx-2">
           {/* Deck */}
           <div className="relative">
-            <img src={`${resources}/deck-empty.png`} alt="" />
+            <button
+              className="cursor-default select-none"
+              onClick={() => dispatch({ type: 'undraw' })}
+            >
+              <img src={`${resources}/deck-empty.png`} alt="" />
+            </button>
 
             {deck.map((card, i) => {
+              const height = Math.floor(i / 10);
+
+              return (
+                <button
+                  key={`${card.suit}-${card.number}`}
+                  className="absolute top-0 left-0 cursor-default select-none"
+                  style={{
+                    transform: `translate(${height * 2}px, ${height}px)`,
+                  }}
+                  onClick={() => dispatch({ type: 'draw' })}
+                >
+                  <Card suit={card.suit} number={card.number} />
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Drawn cards */}
+          <div className="relative w-[71px] h-[96px]">
+            {drawn.map((card, i) => {
               const height = Math.floor(i / 10);
 
               return (
@@ -53,14 +78,11 @@ export default function Solitaire() {
                     transform: `translate(${height * 2}px, ${height}px)`,
                   }}
                 >
-                  <Card suit={card.suit} number={card.number} />
+                  <Card suit={card.suit} number={card.number} turned />
                 </div>
               );
             })}
           </div>
-
-          {/* Drawn cards */}
-          <div className="bg-white"></div>
 
           {/* Empty slot */}
           <div />

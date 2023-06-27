@@ -39,10 +39,23 @@ export default function solitaireReducer(
       return deal();
     }
     case 'draw': {
-      return state;
+      // TODO: Support draw-three ruleset
+      const drawn = state.deck.at(-1);
+      if (!drawn) return state;
+
+      return {
+        ...state,
+        deck: state.deck.slice(0, -1),
+        drawn: [...state.drawn, drawn],
+      };
     }
     case 'undraw': {
-      return state;
+      // TODO: Support draw-three ruleset
+      return {
+        ...state,
+        deck: state.drawn.slice().reverse(),
+        drawn: [],
+      };
     }
     case 'move': {
       return state;
