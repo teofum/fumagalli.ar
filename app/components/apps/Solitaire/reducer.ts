@@ -4,23 +4,28 @@ import {
   deal,
   isWin,
   removeCardsFromStack,
+  score,
 } from './game';
-import type { Card } from './types';
+import type { Card, SolitaireSettings } from './types';
 
 export interface GameState {
   state: 'playing' | 'win_anim' | 'won';
+  score: number;
 
   deck: Card[];
   drawn: Card[];
+  drawnOffset: number; // Display state used for draw-three rules
 
   stacks: Card[][]; // 4 stacks
   rows: { turned: Card[]; unturned: Card[] }[]; // 7 row-stacks
-  // "Rows" are actually columns, but the Windows 98 help calls them "row stacks"
-  // and I can't come up with a better name so I'm sticking with that
+
+  settings: SolitaireSettings;
 }
 
 interface DealAction {
   type: 'deal';
+
+  settings?: SolitaireSettings;
 }
 
 interface DrawAction {
@@ -66,25 +71,44 @@ export default function solitaireReducer(
 ): GameState {
   switch (action.type) {
     case 'deal': {
-      return deal();
+      return deal(action.settings);
     }
     case 'draw': {
-      // TODO: Support draw-three ruleset
-      const drawn = state.deck.at(-1);
-      if (!drawn) return state;
+      switch (state.settings.rules) {
+        case 'draw-one': {
+          const drawn = state.deck.at(-1);
+          if (!drawn) return state;
 
-      return {
-        ...state,
-        deck: state.deck.slice(0, -1),
-        drawn: [...state.drawn, drawn],
-      };
+          return {
+            ...state,
+            deck: state.deck.slice(0, -1),
+            drawn: [...state.drawn, drawn],
+          };
+        }
+        case 'draw-three': {
+          const drawn = state.deck.slice(-3).reverse();
+          if (!drawn) return state;
+
+          return {
+            ...state,
+            deck: state.deck.slice(0, -3),
+            drawn: [...state.drawn, ...drawn],
+            drawnOffset: Math.min(2, drawn.length),
+          };
+        }
+      }
     }
     case 'undraw': {
-      // TODO: Support draw-three ruleset
       return {
         ...state,
         deck: state.drawn.slice().reverse(),
         drawn: [],
+        drawnOffset: 0,
+        score: score(
+          state,
+          'standard',
+          state.settings.rules === 'draw-one' ? -100 : -25,
+        ),
       };
     }
     case 'reveal': {
@@ -103,6 +127,7 @@ export default function solitaireReducer(
               }
             : row,
         ),
+        score: score(state, 'standard', 5), // 5 points for turning card
       };
     }
     case 'sendToStack': {
@@ -115,6 +140,10 @@ export default function solitaireReducer(
 
       // If no stack will take the card, then do nothing
       if (target === -1) return state;
+
+      let newScore = state.score;
+      if (state.settings.scoring === 'standard') newScore += 10;
+      if (state.settings.scoring === 'vegas') newScore -= 5;
 
       // If we found a stack...
       const newState = {
@@ -135,12 +164,18 @@ export default function solitaireReducer(
             (card) => card.number !== number || card.suit !== suit,
           ),
         })),
+        score: newScore,
       };
+
+      const fromDrawn = newState.drawn.length < state.drawn.length;
 
       return {
         ...newState,
         // Check for win condition
         state: isWin(newState) ? 'win_anim' : 'playing',
+        // Remove an offset card if a card was removed from the drawn pile
+        // Kinda hacky, but it works
+        drawnOffset: fromDrawn ? state.drawnOffset - 1 : state.drawnOffset,
       };
     }
     case 'move': {
@@ -174,12 +209,16 @@ export default function solitaireReducer(
                 (card) => card.number !== number || card.suit !== suit,
               ),
             })),
+            score: score(state, 'standard', 10), // 10 points for move to stack
           };
+
+          const fromDrawn = newState.drawn.length < state.drawn.length;
 
           return {
             ...newState,
             // Check for win condition
             state: isWin(newState) ? 'win_anim' : 'playing',
+            drawnOffset: fromDrawn ? state.drawnOffset - 1 : state.drawnOffset,
           };
         }
         case 'row': {
@@ -188,7 +227,7 @@ export default function solitaireReducer(
           if (!canMoveToRowStack(target, cards[0])) return state;
 
           // If the row stack will take the cards...
-          return {
+          const newState = {
             ...state,
             // Push the cards to it, and remove them from wherever they may be
             // This time around cards can actually come from anywhere: drawn
@@ -204,6 +243,20 @@ export default function solitaireReducer(
             stacks: state.stacks.map((stack) =>
               removeCardsFromStack(stack, cards),
             ),
+          };
+
+          const fromDrawn = newState.drawn.length < state.drawn.length;
+          const fromStack = newState.stacks.some(
+            (stack, i) => stack.length < state.stacks[i].length,
+          );
+
+          const points = fromDrawn ? 5 : fromStack ? -15 : 0;
+
+          return {
+            ...newState,
+            drawnOffset: fromDrawn ? state.drawnOffset - 1 : state.drawnOffset,
+            // 5 points for drawn -> rows, -15 for suit -> rows
+            score: score(state, 'standard', points),
           };
         }
       }
