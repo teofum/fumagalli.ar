@@ -1,7 +1,7 @@
 interface Handlers {
-  onDragStart?: (ev: PointerEvent) => void;
-  onDragMove?: (ev: PointerEvent) => void;
-  onDragEnd?: (ev: PointerEvent) => void;
+  onDragStart?: (ev: PointerEvent, target: EventTarget | null) => void;
+  onDragMove?: (ev: PointerEvent, target: EventTarget | null) => void;
+  onDragEnd?: (ev: PointerEvent, target: EventTarget | null) => void;
 }
 
 /**
@@ -16,20 +16,20 @@ export default function useDrag({
   onDragMove,
   onDragEnd,
 }: Handlers) {
-  const drag = (ev: PointerEvent) => {
-    onDragStart?.(ev);
+  const drag = (ev: PointerEvent, target: EventTarget | null) => {
+    onDragStart?.(ev, target);
 
     const dragMove = (ev: PointerEvent) => {
       ev.preventDefault();
       ev.stopPropagation();
-      onDragMove?.(ev);
+      onDragMove?.(ev, target);
     };
 
     // At the end of a drag event (release)...
     const dragEnd = (ev: PointerEvent) => {
       if (ev.button !== 0) return;
 
-      onDragEnd?.(ev);
+      onDragEnd?.(ev, target);
 
       // Clean up event listeners
       window.removeEventListener('pointermove', dragMove);
@@ -44,9 +44,11 @@ export default function useDrag({
     if (ev && ev.button > 0) return;
 
     const start = (ev: PointerEvent) => {
+      const { target } = ev;
+
       ev.preventDefault();
       ev.stopPropagation();
-      drag(ev);
+      drag(ev, target);
       cancel();
     };
 

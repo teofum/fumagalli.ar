@@ -1,4 +1,9 @@
-import { deal } from './game';
+import {
+  canMoveToRowStack,
+  canMoveToSuitStack,
+  deal,
+  removeCardsFromStack,
+} from './game';
 import type { Card } from './types';
 
 export interface GameState {
@@ -35,8 +40,8 @@ interface StackAction {
 
 interface MoveAction {
   type: 'move';
-  card: Card;
-  to: { type: 'stack' | 'row'; index: number };
+  cards: Card[];
+  to: { type: 'suit' | 'row'; index: number };
 }
 
 type Action =
@@ -96,15 +101,9 @@ export default function solitaireReducer(
       const { suit, number } = action.card;
 
       // First, look for a stack that will take the card
-      const target = state.stacks.findIndex((stack) => {
-        // An empty stack will take any ace (and only an ace)
-        if (stack.length === 0) return number === 1;
-
-        // Otherwise,
-        const last = stack.at(-1) as Card; // We know it's not empty, assert
-        // A stack will take the next card of the same suit
-        return last.suit === suit && last.number === number - 1;
-      });
+      const target = state.stacks.findIndex((stack) =>
+        canMoveToSuitStack(stack, action.card),
+      );
 
       // If no stack will take the card, then do nothing
       if (target === -1) return state;
@@ -131,7 +130,63 @@ export default function solitaireReducer(
       };
     }
     case 'move': {
-      return state;
+      const { cards, to } = action;
+      switch (to.type) {
+        case 'suit': {
+          // It's impossible to move multiple cards to a suit stack
+          if (cards.length > 1) return state;
+
+          const target = state.stacks[to.index];
+          if (!canMoveToSuitStack(target, cards[0])) return state;
+
+          // If the stack will take the card...
+          const { number, suit } = cards[0];
+          return {
+            ...state,
+            // We push the card to it...
+            stacks: state.stacks.map((stack, i) =>
+              i === to.index
+                ? [...stack, ...cards] // Push the card to target stack
+                : removeCardsFromStack(stack, cards), // Remove from others
+            ),
+            // And remove it from wherever it was
+            drawn: state.drawn.filter(
+              (card) => card.number !== number || card.suit !== suit,
+            ),
+            rows: state.rows.map(({ turned, unturned }) => ({
+              unturned,
+              turned: turned.filter(
+                (card) => card.number !== number || card.suit !== suit,
+              ),
+            })),
+          };
+        }
+        case 'row': {
+
+          // We'll assume the stack is valid, and only check the first card
+          const target = state.rows[to.index];
+          if (!canMoveToRowStack(target, cards[0])) return state;
+
+          // If the row stack will take the cards...
+          return {
+            ...state,
+            // Push the cards to it, and remove them from wherever they may be
+            // This time around cards can actually come from anywhere: drawn
+            // pile, suit stacks, or another row stack
+            rows: state.rows.map(({ turned, unturned }, i) => ({
+              unturned,
+              turned:
+                i === to.index
+                  ? [...turned, ...cards] // Push cards to target stack
+                  : removeCardsFromStack(turned, cards),
+            })),
+            drawn: removeCardsFromStack(state.drawn, cards),
+            stacks: state.stacks.map((stack) =>
+              removeCardsFromStack(stack, cards),
+            ),
+          };
+        }
+      }
     }
   }
 }

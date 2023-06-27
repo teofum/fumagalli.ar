@@ -58,3 +58,46 @@ export function deal() {
     rows, // Seven filled rows
   };
 }
+
+export function canMoveToSuitStack(targetStack: Card[], card: Card) {
+  // An empty stack will take any ace (and only an ace)
+  if (targetStack.length === 0) return card.number === 1;
+
+  // Otherwise,
+  const last = targetStack.at(-1) as Card; // We know it's not empty, assert
+  // A stack will take the next (asc) card of the same suit
+  return last.suit === card.suit && last.number === card.number - 1;
+}
+
+function color(card: Card) {
+  if (card.suit === 'diamonds' || card.suit === 'hearts') return 'red';
+  return 'black';
+}
+
+export function canMoveToRowStack(
+  { turned, unturned }: GameState['rows'][0],
+  card: Card,
+) {
+  if (turned.length === 0) {
+    // An empty stack will take any king (and only a king)
+    // A stack with only unturned cards will take no cards
+    return unturned.length === 0 && card.number === 13;
+  }
+
+  // Otherwise,
+  const last = turned.at(-1) as Card; // We know it's not empty, assert
+  // A row stack will only take the next (desc) card of a different color
+  return color(last) !== color(card) && last.number === card.number + 1;
+}
+
+/**
+ * Returns `stack`, excluding any cards included in `cards`
+ */
+export function removeCardsFromStack(stack: Card[], cards: Card[]) {
+  return stack.filter(
+    (card) =>
+      !cards.some(
+        ({ number, suit }) => card.number === number && card.suit === suit,
+      ),
+  );
+}
