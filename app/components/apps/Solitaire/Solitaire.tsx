@@ -6,6 +6,7 @@ import { deal } from './game';
 import type { Card as CardType } from './types';
 import useDrag from '~/hooks/useDrag';
 import cn from 'classnames';
+import Button from '~/components/ui/Button';
 
 const resources = getAppResourcesUrl('solitaire');
 
@@ -164,7 +165,7 @@ export default function Solitaire() {
   const boardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (state === 'won' && boardRef.current) {
+    if (state === 'win_anim' && boardRef.current) {
       let i = 51;
       const board = boardRef.current;
 
@@ -173,7 +174,7 @@ export default function Solitaire() {
       let x = 0;
       let y = 0;
       let z = 0;
-      let raf: { x: number | null} = { x: null };
+      let raf: { x: number | null } = { x: null };
 
       const animate = () => {
         const iStack = i % 4;
@@ -214,13 +215,14 @@ export default function Solitaire() {
           if (outOfBounds) i--;
         }
 
-        if (i > 0) raf.x = requestAnimationFrame(animate);
+        if (i >= 0) raf.x = requestAnimationFrame(animate);
+        else dispatch({ type: 'endWinAnimation' });
       };
 
       animate();
       return () => {
         if (raf.x !== null) cancelAnimationFrame(raf.x);
-      }
+      };
     }
   }, [state]);
 
@@ -237,14 +239,18 @@ export default function Solitaire() {
 
       <div
         ref={boardRef}
-        className={cn('flex-1 bg-[#008000] bevel-content select-none p-0.5', {
-          'pointer-events-none': state === 'won',
-        })}
+        className="flex-1 bg-[#008000] bevel-content select-none p-0.5 relative"
+        onClick={
+          state === 'win_anim'
+            ? () => dispatch({ type: 'endWinAnimation' })
+            : undefined
+        }
       >
         <div
           className={cn(
             'grid grid-cols-7 grid-rows-[auto_1fr] justify-items-center',
             'gap-1 px-4 py-2 min-h-full overflow-hidden',
+            { 'pointer-events-none': state !== 'playing' },
           )}
         >
           {/* Deck */}
@@ -392,6 +398,20 @@ export default function Solitaire() {
             </div>
           ))}
         </div>
+
+        {state === 'won' ? (
+          <div className="absolute inset-0.5 bg-checkered-dark grid place-items-center z-5000">
+            <div className="bg-surface bevel-window p-4 flex flex-col items-center gap-2">
+              <div>You won. Congratulations!</div>
+              <Button
+                className="py-1 px-4"
+                onClick={() => dispatch({ type: 'deal' })}
+              >
+                Deal again
+              </Button>
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );

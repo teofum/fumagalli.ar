@@ -8,7 +8,7 @@ import {
 import type { Card } from './types';
 
 export interface GameState {
-  state: 'playing' | 'won';
+  state: 'playing' | 'win_anim' | 'won';
 
   deck: Card[];
   drawn: Card[];
@@ -47,13 +47,18 @@ interface MoveAction {
   to: { type: 'suit' | 'row'; index: number };
 }
 
+interface EndWinAnimationAction {
+  type: 'endWinAnimation';
+}
+
 type Action =
   | DealAction
   | DrawAction
   | UndrawAction
   | RevealAction
   | StackAction
-  | MoveAction;
+  | MoveAction
+  | EndWinAnimationAction;
 
 export default function solitaireReducer(
   state: GameState,
@@ -135,7 +140,7 @@ export default function solitaireReducer(
       return {
         ...newState,
         // Check for win condition
-        state: isWin(newState) ? 'won' : 'playing',
+        state: isWin(newState) ? 'win_anim' : 'playing',
       };
     }
     case 'move': {
@@ -174,7 +179,7 @@ export default function solitaireReducer(
           return {
             ...newState,
             // Check for win condition
-            state: isWin(newState) ? 'won' : 'playing',
+            state: isWin(newState) ? 'win_anim' : 'playing',
           };
         }
         case 'row': {
@@ -202,6 +207,9 @@ export default function solitaireReducer(
           };
         }
       }
+    }
+    case 'endWinAnimation': {
+      return { ...state, state: 'won' };
     }
   }
 }
