@@ -60,7 +60,7 @@ export function deal(settings = defaultSettings, cheat?: boolean): GameState {
   if (cheat)
     return {
       state: 'playing',
-      score: 0,
+      score: settings.scoring === 'vegas' ? 52 : 0,
       deck: [],
       drawn: [{ suit: 'spades', number: 13 }],
       drawnOffset: 0,
@@ -76,7 +76,7 @@ export function deal(settings = defaultSettings, cheat?: boolean): GameState {
 
   return {
     state: 'playing',
-    score: 0,
+    score: settings.scoring === 'vegas' ? 52 : 0,
     deck: deck.slice(28), // Rest of the cards go to the deck
     drawn: [],
     drawnOffset: 0,

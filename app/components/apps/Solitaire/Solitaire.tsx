@@ -169,14 +169,24 @@ export default function Solitaire() {
           <Menu.RadioGroup
             value={settings.rules}
             onValueChange={(value) =>
-              newGame({
-                ...settings,
-                rules: value as 'draw-one' | 'draw-three',
-              })
+              newGame({ ...settings, rules: value as any })
             }
           >
             <Menu.RadioItem value="draw-one" label="Draw one (easy)" />
             <Menu.RadioItem value="draw-three" label="Draw three (hard)" />
+          </Menu.RadioGroup>
+
+          <Menu.Separator />
+
+          <Menu.RadioGroup
+            value={settings.scoring}
+            onValueChange={(value) =>
+              newGame({ ...settings, scoring: value as any })
+            }
+          >
+            <Menu.RadioItem value="none" label="No scoring" />
+            <Menu.RadioItem value="standard" label="Standard" />
+            <Menu.RadioItem value="vegas" label="Vegas" />
           </Menu.RadioGroup>
 
           <Menu.Separator />
@@ -369,14 +379,19 @@ export default function Solitaire() {
 
       <div className="flex flex-row gap-0.5">
         <div className="flex-[2] bg-surface bevel-light-inset py-0.5 px-1">
-          {settings.rules === 'draw-one' ? 'Draw one' : 'Draw three'}
+          {settings.rules === 'draw-one' ? 'Draw one' : 'Draw three'} |{' '}
+          {settings.scoring === 'none'
+            ? 'No'
+            : settings.scoring[0].toUpperCase() +
+              settings.scoring.substring(1)}{' '}
+          scoring
         </div>
         <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
           Time: {Math.floor(time / 60)}:
           {(time % 60).toString().padStart(2, '0')}
         </div>
         <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
-          Score: { score }
+          {settings.scoring === 'none' ? 'Scoring disabled' : `Score: ${score}`}
         </div>
       </div>
     </div>

@@ -141,6 +141,10 @@ export default function solitaireReducer(
       // If no stack will take the card, then do nothing
       if (target === -1) return state;
 
+      let newScore = state.score;
+      if (state.settings.scoring === 'standard') newScore += 10;
+      if (state.settings.scoring === 'vegas') newScore -= 5;
+
       // If we found a stack...
       const newState = {
         ...state,
@@ -160,7 +164,7 @@ export default function solitaireReducer(
             (card) => card.number !== number || card.suit !== suit,
           ),
         })),
-        score: score(state, 'standard', 10), // 10 points for move to stack
+        score: newScore,
       };
 
       const fromDrawn = newState.drawn.length < state.drawn.length;

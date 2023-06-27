@@ -7,5 +7,5 @@ export interface Card {
 
 export interface SolitaireSettings {
   rules: 'draw-one' | 'draw-three';
-  scoring: 'none' | 'standard';
+  scoring: 'none' | 'standard' | 'vegas';
 }
