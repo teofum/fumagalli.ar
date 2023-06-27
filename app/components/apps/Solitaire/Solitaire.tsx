@@ -7,6 +7,8 @@ import type { Card as CardType } from './types';
 import useDrag from '~/hooks/useDrag';
 import cn from 'classnames';
 import Button from '~/components/ui/Button';
+import useDesktopStore from '~/components/desktop/Desktop/store';
+import { useWindow } from '~/components/desktop/Window/context';
 
 const resources = getAppResourcesUrl('solitaire');
 
@@ -32,10 +34,13 @@ const Card = forwardRef<HTMLImageElement, CardProps>(function Card(
 });
 
 export default function Solitaire() {
-  const [{ deck, drawn, stacks, rows, state }, dispatch] = useReducer(
-    solitaireReducer,
-    deal(),
-  );
+  const { close } = useDesktopStore();
+  const { id } = useWindow();
+
+  const [
+    { deck, drawn, drawnOffset, stacks, rows, state, settings },
+    dispatch,
+  ] = useReducer(solitaireReducer, deal());
 
   /**
    * Timer
@@ -58,7 +63,7 @@ export default function Solitaire() {
     }
 
     setTime(0);
-  }
+  };
 
   const startTimer = () => {
     if (timer) return;
@@ -70,8 +75,8 @@ export default function Solitaire() {
     setTimer(newTimer);
   };
 
-  const newGame = () => {
-    dispatch({ type: 'deal' });
+  const newGame = (set = settings) => {
+    dispatch({ type: 'deal', settings: set });
     resetTimer();
   };
 
@@ -271,7 +276,26 @@ export default function Solitaire() {
     <div className="flex flex-col gap-0.5">
       <div className="flex flex-row gap-0.5">
         <Menu.Root trigger={<Menu.Trigger>Game</Menu.Trigger>}>
-          <Menu.Item label="Deal" onSelect={newGame} />
+          <Menu.Item label="Deal" onSelect={() => newGame()} />
+
+          <Menu.Separator />
+
+          <Menu.RadioGroup
+            value={settings.rules}
+            onValueChange={(value) =>
+              newGame({
+                ...settings,
+                rules: value as 'draw-one' | 'draw-three',
+              })
+            }
+          >
+            <Menu.RadioItem value="draw-one" label="Draw one (easy)" />
+            <Menu.RadioItem value="draw-three" label="Draw three (hard)" />
+          </Menu.RadioGroup>
+
+          <Menu.Separator />
+
+          <Menu.Item label="Exit" onSelect={() => close(id)} />
         </Menu.Root>
       </div>
 
@@ -325,13 +349,19 @@ export default function Solitaire() {
               const height = Math.floor(i / 10);
               const top = i === length - 1;
 
+              // Offset last few cards in draw-three
+              const offset = Math.max(0, i - (length - 1) + drawnOffset);
+
+              const x = height * 2 + offset * 15;
+              const y = height + offset;
+
               return (
                 <div
                   key={`${card.suit}-${card.number}`}
                   id={`${card.suit}-${card.number}`}
                   className="absolute top-0 left-0"
                   style={{
-                    transform: `translate(${height * 2}px, ${height}px)`,
+                    transform: `translate(${x}px, ${y}px)`,
                   }}
                   onPointerDown={top ? cardDragHandler : undefined}
                   onDoubleClick={
@@ -443,10 +473,7 @@ export default function Solitaire() {
           <div className="absolute inset-0.5 bg-checkered-dark grid place-items-center z-5000">
             <div className="bg-surface bevel-window p-4 flex flex-col items-center gap-2">
               <div>You won. Congratulations!</div>
-              <Button
-                className="py-1 px-4"
-                onClick={newGame}
-              >
+              <Button className="py-1 px-4" onClick={() => newGame()}>
                 Deal again
               </Button>
             </div>

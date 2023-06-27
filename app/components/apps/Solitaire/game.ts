@@ -1,5 +1,5 @@
 import type { GameState } from './reducer';
-import type { Card, Suit } from './types';
+import type { Card, SolitaireSettings, Suit } from './types';
 
 /**
  * Shuffles an array in place
@@ -35,7 +35,9 @@ export function newDeck() {
   return deck;
 }
 
-export function deal(cheat?: boolean): GameState {
+const defaultSettings: SolitaireSettings = { rules: 'draw-three' };
+
+export function deal(settings = defaultSettings, cheat?: boolean): GameState {
   const deck = newDeck(); // Shuffled deck
 
   // Distribute row-stack cards
@@ -52,23 +54,32 @@ export function deal(cheat?: boolean): GameState {
 
   // Super development cheat code
   // Used to debug win animation
-  if (cheat) return {
-    state: 'playing',
-    deck: [],
-    drawn: [{ suit: 'spades', number: 13 }],
-    rows: Array.from(Array(7), () => ({ unturned: [], turned: [] })),
-    stacks: SUITS.map((suit, i) =>
-      Array.from(Array(i === 3 ? 12 : 13), (_, k) => ({ suit, number: k + 1 })),
-    ),
-  };
+  if (cheat)
+    return {
+      state: 'playing',
+      deck: [],
+      drawn: [{ suit: 'spades', number: 13 }],
+      drawnOffset: 0,
+      rows: Array.from(Array(7), () => ({ unturned: [], turned: [] })),
+      stacks: SUITS.map((suit, i) =>
+        Array.from(Array(i === 3 ? 12 : 13), (_, k) => ({
+          suit,
+          number: k + 1,
+        })),
+      ),
+      settings,
+    };
 
   return {
     state: 'playing',
     deck: deck.slice(28), // Rest of the cards go to the deck
     drawn: [],
+    drawnOffset: 0,
 
     stacks: [[], [], [], []], // Four empty stacks
     rows, // Seven filled rows
+
+    settings,
   };
 }
 

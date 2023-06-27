@@ -5,22 +5,25 @@ import {
   isWin,
   removeCardsFromStack,
 } from './game';
-import type { Card } from './types';
+import type { Card, SolitaireSettings } from './types';
 
 export interface GameState {
   state: 'playing' | 'win_anim' | 'won';
 
   deck: Card[];
   drawn: Card[];
+  drawnOffset: number; // Display state used for draw-three rules
 
   stacks: Card[][]; // 4 stacks
   rows: { turned: Card[]; unturned: Card[] }[]; // 7 row-stacks
-  // "Rows" are actually columns, but the Windows 98 help calls them "row stacks"
-  // and I can't come up with a better name so I'm sticking with that
+
+  settings: SolitaireSettings;
 }
 
 interface DealAction {
   type: 'deal';
+
+  settings?: SolitaireSettings;
 }
 
 interface DrawAction {
@@ -66,25 +69,39 @@ export default function solitaireReducer(
 ): GameState {
   switch (action.type) {
     case 'deal': {
-      return deal();
+      return deal(action.settings);
     }
     case 'draw': {
-      // TODO: Support draw-three ruleset
-      const drawn = state.deck.at(-1);
-      if (!drawn) return state;
+      switch (state.settings.rules) {
+        case 'draw-one': {
+          const drawn = state.deck.at(-1);
+          if (!drawn) return state;
 
-      return {
-        ...state,
-        deck: state.deck.slice(0, -1),
-        drawn: [...state.drawn, drawn],
-      };
+          return {
+            ...state,
+            deck: state.deck.slice(0, -1),
+            drawn: [...state.drawn, drawn],
+          };
+        }
+        case 'draw-three': {
+          const drawn = state.deck.slice(-3).reverse();
+          if (!drawn) return state;
+
+          return {
+            ...state,
+            deck: state.deck.slice(0, -3),
+            drawn: [...state.drawn, ...drawn],
+            drawnOffset: Math.min(2, drawn.length),
+          };
+        }
+      }
     }
     case 'undraw': {
-      // TODO: Support draw-three ruleset
       return {
         ...state,
         deck: state.drawn.slice().reverse(),
         drawn: [],
+        drawnOffset: 0,
       };
     }
     case 'reveal': {
@@ -141,6 +158,12 @@ export default function solitaireReducer(
         ...newState,
         // Check for win condition
         state: isWin(newState) ? 'win_anim' : 'playing',
+        // Remove an offset card if a card was removed from the drawn pile
+        // Kinda hacky, but it works
+        drawnOffset:
+          newState.drawn.length < state.drawn.length
+            ? state.drawnOffset - 1
+            : state.drawnOffset,
       };
     }
     case 'move': {
@@ -180,6 +203,10 @@ export default function solitaireReducer(
             ...newState,
             // Check for win condition
             state: isWin(newState) ? 'win_anim' : 'playing',
+            drawnOffset:
+              newState.drawn.length < state.drawn.length
+                ? state.drawnOffset - 1
+                : state.drawnOffset,
           };
         }
         case 'row': {
@@ -188,7 +215,7 @@ export default function solitaireReducer(
           if (!canMoveToRowStack(target, cards[0])) return state;
 
           // If the row stack will take the cards...
-          return {
+          const newState = {
             ...state,
             // Push the cards to it, and remove them from wherever they may be
             // This time around cards can actually come from anywhere: drawn
@@ -204,6 +231,14 @@ export default function solitaireReducer(
             stacks: state.stacks.map((stack) =>
               removeCardsFromStack(stack, cards),
             ),
+          };
+
+          return {
+            ...newState,
+            drawnOffset:
+              newState.drawn.length < state.drawn.length
+                ? state.drawnOffset - 1
+                : state.drawnOffset,
           };
         }
       }
