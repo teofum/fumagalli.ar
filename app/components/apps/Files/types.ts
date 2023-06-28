@@ -1,4 +1,4 @@
-export type FilesView = 'grid' | 'list' | 'details';
+export type FilesView = 'grid' | 'list' | 'details' | 'tree';
 
 export interface FilesSettings {
   view: FilesView;

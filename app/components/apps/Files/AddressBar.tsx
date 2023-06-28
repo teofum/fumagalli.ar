@@ -58,9 +58,9 @@ export default function AddressBar({ path, navigate }: AddressBarProps) {
   const [search, setSearch] = useState(`/${path.join('/')}/`);
 
   /**
-   * Reset path on navigation
+   * Reset path on navigation and close
    */
-  useEffect(() => setSearch(`/${path.join('/')}/`), [path]);
+  useEffect(() => setSearch(`/${path.join('/')}/`), [open, path]);
 
   /**
    * Search functions
@@ -103,7 +103,10 @@ export default function AddressBar({ path, navigate }: AddressBarProps) {
             <button
               className="outline-none decoration-1 hover:underline focus-visible:underline"
               onPointerDown={(ev) => ev.preventDefault()}
-              onClick={() => navigate('/', true)}
+              onClick={(ev) => {
+                ev.stopPropagation();
+                navigate('/', true);
+              }}
             >
               My Computer
             </button>
@@ -117,7 +120,10 @@ export default function AddressBar({ path, navigate }: AddressBarProps) {
                   <button
                     className="outline-none decoration-1 hover:underline focus-visible:underline"
                     onPointerDown={(ev) => ev.preventDefault()}
-                    onClick={() => navigate(partialPath, true)}
+                    onClick={(ev) => {
+                      ev.stopPropagation();
+                      navigate(partialPath, true);
+                    }}
                   >
                     {name}
                   </button>

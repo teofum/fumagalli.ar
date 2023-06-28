@@ -18,6 +18,7 @@ import getReadableSize from './utils/getReadableSize';
 import useDirectory from './useDirectory';
 import AddressBar from './AddressBar';
 import Toolbar from '~/components/ui/Toolbar';
+import FilesTreeView from './views/FilesTreeView';
 
 const resources = getAppResourcesUrl('files');
 
@@ -76,17 +77,18 @@ export default function Files({
    * File/directory open handler
    */
   const navigate = (to: string, absolute = false) => {
+    setSelected(null);
+
     if (to === '..') setPath(path.slice(0, -1));
     else if (absolute) setPath(parsePath(to));
     else setPath([...path, to]);
   };
 
-  const open = (item: FSObject) => {
+  const open = (item: FSObject, path = pwd) => {
     if (item.class === 'dir') {
-      setPath([...path, item.name]);
-      setSelected(null);
+      navigate(item.name);
     } else {
-      if (!fileHandler.open(item, `${pwd}/${item.name}`))
+      if (!fileHandler.open(item, `${path}/${item.name}`))
         console.log('Unhandled file, possibly unknown type');
     }
   };
@@ -94,6 +96,7 @@ export default function Files({
   let ViewComponent = FilesGridView;
   if (settings.view === 'list') ViewComponent = FilesListView;
   else if (settings.view === 'details') ViewComponent = FilesDetailsView;
+  else if (settings.view === 'tree') ViewComponent = FilesTreeView;
 
   return (
     <div className="flex flex-col gap-0.5 min-w-0">
@@ -131,6 +134,7 @@ export default function Files({
             <Menu.RadioItem value="grid" label="Icons" />
             <Menu.RadioItem value="list" label="List" />
             <Menu.RadioItem value="details" label="Details" />
+            <Menu.RadioItem value="tree" label="Tree" />
           </Menu.RadioGroup>
         </Menu.Root>
       </div>
@@ -151,7 +155,9 @@ export default function Files({
       {dir ? (
         <ViewComponent
           dir={dir}
+          path={pwd}
           open={open}
+          navigate={navigate}
           select={setSelected}
         />
       ) : null}

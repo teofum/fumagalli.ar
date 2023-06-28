@@ -1,22 +1,12 @@
-import cn from 'classnames';
 import { useLayoutEffect, useRef } from 'react';
 import ScrollContainer from '~/components/ui/ScrollContainer';
-import type { Directory, FSObject } from '~/content/types';
 import useResizeObserver from '../utils/useResizeObserver';
+import FilesListItem from './FilesListItem';
+import type FilesViewProps from './FilesViewProps';
 
-interface FilesListViewProps {
-  dir: Directory;
-  open: (item: FSObject) => void;
-  select: React.Dispatch<React.SetStateAction<FSObject | null>>;
-}
-
-export default function FilesListView({
-  dir,
-  open,
-  select,
-}: FilesListViewProps) {
+export default function FilesListView({ dir, open, select }: FilesViewProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLUListElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const onViewportResize = () => {
     if (viewportRef.current && contentRef.current) {
@@ -32,54 +22,21 @@ export default function FilesListView({
   useLayoutEffect(onViewportResize, []);
 
   return (
-    <ScrollContainer
-      className="flex-1"
-      viewportProps={{ ref: viewportRef }}
-    >
-      <ul
+    <ScrollContainer className="flex-1" viewportProps={{ ref: viewportRef }}>
+      <div
         className="p-1 select-none grid grid-flow-col auto-cols-max"
         ref={contentRef}
       >
-        {dir.items.map((item) => {
-          const type = item.class === 'file' ? item.type : item.class;
-
-          let iconUrl = `/fs/system/Resources/Icons/FileType/${type}_16.png`;
-          if (type === 'app') {
-            const appName = item.name.split('.')[0];
-            iconUrl = `/fs/system/Applications/${appName}/icon_16.png`;
-          }
-
-          return (
-            <li key={item.name} className="min-w-max mr-0.5">
-              <button
-                className="flex flex-row gap-0.5 py-px items-center cursor-default w-full group outline-none"
-                onDoubleClick={() => open(item)}
-                onKeyDown={(ev) => {
-                  if (ev.key === 'Enter') open(item);
-                }}
-                onFocus={() => select(item)}
-                onBlur={() => select(null)}
-              >
-                <span className="relative">
-                  <img src={iconUrl} alt={type} />
-                  <span
-                    className={cn(
-                      'absolute inset-0 bg-selection bg-opacity-50',
-                      'hidden group-focus:inline',
-                    )}
-                    style={{
-                      WebkitMaskImage: `url(${iconUrl})`,
-                    }}
-                  />
-                </span>
-                <span className="px-0.5 group-focus:bg-selection group-focus:text-selection">
-                  {item.name}
-                </span>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+        {dir.items.map((item) => (
+          <FilesListItem
+            key={item.name}
+            item={item}
+            open={open}
+            select={select}
+            className="mr-0.5 w-full"
+          />
+        ))}
+      </div>
     </ScrollContainer>
   );
 }
