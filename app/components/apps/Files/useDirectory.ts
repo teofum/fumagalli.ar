@@ -1,19 +1,23 @@
+import { useMemo } from 'react';
 import root from '~/content/dir';
 
 export default function useDirectory(path: string[]) {
-  let dir = root;
-  let relativePath = path.slice();
+  return useMemo(() => {
+    let dir = root;
+    let relativePath = path.slice();
 
-  while (relativePath.length > 0) {
-    const [child, ...rest] = relativePath;
-    if (child) { // Ignore empty segments
-      const next = dir.items.find((item) => item.name === child);
-      if (!next || next.class !== 'dir') return null;
+    while (relativePath.length > 0) {
+      const [child, ...rest] = relativePath;
+      if (child) {
+        // Ignore empty segments
+        const next = dir.items.find((item) => item.name === child);
+        if (!next || next.class !== 'dir') return null;
 
-      dir = next;
+        dir = next;
+      }
+      relativePath = rest;
     }
-    relativePath = rest;
-  }
 
-  return dir;
+    return dir;
+  }, [path]);
 }

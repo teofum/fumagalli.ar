@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import type { FSObject } from '~/content/types';
 import { getAppResourcesUrl } from '~/content/utils';
@@ -8,7 +8,7 @@ import Menu from '~/components/ui/Menu';
 import { useWindow } from '~/components/desktop/Window/context';
 import useFileHandler from '~/hooks/useFileHandler';
 import useDesktopStore from '~/stores/desktop';
-import { useAppSettings } from '~/stores/system';
+import useSystemStore, { useAppSettings } from '~/stores/system';
 
 import type { FilesView } from './types';
 import FilesGridView from './views/FilesGridView';
@@ -35,6 +35,7 @@ export default function Files({
 }: FilesProps) {
   const { id } = useWindow();
   const { setWindowProps, close } = useDesktopStore();
+  const { dirHistory, saveDirToHistory } = useSystemStore();
 
   const [settings, set] = useAppSettings('files');
   const fileHandler = useFileHandler();
@@ -45,7 +46,7 @@ export default function Files({
   const [path, setPath] = useState<string[]>(parsePath(initialPath));
   const [selected, setSelected] = useState<FSObject | null>(null);
 
-  const pwd = `/${path.join('/')}`;
+  const pwd = useMemo(() => `/${path.join('/')}`, [path]);
   const dir = useDirectory(path);
 
   /**
@@ -56,8 +57,29 @@ export default function Files({
   }, [setWindowProps, dir, id]);
 
   /**
+   * Add dir to history on path change, if not already in history
+   */
+  useEffect(() => {
+    console.log('saving', pwd, 'on', dirHistory[0].path);
+    if (dir && dirHistory[0].path !== pwd) {
+      saveDirToHistory({ time: Date.now(), item: dir, path: pwd });
+      console.log('saved');
+    }
+  // Calling this effect on global state update causes a render loop if there
+  // are multiple windows, and because we're dealing with global state there's
+  // no risk of getting stale state, anyway.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dir, pwd]);
+
+  /**
    * File/directory open handler
    */
+  const navigate = (to: string, absolute = false) => {
+    if (to === '..') setPath(path.slice(0, -1));
+    else if (absolute) setPath(parsePath(to));
+    else setPath([...path, to]);
+  };
+
   const open = (item: FSObject) => {
     if (item.class === 'dir') {
       setPath([...path, item.name]);
@@ -76,6 +98,19 @@ export default function Files({
     <div className="flex flex-col gap-0.5 min-w-0">
       <div className="flex flex-row gap-1">
         <Menu.Root trigger={<Menu.Trigger>File</Menu.Trigger>}>
+          <Menu.Sub label="Recent">
+            {dirHistory.map(({ time, item, path }) => (
+              <Menu.Item
+                key={`${time}_${item.name}`}
+                label={item.name}
+                icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+                onSelect={() => navigate(path, true)}
+              />
+            ))}
+          </Menu.Sub>
+
+          <Menu.Separator />
+
           <Menu.Item label="Close" onSelect={() => close(id)} />
         </Menu.Root>
 
@@ -103,7 +138,7 @@ export default function Files({
         <Button
           variant="light"
           className="p-0.5"
-          onClick={() => setPath(path.slice(0, -1))}
+          onClick={() => navigate('..')}
           disabled={path.length === 0}
         >
           <img src={`${resources}/go-up.png`} alt="" />
