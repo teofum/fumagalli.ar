@@ -7,4 +7,7 @@ export const files = (props?: FilesProps): WindowInit => ({
 
   title: 'File Explorer',
   icon: 'files',
+
+  minWidth: 400,
+  minHeight: 300,
 });
