@@ -54,12 +54,21 @@ interface DesktopActions {
   shutdown: (open?: boolean) => void;
 }
 
+/**
+ * Desktop store handles UI-related state: active windows, desktop state, etc.
+ */
 const useDesktopStore = create<DesktopState & DesktopActions>()(
   persist(
     (set, get) => ({
+      /**
+       * State
+       */
       windows: [],
       shutdownDialog: false,
 
+      /**
+       * Actions
+       */
       launch: (init) =>
         set(({ windows }) => ({
           windows: [

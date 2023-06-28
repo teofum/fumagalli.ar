@@ -38,7 +38,7 @@
   }
 
   .menu-item {
-    @apply select-none p-0.5 grid items-center gap-1 outline-none;
+    @apply select-none p-0.5 grid items-center gap-2 outline-none;
 
     grid-template-columns: minmax(1rem, auto) 1fr;
     min-width: 8rem;

@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
-import type { AnyFile, FSObject } from '~/content/types';
-import useDirectory from './useDirectory';
+
+import type { FSObject } from '~/content/types';
+import { getAppResourcesUrl } from '~/content/utils';
+
 import Button from '~/components/ui/Button';
-import { preview } from '../Preview';
-import FilesListView from './views/FilesListView';
-import FilesGridView from './views/FilesGridView';
 import Menu from '~/components/ui/Menu';
 import { useWindow } from '~/components/desktop/Window/context';
-import type { PreviewSupportedFile } from '../Preview/context';
-import { previewSupportedFileTypes } from '../Preview/context';
-import { getAppResourcesUrl } from '~/content/utils';
-import { getApp } from '../renderApp';
-import getReadableSize from './utils/getReadableSize';
-import FilesDetailsView from './views/FilesDetailsView';
+import useFileHandler from '~/hooks/useFileHandler';
 import useDesktopStore from '~/stores/desktop';
+import { useAppSettings } from '~/stores/system';
+
+import type { FilesView } from './types';
+import FilesGridView from './views/FilesGridView';
+import FilesListView from './views/FilesListView';
+import FilesDetailsView from './views/FilesDetailsView';
+import getReadableSize from './utils/getReadableSize';
+import useDirectory from './useDirectory';
 
 const resources = getAppResourcesUrl('files');
 
@@ -22,14 +24,8 @@ function parsePath(path: string) {
   return path.split('/');
 }
 
-function isPreviewable(file: AnyFile): file is PreviewSupportedFile {
-  return previewSupportedFileTypes.includes(file.type);
-}
-
-type FilesViewMode = 'list' | 'grid' | 'details';
-
 export interface FilesProps {
-  initialView?: FilesViewMode;
+  initialView?: FilesView;
   initialPath?: string;
 }
 
@@ -37,39 +33,44 @@ export default function Files({
   initialView = 'grid',
   initialPath = '/',
 }: FilesProps) {
-  const { launch, setWindowProps, close } = useDesktopStore();
   const { id } = useWindow();
+  const { setWindowProps, close } = useDesktopStore();
 
-  const [status, setStatus] = useState(true);
-  const [view, setView] = useState<FilesViewMode>(initialView ?? 'grid');
+  const [settings, set] = useAppSettings('files');
+  const fileHandler = useFileHandler();
+
+  /**
+   * Navigation state
+   */
   const [path, setPath] = useState<string[]>(parsePath(initialPath));
   const [selected, setSelected] = useState<FSObject | null>(null);
 
   const pwd = `/${path.join('/')}`;
   const dir = useDirectory(path);
 
+  /**
+   * Set window title on dir change
+   */
   useEffect(() => {
     if (dir) setWindowProps(id, { title: dir.name });
   }, [setWindowProps, dir, id]);
 
+  /**
+   * File/directory open handler
+   */
   const open = (item: FSObject) => {
     if (item.class === 'dir') {
       setPath([...path, item.name]);
       setSelected(null);
-    } else if (isPreviewable(item)) {
-      launch(preview({ file: item, filePath: `${pwd}/${item.name}` }));
-    } else if (item.type === 'app') {
-      const app = getApp(item.name.split('.')[0]);
-      if (app) launch(app);
     } else {
-      // Unhandled file type
-      console.log('open unknown file');
+      if (!fileHandler.open(item, `${pwd}/${item.name}`))
+        console.log('Unhandled file, possibly unknown type');
     }
   };
 
   let ViewComponent = FilesGridView;
-  if (view === 'list') ViewComponent = FilesListView;
-  else if (view === 'details') ViewComponent = FilesDetailsView;
+  if (settings.view === 'list') ViewComponent = FilesListView;
+  else if (settings.view === 'details') ViewComponent = FilesDetailsView;
 
   return (
     <div className="flex flex-col gap-0.5 min-w-0">
@@ -81,15 +82,15 @@ export default function Files({
         <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>
           <Menu.CheckboxItem
             label="Status Bar"
-            checked={status}
-            onCheckedChange={setStatus}
+            checked={settings.statusBar}
+            onCheckedChange={(checked) => set({ statusBar: checked })}
           />
 
           <Menu.Separator />
 
           <Menu.RadioGroup
-            value={view}
-            onValueChange={(value) => setView(value as FilesViewMode)}
+            value={settings.view}
+            onValueChange={(value) => set({ view: value as FilesView })}
           >
             <Menu.RadioItem value="grid" label="Icons" />
             <Menu.RadioItem value="list" label="List" />
@@ -122,7 +123,7 @@ export default function Files({
         />
       ) : null}
 
-      {status ? (
+      {settings.statusBar ? (
         <div className="flex flex-row gap-0.5">
           <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
             {dir?.items.length || 'No'} object
