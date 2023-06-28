@@ -98,7 +98,7 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
       toggleMaximized: (id) =>
         set(({ windows }) => {
           const target = windows.find((window) => window.id === id);
-          if (!target) return {};
+          if (!target || !target.maximizable) return {};
 
           return {
             windows: windows.map((window) =>
