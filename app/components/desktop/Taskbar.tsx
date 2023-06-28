@@ -16,29 +16,37 @@ export default function Taskbar() {
 
         <Divider orientation="vertical" />
 
-        {windows.map((window) => (
-          <Button
-            key={window.id}
-            className={cn('p-1 pr-2 w-40', {
-              'bevel-semilight': !window.focused,
-              'bevel-inset bg-checkered': window.focused,
-            })}
-            data-active={window.focused ? true : undefined}
-            onClick={() => focus(window.id)}
-          >
-            <div className="flex flex-row gap-1.5">
-              <img src={`/fs/system/Applications/${window.appType}/icon_16.png`} alt="" />
-              <span
-                className={cn(
-                  'whitespace-nowrap overflow-hidden text-ellipsis',
-                  { bold: window.focused },
-                )}
-              >
-                {window.title}
-              </span>
-            </div>
-          </Button>
-        ))}
+        <div className="flex flex-row gap-1 min-w-0 flex-1 overflow-auto">
+          {windows.map((window, i) => (
+            <Button
+              key={window.id}
+              className={cn('p-1 pr-2 basis-40 flex-shrink min-w-12', {
+                'bevel-semilight': !window.focused,
+                'bevel-inset bg-checkered': window.focused,
+              })}
+              data-active={window.focused ? true : undefined}
+              onClick={() => focus(window.id)}
+              style={{ gridColumn: `${i + 1}` }}
+            >
+              <div className="flex flex-row gap-1.5">
+                <img
+                  src={`/fs/system/Applications/${window.appType}/icon_16.png`}
+                  alt=""
+                />
+                <span
+                  className={cn(
+                    'whitespace-nowrap overflow-hidden text-ellipsis',
+                    { bold: window.focused },
+                  )}
+                >
+                  {window.title}
+                </span>
+              </div>
+            </Button>
+          ))}
+        </div>
+
+        <Divider orientation="vertical" />
 
         <div className="bevel-light-inset py-1 px-2 ml-auto text-right w-16">
           <Clock />
