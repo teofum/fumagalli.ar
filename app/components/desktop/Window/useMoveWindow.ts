@@ -1,4 +1,4 @@
-import useDesktopStore from '../Desktop/store';
+import useDesktopStore from '~/stores/desktop';
 import type { WindowProps } from './Window';
 import useDrag from '~/hooks/useDrag';
 

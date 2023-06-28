@@ -1,6 +1,6 @@
 import cn from 'classnames';
 
-import useDesktopStore from './Desktop/store';
+import useDesktopStore from '~/stores/desktop';
 import Button from '~/components/ui/Button';
 import StartMenu from './StartMenu';
 import Divider from '../ui/Divider';

@@ -3,7 +3,7 @@ import cn from 'classnames';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import Check from './icons/Check';
 import Dot from './icons/Dot';
-import ArrowSubmenu from './icons/ArrowSubmenu';
+import ArrowLeft from './icons/ArrowLeft';
 
 type MenuProps = React.PropsWithChildren<
   {
@@ -127,7 +127,7 @@ function Sub({
       <DropdownMenu.SubTrigger className={cn('menu-item menu-sub', className)} {...props}>
         {icon ? <img className="col-start-1" src={icon} alt="" /> : null}
         <span className="col-start-2">{label}</span>
-        <div className="w-3 h-3"><ArrowSubmenu /></div>
+        <div className="w-3 h-3"><ArrowLeft /></div>
       </DropdownMenu.SubTrigger>
 
       <DropdownMenu.Portal>

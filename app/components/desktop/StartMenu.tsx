@@ -2,18 +2,24 @@ import { version } from 'package.json';
 
 import Button from '../ui/Button';
 import Menu from '../ui/Menu';
+import useDesktopStore from '~/stores/desktop';
+import useSystemStore from '~/stores/system';
+import useFileHandler from '~/hooks/useFileHandler';
+
 import { about } from '../apps/About';
 import { intro } from '../apps/Intro';
 import { minesweeper } from '../apps/Minesweeper';
 import { files } from '../apps/Files';
 import { sudoku } from '../apps/Sudoku';
-import useDesktopStore from './Desktop/store';
 import { solitaire } from '../apps/Solitaire';
 
 const ICON_PATH = '/fs/system/Resources/Icons/Start';
 
 export default function StartMenu() {
   const { launch, shutdown } = useDesktopStore();
+  const { fileHistory } = useSystemStore();
+
+  const fileHandler = useFileHandler();
 
   return (
     <Menu.Root
@@ -68,7 +74,20 @@ export default function StartMenu() {
 
             <Menu.Separator />
 
-            <Menu.Item
+            {fileHistory.map(({ time, item, path }) => (
+              <Menu.Item
+                key={`${time}_${item.name}`}
+                label={item.name}
+                icon={`/fs/system/Resources/Icons/FileType/${item.type}_16.png`}
+                onSelect={() => fileHandler.open(item, path)}
+              />
+            ))}
+
+            {fileHistory.length === 0 ? (
+              <Menu.Item label="[EMPTY]" disabled />
+            ) : null}
+
+            {/* <Menu.Item
               label="Articles"
               icon="/fs/system/Resources/Icons/FileType/dir_16.png"
               onSelect={() =>
@@ -88,7 +107,7 @@ export default function StartMenu() {
               onSelect={() =>
                 launch(files({ initialPath: '/Documents/Projects' }))
               }
-            />
+            /> */}
           </Menu.Sub>
 
           <Menu.Sub

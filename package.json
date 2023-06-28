@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "sideEffects": false,
   "scripts": {
@@ -19,6 +19,8 @@
     "@remix-run/vercel": "^1.17.1",
     "@vercel/node": "^2.10.3",
     "classnames": "^2.3.2",
+    "cmdk": "^0.2.0",
+    "fuzzysort": "^2.0.4",
     "isbot": "^3.6.8",
     "nanoid": "^3.3.6",
     "react": "^18.2.0",

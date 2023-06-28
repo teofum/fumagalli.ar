@@ -2,7 +2,7 @@ import cn from 'classnames';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import Menu from '~/components/ui/Menu';
 import { useWindow } from '~/components/desktop/Window/context';
-import useDesktopStore from '~/components/desktop/Desktop/store';
+import useDesktopStore from '~/stores/desktop';
 import { MinesweeperState } from './types';
 import minesweeperReducer from './reducer';
 import { difficultyPresets, newBoard } from './game';

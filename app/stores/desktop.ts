@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
-import type { WindowProps, WindowInit } from '../Window';
-import { WindowSizingMode } from '../Window';
+import type { WindowProps, WindowInit } from '../components/desktop/Window';
+import { WindowSizingMode } from '../components/desktop/Window';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -54,12 +54,21 @@ interface DesktopActions {
   shutdown: (open?: boolean) => void;
 }
 
+/**
+ * Desktop store handles UI-related state: active windows, desktop state, etc.
+ */
 const useDesktopStore = create<DesktopState & DesktopActions>()(
   persist(
     (set, get) => ({
+      /**
+       * State
+       */
       windows: [],
       shutdownDialog: false,
 
+      /**
+       * Actions
+       */
       launch: (init) =>
         set(({ windows }) => ({
           windows: [

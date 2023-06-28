@@ -1,4 +1,4 @@
-import useDesktopStore from '~/components/desktop/Desktop/store';
+import useDesktopStore from '~/stores/desktop';
 import Button from '~/components/ui/Button';
 import { files } from '../Files';
 
