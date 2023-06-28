@@ -3,33 +3,59 @@ import type { WindowProps, WindowInit } from '../components/desktop/Window';
 import { WindowSizingMode } from '../components/desktop/Window';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import clamp from '~/utils/clamp';
 
-export function createWindow(props: WindowInit): WindowProps {
-  return {
+const defaultWindowProps = {
+  title: 'New Window',
+  icon: 'app',
+
+  top: 200,
+  left: 200,
+  width: 640,
+  height: 480,
+
+  maximized: false,
+  focused: true,
+  order: 0,
+
+  minWidth: 200,
+  minHeight: 200,
+
+  sizingX: WindowSizingMode.RESIZABLE,
+  sizingY: WindowSizingMode.RESIZABLE,
+
+  maximizable: true,
+};
+
+function createWindow(props: WindowInit): WindowProps {
+  const window = {
     id: nanoid(),
-
-    title: 'New Window',
-    icon: 'app',
-
-    top: 200,
-    left: 200,
-    width: 640,
-    height: 480,
-
-    maximized: false,
-    focused: true,
-    order: 0,
-
-    minWidth: 200,
-    minHeight: 200,
-
-    sizingX: WindowSizingMode.RESIZABLE,
-    sizingY: WindowSizingMode.RESIZABLE,
-
-    maximizable: true,
-
+    ...defaultWindowProps,
     ...props,
   };
+
+  const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
+  const desktop = desktopEl.getBoundingClientRect();
+
+  const maxTop = Math.max(0, desktop.height - window.height);
+  const maxLeft = Math.max(0, desktop.width - window.width);
+
+  const fixedWidth = window.sizingX === WindowSizingMode.FIXED;
+  const minWidth = fixedWidth ? window.width : window.minWidth;
+
+  const fixedHeight = window.sizingY === WindowSizingMode.FIXED;
+  const minHeight = fixedHeight ? window.height : window.minHeight;
+
+  // If the window overflows the desktop on its default position, move it toward
+  // the top left until it doesn't
+  window.top = clamp(window.top, 0, maxTop);
+  window.left = clamp(window.left, 0, maxLeft);
+
+  // If the window is still overflowing (larger than desktop), resize it to fit
+  window.width = clamp(window.width, minWidth, desktop.width);
+  window.height = clamp(window.height, minHeight, desktop.height);
+
+  return window;
 }
 
 type WindowSizeProps = Partial<

@@ -6,8 +6,6 @@ export const about: WindowInit = {
   title: 'About this website',
   icon: 'info',
 
-  top: 100,
-  left: 100,
   width: 400,
 
   sizingX: WindowSizingMode.FIXED,

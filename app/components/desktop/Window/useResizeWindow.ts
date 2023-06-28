@@ -1,14 +1,7 @@
 import useDesktopStore from '~/stores/desktop';
 import type { WindowProps } from './Window';
 import useDrag from '~/hooks/useDrag';
-
-// Utility
-function clamp(value: number, min?: number, max?: number) {
-  return Math.min(
-    Math.max(value, min ?? Number.MIN_VALUE),
-    max ?? Number.MAX_VALUE,
-  );
-}
+import clamp from '~/utils/clamp';
 
 export default function useResizeWindow(
   { id, minWidth, minHeight, maxWidth, maxHeight }: WindowProps,

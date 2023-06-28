@@ -22,8 +22,8 @@ export default function Desktop() {
 
   return (
     <>
-      <div className="w-screen h-screen bg-desktop flex flex-col">
-        <div className="relative flex-1">
+      <div className="w-screen h-screen flex flex-col">
+        <div id="desktop" className="relative flex-1 bg-desktop">
           {windows.map((window) => (
             <Window key={window.id} {...window} />
           ))}
