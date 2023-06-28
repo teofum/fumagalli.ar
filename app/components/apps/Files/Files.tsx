@@ -19,6 +19,7 @@ import useDirectory from './useDirectory';
 import AddressBar from './AddressBar';
 import Toolbar from '~/components/ui/Toolbar';
 import FilesTreeView from './views/FilesTreeView';
+import FS_ROOT from '~/content/dir';
 
 const resources = getAppResourcesUrl('files');
 
@@ -124,6 +125,13 @@ export default function Files({
             checked={settings.statusBar}
             onCheckedChange={(checked) => set({ statusBar: checked })}
           />
+          <Menu.CheckboxItem
+            label="Side Bar"
+            checked={settings.sideBar === 'tree'}
+            onCheckedChange={(checked) =>
+              set({ sideBar: checked ? 'tree' : 'none' })
+            }
+          />
 
           <Menu.Separator />
 
@@ -152,15 +160,30 @@ export default function Files({
         <AddressBar path={path} navigate={navigate} />
       </Toolbar>
 
-      {dir ? (
-        <ViewComponent
-          dir={dir}
-          path={pwd}
-          open={open}
-          navigate={navigate}
-          select={setSelected}
-        />
-      ) : null}
+      <div className="flex-1 min-h-0 flex flex-row gap-0.5">
+        {settings.sideBar ? (
+          <div className="w-40 min-w-40 flex flex-col">
+            <FilesTreeView
+              dir={FS_ROOT}
+              path="/"
+              open={open}
+              navigate={navigate}
+              select={setSelected}
+            />
+          </div>
+        ) : null}
+        {dir ? (
+          <div className="flex-1 min-w-0 flex flex-col">
+            <ViewComponent
+              dir={dir}
+              path={pwd}
+              open={open}
+              navigate={navigate}
+              select={setSelected}
+            />
+          </div>
+        ) : null}
+      </div>
 
       {settings.statusBar ? (
         <div className="flex flex-row gap-0.5">
