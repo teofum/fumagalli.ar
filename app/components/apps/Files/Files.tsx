@@ -152,7 +152,6 @@ export default function Files({
         <ViewComponent
           dir={dir}
           open={open}
-          selected={selected}
           select={setSelected}
         />
       ) : null}

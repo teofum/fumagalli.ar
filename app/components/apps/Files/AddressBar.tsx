@@ -101,7 +101,7 @@ export default function AddressBar({ path, navigate }: AddressBarProps) {
         <div className="flex-1 mr-0.5 bg-default bevel-inset flex flex-row min-w-0 p-0.5">
           <div className="py-0.5 px-1.5 flex flex-row items-center justify-end gap-0.5 whitespace-nowrap overflow-hidden">
             <button
-              className="select-none decoration-1 hover:underline"
+              className="outline-none decoration-1 hover:underline focus-visible:underline"
               onPointerDown={(ev) => ev.preventDefault()}
               onClick={() => navigate('/', true)}
             >
@@ -115,7 +115,7 @@ export default function AddressBar({ path, navigate }: AddressBarProps) {
                 <div key={`${partialPath}`} className="flex flex-row gap-0.5">
                   <span>/</span>
                   <button
-                    className="select-none decoration-1 hover:underline"
+                    className="outline-none decoration-1 hover:underline focus-visible:underline"
                     onPointerDown={(ev) => ev.preventDefault()}
                     onClick={() => navigate(partialPath, true)}
                   >

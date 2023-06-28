@@ -7,14 +7,12 @@ import useResizeObserver from '../utils/useResizeObserver';
 interface FilesListViewProps {
   dir: Directory;
   open: (item: FSObject) => void;
-  selected: FSObject | null;
   select: React.Dispatch<React.SetStateAction<FSObject | null>>;
 }
 
 export default function FilesListView({
   dir,
   open,
-  selected,
   select,
 }: FilesListViewProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -36,7 +34,6 @@ export default function FilesListView({
   return (
     <ScrollContainer
       className="flex-1"
-      onClick={() => select(null)}
       viewportProps={{ ref: viewportRef }}
     >
       <ul
@@ -44,7 +41,6 @@ export default function FilesListView({
         ref={contentRef}
       >
         {dir.items.map((item) => {
-          const isSelected = item.name === selected?.name;
           const type = item.class === 'file' ? item.type : item.class;
 
           let iconUrl = `/fs/system/Resources/Icons/FileType/${type}_16.png`;
@@ -56,30 +52,27 @@ export default function FilesListView({
           return (
             <li key={item.name} className="min-w-max mr-0.5">
               <button
-                className="flex flex-row gap-0.5 py-px items-center cursor-default w-full"
+                className="flex flex-row gap-0.5 py-px items-center cursor-default w-full group outline-none"
                 onDoubleClick={() => open(item)}
-                onClick={(ev) => {
-                  select(item);
-                  ev.stopPropagation();
+                onKeyDown={(ev) => {
+                  if (ev.key === 'Enter') open(item);
                 }}
+                onFocus={() => select(item)}
+                onBlur={() => select(null)}
               >
                 <span className="relative">
                   <img src={iconUrl} alt={type} />
                   <span
                     className={cn(
                       'absolute inset-0 bg-selection bg-opacity-50',
-                      { hidden: !isSelected },
+                      'hidden group-focus:inline',
                     )}
                     style={{
                       WebkitMaskImage: `url(${iconUrl})`,
                     }}
                   />
                 </span>
-                <span
-                  className={cn('px-0.5', {
-                    'bg-selection text-selection': isSelected,
-                  })}
-                >
+                <span className="px-0.5 group-focus:bg-selection group-focus:text-selection">
                   {item.name}
                 </span>
               </button>

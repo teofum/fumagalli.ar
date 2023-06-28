@@ -5,21 +5,18 @@ import type { Directory, FSObject } from '~/content/types';
 interface FilesGridViewProps {
   dir: Directory;
   open: (item: FSObject) => void;
-  selected: FSObject | null;
   select: React.Dispatch<React.SetStateAction<FSObject | null>>;
 }
 
 export default function FilesGridView({
   dir,
   open,
-  selected,
   select,
 }: FilesGridViewProps) {
   return (
-    <ScrollContainer className="flex-1" onClick={() => select(null)}>
+    <ScrollContainer className="flex-1">
       <ul className="p-1 select-none grid grid-cols-[repeat(auto-fill,4rem)] gap-2">
         {dir.items.map((item) => {
-          const isSelected = item.name === selected?.name;
           const type = item.class === 'file' ? item.type : item.class;
 
           let iconUrl = `/fs/system/Resources/Icons/FileType/${type}_32.png`;
@@ -31,22 +28,20 @@ export default function FilesGridView({
           return (
             <li key={item.name}>
               <button
-                className="flex flex-col gap-1 w-16 items-center cursor-default"
+                className="flex flex-col gap-1 w-16 items-center cursor-default group outline-none"
                 onDoubleClick={() => open(item)}
-                onClick={(ev) => {
-                  select(item);
-                  ev.stopPropagation();
+                onKeyDown={(ev) => {
+                  if (ev.key === 'Enter') open(item);
                 }}
+                onFocus={() => select(item)}
+                onBlur={() => select(null)}
               >
                 <span className="relative">
-                  <img
-                    src={iconUrl}
-                    alt={type}
-                  />
+                  <img src={iconUrl} alt={type} />
                   <span
                     className={cn(
                       'absolute inset-0 bg-selection bg-opacity-50',
-                      { hidden: !isSelected },
+                      'hidden group-focus:inline',
                     )}
                     style={{
                       WebkitMaskImage: `url(${iconUrl})`,
@@ -55,10 +50,11 @@ export default function FilesGridView({
                 </span>
                 <div className="max-h-8 z-[1]">
                   <div
-                    className={cn('px-0.5 [overflow-wrap:anywhere]', {
-                      'bg-selection text-selection': isSelected,
-                      'line-clamp-2': !isSelected,
-                    })}
+                    className={cn(
+                      'px-0.5 [overflow-wrap:anywhere]',
+                      'group-focus:bg-selection group-focus:text-selection',
+                      'line-clamp-2 group-focus:line-clamp-none',
+                    )}
                   >
                     {item.name}
                   </div>
