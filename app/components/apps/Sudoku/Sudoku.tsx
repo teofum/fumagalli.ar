@@ -8,6 +8,7 @@ import { useWindow } from '~/components/desktop/Window/context';
 import { useFetcher } from '@remix-run/react';
 import Markdown from '~/components/ui/Markdown';
 import useDesktopStore from '~/stores/desktop';
+import Toolbar from '~/components/ui/Toolbar';
 
 interface CellProps {
   index: number;
@@ -230,37 +231,32 @@ export default function Sudoku() {
 
           <Menu.Separator />
 
-          <Menu.Item
-            label="Exit"
-            onSelect={() => close(id)}
-          />
+          <Menu.Item label="Exit" onSelect={() => close(id)} />
         </Menu.Root>
       </div>
 
-      <div className="bevel-light-inset p-px">
-        <div className="bevel-light p-px flex flex-row">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((value) => (
-            <Button
-              key={value}
-              variant="light"
-              className="w-8 h-8 text-center"
-              disabled={state.selected < 0}
-              onClick={() => dispatch({ type: 'set', value })}
-            >
-              <span className="font-display text-2xl leading-7">{value}</span>
-            </Button>
-          ))}
-
+      <Toolbar>
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((value) => (
           <Button
+            key={value}
             variant="light"
-            className="py-2 px-4"
+            className="w-8 h-8 text-center"
             disabled={state.selected < 0}
-            onClick={() => dispatch({ type: 'set', value: 0 })}
+            onClick={() => dispatch({ type: 'set', value })}
           >
-            <span>Clear</span>
+            <span className="font-display text-2xl leading-7">{value}</span>
           </Button>
-        </div>
-      </div>
+        ))}
+
+        <Button
+          variant="light"
+          className="py-2 px-4"
+          disabled={state.selected < 0}
+          onClick={() => dispatch({ type: 'set', value: 0 })}
+        >
+          <span>Clear</span>
+        </Button>
+      </Toolbar>
 
       <div className="bg-default bevel-content p-0.5">
         <div className="grid grid-cols-9 relative">
@@ -278,9 +274,7 @@ export default function Sudoku() {
 
           {state.board === null ? (
             <div className="col-span-9 w-[360px] h-[360px] p-4">
-              <Markdown>
-                {helpContent}
-              </Markdown>
+              <Markdown>{helpContent}</Markdown>
 
               <Button className="py-1 px-4 mt-6" onClick={() => newGame()}>
                 Start game

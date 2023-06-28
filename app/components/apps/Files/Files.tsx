@@ -16,12 +16,14 @@ import FilesListView from './views/FilesListView';
 import FilesDetailsView from './views/FilesDetailsView';
 import getReadableSize from './utils/getReadableSize';
 import useDirectory from './useDirectory';
+import AddressBar from './AddressBar';
+import Toolbar from '~/components/ui/Toolbar';
 
 const resources = getAppResourcesUrl('files');
 
 function parsePath(path: string) {
   if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
-  return path.split('/');
+  return path.split('/').filter((segment) => segment !== '');
 }
 
 export interface FilesProps {
@@ -60,15 +62,14 @@ export default function Files({
    * Add dir to history on path change, if not already in history
    */
   useEffect(() => {
-    console.log('saving', pwd, 'on', dirHistory[0].path);
     if (dir && dirHistory[0].path !== pwd) {
       saveDirToHistory({ time: Date.now(), item: dir, path: pwd });
       console.log('saved');
     }
-  // Calling this effect on global state update causes a render loop if there
-  // are multiple windows, and because we're dealing with global state there's
-  // no risk of getting stale state, anyway.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Calling this effect on global state update causes a render loop if there
+    // are multiple windows, and because we're dealing with global state there's
+    // no risk of getting stale state, anyway.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dir, pwd]);
 
   /**
@@ -134,20 +135,18 @@ export default function Files({
         </Menu.Root>
       </div>
 
-      <div className="flex flex-row gap-1">
+      <Toolbar>
         <Button
           variant="light"
-          className="p-0.5"
+          className="p-0.5 min-w-7"
           onClick={() => navigate('..')}
           disabled={path.length === 0}
         >
           <img src={`${resources}/go-up.png`} alt="" />
         </Button>
 
-        <div className="flex-1 bg-default bevel-inset p-1 flex flex-row items-center">
-          <span>{pwd}</span>
-        </div>
-      </div>
+        <AddressBar path={path} navigate={navigate} />
+      </Toolbar>
 
       {dir ? (
         <ViewComponent
