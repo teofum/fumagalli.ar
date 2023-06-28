@@ -64,7 +64,7 @@ export default function Files({
    * Add dir to history on path change, if not already in history
    */
   useEffect(() => {
-    if (dir && dirHistory[0].path !== pwd) {
+    if (dir && dirHistory[0]?.path !== pwd) {
       saveDirToHistory({ time: Date.now(), item: dir, path: pwd });
       console.log('saved');
     }
