@@ -12,12 +12,19 @@ export default function Desktop() {
   const [isShutdown, setShutdown] = useState(false);
 
   useEffect(() => {
+    const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
+    const desktop = desktopEl.getBoundingClientRect();
+
     if (windows.length === 0) {
-      launch(about);
-      launch(intro);
+      launch({ ...about, top: 50, left: 50 });
+      launch({
+        ...intro,
+        top: desktop.height / 2 - 300,
+        left: desktop.width / 2 - 320,
+      });
     }
-  // This is only meant to run once on startup
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // This is only meant to run once on startup
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
