@@ -161,7 +161,7 @@ export default function Files({
       </Toolbar>
 
       <div className="flex-1 min-h-0 flex flex-row gap-0.5">
-        {settings.sideBar ? (
+        {settings.sideBar === 'tree' ? (
           <div className="w-40 min-w-40 flex flex-col">
             <FilesTreeView
               dir={FS_ROOT}
