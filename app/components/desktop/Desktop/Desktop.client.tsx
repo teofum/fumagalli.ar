@@ -7,10 +7,12 @@ import useDesktopStore from '~/stores/desktop';
 import { about } from '~/components/apps/About';
 import { intro } from '~/components/apps/Intro';
 import cn from 'classnames';
+import useSystemStore from '~/stores/system';
 
 type ComputerState = 'on' | 'off' | 'shutting-down';
 
 export default function Desktop() {
+  const { themeCustomizations } = useSystemStore();
   const { windows, launch, close, shutdownDialog, openShutdown } =
     useDesktopStore();
   const [computerState, setComputerState] = useState<ComputerState>('on');
@@ -44,7 +46,11 @@ export default function Desktop() {
   return (
     <>
       <div className={cn('w-screen h-screen flex flex-col overflow-hidden')}>
-        <div id="desktop" className="relative flex-1 bg-desktop">
+        <div
+          id="desktop"
+          className="relative flex-1 bg-desktop"
+          style={{ backgroundColor: themeCustomizations.backgroundColor }}
+        >
           {windows.map((window) => (
             <Window key={window.id} {...window} />
           ))}

@@ -3,13 +3,17 @@ export interface SystemTheme {
   cssClass: string;
 }
 
+export interface ThemeCustomization {
+  backgroundColor?: string;
+}
+
 export const themes: SystemTheme[] = [
   {
-    name: 'TeOS Default',
+    name: 'Default Light',
     cssClass: 'theme-default',
   },
   {
-    name: 'TeOS Dark',
+    name: 'Default Dark',
     cssClass: 'theme-dark',
   },
   {

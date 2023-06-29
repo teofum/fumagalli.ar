@@ -8,6 +8,7 @@ type SelectProps = {
   triggerProps?: React.ComponentProps<typeof SelectPrimitive.Trigger>;
   contentProps?: React.ComponentProps<typeof SelectPrimitive.Content>;
   renderValue?: React.ReactNode;
+  viewportClassName?: string;
 } & React.ComponentProps<typeof SelectPrimitive.Root>;
 
 export const Select = forwardRef<HTMLButtonElement, SelectProps>(
@@ -17,6 +18,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
       triggerProps,
       contentProps,
       renderValue,
+      viewportClassName,
       children,
       ...props
     },
@@ -60,7 +62,9 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
             <SelectPrimitive.ScrollUpButton>
               <ArrowDown className="rotate-180" />
             </SelectPrimitive.ScrollUpButton>
-            <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
+            <SelectPrimitive.Viewport className={viewportClassName}>
+              {children}
+            </SelectPrimitive.Viewport>
             <SelectPrimitive.ScrollDownButton>
               <ArrowDown />
             </SelectPrimitive.ScrollDownButton>

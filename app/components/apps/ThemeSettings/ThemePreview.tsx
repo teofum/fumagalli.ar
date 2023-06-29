@@ -1,9 +1,15 @@
 import Max from '~/components/ui/icons/Max';
 import Close from '~/components/ui/icons/Close';
+import useSystemStore from '~/stores/system';
 
 export default function ThemePreview() {
+  const { themeCustomizations } = useSystemStore();
+
   return (
-    <div className="w-96 h-60 bevel-content bg-desktop relative pointer-events-none">
+    <div
+      className="w-96 h-60 bevel-content bg-desktop relative pointer-events-none"
+      style={{ backgroundColor: themeCustomizations.backgroundColor }}
+    >
       <div className="bg-surface bevel-window absolute top-4 left-8 w-64 h-40 p-1 flex flex-col gap-0.5">
         <div className="flex flex-row items-center gap-2 px-0.5 py-px">
           <img src={`/fs/system/Resources/Icons/FileType/app_16.png`} alt="" />
@@ -50,10 +56,10 @@ export default function ThemePreview() {
         </div>
 
         <div className="flex flex-row gap-1 p-0.5 justify-end">
-          <div className="button button-normal text-center px-2 py-1 w-20">
+          <div className="button button-normal text-center px-2 py-1 w-16">
             OK
           </div>
-          <div className="button button-normal text-center px-2 py-1 w-20">
+          <div className="button button-normal text-center px-2 py-1 w-16">
             Cancel
           </div>
         </div>

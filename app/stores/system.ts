@@ -6,6 +6,7 @@ import merge from 'ts-deepmerge';
 import type { AnyFile, Directory } from '~/content/types';
 import {
   defaultTheme,
+  type ThemeCustomization,
   type SystemTheme,
 } from '~/components/apps/ThemeSettings/types';
 
@@ -56,6 +57,7 @@ interface SystemState {
   fileHistory: FileAccess[];
   dirHistory: DirectoryAccess[];
   theme: SystemTheme;
+  themeCustomizations: ThemeCustomization;
 
   _schema: number;
 }
@@ -78,6 +80,7 @@ interface SystemActions {
 
   // System theme
   updateTheme: (theme: SystemTheme) => void;
+  updateThemeCustomizations: (theme: Partial<ThemeCustomization>) => void;
 }
 
 /**
@@ -99,6 +102,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
       fileHistory: [],
       dirHistory: [],
       theme: defaultTheme,
+      themeCustomizations: {},
 
       _schema: SCHEMA_VERSION,
 
@@ -133,6 +137,10 @@ const useSystemStore = create<SystemState & SystemActions>()(
         })),
 
       updateTheme: (theme) => set(() => ({ theme })),
+      updateThemeCustomizations: (theme) =>
+        set(({ themeCustomizations }) => ({
+          themeCustomizations: { ...themeCustomizations, ...theme },
+        })),
     }),
     {
       name: 'system-storage',
