@@ -185,13 +185,10 @@ export default function Window<T extends string>(props: WindowProps<T>) {
     />,
   ];
 
-  const titlebarSpacerClass = cn(
-    'flex-1 h-1.5 border-t border-b',
-    {
-      'border-light': focused,
-      'border-disabled drop-shadow-disabled': !focused,
-    },
-  );
+  const titlebarSpacerClass = cn('flex-1 h-1.5 border-t border-b', {
+    'border-light': focused,
+    'border-disabled drop-shadow-disabled': !focused,
+  });
 
   /**
    * Component markup
@@ -206,6 +203,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
       "
       style={getWindowStyleProps(props)}
       onPointerDown={() => focus(id)}
+      data-state={focused ? 'active' : 'inactive'}
     >
       <div className="col-start-2 row-start-2 grid grid-rows-[1.125rem_calc(100%-1.125rem)]">
         <div

@@ -2,9 +2,12 @@ import useSystemStore from '~/stores/system';
 import { themes } from './types';
 import { Select, SelectItem } from '~/components/ui/Select';
 import ThemePreview from './ThemePreview';
+import { useWindow } from '~/components/desktop/Window/context';
+import Button from '~/components/ui/Button';
 
 export default function ThemeSettings() {
   const { theme, updateTheme } = useSystemStore();
+  const { close } = useWindow();
 
   const selectTheme = (value: string) => {
     const newTheme = themes.find((t) => t.cssClass === value);
@@ -30,6 +33,10 @@ export default function ThemeSettings() {
           ))}
         </Select>
       </div>
+
+      <Button className="px-2 py-1 w-20 text-center self-end" onClick={close}>
+        <span>Done</span>
+      </Button>
     </div>
   );
 }

@@ -37,6 +37,12 @@
     @apply bg-surface bevel-window p-[0.1875rem] z-2000;
   }
 
+  [data-state='inactive'] .menu-trigger {
+    @apply text-disabled;
+
+    box-shadow: none !important;
+  }
+
   .menu-item {
     @apply select-none p-0.5 grid items-center gap-2 outline-none;
 
@@ -45,7 +51,7 @@
   }
 
   .menu-item[data-highlighted],
-  .menu-sub[data-state="open"] {
+  .menu-sub[data-state='open'] {
     @apply bg-selection text-selection;
   }
 

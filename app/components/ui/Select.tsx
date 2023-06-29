@@ -27,7 +27,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
         <SelectPrimitive.Trigger
           ref={ref}
           className={cn(
-            'flex flex-row items-stretch p-0.5',
+            'flex flex-row items-stretch p-0.5 cursor-default',
             'whitespace-nowrap overflow-hidden text-ellipsis',
             'bg-default bevel-content outline-none group',
             triggerProps?.className,

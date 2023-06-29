@@ -37,7 +37,7 @@ const Trigger = React.forwardRef<
   return (
     <button
       className={cn(
-        'button shadow-none hover:bevel-light px-1.5 py-0.5',
+        'button bg-transparent shadow-none hover:bevel-light px-1.5 py-0.5 menu-trigger',
         'active:bevel-light-inset data-[state=open]:bevel-light-inset',
         className,
       )}
@@ -124,10 +124,15 @@ function Sub({
 }: SubProps) {
   return (
     <DropdownMenu.Sub>
-      <DropdownMenu.SubTrigger className={cn('menu-item menu-sub', className)} {...props}>
+      <DropdownMenu.SubTrigger
+        className={cn('menu-item menu-sub', className)}
+        {...props}
+      >
         {icon ? <img className="col-start-1" src={icon} alt="" /> : null}
         <span className="col-start-2">{label}</span>
-        <div className="w-3 h-3"><ArrowLeft /></div>
+        <div className="w-3 h-3">
+          <ArrowLeft />
+        </div>
       </DropdownMenu.SubTrigger>
 
       <DropdownMenu.Portal>
