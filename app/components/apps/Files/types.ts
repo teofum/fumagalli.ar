@@ -13,7 +13,7 @@ export const defaultFilesSettings: FilesSettings = {
 };
 
 export interface FilesState {
-  path?: string;
+  path: string;
 }
 
 export const defaultFilesState: FilesState = {

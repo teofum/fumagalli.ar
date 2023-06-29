@@ -33,16 +33,16 @@ export default function Files() {
   const { setTitle } = useDesktopStore();
   const { dirHistory, saveDirToHistory } = useSystemStore();
 
-  const [state] = useAppState('files');
+  const [state, setState] = useAppState('files');
 
   const [settings, set] = useAppSettings('files');
   const fileHandler = useFileHandler();
 
-  /**
-   * Navigation state
-   */
-  const [path, setPath] = useState<string[]>(parsePath(state.path ?? '/'));
   const [selected, setSelected] = useState<FSObject | null>(null);
+
+  const path = useMemo(() => parsePath(state.path), [state.path]);
+  const setPath = (path: string[]) =>
+    setState({ ...state, path: `/${path.join('/')}` });
 
   const pwd = useMemo(() => `/${path.join('/')}`, [path]);
   const dir = useDirectory(path);
