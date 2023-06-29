@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply text-base;
+    @apply text-base text-default;
 
     overflow: hidden;
   }

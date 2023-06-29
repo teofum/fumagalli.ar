@@ -6,6 +6,7 @@ import Button from '~/components/ui/Button';
 import useDesktopStore from '~/stores/desktop';
 import { about } from '~/components/apps/About';
 import { intro } from '~/components/apps/Intro';
+import cn from 'classnames';
 
 export default function Desktop() {
   const { windows, launch, shutdownDialog, shutdown } = useDesktopStore();
@@ -29,7 +30,7 @@ export default function Desktop() {
 
   return (
     <>
-      <div className="w-screen h-screen flex flex-col overflow-hidden">
+      <div className={cn('w-screen h-screen flex flex-col overflow-hidden')}>
         <div id="desktop" className="relative flex-1 bg-desktop">
           {windows.map((window) => (
             <Window key={window.id} {...window} />

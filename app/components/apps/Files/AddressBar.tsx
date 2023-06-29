@@ -164,7 +164,7 @@ export default function AddressBar({ path, navigate }: AddressBarProps) {
                 autoFocus
                 value={search}
                 onValueChange={setSearch}
-                className="flex-1 outline-none py-0.5 px-1.5"
+                className="flex-1 outline-none py-0.5 px-1.5 bg-transparent"
               />
 
               <Button className="ml-auto" onClick={() => setOpen(false)}>

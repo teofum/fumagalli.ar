@@ -6,6 +6,9 @@ import Button from '~/components/ui/Button';
 import AppOutlet, { type AppState } from '~/components/apps/renderApp';
 import { WindowProvider } from './context';
 import useDesktopStore from '~/stores/desktop';
+import Restore from '~/components/ui/icons/Restore';
+import Max from '~/components/ui/icons/Max';
+import Close from '~/components/ui/icons/Close';
 
 export enum WindowSizingMode {
   RESIZABLE = 'standard',
@@ -226,18 +229,11 @@ export default function Window<T extends string>(props: WindowProps<T>) {
           <div className="flex flex-row">
             {props.maximizable ? (
               <Button onClick={() => toggleMaximized(id)}>
-                {maximized ? (
-                  <img
-                    src="/fs/system/Resources/UI/restore.png"
-                    alt="Restore"
-                  />
-                ) : (
-                  <img src="/fs/system/Resources/UI/max.png" alt="Maximize" />
-                )}
+                {maximized ? <Restore /> : <Max />}
               </Button>
             ) : null}
             <Button onClick={() => close(id)}>
-              <img src="/fs/system/Resources/UI/close.png" alt="Close" />
+              <Close />
             </Button>
           </div>
         </div>

@@ -41,7 +41,7 @@ export default function FilesGridView({ dir, open, select }: FilesViewProps) {
               <div className="max-h-8 z-[1]">
                 <div
                   className={cn(
-                    'px-0.5 [overflow-wrap:anywhere]',
+                    'px-0.5 text-ellipsis',
                     'group-focus:bg-selection group-focus:text-selection',
                     'line-clamp-2 group-focus:line-clamp-none',
                   )}

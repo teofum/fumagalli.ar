@@ -1094,21 +1094,29 @@ const FS_ROOT: Directory = {
               class: 'dir',
               name: 'intro',
               created: 1687629331,
-              modified: 1687657874,
+              modified: 1688018646,
               items: [
                 {
                   class: 'dir',
                   name: 'resources',
                   created: 1687657872,
-                  modified: 1687657874,
+                  modified: 1688018982,
                   items: [
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'me copy.png',
+                      created: 1688018968,
+                      modified: 1688018968,
+                      size: 28089,
+                    },
                     {
                       class: 'file',
                       type: 'image',
                       name: 'me.png',
                       created: 1687449488,
-                      modified: 1687449488,
-                      size: 28089,
+                      modified: 1688018982,
+                      size: 20119,
                     },
                   ],
                 },
@@ -2188,7 +2196,7 @@ const FS_ROOT: Directory = {
                   class: 'dir',
                   name: 'Start',
                   created: 1687720317,
-                  modified: 1687723035,
+                  modified: 1688014710,
                   items: [
                     {
                       class: 'file',
@@ -2205,6 +2213,14 @@ const FS_ROOT: Directory = {
                       created: 1687720714,
                       modified: 1687720714,
                       size: 496,
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'favorites.png',
+                      created: 1688014693,
+                      modified: 1688014693,
+                      size: 450,
                     },
                     {
                       class: 'file',

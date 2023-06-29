@@ -3,10 +3,20 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import merge from 'ts-deepmerge';
 
+import type { AnyFile, Directory } from '~/content/types';
+import {
+  defaultTheme,
+  type SystemTheme,
+} from '~/components/apps/ThemeSettings/types';
+
 import {
   defaultFilesSettings,
   type FilesSettings,
 } from '~/components/apps/Files/types';
+import {
+  defaultMinesweeperSettings,
+  type MinesweeperSettings,
+} from '~/components/apps/Minesweeper/types';
 import {
   defaultSolitaireSettings,
   type SolitaireSettings,
@@ -15,12 +25,6 @@ import {
   defaultSudokuSettings,
   type SudokuSettings,
 } from '~/components/apps/Sudoku/types';
-
-import type { AnyFile, Directory } from '~/content/types';
-import {
-  defaultMinesweeperSettings,
-  type MinesweeperSettings,
-} from '~/components/apps/Minesweeper/types';
 
 const MAX_FILE_HISTORY = 10; // Number of last accessed files to keep
 const MAX_DIR_HISTORY = 10; // Number of last accessed directories to keep
@@ -51,6 +55,7 @@ interface SystemState {
   };
   fileHistory: FileAccess[];
   dirHistory: DirectoryAccess[];
+  theme: SystemTheme;
 
   _schema: number;
 }
@@ -70,6 +75,9 @@ interface SystemActions {
   // File and folder history
   saveFileToHistory: (item: FileAccess) => void;
   saveDirToHistory: (item: DirectoryAccess) => void;
+
+  // System theme
+  updateTheme: (theme: SystemTheme) => void;
 }
 
 /**
@@ -90,6 +98,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
       },
       fileHistory: [],
       dirHistory: [],
+      theme: defaultTheme,
 
       _schema: SCHEMA_VERSION,
 
@@ -122,6 +131,8 @@ const useSystemStore = create<SystemState & SystemActions>()(
             ),
           ].slice(0, MAX_DIR_HISTORY),
         })),
+
+      updateTheme: (theme) => set(() => ({ theme })),
     }),
     {
       name: 'system-storage',
