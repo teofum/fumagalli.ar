@@ -6,6 +6,10 @@ import {
   defaultFilesSettings,
   type FilesSettings,
 } from '~/components/apps/Files/types';
+import {
+  defaultSolitaireSettings,
+  type SolitaireSettings,
+} from '~/components/apps/Solitaire/types';
 
 import type { AnyFile, Directory } from '~/content/types';
 
@@ -27,6 +31,7 @@ export interface DirectoryAccess {
 interface SystemState {
   appSettings: {
     files: FilesSettings;
+    solitaire: SolitaireSettings;
   };
   fileHistory: FileAccess[];
   dirHistory: DirectoryAccess[];
@@ -61,6 +66,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
        */
       appSettings: {
         files: defaultFilesSettings,
+        solitaire: defaultSolitaireSettings,
       },
       fileHistory: [],
       dirHistory: [],
