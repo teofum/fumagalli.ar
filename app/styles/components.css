@@ -32,6 +32,11 @@
     @apply hover:bevel-light active:bevel-light-inset p-0.5;
   }
 
+  /* Toggle button */
+  .toggle-button[data-state='on'] {
+    @apply bg-checkered bevel-inset;
+  }
+
   /* Menus */
   .menu-content {
     @apply bg-surface bevel-window p-[0.1875rem] z-2000;
