@@ -88,14 +88,14 @@ function SudokuCell({ index: i, value, fixed, game, dispatch }: CellProps) {
       <div
         className={cn('h-full grid place-items-center', {
           'bg-selection text-selection': isSelected,
-          'bg-highlight': isNeighborOfSelected && settings.highlightNeighbors,
           'bg-default': !isSelected,
+          'bg-highlight': isNeighborOfSelected && settings.highlightNeighbors,
         })}
       >
         <span
           className={cn('font-display text-2xl select-none', {
-            'text-light': fixed,
             'text-[#ff2020]': hasConflict && settings.showConflict,
+            'text-light': fixed,
           })}
         >
           {value || ''}

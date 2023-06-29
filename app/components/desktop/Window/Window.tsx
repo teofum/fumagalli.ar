@@ -186,8 +186,9 @@ export default function Window<T extends string>(props: WindowProps<T>) {
   ];
 
   const titlebarSpacerClass = cn(
-    'flex-1 h-1.5 border-t border-b border-light',
+    'flex-1 h-1.5 border-t border-b',
     {
+      'border-light': focused,
       'border-disabled drop-shadow-disabled': !focused,
     },
   );

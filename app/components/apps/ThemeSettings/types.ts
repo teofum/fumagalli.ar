@@ -12,6 +12,10 @@ export const themes: SystemTheme[] = [
     name: 'TeOS Dark',
     cssClass: 'theme-dark',
   },
+  {
+    name: 'Steel',
+    cssClass: 'theme-steel',
+  },
 ];
 
 export const defaultTheme = themes[0];

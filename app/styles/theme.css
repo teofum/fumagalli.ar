@@ -34,7 +34,7 @@
   .theme-dark {
     --color-desktop: 0 64 64;
     --color-background: 40 40 40;
-    --color-highlight: 96 32 32;
+    --color-highlight: 96 96 32;
   
     --color-surface: 64 64 64;
     --color-dark: 32 32 32;
@@ -49,14 +49,45 @@
     --color-heading-3: 143 188 239;
   
     --color-text-light: 128 128 128;
-    --color-text-disabled: 32 32 32;
-    --color-text-disabled-shadow: var(--color-lighter);
-    --color-text-accent: 76 148 230;
+    --color-text-disabled: 0 0 0;
+    --color-text-disabled-shadow: var(--color-light);
+    --color-text-accent: 255 255 128;
   
     --color-text-link: 97 149 209;
     --color-text-visited: 161 77 203;
 
     --color-selection-bg: 255 255 128;
+    --color-selection-text: 0 0 0;
+  
+    --color-border: 128 128 128;
+  }
+
+  .theme-steel {
+    --color-desktop: 69 83 99;
+    --color-background: 38 45 54;
+    --color-highlight: 96 96 32;
+  
+    --color-surface: 52 62 76;
+    --color-dark: 17 21 25;
+    --color-darker: 0 0 0;
+    --color-light: 77 94 115;
+    --color-lighter: 128 156 191;
+  
+    --color-title: 250 247 75;
+    --color-text: 255 253 161;
+    --color-heading: var(--color-text);
+    --color-heading-2: var(--color-heading);
+    --color-heading-3: 250 152 41;
+  
+    --color-text-light: var(--color-lighter);
+    --color-text-disabled: var(--color-dark);
+    --color-text-disabled-shadow: var(--color-light);
+    --color-text-accent: var(--color-title);
+  
+    --color-text-link: var(--color-title);
+    --color-text-visited: var(--color-heading-3);
+
+    --color-selection-bg: var(--color-text);
     --color-selection-text: 0 0 0;
   
     --color-border: 128 128 128;
