@@ -17,6 +17,10 @@ import {
 } from '~/components/apps/Sudoku/types';
 
 import type { AnyFile, Directory } from '~/content/types';
+import {
+  defaultMinesweeperSettings,
+  type MinesweeperSettings,
+} from '~/components/apps/Minesweeper/types';
 
 const MAX_FILE_HISTORY = 10; // Number of last accessed files to keep
 const MAX_DIR_HISTORY = 10; // Number of last accessed directories to keep
@@ -38,6 +42,7 @@ interface SystemState {
     files: FilesSettings;
     solitaire: SolitaireSettings;
     sudoku: SudokuSettings;
+    minesweeper: MinesweeperSettings;
   };
   fileHistory: FileAccess[];
   dirHistory: DirectoryAccess[];
@@ -74,6 +79,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
         files: defaultFilesSettings,
         solitaire: defaultSolitaireSettings,
         sudoku: defaultSudokuSettings,
+        minesweeper: defaultMinesweeperSettings,
       },
       fileHistory: [],
       dirHistory: [],
