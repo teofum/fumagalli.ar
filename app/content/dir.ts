@@ -1008,7 +1008,7 @@ const FS_ROOT: Directory = {
           class: 'dir',
           name: 'Applications',
           created: 1687629318,
-          modified: 1687874324,
+          modified: 1688014384,
           items: [
             {
               class: 'dir',
@@ -2046,6 +2046,38 @@ const FS_ROOT: Directory = {
                   name: 'sudoku.app',
                   created: 1687729491,
                   modified: 1687729491,
+                  size: 0,
+                },
+              ],
+            },
+            {
+              class: 'dir',
+              name: 'theme',
+              created: 1688014384,
+              modified: 1688014538,
+              items: [
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_16.png',
+                  created: 1688014512,
+                  modified: 1688014512,
+                  size: 450,
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_32.png',
+                  created: 1688014535,
+                  modified: 1688014535,
+                  size: 673,
+                },
+                {
+                  class: 'file',
+                  type: 'app',
+                  name: 'theme.app',
+                  created: 1688014390,
+                  modified: 1688014390,
                   size: 0,
                 },
               ],
