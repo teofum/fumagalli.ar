@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import merge from 'ts-deepmerge';
 
 import {
   defaultFilesSettings,
@@ -107,7 +108,17 @@ const useSystemStore = create<SystemState & SystemActions>()(
           ].slice(0, MAX_DIR_HISTORY),
         })),
     }),
-    { name: 'system-storage' },
+    {
+      name: 'system-storage',
+      merge: (persisted, current) =>
+        // We'll assume the persisted state is valid and hasn't been tampered
+        // with, otherwise making this type-safe is a nightmare
+        merge.withOptions(
+          { mergeArrays: false },
+          current,
+          persisted as typeof current,
+        ) as any,
+    },
   ),
 );
 
