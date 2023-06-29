@@ -13,6 +13,7 @@ import solitaireReducer from './reducer';
 import { deal } from './game';
 import useDragCard from './useDragCard';
 import winAnimation from './animation';
+import { useAppSettings } from '~/stores/system';
 
 const resources = getAppResourcesUrl('solitaire');
 
@@ -45,10 +46,18 @@ export default function Solitaire() {
   const { close } = useDesktopStore();
   const { id } = useWindow();
 
-  const [
-    { deck, drawn, drawnOffset, stacks, rows, state, score, settings },
-    dispatch,
-  ] = useReducer(solitaireReducer, deal());
+  const [settings, set] = useAppSettings('solitaire');
+  const [game, dispatch] = useReducer(solitaireReducer, deal());
+
+  /**
+   * Sync game-state settings with app settings from system store
+   * The game reducer needs to be aware of settings for scoring and drawing
+   * We could pass settings with each action instead, but that gets tedious and
+   * pollutes the API...
+   */
+  useEffect(() => {
+    dispatch({ type: 'deal', settings });
+  }, [settings]);
 
   /**
    * Timer
@@ -57,12 +66,12 @@ export default function Solitaire() {
   const [timer, setTimer] = useState<NodeJS.Timeout>();
 
   useEffect(() => {
-    if (state !== 'playing' && timer) {
+    if (game.state !== 'playing' && timer) {
       // Stop timer on gamestate change
       clearInterval(timer);
       setTimer(undefined);
     }
-  }, [state, timer]);
+  }, [game.state, timer]);
 
   const resetTimer = () => {
     if (timer) {
@@ -99,11 +108,11 @@ export default function Solitaire() {
   const boardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (state === 'win_anim' && boardRef.current) {
+    if (game.state === 'win_anim' && boardRef.current) {
       const board = boardRef.current;
       return winAnimation(board, () => dispatch({ type: 'endWinAnimation' }));
     }
-  }, [state]);
+  }, [game.state]);
 
   /**
    * Component UI
@@ -121,7 +130,7 @@ export default function Solitaire() {
             <Menu.RadioGroup
               value={settings.rules}
               onValueChange={(value) =>
-                newGame({ ...settings, rules: value as any })
+                set({ ...settings, rules: value as any })
               }
             >
               <Menu.RadioItem value="draw-one" label="Draw one (easy)" />
@@ -133,7 +142,7 @@ export default function Solitaire() {
             <Menu.RadioGroup
               value={settings.scoring}
               onValueChange={(value) =>
-                newGame({ ...settings, scoring: value as any })
+                set({ ...settings, scoring: value as any })
               }
             >
               <Menu.RadioItem value="none" label="No scoring" />
@@ -146,7 +155,7 @@ export default function Solitaire() {
             <Menu.RadioGroup
               value={settings.back.toString()}
               onValueChange={(value) =>
-                dispatch({ type: 'changeDeck', back: Number(value) })
+                set({ ...settings, back: Number(value) })
               }
             >
               <Menu.RadioItem value="0" label="Deck 1" />
@@ -175,7 +184,7 @@ export default function Solitaire() {
         ref={boardRef}
         className="flex-1 bg-[#008000] bevel-content select-none p-0.5 relative"
         onClick={
-          state === 'win_anim'
+          game.state === 'win_anim'
             ? () => dispatch({ type: 'endWinAnimation' })
             : undefined
         }
@@ -184,7 +193,7 @@ export default function Solitaire() {
           className={cn(
             'grid grid-cols-7 grid-rows-[auto_1fr] justify-items-center',
             'gap-1 px-4 py-2 min-h-full overflow-hidden',
-            { 'pointer-events-none': state !== 'playing' },
+            { 'pointer-events-none': game.state !== 'playing' },
           )}
           onPointerDown={startTimer}
         >
@@ -197,7 +206,7 @@ export default function Solitaire() {
               <img src={`${resources}/deck-empty.png`} alt="" />
             </button>
 
-            {deck.map((card, i) => {
+            {game.deck.map((card, i) => {
               const height = Math.floor(i / 10);
 
               return (
@@ -222,12 +231,12 @@ export default function Solitaire() {
 
           {/* Drawn cards */}
           <div className="relative w-[71px] h-[96px]">
-            {drawn.map((card, i, { length }) => {
+            {game.drawn.map((card, i, { length }) => {
               const height = Math.floor(i / 10);
               const top = i === length - 1;
 
               // Offset last few cards in draw-three
-              const offset = Math.max(0, i - (length - 1) + drawnOffset);
+              const offset = Math.max(0, i - (length - 1) + game.drawnOffset);
 
               const x = height * 2 + offset * 15;
               const y = height + offset;
@@ -273,7 +282,7 @@ export default function Solitaire() {
                 alt={`Suit stack ${iStack + 1}`}
               />
 
-              {stacks[iStack].map((card, iCard, { length }) => {
+              {game.stacks[iStack].map((card, iCard, { length }) => {
                 const height = Math.floor(iCard / 4);
                 // const top = iCard === length - 1;
 
@@ -306,7 +315,7 @@ export default function Solitaire() {
               id={`stack-row-${iRow}`}
               className="relative w-[71px] h-[96px]"
             >
-              {rows[iRow].unturned.map((card, iCard, { length }) => {
+              {game.rows[iRow].unturned.map((card, iCard, { length }) => {
                 const y = iCard * 3;
                 const top = iCard === length - 1;
 
@@ -332,8 +341,8 @@ export default function Solitaire() {
                 );
               })}
 
-              {rows[iRow].turned.map((card, iCard, { length }) => {
-                const y = iCard * 15 + rows[iRow].unturned.length * 3;
+              {game.rows[iRow].turned.map((card, iCard, { length }) => {
+                const y = iCard * 15 + game.rows[iRow].unturned.length * 3;
                 const top = iCard === length - 1;
 
                 return (
@@ -365,7 +374,7 @@ export default function Solitaire() {
         </div>
 
         {/* Win overlay */}
-        {state === 'won' ? (
+        {game.state === 'won' ? (
           <div className="absolute inset-0.5 bg-checkered-dark grid place-items-center z-5000">
             <div className="bg-surface bevel-window p-4 flex flex-col items-center gap-2">
               <div>You won. Congratulations!</div>
@@ -392,7 +401,9 @@ export default function Solitaire() {
           {(time % 60).toString().padStart(2, '0')}
         </div>
         <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
-          {settings.scoring === 'none' ? 'Scoring disabled' : `Score: ${score}`}
+          {settings.scoring === 'none'
+            ? 'Scoring disabled'
+            : `Score: ${game.score}`}
         </div>
       </div>
     </div>

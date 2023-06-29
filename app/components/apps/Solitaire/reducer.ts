@@ -24,7 +24,6 @@ export interface GameState {
 
 interface DealAction {
   type: 'deal';
-
   settings?: SolitaireSettings;
 }
 

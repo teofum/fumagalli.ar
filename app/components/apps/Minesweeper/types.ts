@@ -1,4 +1,4 @@
-import type { difficultyPresets } from './game';
+import { difficultyPresets } from './game';
 
 export enum MinesweeperState {
   NEW = 'new',
@@ -33,3 +33,5 @@ export interface MinesweeperSettings {
   height: number;
   mines: number;
 }
+
+export const defaultMinesweeperSettings = difficultyPresets.beginner;

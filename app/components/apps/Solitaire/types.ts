@@ -10,3 +10,9 @@ export interface SolitaireSettings {
   scoring: 'none' | 'standard' | 'vegas';
   back: number;
 }
+
+export const defaultSolitaireSettings: SolitaireSettings = {
+  rules: 'draw-three',
+  scoring: 'standard',
+  back: 0,
+};

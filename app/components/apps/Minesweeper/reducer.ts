@@ -9,7 +9,6 @@ import {
 interface GameState {
   board: MinesweeperBoard;
   state: MinesweeperState;
-  settings: MinesweeperSettings;
 }
 
 interface NewGameAction {
@@ -38,7 +37,6 @@ export default function minesweeperReducer(
       return {
         board: newBoard(action.settings),
         state: MinesweeperState.NEW,
-        settings: action.settings,
       };
     }
     case 'reveal': {
@@ -90,7 +88,7 @@ export default function minesweeperReducer(
       };
     }
     case 'cycleFlag': {
-      const { board, settings } = state;
+      const { board } = state;
 
       // Copy game state and board
       let newState = state.state;
@@ -113,11 +111,12 @@ export default function minesweeperReducer(
         .filter((cell) => cell.hasMine)
         .every((cell) => cell.flag === FlagStatus.FLAGGED);
 
-      const newFlagCount = newBoard.cells.filter(
+      const flagCount = newBoard.cells.filter(
         (cell) => cell.flag === FlagStatus.FLAGGED,
       ).length;
 
-      if (allMinesFlagged && newFlagCount === settings.mines)
+      const mineCount = newBoard.cells.filter((cell) => cell.hasMine).length;
+      if (allMinesFlagged && flagCount === mineCount)
         newState = MinesweeperState.WON;
 
       return {

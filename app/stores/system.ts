@@ -1,13 +1,26 @@
 import { useState } from 'react';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import merge from 'ts-deepmerge';
 
 import {
   defaultFilesSettings,
   type FilesSettings,
 } from '~/components/apps/Files/types';
+import {
+  defaultSolitaireSettings,
+  type SolitaireSettings,
+} from '~/components/apps/Solitaire/types';
+import {
+  defaultSudokuSettings,
+  type SudokuSettings,
+} from '~/components/apps/Sudoku/types';
 
 import type { AnyFile, Directory } from '~/content/types';
+import {
+  defaultMinesweeperSettings,
+  type MinesweeperSettings,
+} from '~/components/apps/Minesweeper/types';
 
 const MAX_FILE_HISTORY = 10; // Number of last accessed files to keep
 const MAX_DIR_HISTORY = 10; // Number of last accessed directories to keep
@@ -27,6 +40,9 @@ export interface DirectoryAccess {
 interface SystemState {
   appSettings: {
     files: FilesSettings;
+    solitaire: SolitaireSettings;
+    sudoku: SudokuSettings;
+    minesweeper: MinesweeperSettings;
   };
   fileHistory: FileAccess[];
   dirHistory: DirectoryAccess[];
@@ -61,6 +77,9 @@ const useSystemStore = create<SystemState & SystemActions>()(
        */
       appSettings: {
         files: defaultFilesSettings,
+        solitaire: defaultSolitaireSettings,
+        sudoku: defaultSudokuSettings,
+        minesweeper: defaultMinesweeperSettings,
       },
       fileHistory: [],
       dirHistory: [],
@@ -95,7 +114,17 @@ const useSystemStore = create<SystemState & SystemActions>()(
           ].slice(0, MAX_DIR_HISTORY),
         })),
     }),
-    { name: 'system-storage' },
+    {
+      name: 'system-storage',
+      merge: (persisted, current) =>
+        // We'll assume the persisted state is valid and hasn't been tampered
+        // with, otherwise making this type-safe is a nightmare
+        merge.withOptions(
+          { mergeArrays: false },
+          current,
+          persisted as typeof current,
+        ) as any,
+    },
   ),
 );
 

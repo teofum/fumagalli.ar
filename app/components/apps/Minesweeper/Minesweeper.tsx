@@ -1,11 +1,15 @@
-import cn from 'classnames';
 import { useEffect, useReducer, useRef, useState } from 'react';
-import Menu from '~/components/ui/Menu';
+import cn from 'classnames';
+
 import { useWindow } from '~/components/desktop/Window/context';
+import Menu from '~/components/ui/Menu';
+
 import useDesktopStore from '~/stores/desktop';
+import { useAppSettings } from '~/stores/system';
+
+import { difficultyPresets, newBoard } from './game';
 import { MinesweeperState } from './types';
 import minesweeperReducer from './reducer';
-import { difficultyPresets, newBoard } from './game';
 import MinesweeperStatus from './MinesweeperStatus';
 import MinesweeperCell from './MinesweeperCell';
 
@@ -13,17 +17,15 @@ export default function Minesweeper() {
   const { close } = useDesktopStore();
   const { id } = useWindow();
 
+  const [settings, set] = useAppSettings('minesweeper');
+
   /**
    * Game state
    */
-  const [{ board, settings, state }, dispatch] = useReducer(
-    minesweeperReducer,
-    {
-      board: newBoard(difficultyPresets.beginner),
-      settings: difficultyPresets.beginner,
-      state: MinesweeperState.NEW,
-    },
-  );
+  const [{ board, state }, dispatch] = useReducer(minesweeperReducer, {
+    board: newBoard(settings),
+    state: MinesweeperState.NEW,
+  });
 
   /**
    * Timer
@@ -70,8 +72,9 @@ export default function Minesweeper() {
     dispatch({ type: 'cycleFlag', cellIndex });
   };
 
-  const reset = (set = settings) => {
-    dispatch({ type: 'newGame', settings: set });
+  const reset = (s = settings) => {
+    dispatch({ type: 'newGame', settings: s });
+    set(s);
   };
 
   /**
@@ -117,7 +120,6 @@ export default function Minesweeper() {
         <MinesweeperStatus
           board={board}
           state={state}
-          settings={settings}
           time={time}
           reset={reset}
         />
