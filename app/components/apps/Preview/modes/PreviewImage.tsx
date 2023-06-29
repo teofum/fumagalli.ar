@@ -5,8 +5,8 @@ import { useWindow } from '~/components/desktop/Window/context';
 import { useEffect, useRef, useState } from 'react';
 import Button from '~/components/ui/Button';
 import { getAppResourcesUrl } from '~/content/utils';
-import useDesktopStore from '~/stores/desktop';
 import Toolbar from '~/components/ui/Toolbar';
+import useDesktopStore from '~/stores/desktop';
 
 const resources = getAppResourcesUrl('preview');
 
@@ -17,8 +17,8 @@ const ZOOM_STOPS = [
 ];
 
 export default function PreviewImage() {
-  const { moveAndResize, close } = useDesktopStore();
-  const { id, minWidth, minHeight } = useWindow();
+  const { id, minWidth, minHeight, close } = useWindow();
+  const { moveAndResize } = useDesktopStore();
 
   const { file, resourceUrl } = usePreviewApp();
   if (file.type !== 'image') throw new Error('Wrong file type');
@@ -120,7 +120,7 @@ export default function PreviewImage() {
 
           <Menu.Separator />
 
-          <Menu.Item label="Close" onSelect={() => close(id)} />
+          <Menu.Item label="Close" onSelect={close} />
         </Menu.Root>
 
         <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>

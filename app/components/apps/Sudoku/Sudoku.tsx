@@ -7,7 +7,6 @@ import Button from '~/components/ui/Button';
 import { useWindow } from '~/components/desktop/Window/context';
 import { useFetcher } from '@remix-run/react';
 import Markdown from '~/components/ui/Markdown';
-import useDesktopStore from '~/stores/desktop';
 import Toolbar from '~/components/ui/Toolbar';
 import { useAppSettings } from '~/stores/system';
 
@@ -107,8 +106,7 @@ function SudokuCell({ index: i, value, fixed, game, dispatch }: CellProps) {
 }
 
 export default function Sudoku() {
-  const { close } = useDesktopStore();
-  const { id } = useWindow();
+  const { close } = useWindow();
 
   const [settings, set] = useAppSettings('sudoku');
 
@@ -218,7 +216,7 @@ export default function Sudoku() {
 
           <Menu.Separator />
 
-          <Menu.Item label="Exit" onSelect={() => close(id)} />
+          <Menu.Item label="Exit" onSelect={close} />
         </Menu.Root>
       </div>
 

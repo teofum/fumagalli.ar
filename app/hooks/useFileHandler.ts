@@ -2,7 +2,7 @@ import { preview } from '~/components/apps/Preview';
 import {
   type PreviewSupportedFile,
   previewSupportedFileTypes,
-} from '~/components/apps/Preview/context';
+} from '~/components/apps/Preview/types';
 import { getApp } from '~/components/apps/renderApp';
 import type { AnyFile } from '~/content/types';
 import useDesktopStore from '~/stores/desktop';

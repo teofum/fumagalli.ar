@@ -4,7 +4,6 @@ import cn from 'classnames';
 import { useWindow } from '~/components/desktop/Window/context';
 import Menu from '~/components/ui/Menu';
 
-import useDesktopStore from '~/stores/desktop';
 import { useAppSettings } from '~/stores/system';
 
 import { difficultyPresets, newBoard } from './game';
@@ -14,8 +13,7 @@ import MinesweeperStatus from './MinesweeperStatus';
 import MinesweeperCell from './MinesweeperCell';
 
 export default function Minesweeper() {
-  const { close } = useDesktopStore();
-  const { id } = useWindow();
+  const { close } = useWindow();
 
   const [settings, set] = useAppSettings('minesweeper');
 
@@ -112,7 +110,7 @@ export default function Minesweeper() {
 
           <Menu.Separator />
 
-          <Menu.Item label="Exit" onSelect={() => close(id)} />
+          <Menu.Item label="Exit" onSelect={close} />
         </Menu.Root>
       </div>
 

@@ -25,6 +25,11 @@ import {
 const MAX_FILE_HISTORY = 10; // Number of last accessed files to keep
 const MAX_DIR_HISTORY = 10; // Number of last accessed directories to keep
 
+// Schema version, ensures incompatible data isn't loaded
+// CHANGING THIS WILL WIPE ALL DATA FOR EVERYONE.
+// Update ONLY for breaking changes to the schema.
+const SCHEMA_VERSION = 1;
+
 export interface FileAccess {
   time: number;
   path: string;
@@ -46,6 +51,8 @@ interface SystemState {
   };
   fileHistory: FileAccess[];
   dirHistory: DirectoryAccess[];
+
+  _schema: number;
 }
 
 type AppWithSettings = keyof SystemState['appSettings'];
@@ -84,6 +91,8 @@ const useSystemStore = create<SystemState & SystemActions>()(
       fileHistory: [],
       dirHistory: [],
 
+      _schema: SCHEMA_VERSION,
+
       /**
        * Actions
        */
@@ -116,14 +125,21 @@ const useSystemStore = create<SystemState & SystemActions>()(
     }),
     {
       name: 'system-storage',
-      merge: (persisted, current) =>
+      merge: (persisted, current) => {
+        // Wipe persisted state on schema version change
+        // This will allow me to safely introduce breaking schema changes
+        // without causing the app to crash for existing users
+        if ((persisted as typeof current)._schema !== current._schema)
+          return current;
+
         // We'll assume the persisted state is valid and hasn't been tampered
         // with, otherwise making this type-safe is a nightmare
-        merge.withOptions(
+        return merge.withOptions(
           { mergeArrays: false },
           current,
           persisted as typeof current,
-        ) as any,
+        ) as any;
+      },
     },
   ),
 );

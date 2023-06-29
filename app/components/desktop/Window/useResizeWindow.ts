@@ -1,10 +1,10 @@
 import useDesktopStore from '~/stores/desktop';
-import type { WindowProps } from './Window';
+import type { AnyWindowProps } from './Window';
 import useDrag from '~/hooks/useDrag';
 import clamp from '~/utils/clamp';
 
 export default function useResizeWindow(
-  { id, minWidth, minHeight, maxWidth, maxHeight }: WindowProps,
+  { id, minWidth, minHeight, maxWidth, maxHeight }: AnyWindowProps,
   windowRef: React.RefObject<HTMLDivElement>,
   direction: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw',
 ) {

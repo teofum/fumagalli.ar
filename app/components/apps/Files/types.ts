@@ -11,3 +11,11 @@ export const defaultFilesSettings: FilesSettings = {
   statusBar: true,
   sideBar: 'none',
 };
+
+export interface FilesState {
+  path: string;
+}
+
+export const defaultFilesState: FilesState = {
+  path: '/',
+};

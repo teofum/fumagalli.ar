@@ -1,9 +1,17 @@
 import { nanoid } from 'nanoid';
-import type { WindowProps, WindowInit } from '../components/desktop/Window';
-import { WindowSizingMode } from '../components/desktop/Window';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import merge from 'ts-deepmerge';
+
+import type { AnyWindowProps } from '~/components/desktop/Window/Window';
+import type { WindowProps, WindowInit } from '../components/desktop/Window';
+import { WindowSizingMode } from '../components/desktop/Window';
 import clamp from '~/utils/clamp';
+
+// Schema version, ensures incompatible data isn't loaded
+// CHANGING THIS WILL WIPE ALL DATA FOR EVERYONE.
+// Update ONLY for breaking changes to the schema.
+const SCHEMA_VERSION = 1;
 
 const defaultWindowProps = {
   title: 'New Window',
@@ -27,11 +35,11 @@ const defaultWindowProps = {
   maximizable: true,
 };
 
-function createWindow(props: WindowInit): WindowProps {
+function createWindow<T extends string>(init: WindowInit<T>): WindowProps<T> {
   const window = {
     id: nanoid(),
     ...defaultWindowProps,
-    ...props,
+    ...init,
   };
 
   const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
@@ -58,23 +66,29 @@ function createWindow(props: WindowInit): WindowProps {
   return window;
 }
 
-type WindowSizeProps = Partial<
-  Pick<WindowProps, 'top' | 'left' | 'width' | 'height'>
+export type WindowSizeProps = Partial<
+  Pick<AnyWindowProps, 'top' | 'left' | 'width' | 'height'>
 >;
 
 interface DesktopState {
-  windows: WindowProps[];
+  windows: AnyWindowProps[];
   shutdownDialog: boolean;
+
+  _schema: number;
 }
 
 interface DesktopActions {
   // Window-related actions
-  launch: (init: WindowInit) => void;
+  launch: <T extends string>(init: WindowInit<T>) => void;
   focus: (id: string) => void;
   toggleMaximized: (id: string) => void;
   close: (id: string) => void;
   moveAndResize: (id: string, data: WindowSizeProps) => void;
-  setWindowProps: (id: string, data: Partial<WindowProps>) => void;
+  setTitle: (id: string, title: string) => void;
+  setWindowProps: <T extends string>(
+    id: string,
+    data: Partial<WindowProps<T>>,
+  ) => void;
 
   // Other actions
   shutdown: (open?: boolean) => void;
@@ -91,6 +105,7 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
        */
       windows: [],
       shutdownDialog: false,
+      _schema: SCHEMA_VERSION,
 
       /**
        * Actions
@@ -144,6 +159,12 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
             window.id === id ? { ...window, ...data } : window,
           ),
         })),
+      setTitle: (id, title) =>
+        set(({ windows }) => ({
+          windows: windows.map((window) =>
+            window.id === id ? { ...window, title } : window,
+          ),
+        })),
       setWindowProps: (id, data) =>
         set(({ windows }) => ({
           windows: windows.map((window) =>
@@ -152,7 +173,24 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
         })),
       shutdown: (open = false) => set(() => ({ shutdownDialog: open })),
     }),
-    { name: 'desktop-storage' },
+    {
+      name: 'desktop-storage',
+      merge: (persisted, current) => {
+        // Wipe persisted state on schema version change
+        // This will allow me to safely introduce breaking schema changes
+        // without causing the app to crash for existing users
+        if ((persisted as typeof current)._schema !== current._schema)
+          return current;
+
+        // We'll assume the persisted state is valid and hasn't been tampered
+        // with, otherwise making this type-safe is a nightmare
+        return merge.withOptions(
+          { mergeArrays: false },
+          current,
+          persisted as typeof current,
+        ) as any;
+      },
+    },
   ),
 );
 

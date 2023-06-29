@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
-import useDesktopStore from '~/stores/desktop';
-import { useWindow } from '~/components/desktop/Window/context';
-import { PreviewAppProvider, type PreviewSupportedFile } from './context';
+
+import { useAppState, useWindow } from '~/components/desktop/Window/context';
+
+import { PreviewAppProvider } from './context';
+import type { PreviewSupportedFile } from './types';
 import PreviewMarkdown from './modes/PreviewMarkdown';
 import PreviewImage from './modes/PreviewImage';
+import useDesktopStore from '~/stores/desktop';
 
 const getPreviewMode = (fileType: PreviewSupportedFile['type']) => {
   switch (fileType) {
@@ -14,19 +17,16 @@ const getPreviewMode = (fileType: PreviewSupportedFile['type']) => {
   }
 };
 
-export interface PreviewProps {
-  file?: PreviewSupportedFile;
-  filePath?: string;
-}
-
-export default function Preview({ file, filePath }: PreviewProps) {
-  const { setWindowProps } = useDesktopStore();
+export default function Preview() {
   const { id } = useWindow();
+  const { setTitle } = useDesktopStore();
+
+  const [{ file, filePath }] = useAppState('preview');
 
   // Set window title to file title
   useEffect(() => {
-    if (file) setWindowProps(id, { title: `${file.name} - Preview` });
-  }, [setWindowProps, file, id]);
+    if (file) setTitle(id, `${file.name} - Preview`);
+  }, [setTitle, id, file]);
 
   if (!file || !filePath) return null;
 

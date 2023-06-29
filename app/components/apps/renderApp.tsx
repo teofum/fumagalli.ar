@@ -1,7 +1,9 @@
 import About, { about } from './About';
 import Intro, { intro } from './Intro';
 import Files, { files } from './Files';
+import type { FilesState } from './Files/types';
 import Preview, { preview } from './Preview';
+import type { PreviewState } from './Preview/types';
 import Minesweeper, { minesweeper } from './Minesweeper';
 import Sudoku, { sudoku } from './Sudoku';
 import Solitaire, { solitaire } from './Solitaire';
@@ -16,17 +18,24 @@ const applications = [
   { Component: Sudoku, meta: sudoku },
 ];
 
-interface AppOutletProps {
-  type: string;
-  props?: unknown;
+interface AppStateTypes {
+  files: FilesState;
+  preview: PreviewState;
 }
 
-export default function AppOutlet({ type, props }: AppOutletProps) {
+export type AppState<AppType extends string> =
+  AppType extends keyof AppStateTypes ? AppStateTypes[AppType] : undefined;
+
+interface AppOutletProps {
+  type: string;
+}
+
+export default function AppOutlet({ type }: AppOutletProps) {
   const app = applications.find(({ meta }) => meta.appType === type);
   if (!app) return <div>Unknown application {type}</div>;
 
   const { Component } = app;
-  return <Component {...(props as React.ComponentProps<typeof Component>)} />;
+  return <Component />;
 }
 
 export function getApp(type: string) {
