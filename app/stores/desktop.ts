@@ -8,6 +8,8 @@ import type { WindowProps, WindowInit } from '../components/desktop/Window';
 import { WindowSizingMode } from '../components/desktop/Window';
 import clamp from '~/utils/clamp';
 
+const SCHEMA_VERSION = 1;
+
 const defaultWindowProps = {
   title: 'New Window',
   icon: 'app',
@@ -68,6 +70,8 @@ export type WindowSizeProps = Partial<
 interface DesktopState {
   windows: AnyWindowProps[];
   shutdownDialog: boolean;
+
+  _schema: number;
 }
 
 interface DesktopActions {
@@ -98,6 +102,7 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
        */
       windows: [],
       shutdownDialog: false,
+      _schema: SCHEMA_VERSION,
 
       /**
        * Actions
@@ -167,14 +172,21 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
     }),
     {
       name: 'desktop-storage',
-      merge: (persisted, current) =>
+      merge: (persisted, current) => {
+        // Wipe persisted state on schema version change
+        // This will allow me to safely introduce breaking schema changes
+        // without causing the app to crash for existing users
+        if ((persisted as typeof current)._schema !== current._schema)
+          return current;
+
         // We'll assume the persisted state is valid and hasn't been tampered
         // with, otherwise making this type-safe is a nightmare
-        merge.withOptions(
+        return merge.withOptions(
           { mergeArrays: false },
           current,
           persisted as typeof current,
-        ) as any,
+        ) as any;
+      },
     },
   ),
 );
