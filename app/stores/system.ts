@@ -10,6 +10,10 @@ import {
   defaultSolitaireSettings,
   type SolitaireSettings,
 } from '~/components/apps/Solitaire/types';
+import {
+  defaultSudokuSettings,
+  type SudokuSettings,
+} from '~/components/apps/Sudoku/types';
 
 import type { AnyFile, Directory } from '~/content/types';
 
@@ -32,6 +36,7 @@ interface SystemState {
   appSettings: {
     files: FilesSettings;
     solitaire: SolitaireSettings;
+    sudoku: SudokuSettings;
   };
   fileHistory: FileAccess[];
   dirHistory: DirectoryAccess[];
@@ -67,6 +72,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
       appSettings: {
         files: defaultFilesSettings,
         solitaire: defaultSolitaireSettings,
+        sudoku: defaultSudokuSettings,
       },
       fileHistory: [],
       dirHistory: [],

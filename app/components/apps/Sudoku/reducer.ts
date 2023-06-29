@@ -1,20 +1,8 @@
-interface SudokuCell {
-  value: number;
-  fixed: boolean;
-}
-
-type SudokuBoard = SudokuCell[];
-
-interface SudokuSettings {
-  highlightNeighbors: boolean;
-  showConflict: boolean;
-  difficulty: 'easy' | 'medium' | 'hard';
-}
+import type { SudokuBoard } from './types';
 
 interface GameState {
   board: SudokuBoard | null;
   selected: number;
-  settings: SudokuSettings;
   won: boolean;
 }
 
@@ -33,12 +21,7 @@ interface SetCellAction {
   value: number;
 }
 
-interface SettingsAction {
-  type: 'settings';
-  settings: Partial<SudokuSettings>;
-}
-
-type Action = NewGameAction | SelectCellAction | SetCellAction | SettingsAction;
+type Action = NewGameAction | SelectCellAction | SetCellAction;
 
 export default function sudokuReducer(
   state: GameState,
@@ -64,9 +47,6 @@ export default function sudokuReducer(
         board[state.selected].value = action.value;
 
       return checkBoard({ ...state, board });
-    }
-    case 'settings': {
-      return { ...state, settings: { ...state.settings, ...action.settings } };
     }
     default:
       return state;
