@@ -2,7 +2,6 @@ import * as SelectPrimitive from '@radix-ui/react-select';
 import cn from 'classnames';
 import { forwardRef } from 'react';
 import ArrowDown from './icons/ArrowDown';
-import Check from './icons/Check';
 
 type SelectProps = {
   placeholder?: string;
