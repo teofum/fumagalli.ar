@@ -1,9 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
-import type { ImageFile, MarkdownFile } from '~/content/types';
 
-export const previewSupportedFileTypes = ['md', 'image'];
-export type PreviewSupportedFile = MarkdownFile | ImageFile;
+import type { PreviewSupportedFile } from './types';
 
 interface PreviewAppContextType {
   file: PreviewSupportedFile;

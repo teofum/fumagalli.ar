@@ -3,7 +3,7 @@ import useMoveWindow from './useMoveWindow';
 import useResizeWindow from './useResizeWindow';
 import cn from 'classnames';
 import Button from '~/components/ui/Button';
-import AppOutlet from '~/components/apps/renderApp';
+import AppOutlet, { type AppState } from '~/components/apps/renderApp';
 import { WindowProvider } from './context';
 import useDesktopStore from '~/stores/desktop';
 
@@ -15,10 +15,10 @@ export enum WindowSizingMode {
   MAX_CONTENT = 'max-content',
 }
 
-export interface WindowProps {
+export interface WindowProps<AppType extends string> {
   id: string;
-  appType: string;
-  appProps?: unknown;
+  appType: AppType;
+  appState: AppState<AppType>;
 
   // Decoration
   title: string;
@@ -49,11 +49,13 @@ export interface WindowProps {
   maximizable: boolean;
 }
 
-export type WindowInit = Omit<
-  Partial<WindowProps>,
-  'id' | 'focused' | 'order' | 'appType'
+export type WindowInit<AppType extends string> = Omit<
+  Partial<WindowProps<AppType>>,
+  'id' | 'focused' | 'order'
 > &
-  Pick<WindowProps, 'appType'>;
+  Pick<WindowProps<AppType>, 'appType' | 'appState'>;
+
+export type AnyWindowProps = WindowProps<string>;
 
 function getSizeValue(mode: WindowSizingMode, value: number) {
   if (mode === WindowSizingMode.AUTO) return 'auto';
@@ -62,7 +64,7 @@ function getSizeValue(mode: WindowSizingMode, value: number) {
   return `${value}px`;
 }
 
-function getWindowStyleProps({
+function getWindowStyleProps<AppType extends string>({
   top,
   left,
   width,
@@ -71,7 +73,7 @@ function getWindowStyleProps({
   sizingY,
   maximized,
   order,
-}: WindowProps) {
+}: WindowProps<AppType>) {
   if (maximized)
     return {
       top: '0',
@@ -90,8 +92,8 @@ function getWindowStyleProps({
   };
 }
 
-export default function Window(props: WindowProps) {
-  const { id, appType, appProps, title, maximized, focused } = props;
+export default function Window<T extends string>(props: WindowProps<T>) {
+  const { id, appType, title, maximized, focused } = props;
   const { focus, close, toggleMaximized } = useDesktopStore();
 
   /**
@@ -240,8 +242,8 @@ export default function Window(props: WindowProps) {
           </div>
         </div>
 
-        <WindowProvider value={props}>
-          <AppOutlet type={appType} props={appProps} />
+        <WindowProvider windowProps={props}>
+          <AppOutlet type={appType} />
         </WindowProvider>
       </div>
 

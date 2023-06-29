@@ -2,7 +2,6 @@ import { forwardRef, useEffect, useReducer, useRef, useState } from 'react';
 import cn from 'classnames';
 
 import { useWindow } from '~/components/desktop/Window/context';
-import useDesktopStore from '~/stores/desktop';
 import Button from '~/components/ui/Button';
 import Menu from '~/components/ui/Menu';
 
@@ -43,8 +42,7 @@ const Card = forwardRef<HTMLImageElement, CardProps>(function Card(
 });
 
 export default function Solitaire() {
-  const { close } = useDesktopStore();
-  const { id } = useWindow();
+  const { close } = useWindow();
 
   const [settings, set] = useAppSettings('solitaire');
   const [game, dispatch] = useReducer(solitaireReducer, deal());
@@ -175,7 +173,7 @@ export default function Solitaire() {
 
           <Menu.Separator />
 
-          <Menu.Item label="Exit" onSelect={() => close(id)} />
+          <Menu.Item label="Exit" onSelect={close} />
         </Menu.Root>
       </div>
 

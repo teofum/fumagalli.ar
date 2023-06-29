@@ -1,9 +1,9 @@
 import useDesktopStore from '~/stores/desktop';
-import type { WindowProps } from './Window';
+import type { AnyWindowProps } from './Window';
 import useDrag from '~/hooks/useDrag';
 
 export default function useMoveWindow(
-  { id, maximized }: WindowProps,
+  { id, maximized }: AnyWindowProps,
   windowRef: React.RefObject<HTMLDivElement>,
 ) {
   const { moveAndResize } = useDesktopStore();

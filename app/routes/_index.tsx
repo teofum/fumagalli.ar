@@ -17,3 +17,13 @@ export default function Index() {
 
   return mounted ? <Desktop /> : null;
 }
+
+export function ErrorBoundary() {
+  return (
+    <div className="my-6 mx-auto w-full max-w-lg border border-[red] p-4">
+      A system error ocurred... The most likely cause is stale data from an
+      older version of this app. Please delete all site data and refresh the
+      page.
+    </div>
+  );
+}

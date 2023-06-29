@@ -1,9 +1,9 @@
 import type { WindowInit } from '~/components/desktop/Window';
-import type { FilesProps } from './Files';
+import { type FilesState, defaultFilesState } from './types';
 
-export const files = (props?: FilesProps): WindowInit => ({
+export const files = (initialState?: FilesState): WindowInit<'files'> => ({
   appType: 'files',
-  appProps: props,
+  appState: initialState ?? defaultFilesState,
 
   title: 'File Explorer',
   icon: 'files',

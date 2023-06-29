@@ -6,7 +6,7 @@ export default function Intro() {
   const { launch } = useDesktopStore();
 
   const openFolder = (path: string) => {
-    launch(files({ initialPath: path }));
+    launch(files({ path }));
   };
 
   return (

@@ -1,9 +1,11 @@
 import type { WindowInit } from '~/components/desktop/Window';
-import type { PreviewProps } from './Preview';
+import { type PreviewState, previewDefaultState } from './types';
 
-export const preview = (props?: PreviewProps): WindowInit => ({
+export const preview = (
+  initialState?: PreviewState,
+): WindowInit<'preview'> => ({
   appType: 'preview',
-  appProps: props,
+  appState: initialState ?? previewDefaultState,
 
   title: 'Preview',
   icon: 'preview',

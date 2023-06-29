@@ -52,7 +52,7 @@ export default function StartMenu() {
                 />
               ))}
             </Menu.Sub>
-            {[files({ initialPath: '/Documents' }), about, intro].map((app) => (
+            {[files({ path: '/Documents' }), about, intro].map((app) => (
               <Menu.Item
                 key={app.appType}
                 label={app.title ?? ''}
@@ -69,7 +69,7 @@ export default function StartMenu() {
             <Menu.Item
               label="My Documents"
               icon="/fs/system/Applications/files/icon_16.png"
-              onSelect={() => launch(files({ initialPath: '/Documents' }))}
+              onSelect={() => launch(files({ path: '/Documents' }))}
             />
 
             <Menu.Separator />

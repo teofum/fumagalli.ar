@@ -5,9 +5,8 @@ import { getAppResourcesUrl } from '~/content/utils';
 
 import Button from '~/components/ui/Button';
 import Menu from '~/components/ui/Menu';
-import { useWindow } from '~/components/desktop/Window/context';
+import { useAppState, useWindow } from '~/components/desktop/Window/context';
 import useFileHandler from '~/hooks/useFileHandler';
-import useDesktopStore from '~/stores/desktop';
 import useSystemStore, { useAppSettings } from '~/stores/system';
 
 import type { FilesView } from './types';
@@ -20,6 +19,7 @@ import AddressBar from './AddressBar';
 import Toolbar from '~/components/ui/Toolbar';
 import FilesTreeView from './views/FilesTreeView';
 import FS_ROOT from '~/content/dir';
+import useDesktopStore from '~/stores/desktop';
 
 const resources = getAppResourcesUrl('files');
 
@@ -28,18 +28,12 @@ function parsePath(path: string) {
   return path.split('/').filter((segment) => segment !== '');
 }
 
-export interface FilesProps {
-  initialView?: FilesView;
-  initialPath?: string;
-}
-
-export default function Files({
-  initialView = 'grid',
-  initialPath = '/',
-}: FilesProps) {
-  const { id } = useWindow();
-  const { setWindowProps, close } = useDesktopStore();
+export default function Files() {
+  const { id, close } = useWindow();
+  const { setTitle } = useDesktopStore();
   const { dirHistory, saveDirToHistory } = useSystemStore();
+
+  const [state] = useAppState('files');
 
   const [settings, set] = useAppSettings('files');
   const fileHandler = useFileHandler();
@@ -47,7 +41,7 @@ export default function Files({
   /**
    * Navigation state
    */
-  const [path, setPath] = useState<string[]>(parsePath(initialPath));
+  const [path, setPath] = useState<string[]>(parsePath(state.path ?? '/'));
   const [selected, setSelected] = useState<FSObject | null>(null);
 
   const pwd = useMemo(() => `/${path.join('/')}`, [path]);
@@ -57,8 +51,8 @@ export default function Files({
    * Set window title on dir change
    */
   useEffect(() => {
-    if (dir) setWindowProps(id, { title: dir.name });
-  }, [setWindowProps, dir, id]);
+    if (dir) setTitle(id, dir.name);
+  }, [setTitle, id, dir]);
 
   /**
    * Add dir to history on path change, if not already in history
@@ -116,7 +110,7 @@ export default function Files({
 
           <Menu.Separator />
 
-          <Menu.Item label="Close" onSelect={() => close(id)} />
+          <Menu.Item label="Close" onSelect={close} />
         </Menu.Root>
 
         <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>
