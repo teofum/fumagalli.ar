@@ -64,6 +64,12 @@ export default {
       minWidth: {
         ...defaultTheme.spacing,
       },
+      maxHeight: {
+        ...defaultTheme.spacing,
+      },
+      minHeight: {
+        ...defaultTheme.spacing,
+      },
       backgroundColor: {
         default: 'rgb(var(--color-background) / <alpha-value>)',
         selection: 'rgb(var(--color-selection-bg) / <alpha-value>)',

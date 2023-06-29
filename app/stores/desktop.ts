@@ -91,7 +91,7 @@ interface DesktopActions {
   ) => void;
 
   // Other actions
-  shutdown: (open?: boolean) => void;
+  openShutdown: (open?: boolean) => void;
 }
 
 /**
@@ -171,7 +171,7 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
             window.id === id ? { ...window, ...data } : window,
           ),
         })),
-      shutdown: (open = false) => set(() => ({ shutdownDialog: open })),
+      openShutdown: (open = true) => set(() => ({ shutdownDialog: open })),
     }),
     {
       name: 'desktop-storage',

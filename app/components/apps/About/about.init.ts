@@ -1,7 +1,8 @@
 import { WindowSizingMode, type WindowInit } from '~/components/desktop/Window';
 
-export const about: WindowInit = {
+export const about: WindowInit<'about'> = {
   appType: 'about',
+  appState: undefined,
 
   title: 'About this website',
   icon: 'info',

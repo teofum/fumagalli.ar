@@ -1008,7 +1008,7 @@ const FS_ROOT: Directory = {
           class: 'dir',
           name: 'Applications',
           created: 1687629318,
-          modified: 1687874324,
+          modified: 1688014384,
           items: [
             {
               class: 'dir',
@@ -1094,21 +1094,29 @@ const FS_ROOT: Directory = {
               class: 'dir',
               name: 'intro',
               created: 1687629331,
-              modified: 1687657874,
+              modified: 1688018646,
               items: [
                 {
                   class: 'dir',
                   name: 'resources',
                   created: 1687657872,
-                  modified: 1687657874,
+                  modified: 1688018982,
                   items: [
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'me copy.png',
+                      created: 1688018968,
+                      modified: 1688018968,
+                      size: 28089,
+                    },
                     {
                       class: 'file',
                       type: 'image',
                       name: 'me.png',
                       created: 1687449488,
-                      modified: 1687449488,
-                      size: 28089,
+                      modified: 1688018982,
+                      size: 20119,
                     },
                   ],
                 },
@@ -2050,6 +2058,38 @@ const FS_ROOT: Directory = {
                 },
               ],
             },
+            {
+              class: 'dir',
+              name: 'theme',
+              created: 1688014384,
+              modified: 1688014538,
+              items: [
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_16.png',
+                  created: 1688014512,
+                  modified: 1688014512,
+                  size: 450,
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_32.png',
+                  created: 1688014535,
+                  modified: 1688014535,
+                  size: 673,
+                },
+                {
+                  class: 'file',
+                  type: 'app',
+                  name: 'theme.app',
+                  created: 1688014390,
+                  modified: 1688014390,
+                  size: 0,
+                },
+              ],
+            },
           ],
         },
         {
@@ -2156,7 +2196,7 @@ const FS_ROOT: Directory = {
                   class: 'dir',
                   name: 'Start',
                   created: 1687720317,
-                  modified: 1687723035,
+                  modified: 1688014710,
                   items: [
                     {
                       class: 'file',
@@ -2173,6 +2213,14 @@ const FS_ROOT: Directory = {
                       created: 1687720714,
                       modified: 1687720714,
                       size: 496,
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'favorites.png',
+                      created: 1688014693,
+                      modified: 1688014693,
+                      size: 450,
                     },
                     {
                       class: 'file',

@@ -6,6 +6,9 @@ import Button from '~/components/ui/Button';
 import AppOutlet, { type AppState } from '~/components/apps/renderApp';
 import { WindowProvider } from './context';
 import useDesktopStore from '~/stores/desktop';
+import Restore from '~/components/ui/icons/Restore';
+import Max from '~/components/ui/icons/Max';
+import Close from '~/components/ui/icons/Close';
 
 export enum WindowSizingMode {
   RESIZABLE = 'standard',
@@ -182,12 +185,10 @@ export default function Window<T extends string>(props: WindowProps<T>) {
     />,
   ];
 
-  const titlebarSpacerClass = cn(
-    'flex-1 h-1.5 border-t border-b border-light',
-    {
-      'border-disabled drop-shadow-disabled': !focused,
-    },
-  );
+  const titlebarSpacerClass = cn('flex-1 h-1.5 border-t border-b', {
+    'border-light': focused,
+    'border-disabled drop-shadow-disabled': !focused,
+  });
 
   /**
    * Component markup
@@ -202,6 +203,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
       "
       style={getWindowStyleProps(props)}
       onPointerDown={() => focus(id)}
+      data-state={focused ? 'active' : 'inactive'}
     >
       <div className="col-start-2 row-start-2 grid grid-rows-[1.125rem_calc(100%-1.125rem)]">
         <div
@@ -214,7 +216,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
           <div className={titlebarSpacerClass} />
 
           <span
-            className={cn('font-title bold', {
+            className={cn('font-title text-title bold', {
               'text-disabled': !focused,
             })}
           >
@@ -226,18 +228,11 @@ export default function Window<T extends string>(props: WindowProps<T>) {
           <div className="flex flex-row">
             {props.maximizable ? (
               <Button onClick={() => toggleMaximized(id)}>
-                {maximized ? (
-                  <img
-                    src="/fs/system/Resources/UI/restore.png"
-                    alt="Restore"
-                  />
-                ) : (
-                  <img src="/fs/system/Resources/UI/max.png" alt="Maximize" />
-                )}
+                {maximized ? <Restore /> : <Max />}
               </Button>
             ) : null}
             <Button onClick={() => close(id)}>
-              <img src="/fs/system/Resources/UI/close.png" alt="Close" />
+              <Close />
             </Button>
           </div>
         </div>

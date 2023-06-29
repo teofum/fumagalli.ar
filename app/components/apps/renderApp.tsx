@@ -7,6 +7,7 @@ import type { PreviewState } from './Preview/types';
 import Minesweeper, { minesweeper } from './Minesweeper';
 import Sudoku, { sudoku } from './Sudoku';
 import Solitaire, { solitaire } from './Solitaire';
+import ThemeSettings, { themeSettings } from './ThemeSettings';
 
 const applications = [
   { Component: About, meta: about },
@@ -16,6 +17,7 @@ const applications = [
   { Component: Minesweeper, meta: minesweeper },
   { Component: Solitaire, meta: solitaire },
   { Component: Sudoku, meta: sudoku },
+  { Component: ThemeSettings, meta: themeSettings },
 ];
 
 interface AppStateTypes {

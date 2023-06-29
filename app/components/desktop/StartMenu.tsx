@@ -12,11 +12,12 @@ import { minesweeper } from '../apps/Minesweeper';
 import { files } from '../apps/Files';
 import { sudoku } from '../apps/Sudoku';
 import { solitaire } from '../apps/Solitaire';
+import { themeSettings } from '../apps/ThemeSettings';
 
 const ICON_PATH = '/fs/system/Resources/Icons/Start';
 
 export default function StartMenu() {
-  const { launch, shutdown } = useDesktopStore();
+  const { launch, openShutdown: shutdown } = useDesktopStore();
   const { fileHistory } = useSystemStore();
 
   const fileHandler = useFileHandler();
@@ -61,6 +62,29 @@ export default function StartMenu() {
               />
             ))}
           </Menu.Sub>
+
+          <Menu.Sub
+            className="gap-2 w-44"
+            label="Favorites"
+            icon={`${ICON_PATH}/favorites.png`}
+          >
+            <Menu.Item
+              label="Articles"
+              icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+              onSelect={() => launch(files({ path: '/Documents/Articles' }))}
+            />
+            <Menu.Item
+              label="Photos"
+              icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+              onSelect={() => launch(files({ path: '/Documents/Photos' }))}
+            />
+            <Menu.Item
+              label="Projects"
+              icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+              onSelect={() => launch(files({ path: '/Documents/Projects' }))}
+            />
+          </Menu.Sub>
+
           <Menu.Sub
             className="gap-2 w-44"
             label="Documents"
@@ -86,28 +110,6 @@ export default function StartMenu() {
             {fileHistory.length === 0 ? (
               <Menu.Item label="[EMPTY]" disabled />
             ) : null}
-
-            {/* <Menu.Item
-              label="Articles"
-              icon="/fs/system/Resources/Icons/FileType/dir_16.png"
-              onSelect={() =>
-                launch(files({ initialPath: '/Documents/Articles' }))
-              }
-            />
-            <Menu.Item
-              label="Photos"
-              icon="/fs/system/Resources/Icons/FileType/dir_16.png"
-              onSelect={() =>
-                launch(files({ initialPath: '/Documents/Photos' }))
-              }
-            />
-            <Menu.Item
-              label="Projects"
-              icon="/fs/system/Resources/Icons/FileType/dir_16.png"
-              onSelect={() =>
-                launch(files({ initialPath: '/Documents/Projects' }))
-              }
-            /> */}
           </Menu.Sub>
 
           <Menu.Sub
@@ -115,8 +117,16 @@ export default function StartMenu() {
             label="Settings"
             icon={`${ICON_PATH}/settings.png`}
           >
-            <Menu.Item label="[EMPTY]" disabled />
+            {[themeSettings].map((app) => (
+              <Menu.Item
+                key={app.appType}
+                label={app.title ?? ''}
+                icon={`/fs/system/Applications/${app.appType}/icon_16.png`}
+                onSelect={() => launch(app)}
+              />
+            ))}
           </Menu.Sub>
+
           <Menu.Item
             className="gap-2 w-44"
             label="Help"

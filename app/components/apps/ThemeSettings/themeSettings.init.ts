@@ -1,11 +1,10 @@
 import { WindowSizingMode, type WindowInit } from '~/components/desktop/Window';
 
-export const minesweeper: WindowInit<'mine'> = {
-  appType: 'mine',
+export const themeSettings: WindowInit<'theme'> = {
+  appType: 'theme',
   appState: undefined,
 
-  title: 'Minesweeper',
-  icon: 'mine',
+  title: 'System Theme',
 
   sizingX: WindowSizingMode.AUTO,
   sizingY: WindowSizingMode.AUTO,
