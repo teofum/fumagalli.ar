@@ -17,7 +17,7 @@ import { themeSettings } from '../apps/ThemeSettings';
 const ICON_PATH = '/fs/system/Resources/Icons/Start';
 
 export default function StartMenu() {
-  const { launch, shutdown } = useDesktopStore();
+  const { launch, openShutdown: shutdown } = useDesktopStore();
   const { fileHistory } = useSystemStore();
 
   const fileHandler = useFileHandler();
