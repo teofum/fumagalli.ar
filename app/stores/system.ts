@@ -25,6 +25,9 @@ import {
 const MAX_FILE_HISTORY = 10; // Number of last accessed files to keep
 const MAX_DIR_HISTORY = 10; // Number of last accessed directories to keep
 
+// Schema version, ensures incompatible data isn't loaded
+// CHANGING THIS WILL WIPE ALL DATA FOR EVERYONE.
+// Update ONLY for breaking changes to the schema.
 const SCHEMA_VERSION = 1;
 
 export interface FileAccess {

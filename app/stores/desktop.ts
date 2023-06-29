@@ -8,6 +8,9 @@ import type { WindowProps, WindowInit } from '../components/desktop/Window';
 import { WindowSizingMode } from '../components/desktop/Window';
 import clamp from '~/utils/clamp';
 
+// Schema version, ensures incompatible data isn't loaded
+// CHANGING THIS WILL WIPE ALL DATA FOR EVERYONE.
+// Update ONLY for breaking changes to the schema.
 const SCHEMA_VERSION = 1;
 
 const defaultWindowProps = {
