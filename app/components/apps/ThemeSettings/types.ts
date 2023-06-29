@@ -13,8 +13,20 @@ export const themes: SystemTheme[] = [
     cssClass: 'theme-dark',
   },
   {
+    name: 'Champagne',
+    cssClass: 'theme-champagne',
+  },
+  {
+    name: 'Jade',
+    cssClass: 'theme-jade',
+  },
+  {
     name: 'Steel',
     cssClass: 'theme-steel',
+  },
+  {
+    name: 'Midnight',
+    cssClass: 'theme-midnight',
   },
 ];
 

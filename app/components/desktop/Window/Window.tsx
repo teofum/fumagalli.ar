@@ -216,7 +216,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
           <div className={titlebarSpacerClass} />
 
           <span
-            className={cn('font-title bold', {
+            className={cn('font-title text-title bold', {
               'text-disabled': !focused,
             })}
           >

@@ -32,7 +32,7 @@ export default function ThemePreview() {
           <img src={`/fs/system/Resources/Icons/FileType/app_16.png`} alt="" />
 
           <div className="flex-1 h-1.5 border-t border-b border-light" />
-          <span className="font-title bold">Active Window</span>
+          <span className="font-title text-title bold">Active Window</span>
           <div className="flex-1 h-1.5 border-t border-b border-light" />
 
           <div className="flex flex-row">
