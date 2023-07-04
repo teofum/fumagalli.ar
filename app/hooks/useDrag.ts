@@ -32,12 +32,12 @@ export default function useDrag({
       onDragEnd?.(ev, target);
 
       // Clean up event listeners
-      window.removeEventListener('pointermove', dragMove);
-      window.removeEventListener('pointerup', dragEnd);
+      document.body.removeEventListener('pointermove', dragMove);
+      document.body.removeEventListener('pointerup', dragEnd);
     };
 
-    window.addEventListener('pointermove', dragMove); // Drag while moving
-    window.addEventListener('pointerup', dragEnd); // End drag on pointer up
+    document.body.addEventListener('pointermove', dragMove); // Drag while moving
+    document.body.addEventListener('pointerup', dragEnd); // End drag on pointer up
   };
 
   const pointerDownHandler = (ev?: React.PointerEvent) => {
@@ -54,13 +54,13 @@ export default function useDrag({
 
     // Clean up event listeners
     const cancel = () => {
-      window.removeEventListener('pointermove', start);
-      window.removeEventListener('pointerup', cancel);
+      document.body.removeEventListener('pointermove', start);
+      document.body.removeEventListener('pointerup', cancel);
     };
 
     // On pointer down...
-    window.addEventListener('pointermove', start); // Start dragging on move
-    window.addEventListener('pointerup', cancel); // Cancel on pointer up (click)
+    document.body.addEventListener('pointermove', start); // Start dragging on move
+    document.body.addEventListener('pointerup', cancel); // Cancel on pointer up (click)
   };
 
   return pointerDownHandler;

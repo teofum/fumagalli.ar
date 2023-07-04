@@ -1008,7 +1008,7 @@ const FS_ROOT: Directory = {
           class: 'dir',
           name: 'Applications',
           created: 1687629318,
-          modified: 1688014384,
+          modified: 1688487830,
           items: [
             {
               class: 'dir',
@@ -1039,6 +1039,38 @@ const FS_ROOT: Directory = {
                   created: 1687657802,
                   modified: 1687657802,
                   size: 470,
+                },
+              ],
+            },
+            {
+              class: 'dir',
+              name: 'dos',
+              created: 1688487830,
+              modified: 1688487871,
+              items: [
+                {
+                  class: 'file',
+                  type: 'app',
+                  name: 'dos.app',
+                  created: 1688487835,
+                  modified: 1688487835,
+                  size: 0,
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_16.png',
+                  created: 1688487864,
+                  modified: 1688487864,
+                  size: 361,
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_32.png',
+                  created: 1688487847,
+                  modified: 1688487847,
+                  size: 606,
                 },
               ],
             },
