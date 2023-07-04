@@ -39,13 +39,13 @@ const defaultWindowProps = {
 
 function createWindow<T extends string>(
   init: WindowInit<T>,
-  parentId?: string,
+  parent?: AnyWindowProps,
 ): WindowProps<T> {
   const window = {
     id: nanoid(),
     ...defaultWindowProps,
     ...init,
-    parentId,
+    parentId: parent?.id,
   };
 
   const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
@@ -59,6 +59,12 @@ function createWindow<T extends string>(
 
   const fixedHeight = window.sizingY === WindowSizingMode.FIXED;
   const minHeight = fixedHeight ? window.height : window.minHeight;
+
+  // If the window is a modal, place it centered on top of parent
+  if (parent) {
+    window.top = parent.top + parent.height / 2 - window.height / 2;
+    window.left = parent.left + parent.width / 2 - window.width / 2;
+  }
 
   // If the window overflows the desktop on its default position, move it toward
   // the top left until it doesn't
@@ -75,11 +81,11 @@ function createWindow<T extends string>(
 function addWindow<T extends string>(
   windows: AnyWindowProps[],
   init: WindowInit<T>,
-  parentId?: string,
+  parent?: AnyWindowProps,
 ): AnyWindowProps[] {
   return [
     ...windows.map((window) => ({ ...window, focused: false })),
-    { ...createWindow(init, parentId), order: windows.length, focused: true },
+    { ...createWindow(init, parent), order: windows.length, focused: true },
   ];
 }
 
@@ -169,14 +175,17 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
       launch: (init, parentId) =>
         set(({ windows }) => {
           if (parentId) {
+            const parent = findWindow(windows, parentId);
+            if (!parent) return {};
+
             return {
               windows: [
                 ...windows.map((window) =>
-                  window.id === parentId
+                  window.id === parent.id
                     ? {
                         ...window,
                         focused: true,
-                        children: addWindow(window.children, init, parentId),
+                        children: addWindow(window.children, init, parent),
                       }
                     : { ...window, focused: false },
                 ),
