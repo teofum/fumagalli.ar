@@ -8,6 +8,8 @@ import Minesweeper, { minesweeper } from './Minesweeper';
 import Sudoku, { sudoku } from './Sudoku';
 import Solitaire, { solitaire } from './Solitaire';
 import ThemeSettings, { themeSettings } from './ThemeSettings';
+import DOSEmu, { dosEmu } from './DOSEmu';
+import type { DOSEmuState } from './DOSEmu/types';
 
 const applications = [
   { Component: About, meta: about },
@@ -18,11 +20,13 @@ const applications = [
   { Component: Solitaire, meta: solitaire },
   { Component: Sudoku, meta: sudoku },
   { Component: ThemeSettings, meta: themeSettings },
+  { Component: DOSEmu, meta: dosEmu() },
 ];
 
 interface AppStateTypes {
   files: FilesState;
   preview: PreviewState;
+  dos: DOSEmuState;
 }
 
 export type AppState<AppType extends string> =

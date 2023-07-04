@@ -13,8 +13,13 @@ import { files } from '../apps/Files';
 import { sudoku } from '../apps/Sudoku';
 import { solitaire } from '../apps/Solitaire';
 import { themeSettings } from '../apps/ThemeSettings';
+import { dosEmu } from '../apps/DOSEmu';
 
 const ICON_PATH = '/fs/system/Resources/Icons/Start';
+
+const dosGames = [
+  { title: 'DOOM', bundle: '/fs/system/Applications/dos/games/doom.jsdos' },
+];
 
 export default function StartMenu() {
   const { launch, openShutdown: shutdown } = useDesktopStore();
@@ -44,6 +49,16 @@ export default function StartMenu() {
             icon={`${ICON_PATH}/applications.png`}
           >
             <Menu.Sub label="Games">
+              <Menu.Sub label="DOS">
+                {dosGames.map((game) => (
+                  <Menu.Item
+                    key={game.title}
+                    label={game.title ?? ''}
+                    icon={`/fs/system/Applications/dos/icon_16.png`}
+                    onSelect={() => launch(dosEmu({ bundleUrl: game.bundle }))}
+                  />
+                ))}
+              </Menu.Sub>
               {[minesweeper, solitaire, sudoku].map((app) => (
                 <Menu.Item
                   key={app.appType}

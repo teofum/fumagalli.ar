@@ -1008,7 +1008,7 @@ const FS_ROOT: Directory = {
           class: 'dir',
           name: 'Applications',
           created: 1687629318,
-          modified: 1688014384,
+          modified: 1688487830,
           items: [
             {
               class: 'dir',
@@ -1039,6 +1039,54 @@ const FS_ROOT: Directory = {
                   created: 1687657802,
                   modified: 1687657802,
                   size: 470,
+                },
+              ],
+            },
+            {
+              class: 'dir',
+              name: 'dos',
+              created: 1688487830,
+              modified: 1688494018,
+              items: [
+                {
+                  class: 'dir',
+                  name: 'games',
+                  created: 1688494018,
+                  modified: 1688494021,
+                  items: [
+                    {
+                      class: 'file',
+                      type: 'dos',
+                      name: 'doom.jsdos',
+                      created: 1688481885,
+                      modified: 1688481885,
+                      size: 5539791,
+                    },
+                  ],
+                },
+                {
+                  class: 'file',
+                  type: 'app',
+                  name: 'dos.app',
+                  created: 1688487835,
+                  modified: 1688487835,
+                  size: 0,
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_16.png',
+                  created: 1688487864,
+                  modified: 1688487864,
+                  size: 361,
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'icon_32.png',
+                  created: 1688487847,
+                  modified: 1688487847,
+                  size: 606,
                 },
               ],
             },
@@ -2108,7 +2156,7 @@ const FS_ROOT: Directory = {
                   class: 'dir',
                   name: 'FileType',
                   created: 1687548703,
-                  modified: 1687657265,
+                  modified: 1688496359,
                   items: [
                     {
                       class: 'file',
@@ -2141,6 +2189,22 @@ const FS_ROOT: Directory = {
                       created: 1687546064,
                       modified: 1687546064,
                       size: 489,
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'dos_16.png',
+                      created: 1688496351,
+                      modified: 1688496351,
+                      size: 361,
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'dos_32.png',
+                      created: 1688496351,
+                      modified: 1688496351,
+                      size: 606,
                     },
                     {
                       class: 'file',

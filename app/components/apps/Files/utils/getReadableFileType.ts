@@ -10,6 +10,8 @@ export default function getReadableFileType(item: FSObject) {
       return `${extension?.toUpperCase()} Image`;
     case 'md':
       return 'Markdown File';
+    case 'dos':
+      return 'DOSEmu ROM';
     case 'app':
       return 'Application';
     case 'file':
