@@ -3,12 +3,13 @@ import { createContext, useContext } from 'react';
 
 import useDesktopStore from '~/stores/desktop';
 import type { AppState } from '~/components/apps/renderApp';
-import type { WindowProps } from './Window';
+import type { WindowInit, WindowProps } from './Window';
 
 interface WindowContextType<T extends string> extends WindowProps<T> {
   focus: () => void;
   toggleMaximized: () => void;
   close: () => void;
+  modal: <T extends string>(init: WindowInit<T>) => void;
 }
 
 const WindowContext = createContext<WindowContextType<string>>(
@@ -27,9 +28,12 @@ export function WindowProvider<T extends string>({
 
   const focus = () => desktop.focus(windowProps.id);
   const toggleMaximized = () => desktop.toggleMaximized(windowProps.id);
-  const close = () => desktop.close(windowProps.id);
+  const close = () => desktop.close(windowProps.id, windowProps.parentId);
 
-  const value = { ...windowProps, focus, toggleMaximized, close };
+  const modal = <T extends string>(init: WindowInit<T>) =>
+    desktop.launch(init, windowProps.id);
+
+  const value = { ...windowProps, focus, toggleMaximized, close, modal };
 
   return (
     <WindowContext.Provider value={value}>{children}</WindowContext.Provider>

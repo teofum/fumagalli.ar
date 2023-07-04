@@ -17,6 +17,8 @@ const defaultWindowProps = {
   title: 'New Window',
   icon: 'app',
 
+  children: [],
+
   top: 200,
   left: 200,
   width: 640,
@@ -35,11 +37,15 @@ const defaultWindowProps = {
   maximizable: true,
 };
 
-function createWindow<T extends string>(init: WindowInit<T>): WindowProps<T> {
+function createWindow<T extends string>(
+  init: WindowInit<T>,
+  parentId?: string,
+): WindowProps<T> {
   const window = {
     id: nanoid(),
     ...defaultWindowProps,
     ...init,
+    parentId,
   };
 
   const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
@@ -66,6 +72,17 @@ function createWindow<T extends string>(init: WindowInit<T>): WindowProps<T> {
   return window;
 }
 
+function addWindow<T extends string>(
+  windows: AnyWindowProps[],
+  init: WindowInit<T>,
+  parentId?: string,
+): AnyWindowProps[] {
+  return [
+    ...windows.map((window) => ({ ...window, focused: false })),
+    { ...createWindow(init, parentId), order: windows.length, focused: true },
+  ];
+}
+
 export type WindowSizeProps = Partial<
   Pick<AnyWindowProps, 'top' | 'left' | 'width' | 'height'>
 >;
@@ -79,10 +96,10 @@ interface DesktopState {
 
 interface DesktopActions {
   // Window-related actions
-  launch: <T extends string>(init: WindowInit<T>) => void;
+  launch: <T extends string>(init: WindowInit<T>, parentId?: string) => void;
   focus: (id: string) => void;
   toggleMaximized: (id: string) => void;
-  close: (id: string) => void;
+  close: (id: string, parentId?: string) => void;
   moveAndResize: (id: string, data: WindowSizeProps) => void;
   setTitle: (id: string, title: string) => void;
   setWindowProps: <T extends string>(
@@ -110,13 +127,24 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
       /**
        * Actions
        */
-      launch: (init) =>
-        set(({ windows }) => ({
-          windows: [
-            ...windows.map((window) => ({ ...window, focused: false })),
-            { ...createWindow(init), order: windows.length, focused: true },
-          ],
-        })),
+      launch: (init, parentId) =>
+        set(({ windows }) => {
+          if (parentId) {
+            return {
+              windows: [
+                ...windows.map((window) =>
+                  window.id === parentId
+                    ? {
+                        ...window,
+                        focused: true,
+                        children: addWindow(window.children, init, parentId),
+                      }
+                    : { ...window, focused: false },
+                ),
+              ],
+            };
+          } else return { windows: addWindow(windows, init) };
+        }),
       focus: (id) =>
         set(({ windows }) => {
           const target = windows.find((window) => window.id === id);
@@ -149,10 +177,21 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
             ),
           };
         }),
-      close: (id) =>
-        set(({ windows }) => ({
-          windows: windows.filter((window) => window.id !== id),
-        })),
+      close: (id, parentId) =>
+        set(({ windows }) => {
+          if (parentId) {
+            return {
+              windows: windows.map((window) =>
+                window.id === parentId
+                  ? {
+                      ...window,
+                      children: window.children.filter((w) => w.id !== id),
+                    }
+                  : window,
+              ),
+            };
+          } else return { windows: windows.filter((w) => w.id !== id) };
+        }),
       moveAndResize: (id, data) =>
         set(({ windows }) => ({
           windows: windows.map((window) =>

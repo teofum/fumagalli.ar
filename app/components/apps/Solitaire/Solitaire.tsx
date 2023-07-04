@@ -13,6 +13,7 @@ import { deal } from './game';
 import useDragCard from './useDragCard';
 import winAnimation from './animation';
 import { useAppSettings } from '~/stores/system';
+import { about } from '../About';
 
 const resources = getAppResourcesUrl('solitaire');
 
@@ -42,7 +43,7 @@ const Card = forwardRef<HTMLImageElement, CardProps>(function Card(
 });
 
 export default function Solitaire() {
-  const { close } = useWindow();
+  const { close, modal } = useWindow();
 
   const [settings, set] = useAppSettings('solitaire');
   const [game, dispatch] = useReducer(solitaireReducer, deal());
@@ -170,6 +171,8 @@ export default function Solitaire() {
               <Menu.RadioItem value="11" label="Deck 12" />
             </Menu.RadioGroup>
           </Menu.Sub>
+
+          <Menu.Item label="Change deck" onSelect={() => modal(about)} />
 
           <Menu.Separator />
 

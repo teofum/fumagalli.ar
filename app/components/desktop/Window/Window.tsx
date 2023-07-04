@@ -23,6 +23,9 @@ export interface WindowProps<AppType extends string> {
   appType: AppType;
   appState: AppState<AppType>;
 
+  children: AnyWindowProps[];
+  parentId?: string;
+
   // Decoration
   title: string;
   icon: string;
@@ -54,7 +57,7 @@ export interface WindowProps<AppType extends string> {
 
 export type WindowInit<AppType extends string> = Omit<
   Partial<WindowProps<AppType>>,
-  'id' | 'focused' | 'order'
+  'id' | 'focused' | 'order' | 'parentId' | 'children'
 > &
   Pick<WindowProps<AppType>, 'appType' | 'appState'>;
 
@@ -96,7 +99,7 @@ function getWindowStyleProps<AppType extends string>({
 }
 
 export default function Window<T extends string>(props: WindowProps<T>) {
-  const { id, appType, title, maximized, focused } = props;
+  const { id, appType, title, maximized, focused, parentId, children } = props;
   const { focus, close, toggleMaximized } = useDesktopStore();
 
   /**
@@ -197,7 +200,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
     <div
       ref={windowRef}
       className="
-        touch-none absolute
+        touch-none fixed
         grid grid-cols-[0.25rem_calc(100%-0.5rem)_0.25rem] grid-rows-[0.25rem_calc(100%-0.5rem)_0.25rem]
         bg-surface bevel-window
       "
@@ -231,7 +234,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
                 {maximized ? <Restore /> : <Max />}
               </Button>
             ) : null}
-            <Button onClick={() => close(id)}>
+            <Button onClick={() => close(id, parentId)}>
               <Close />
             </Button>
           </div>
@@ -243,6 +246,10 @@ export default function Window<T extends string>(props: WindowProps<T>) {
       </div>
 
       {!maximized ? resizeHandles : null}
+
+      {children.map((window) => (
+        <Window key={window.id} {...window} />
+      ))}
     </div>
   );
 }
