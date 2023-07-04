@@ -17,7 +17,9 @@ import { dosEmu } from '../apps/DOSEmu';
 
 const ICON_PATH = '/fs/system/Resources/Icons/Start';
 
-const dosGames = [{ title: 'DOOM', bundle: '/doom.jsdos' }];
+const dosGames = [
+  { title: 'DOOM', bundle: '/fs/system/Applications/dos/games/doom.jsdos' },
+];
 
 export default function StartMenu() {
   const { launch, openShutdown: shutdown } = useDesktopStore();

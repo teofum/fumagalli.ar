@@ -1,3 +1,4 @@
+import { dosEmu } from '~/components/apps/DOSEmu';
 import { preview } from '~/components/apps/Preview';
 import {
   type PreviewSupportedFile,
@@ -28,6 +29,8 @@ export default function useFileHandler() {
         launch(app);
         handled = true;
       }
+    } else if (file.type === 'dos') {
+      launch(dosEmu({ bundleUrl: `/fs${path}` }));
     }
 
     if (handled && file.type !== 'app') {

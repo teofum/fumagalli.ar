@@ -7,6 +7,8 @@ function get_file_type {
     type="image"
   elif [ "$e" = "md" ]; then
     type="md"
+  elif [ "$e" = "jsdos" ]; then
+    type="dos"
   elif [ "$e" = "app" ]; then
     type="app"
   else

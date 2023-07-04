@@ -32,10 +32,19 @@ export interface MarkdownFile extends FileBase {
   type: 'md';
 }
 
+export interface DosRomFile extends FileBase {
+  type: 'dos';
+}
+
 export interface AppFile extends FileBase {
   type: 'app';
 }
 
-export type AnyFile = ImageFile | MarkdownFile | AppFile | GenericFile;
+export type AnyFile =
+  | ImageFile
+  | MarkdownFile
+  | DosRomFile
+  | AppFile
+  | GenericFile;
 
 export type FSObject = Directory | AnyFile;
