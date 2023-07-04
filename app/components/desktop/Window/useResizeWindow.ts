@@ -4,7 +4,7 @@ import useDrag from '~/hooks/useDrag';
 import clamp from '~/utils/clamp';
 
 export default function useResizeWindow(
-  { id, minWidth, minHeight, maxWidth, maxHeight }: AnyWindowProps,
+  { id, minWidth, minHeight, maxWidth, maxHeight, parentId }: AnyWindowProps,
   windowRef: React.RefObject<HTMLDivElement>,
   direction: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw',
 ) {
@@ -89,12 +89,16 @@ export default function useResizeWindow(
 
     // Commit window changes to application state
     const { top, left, width, height } = el.getBoundingClientRect();
-    moveAndResize(id, {
-      top,
-      left,
-      width,
-      height,
-    });
+    moveAndResize(
+      id,
+      {
+        top,
+        left,
+        width,
+        height,
+      },
+      parentId,
+    );
   };
 
   return useDrag({

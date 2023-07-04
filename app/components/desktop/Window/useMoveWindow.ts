@@ -3,7 +3,7 @@ import type { AnyWindowProps } from './Window';
 import useDrag from '~/hooks/useDrag';
 
 export default function useMoveWindow(
-  { id, maximized }: AnyWindowProps,
+  { id, parentId }: AnyWindowProps,
   windowRef: React.RefObject<HTMLDivElement>,
 ) {
   const { moveAndResize } = useDesktopStore();
@@ -46,12 +46,16 @@ export default function useMoveWindow(
 
     // Commit window changes to application state
     const { top, left, width, height } = el.getBoundingClientRect();
-    moveAndResize(id, {
-      top,
-      left,
-      width,
-      height,
-    });
+    moveAndResize(
+      id,
+      {
+        top,
+        left,
+        width,
+        height,
+      },
+      parentId,
+    );
   };
 
   return useDrag({

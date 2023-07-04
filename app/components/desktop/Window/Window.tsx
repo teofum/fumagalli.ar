@@ -212,7 +212,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
         <div
           className="select-none flex flex-row items-center gap-2 px-0.5 py-px mb-0.5"
           onPointerDown={maximized ? undefined : moveHandler}
-          onDoubleClick={() => toggleMaximized(id)}
+          onDoubleClick={() => toggleMaximized(id, parentId)}
         >
           <img src={`/fs/system/Applications/${appType}/icon_16.png`} alt="" />
 
@@ -230,7 +230,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
 
           <div className="flex flex-row">
             {props.maximizable ? (
-              <Button onClick={() => toggleMaximized(id)}>
+              <Button onClick={() => toggleMaximized(id, parentId)}>
                 {maximized ? <Restore /> : <Max />}
               </Button>
             ) : null}

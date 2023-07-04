@@ -83,6 +83,44 @@ function addWindow<T extends string>(
   ];
 }
 
+function findWindow(windows: AnyWindowProps[], id: string, parentId?: string) {
+  if (parentId) {
+    const parent = windows.find((window) => window.id === parentId);
+    return parent?.children.find((window) => window.id === id);
+  } else return windows.find((window) => window.id === id);
+}
+
+/**
+ * Updates a window with new data. Target can be at root level or a child of a
+ * root level window.
+ * @param windows
+ * @param target
+ * @param data
+ * @returns
+ */
+function updateWindow<T extends string>(
+  windows: AnyWindowProps[],
+  target: WindowProps<T>,
+  data: Partial<WindowProps<T>>,
+): AnyWindowProps[] {
+  if (target.parentId) {
+    return windows.map((window) =>
+      window.id === target.parentId
+        ? {
+            ...window,
+            children: window.children.map((window) =>
+              window.id === target.id ? { ...window, ...data } : window,
+            ),
+          }
+        : window,
+    );
+  } else {
+    return windows.map((window) =>
+      window.id === target.id ? { ...window, ...data } : window,
+    );
+  }
+}
+
 export type WindowSizeProps = Partial<
   Pick<AnyWindowProps, 'top' | 'left' | 'width' | 'height'>
 >;
@@ -98,13 +136,14 @@ interface DesktopActions {
   // Window-related actions
   launch: <T extends string>(init: WindowInit<T>, parentId?: string) => void;
   focus: (id: string) => void;
-  toggleMaximized: (id: string) => void;
+  toggleMaximized: (id: string, parentId?: string) => void;
   close: (id: string, parentId?: string) => void;
-  moveAndResize: (id: string, data: WindowSizeProps) => void;
-  setTitle: (id: string, title: string) => void;
+  moveAndResize: (id: string, data: WindowSizeProps, parentId?: string) => void;
+  setTitle: (id: string, title: string, parentId?: string) => void;
   setWindowProps: <T extends string>(
     id: string,
     data: Partial<WindowProps<T>>,
+    parentId?: string,
   ) => void;
 
   // Other actions
@@ -164,17 +203,15 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
             })),
           };
         }),
-      toggleMaximized: (id) =>
+      toggleMaximized: (id, parentId) =>
         set(({ windows }) => {
-          const target = windows.find((window) => window.id === id);
+          const target = findWindow(windows, id, parentId);
           if (!target || !target.maximizable) return {};
 
           return {
-            windows: windows.map((window) =>
-              window.id === id
-                ? { ...window, maximized: !window.maximized }
-                : window,
-            ),
+            windows: updateWindow(windows, target, {
+              maximized: !target.maximized,
+            }),
           };
         }),
       close: (id, parentId) =>
@@ -192,24 +229,27 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
             };
           } else return { windows: windows.filter((w) => w.id !== id) };
         }),
-      moveAndResize: (id, data) =>
-        set(({ windows }) => ({
-          windows: windows.map((window) =>
-            window.id === id ? { ...window, ...data } : window,
-          ),
-        })),
-      setTitle: (id, title) =>
-        set(({ windows }) => ({
-          windows: windows.map((window) =>
-            window.id === id ? { ...window, title } : window,
-          ),
-        })),
-      setWindowProps: (id, data) =>
-        set(({ windows }) => ({
-          windows: windows.map((window) =>
-            window.id === id ? { ...window, ...data } : window,
-          ),
-        })),
+      moveAndResize: (id, data, parentId) =>
+        set(({ windows }) => {
+          const target = findWindow(windows, id, parentId);
+          if (!target) return {};
+
+          return { windows: updateWindow(windows, target, data) };
+        }),
+      setTitle: (id, title, parentId) =>
+        set(({ windows }) => {
+          const target = findWindow(windows, id, parentId);
+          if (!target) return {};
+
+          return { windows: updateWindow(windows, target, { title }) };
+        }),
+      setWindowProps: (id, data, parentId) =>
+        set(({ windows }) => {
+          const target = findWindow(windows, id, parentId);
+          if (!target) return {};
+
+          return { windows: updateWindow(windows, target, data) };
+        }),
       openShutdown: (open = true) => set(() => ({ shutdownDialog: open })),
     }),
     {

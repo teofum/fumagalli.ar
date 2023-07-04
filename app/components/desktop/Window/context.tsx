@@ -27,8 +27,9 @@ export function WindowProvider<T extends string>({
   const desktop = useDesktopStore();
 
   const focus = () => desktop.focus(windowProps.id);
-  const toggleMaximized = () => desktop.toggleMaximized(windowProps.id);
   const close = () => desktop.close(windowProps.id, windowProps.parentId);
+  const toggleMaximized = () =>
+    desktop.toggleMaximized(windowProps.id, windowProps.parentId);
 
   const modal = <T extends string>(init: WindowInit<T>) =>
     desktop.launch(init, windowProps.id);
@@ -55,10 +56,10 @@ export function useWindow<T extends string>(appType?: T) {
 
 export function useAppState<T extends string>(appType: T) {
   const { setWindowProps } = useDesktopStore();
-  const { appState, id } = useWindow(appType);
+  const { appState, id, parentId } = useWindow(appType);
 
   const setState = (state: AppState<T>) =>
-    setWindowProps(id, { appState: state });
+    setWindowProps(id, { appState: state }, parentId);
 
   return [appState, setState] as const;
 }
