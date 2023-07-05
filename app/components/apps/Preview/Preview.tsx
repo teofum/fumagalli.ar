@@ -39,7 +39,7 @@ export default function Preview() {
   const open = () => {
     modal(
       files({
-        path: '/Documents',
+        path: state.filePath?.split('/').slice(0, -1).join('/') ?? '/Documents',
         typeFilter: previewSupportedFileTypes,
         modalCallback: (file, filePath) => {
           if (isPreviewable(file)) setState({ file, filePath });
