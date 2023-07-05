@@ -270,19 +270,23 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
     {
       name: 'desktop-storage',
       merge: (persisted, current) => {
+        const stored = persisted as typeof current;
+
         // Wipe persisted state on schema version change
         // This will allow me to safely introduce breaking schema changes
         // without causing the app to crash for existing users
-        if ((persisted as typeof current)._schema !== current._schema)
-          return current;
+        if (stored._schema !== current._schema) return current;
 
         // We'll assume the persisted state is valid and hasn't been tampered
         // with, otherwise making this type-safe is a nightmare
-        return merge.withOptions(
-          { mergeArrays: false },
-          current,
-          persisted as typeof current,
-        ) as any;
+        return merge.withOptions({ mergeArrays: false }, current, {
+          ...stored,
+          // Destroy modal windows on load
+          windows: stored.windows.map((window) => ({
+            ...window,
+            children: [],
+          })),
+        }) as any;
       },
     },
   ),
