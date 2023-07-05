@@ -14,6 +14,7 @@ import { minesweeper } from '~/components/apps/Minesweeper';
 import { sudoku } from '~/components/apps/Sudoku';
 import { solitaire } from '~/components/apps/Solitaire';
 import { dosEmu } from '~/components/apps/DOSEmu';
+import { DOS_GAMES } from '~/components/apps/DOSEmu/types';
 
 type ComputerState = 'on' | 'off' | 'shutting-down';
 
@@ -147,30 +148,15 @@ export default function Desktop() {
               y={2}
               open={() => launch(solitaire)}
             />
-            <DesktopIcon
-              iconUrl="/fs/system/Applications/dos/icon_32.png"
-              title="DOOM"
-              y={2}
-              open={() =>
-                launch(
-                  dosEmu({
-                    bundleUrl: '/fs/system/Applications/dos/games/doom.jsdos',
-                  }),
-                )
-              }
-            />
-            <DesktopIcon
-              iconUrl="/fs/system/Applications/dos/icon_32.png"
-              title="STUNTS"
-              y={2}
-              open={() =>
-                launch(
-                  dosEmu({
-                    bundleUrl: '/fs/system/Applications/dos/games/stunts.jsdos',
-                  }),
-                )
-              }
-            />
+            {DOS_GAMES.map((game) => (
+              <DesktopIcon
+                key={game.title}
+                title={game.title}
+                iconUrl="/fs/system/Applications/dos/icon_32.png"
+                y={2}
+                open={() => launch(dosEmu(game))}
+              />
+            ))}
           </div>
 
           {windows.map((window) => (
