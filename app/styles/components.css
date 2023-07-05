@@ -37,6 +37,11 @@
     @apply bg-checkered bevel-inset;
   }
 
+  /* Input */
+  .input {
+    @apply py-1 px-2 bg-default bevel-content outline-none;
+  }
+
   /* Menus */
   .menu-content {
     @apply bg-surface bevel-window p-[0.1875rem] z-2000;

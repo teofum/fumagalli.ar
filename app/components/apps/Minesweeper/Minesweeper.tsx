@@ -11,9 +11,13 @@ import { MinesweeperState } from './types';
 import minesweeperReducer from './reducer';
 import MinesweeperStatus from './MinesweeperStatus';
 import MinesweeperCell from './MinesweeperCell';
+import {
+  type MinesweeperCustomDifficultyState,
+  mine_difficulty,
+} from './modals/CustomDifficulty';
 
 export default function Minesweeper() {
-  const { close } = useWindow();
+  const { close, modal } = useWindow();
 
   const [settings, set] = useAppSettings('minesweeper');
 
@@ -81,6 +85,11 @@ export default function Minesweeper() {
   const playing =
     state === MinesweeperState.NEW || state === MinesweeperState.PLAYING;
 
+  const dialogInitialState = {
+    ...settings,
+    commit: (settings) => reset(settings),
+  } satisfies MinesweeperCustomDifficultyState;
+
   /**
    * Comopnent UI
    */
@@ -106,6 +115,11 @@ export default function Minesweeper() {
             label="Expert"
             checked={settings.name === 'expert'}
             onSelect={() => reset(difficultyPresets.expert)}
+          />
+          <Menu.CheckboxItem
+            label="Custom..."
+            checked={settings.name === 'custom'}
+            onSelect={() => modal(mine_difficulty(dialogInitialState))}
           />
 
           <Menu.Separator />
