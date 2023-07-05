@@ -8,6 +8,7 @@ export const about: WindowInit<'about'> = {
   icon: 'info',
 
   width: 400,
+  height: 200,
 
   sizingX: WindowSizingMode.FIXED,
   sizingY: WindowSizingMode.AUTO,

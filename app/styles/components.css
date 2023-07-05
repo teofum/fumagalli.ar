@@ -37,15 +37,22 @@
     @apply bg-checkered bevel-inset;
   }
 
+  /* Input */
+  .input {
+    @apply py-1 px-2 bg-default bevel-content outline-none;
+  }
+
   /* Menus */
   .menu-content {
     @apply bg-surface bevel-window p-[0.1875rem] z-2000;
   }
 
   [data-state='inactive'] .menu-trigger {
-    @apply text-disabled;
+    @apply text-disabled hover:shadow-none;
+  }
 
-    box-shadow: none !important;
+  [data-state='active'] .menu-trigger {
+    @apply text-default drop-shadow-none hover:bevel-light;
   }
 
   .menu-item {

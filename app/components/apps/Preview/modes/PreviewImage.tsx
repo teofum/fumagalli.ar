@@ -1,31 +1,32 @@
 import ScrollContainer from '~/components/ui/ScrollContainer';
-import { usePreviewApp } from '../context';
-import Menu from '~/components/ui/Menu';
-import { useWindow } from '~/components/desktop/Window/context';
-import { useEffect, useRef, useState } from 'react';
+import { useAppState, useWindow } from '~/components/desktop/Window/context';
+import { useEffect, useRef } from 'react';
 import Button from '~/components/ui/Button';
 import { getAppResourcesUrl } from '~/content/utils';
 import Toolbar from '~/components/ui/Toolbar';
 import useDesktopStore from '~/stores/desktop';
+import { MAX_INITIAL_SIZE, UI_SIZE, ZOOM_STOPS } from '../constants';
+import Menu from '~/components/ui/Menu';
+import type { PreviewModeProps } from '../types';
 
 const resources = getAppResourcesUrl('preview');
 
-const MAX_INITIAL_SIZE = { x: 800, y: 600 };
-const UI_SIZE = { x: 30, y: 100 };
-const ZOOM_STOPS = [
-  0.05, 0.1, 0.25, 0.33, 0.5, 0.67, 0.75, 1, 1.25, 1.5, 2, 4, 8, 16, 32, 64,
-];
-
-export default function PreviewImage() {
-  const { id, minWidth, minHeight, close } = useWindow();
+export default function PreviewImage({ commonMenu }: PreviewModeProps) {
+  const { id, minWidth, minHeight } = useWindow();
   const { moveAndResize } = useDesktopStore();
 
-  const { file, resourceUrl } = usePreviewApp();
-  if (file.type !== 'image') throw new Error('Wrong file type');
+  const [state, setState] = useAppState('preview');
+  const resourceUrl = '/fs' + state.filePath;
+
+  if (state.file?.type !== 'image') throw new Error('Wrong file type');
 
   const viewportRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
-  const [zoom, setZoom] = useState(1);
+
+  const zoom = state.zoom ?? 1;
+  const setZoom = (zoom: number) => {
+    setState({ ...state, zoom });
+  };
 
   useEffect(() => {
     if (imageRef.current) {
@@ -43,7 +44,10 @@ export default function PreviewImage() {
           const zoomToFitWidth = maxWidth / naturalWidth;
           const zoomToFitHeight = maxHeight / naturalHeight;
 
-          setZoom(Math.min(zoomToFitWidth, zoomToFitHeight));
+          setState({
+            ...state,
+            zoom: Math.min(zoomToFitWidth, zoomToFitHeight),
+          });
 
           // Calculate actual size image ended up with
           let actualWidth = maxWidth;
@@ -69,19 +73,10 @@ export default function PreviewImage() {
         }
       };
 
-      img.addEventListener('load', onload);
+      if (!state.zoom) img.addEventListener('load', onload);
       return () => img.removeEventListener('load', onload);
     }
-  }, [moveAndResize, id, minHeight, minWidth]);
-
-  const download = () => {
-    const a = document.createElement('a');
-    a.href = resourceUrl;
-    a.download = '';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
+  }, [moveAndResize, id, minHeight, minWidth, state, setState]);
 
   const zoomOut = () => {
     const nextZoomStop = ZOOM_STOPS.filter((stop) => stop < zoom).at(-1);
@@ -113,15 +108,9 @@ export default function PreviewImage() {
   const width = (imageRef.current?.naturalWidth ?? 0) * zoom;
 
   return (
-    <div className="flex flex-col gap-0.5 min-w-0">
+    <>
       <div className="flex flex-row gap-1">
-        <Menu.Root trigger={<Menu.Trigger>File</Menu.Trigger>}>
-          <Menu.Item label="Download" onSelect={download} />
-
-          <Menu.Separator />
-
-          <Menu.Item label="Close" onSelect={close} />
-        </Menu.Root>
+        {commonMenu}
 
         <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>
           <Menu.RadioGroup
@@ -190,11 +179,11 @@ export default function PreviewImage() {
           <img
             ref={imageRef}
             src={resourceUrl}
-            alt={file.altText}
+            alt={state.file?.altText}
             style={{ width, minWidth: width }}
           />
         </div>
       </ScrollContainer>
-    </div>
+    </>
   );
 }

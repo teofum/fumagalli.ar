@@ -46,9 +46,6 @@ export default {
       'disabled-shadow':
         'rgb(var(--color-text-disabled-shadow) / <alpha-value>)',
     },
-    dropShadow: {
-      disabled: '1px 1px 0 rgb(var(--color-text-disabled-shadow))',
-    },
     zIndex: {
       1000: '1000',
       2000: '2000',
@@ -90,6 +87,9 @@ export default {
       },
       borderColor: {
         default: 'rgb(var(--color-text) / <alpha-value>)',
+      },
+      dropShadow: {
+        disabled: '1px 1px 0 rgb(var(--color-text-disabled-shadow))',
       },
     },
   },

@@ -4,6 +4,8 @@ import getReadableSize from '../utils/getReadableSize';
 import getReadableFileType from '../utils/getReadableFileType';
 import FilesListItem from './FilesListItem';
 import type FilesViewProps from './FilesViewProps';
+import filterByType from '../utils/filterByType';
+import { useAppState } from '~/components/desktop/Window/context';
 
 function formatDate(seconds: number) {
   return new Date(seconds * 1000).toLocaleString('en-US', {
@@ -22,6 +24,8 @@ export default function FilesDetailsView({
   open,
   select,
 }: FilesViewProps) {
+  const [state] = useAppState('files');
+
   return (
     <ScrollContainer className="flex-1">
       <table className="p-1 select-none min-w-full">
@@ -58,7 +62,7 @@ export default function FilesDetailsView({
           </tr>
         </thead>
         <tbody>
-          {dir.items.map((item) => (
+          {filterByType(dir.items, state.typeFilter).map((item) => (
             <tr key={item.name}>
               <td className="min-w-32 w-32 max-w-32 py-0 px-0.5">
                 <FilesListItem item={item} open={open} select={select} />

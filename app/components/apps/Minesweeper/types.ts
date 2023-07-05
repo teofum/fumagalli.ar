@@ -28,7 +28,7 @@ export interface MinesweeperBoard {
 }
 
 export interface MinesweeperSettings {
-  name: keyof typeof difficultyPresets;
+  name: keyof typeof difficultyPresets | 'custom';
   width: number;
   height: number;
   mines: number;

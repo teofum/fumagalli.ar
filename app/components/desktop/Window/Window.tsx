@@ -23,6 +23,9 @@ export interface WindowProps<AppType extends string> {
   appType: AppType;
   appState: AppState<AppType>;
 
+  children: AnyWindowProps[];
+  parentId?: string;
+
   // Decoration
   title: string;
   icon: string;
@@ -54,7 +57,7 @@ export interface WindowProps<AppType extends string> {
 
 export type WindowInit<AppType extends string> = Omit<
   Partial<WindowProps<AppType>>,
-  'id' | 'focused' | 'order'
+  'id' | 'focused' | 'order' | 'parentId' | 'children'
 > &
   Pick<WindowProps<AppType>, 'appType' | 'appState'>;
 
@@ -96,8 +99,11 @@ function getWindowStyleProps<AppType extends string>({
 }
 
 export default function Window<T extends string>(props: WindowProps<T>) {
-  const { id, appType, title, maximized, focused } = props;
-  const { focus, close, toggleMaximized } = useDesktopStore();
+  const { id, appType, title, maximized, parentId, children } = props;
+  const { windows, focus, close, toggleMaximized } = useDesktopStore();
+
+  const parent = windows.find((window) => window.id === parentId);
+  const icon = parent ? parent.appType : appType;
 
   /**
    * Move/resize handling
@@ -117,6 +123,9 @@ export default function Window<T extends string>(props: WindowProps<T>) {
   const canResizeEW = props.sizingX === WindowSizingMode.RESIZABLE;
   const canResizeNS = props.sizingY === WindowSizingMode.RESIZABLE;
   const canResizeNSEW = canResizeEW && canResizeNS;
+
+  // Window will appear inactive if it has any modals
+  const active = props.focused && props.children.length === 0;
 
   const resizeHandles = [
     <div
@@ -186,8 +195,8 @@ export default function Window<T extends string>(props: WindowProps<T>) {
   ];
 
   const titlebarSpacerClass = cn('flex-1 h-1.5 border-t border-b', {
-    'border-light': focused,
-    'border-disabled drop-shadow-disabled': !focused,
+    'border-light': active,
+    'border-disabled drop-shadow-disabled': !active,
   });
 
   /**
@@ -197,27 +206,27 @@ export default function Window<T extends string>(props: WindowProps<T>) {
     <div
       ref={windowRef}
       className="
-        touch-none absolute
+        touch-none fixed
         grid grid-cols-[0.25rem_calc(100%-0.5rem)_0.25rem] grid-rows-[0.25rem_calc(100%-0.5rem)_0.25rem]
         bg-surface bevel-window
       "
       style={getWindowStyleProps(props)}
       onPointerDown={() => focus(id)}
-      data-state={focused ? 'active' : 'inactive'}
+      data-state={active ? 'active' : 'inactive'}
     >
       <div className="col-start-2 row-start-2 grid grid-rows-[1.125rem_calc(100%-1.125rem)]">
         <div
           className="select-none flex flex-row items-center gap-2 px-0.5 py-px mb-0.5"
           onPointerDown={maximized ? undefined : moveHandler}
-          onDoubleClick={() => toggleMaximized(id)}
+          onDoubleClick={() => toggleMaximized(id, parentId)}
         >
-          <img src={`/fs/system/Applications/${appType}/icon_16.png`} alt="" />
+          <img src={`/fs/system/Applications/${icon}/icon_16.png`} alt="" />
 
           <div className={titlebarSpacerClass} />
 
           <span
             className={cn('font-title text-title bold', {
-              'text-disabled': !focused,
+              'text-disabled': !active,
             })}
           >
             {title}
@@ -227,22 +236,29 @@ export default function Window<T extends string>(props: WindowProps<T>) {
 
           <div className="flex flex-row">
             {props.maximizable ? (
-              <Button onClick={() => toggleMaximized(id)}>
+              <Button onClick={() => toggleMaximized(id, parentId)}>
                 {maximized ? <Restore /> : <Max />}
               </Button>
             ) : null}
-            <Button onClick={() => close(id)}>
+            <Button onClick={() => close(id, parentId)}>
               <Close />
             </Button>
           </div>
         </div>
 
-        <WindowProvider windowProps={props}>
+        <WindowProvider window={props} parent={parent}>
           <AppOutlet type={appType} />
         </WindowProvider>
       </div>
 
       {!maximized ? resizeHandles : null}
+
+      {/* Block interaction with window if it has modals */}
+      {children.length > 0 ? <div className="absolute inset-0" /> : null}
+
+      {children.map((window) => (
+        <Window key={window.id} {...window} />
+      ))}
     </div>
   );
 }

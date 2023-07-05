@@ -5,8 +5,15 @@ import type { FilesState } from './Files/types';
 import Preview, { preview } from './Preview';
 import type { PreviewState } from './Preview/types';
 import Minesweeper, { minesweeper } from './Minesweeper';
+import MinesweeperCustomDifficulty, {
+  mine_difficulty,
+} from './Minesweeper/modals/CustomDifficulty';
+import type { MinesweeperCustomDifficultyState } from './Minesweeper/modals/CustomDifficulty';
 import Sudoku, { sudoku } from './Sudoku';
 import Solitaire, { solitaire } from './Solitaire';
+import SolitaireDeckSelect, {
+  solitaire_deck,
+} from './Solitaire/modals/DeckSelect';
 import ThemeSettings, { themeSettings } from './ThemeSettings';
 import DOSEmu, { dosEmu } from './DOSEmu';
 import type { DOSEmuState } from './DOSEmu/types';
@@ -17,7 +24,9 @@ const applications = [
   { Component: Files, meta: files() },
   { Component: Preview, meta: preview() },
   { Component: Minesweeper, meta: minesweeper },
+  { Component: MinesweeperCustomDifficulty, meta: mine_difficulty() },
   { Component: Solitaire, meta: solitaire },
+  { Component: SolitaireDeckSelect, meta: solitaire_deck },
   { Component: Sudoku, meta: sudoku },
   { Component: ThemeSettings, meta: themeSettings },
   { Component: DOSEmu, meta: dosEmu() },
@@ -27,6 +36,7 @@ interface AppStateTypes {
   files: FilesState;
   preview: PreviewState;
   dos: DOSEmuState;
+  mine_difficulty: MinesweeperCustomDifficultyState;
 }
 
 export type AppState<AppType extends string> =

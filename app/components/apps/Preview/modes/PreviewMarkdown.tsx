@@ -1,11 +1,13 @@
 import ScrollContainer from '~/components/ui/ScrollContainer';
-import { usePreviewApp } from '../context';
 import { useEffect, useState } from 'react';
 import Markdown from '~/components/ui/Markdown';
+import { useAppState } from '~/components/desktop/Window/context';
+import type { PreviewModeProps } from '../types';
 
-export default function PreviewMarkdown() {
-  const { file, resourceUrl } = usePreviewApp();
-  if (file.type !== 'md') throw new Error('Wrong file type');
+export default function PreviewMarkdown({ commonMenu }: PreviewModeProps) {
+  const [state] = useAppState('preview');
+  const resourceUrl = '/fs' + state.filePath;
+  if (state.file?.type !== 'md') throw new Error('Wrong file type');
 
   const [content, setContent] = useState('No content available');
   useEffect(() => {
@@ -22,12 +24,14 @@ export default function PreviewMarkdown() {
   }, [resourceUrl]);
 
   return (
-    <ScrollContainer>
-      <div className="p-4 max-w-3xl">
-        <Markdown>
-          {content}
-        </Markdown>
-      </div>
-    </ScrollContainer>
+    <>
+      <div className="flex flex-row gap-1">{commonMenu}</div>
+
+      <ScrollContainer className="flex-1">
+        <div className="p-4 max-w-3xl">
+          <Markdown>{content}</Markdown>
+        </div>
+      </ScrollContainer>
+    </>
   );
 }

@@ -17,6 +17,8 @@ const defaultWindowProps = {
   title: 'New Window',
   icon: 'app',
 
+  children: [],
+
   top: 200,
   left: 200,
   width: 640,
@@ -35,11 +37,15 @@ const defaultWindowProps = {
   maximizable: true,
 };
 
-function createWindow<T extends string>(init: WindowInit<T>): WindowProps<T> {
+function createWindow<T extends string>(
+  init: WindowInit<T>,
+  parent?: AnyWindowProps,
+): WindowProps<T> {
   const window = {
     id: nanoid(),
     ...defaultWindowProps,
     ...init,
+    parentId: parent?.id,
   };
 
   const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
@@ -54,6 +60,12 @@ function createWindow<T extends string>(init: WindowInit<T>): WindowProps<T> {
   const fixedHeight = window.sizingY === WindowSizingMode.FIXED;
   const minHeight = fixedHeight ? window.height : window.minHeight;
 
+  // If the window is a modal, place it on top of parent
+  if (parent) {
+    window.top = parent.top + 50;
+    window.left = parent.left + 50;
+  }
+
   // If the window overflows the desktop on its default position, move it toward
   // the top left until it doesn't
   window.top = clamp(window.top, 0, maxTop);
@@ -64,6 +76,55 @@ function createWindow<T extends string>(init: WindowInit<T>): WindowProps<T> {
   window.height = clamp(window.height, minHeight, desktop.height);
 
   return window;
+}
+
+function addWindow<T extends string>(
+  windows: AnyWindowProps[],
+  init: WindowInit<T>,
+  parent?: AnyWindowProps,
+): AnyWindowProps[] {
+  return [
+    ...windows.map((window) => ({ ...window, focused: false })),
+    { ...createWindow(init, parent), order: windows.length, focused: true },
+  ];
+}
+
+function findWindow(windows: AnyWindowProps[], id: string, parentId?: string) {
+  if (parentId) {
+    const parent = windows.find((window) => window.id === parentId);
+    return parent?.children.find((window) => window.id === id);
+  } else return windows.find((window) => window.id === id);
+}
+
+/**
+ * Updates a window with new data. Target can be at root level or a child of a
+ * root level window.
+ * @param windows
+ * @param target
+ * @param data
+ * @returns
+ */
+function updateWindow<T extends string>(
+  windows: AnyWindowProps[],
+  target: WindowProps<T>,
+  data: Partial<WindowProps<T>>,
+): AnyWindowProps[] {
+  if (target.parentId) {
+    return windows.map((window) =>
+      window.id === target.parentId
+        ? {
+            ...window,
+            children: window.children.map((window) =>
+              window.id === target.id ? { ...window, ...data } : window,
+            ),
+          }
+        : window,
+    );
+  } else {
+    return windows.map((window) =>
+      window.id === target.id ? { ...window, ...data } : window,
+    );
+  }
 }
 
 export type WindowSizeProps = Partial<
@@ -79,15 +140,16 @@ interface DesktopState {
 
 interface DesktopActions {
   // Window-related actions
-  launch: <T extends string>(init: WindowInit<T>) => void;
+  launch: <T extends string>(init: WindowInit<T>, parentId?: string) => void;
   focus: (id: string) => void;
-  toggleMaximized: (id: string) => void;
-  close: (id: string) => void;
-  moveAndResize: (id: string, data: WindowSizeProps) => void;
-  setTitle: (id: string, title: string) => void;
+  toggleMaximized: (id: string, parentId?: string) => void;
+  close: (id: string, parentId?: string) => void;
+  moveAndResize: (id: string, data: WindowSizeProps, parentId?: string) => void;
+  setTitle: (id: string, title: string, parentId?: string) => void;
   setWindowProps: <T extends string>(
     id: string,
     data: Partial<WindowProps<T>>,
+    parentId?: string,
   ) => void;
 
   // Other actions
@@ -110,13 +172,27 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
       /**
        * Actions
        */
-      launch: (init) =>
-        set(({ windows }) => ({
-          windows: [
-            ...windows.map((window) => ({ ...window, focused: false })),
-            { ...createWindow(init), order: windows.length, focused: true },
-          ],
-        })),
+      launch: (init, parentId) =>
+        set(({ windows }) => {
+          if (parentId) {
+            const parent = findWindow(windows, parentId);
+            if (!parent) return {};
+
+            return {
+              windows: [
+                ...windows.map((window) =>
+                  window.id === parent.id
+                    ? {
+                        ...window,
+                        focused: true,
+                        children: addWindow(window.children, init, parent),
+                      }
+                    : { ...window, focused: false },
+                ),
+              ],
+            };
+          } else return { windows: addWindow(windows, init) };
+        }),
       focus: (id) =>
         set(({ windows }) => {
           const target = windows.find((window) => window.id === id);
@@ -133,62 +209,84 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
                   : window.order > target.order
                   ? window.order - 1 // Lower any window on top of target by 1
                   : window.order, // Keep the rest the same
+
+              // Modals always share focus state with their parent
+              children: window.children.map((child) => ({
+                ...child,
+                focused: window.id === id,
+              })),
             })),
           };
         }),
-      toggleMaximized: (id) =>
+      toggleMaximized: (id, parentId) =>
         set(({ windows }) => {
-          const target = windows.find((window) => window.id === id);
+          const target = findWindow(windows, id, parentId);
           if (!target || !target.maximizable) return {};
 
           return {
-            windows: windows.map((window) =>
-              window.id === id
-                ? { ...window, maximized: !window.maximized }
-                : window,
-            ),
+            windows: updateWindow(windows, target, {
+              maximized: !target.maximized,
+            }),
           };
         }),
-      close: (id) =>
-        set(({ windows }) => ({
-          windows: windows.filter((window) => window.id !== id),
-        })),
-      moveAndResize: (id, data) =>
-        set(({ windows }) => ({
-          windows: windows.map((window) =>
-            window.id === id ? { ...window, ...data } : window,
-          ),
-        })),
-      setTitle: (id, title) =>
-        set(({ windows }) => ({
-          windows: windows.map((window) =>
-            window.id === id ? { ...window, title } : window,
-          ),
-        })),
-      setWindowProps: (id, data) =>
-        set(({ windows }) => ({
-          windows: windows.map((window) =>
-            window.id === id ? { ...window, ...data } : window,
-          ),
-        })),
+      close: (id, parentId) =>
+        set(({ windows }) => {
+          if (parentId) {
+            return {
+              windows: windows.map((window) =>
+                window.id === parentId
+                  ? {
+                      ...window,
+                      children: window.children.filter((w) => w.id !== id),
+                    }
+                  : window,
+              ),
+            };
+          } else return { windows: windows.filter((w) => w.id !== id) };
+        }),
+      moveAndResize: (id, data, parentId) =>
+        set(({ windows }) => {
+          const target = findWindow(windows, id, parentId);
+          if (!target) return {};
+
+          return { windows: updateWindow(windows, target, data) };
+        }),
+      setTitle: (id, title, parentId) =>
+        set(({ windows }) => {
+          const target = findWindow(windows, id, parentId);
+          if (!target) return {};
+
+          return { windows: updateWindow(windows, target, { title }) };
+        }),
+      setWindowProps: (id, data, parentId) =>
+        set(({ windows }) => {
+          const target = findWindow(windows, id, parentId);
+          if (!target) return {};
+
+          return { windows: updateWindow(windows, target, data) };
+        }),
       openShutdown: (open = true) => set(() => ({ shutdownDialog: open })),
     }),
     {
       name: 'desktop-storage',
       merge: (persisted, current) => {
+        const stored = persisted as typeof current;
+
         // Wipe persisted state on schema version change
         // This will allow me to safely introduce breaking schema changes
         // without causing the app to crash for existing users
-        if ((persisted as typeof current)._schema !== current._schema)
-          return current;
+        if (stored._schema !== current._schema) return current;
 
         // We'll assume the persisted state is valid and hasn't been tampered
         // with, otherwise making this type-safe is a nightmare
-        return merge.withOptions(
-          { mergeArrays: false },
-          current,
-          persisted as typeof current,
-        ) as any;
+        return merge.withOptions({ mergeArrays: false }, current, {
+          ...stored,
+          // Destroy modal windows on load
+          windows: stored.windows.map((window) => ({
+            ...window,
+            children: [],
+          })),
+        }) as any;
       },
     },
   ),

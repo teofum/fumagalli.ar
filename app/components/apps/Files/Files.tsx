@@ -29,7 +29,7 @@ function parsePath(path: string) {
 }
 
 export default function Files() {
-  const { id, close } = useWindow();
+  const { id, parentId, close } = useWindow();
   const { setTitle } = useDesktopStore();
   const { dirHistory, saveDirToHistory } = useSystemStore();
 
@@ -47,12 +47,15 @@ export default function Files() {
   const pwd = useMemo(() => `/${path.join('/')}`, [path]);
   const dir = useDirectory(path);
 
+  const isModal = state.modalCallback !== undefined;
+
   /**
    * Set window title on dir change
    */
   useEffect(() => {
-    if (dir) setTitle(id, dir.name);
-  }, [setTitle, id, dir]);
+    if (parentId) setTitle(id, 'Open File', parentId);
+    else if (dir) setTitle(id, dir.name);
+  }, [setTitle, id, parentId, dir]);
 
   /**
    * Add dir to history on path change, if not already in history
@@ -60,7 +63,6 @@ export default function Files() {
   useEffect(() => {
     if (dir && dirHistory[0]?.path !== pwd) {
       saveDirToHistory({ time: Date.now(), item: dir, path: pwd });
-      console.log('saved');
     }
     // Calling this effect on global state update causes a render loop if there
     // are multiple windows, and because we're dealing with global state there's
@@ -82,7 +84,12 @@ export default function Files() {
   const open = (item: FSObject, path = pwd) => {
     if (item.class === 'dir') {
       navigate(item.name);
+    } else if (state.modalCallback) {
+      // Modal file handling
+      state.modalCallback(item, `${path}/${item.name}`);
+      close();
     } else {
+      // Regular file handling
       if (!fileHandler.open(item, `${path}/${item.name}`))
         console.log('Unhandled file, possibly unknown type');
     }
@@ -114,11 +121,13 @@ export default function Files() {
         </Menu.Root>
 
         <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>
-          <Menu.CheckboxItem
-            label="Status Bar"
-            checked={settings.statusBar}
-            onCheckedChange={(checked) => set({ statusBar: checked })}
-          />
+          {!isModal ? (
+            <Menu.CheckboxItem
+              label="Status Bar"
+              checked={settings.statusBar}
+              onCheckedChange={(checked) => set({ statusBar: checked })}
+            />
+          ) : null}
           <Menu.CheckboxItem
             label="Side Bar"
             checked={settings.sideBar === 'tree'}
@@ -179,7 +188,7 @@ export default function Files() {
         ) : null}
       </div>
 
-      {settings.statusBar ? (
+      {settings.statusBar && !isModal ? (
         <div className="flex flex-row gap-0.5">
           <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
             {dir?.items.length || 'No'} object
@@ -196,6 +205,26 @@ export default function Files() {
               </span>
             ) : null}
           </div>
+        </div>
+      ) : null}
+
+      {isModal ? (
+        <div className="flex flex-row gap-1 p-2 items-center">
+          <span className="mr-auto">
+            {selected?.class === 'file' ? selected.name : 'No file selected'}
+          </span>
+
+          <Button
+            className="py-1 px-2 w-20"
+            onMouseDown={(ev) => ev.preventDefault()}
+            onClick={() => selected && open(selected)}
+            disabled={selected?.class !== 'file'}
+          >
+            <span>Choose file</span>
+          </Button>
+          <Button className="py-1 px-2 w-20" onClick={close}>
+            <span>Cancel</span>
+          </Button>
         </div>
       ) : null}
     </div>
