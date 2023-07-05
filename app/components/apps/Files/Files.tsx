@@ -29,7 +29,7 @@ function parsePath(path: string) {
 }
 
 export default function Files() {
-  const { id, close } = useWindow();
+  const { id, parentId, close } = useWindow();
   const { setTitle } = useDesktopStore();
   const { dirHistory, saveDirToHistory } = useSystemStore();
 
@@ -53,8 +53,9 @@ export default function Files() {
    * Set window title on dir change
    */
   useEffect(() => {
-    if (dir) setTitle(id, dir.name);
-  }, [setTitle, id, dir]);
+    if (parentId) setTitle(id, 'Open File', parentId);
+    else if (dir) setTitle(id, dir.name);
+  }, [setTitle, id, parentId, dir]);
 
   /**
    * Add dir to history on path change, if not already in history

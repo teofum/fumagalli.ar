@@ -48,9 +48,11 @@
   }
 
   [data-state='inactive'] .menu-trigger {
-    @apply text-disabled;
+    @apply text-disabled hover:shadow-none;
+  }
 
-    box-shadow: none !important;
+  [data-state='active'] .menu-trigger {
+    @apply text-default drop-shadow-none hover:bevel-light;
   }
 
   .menu-item {
