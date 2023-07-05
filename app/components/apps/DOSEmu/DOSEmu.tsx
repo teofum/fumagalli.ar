@@ -4,17 +4,34 @@ import type { DosPlayer as Instance } from 'js-dos';
 import { useAppState, useWindow } from '~/components/desktop/Window/context';
 import DosPlayer from './DosPlayer';
 import Menu from '~/components/ui/Menu';
+import { files } from '../Files';
 
 export default function DOSEmu() {
-  const { close } = useWindow();
+  const { close, modal } = useWindow();
 
-  const [state] = useAppState('dos');
+  const [state, setState] = useAppState('dos');
   const [dos, setDos] = useState<Instance | null>(null);
+
+  const open = () => {
+    modal(
+      files({
+        path: '/system/Applications/dos/games',
+        typeFilter: ['dos'],
+        modalCallback: (file, filePath) => {
+          if (file.type === 'dos') setState({ bundleUrl: `/fs${filePath}` });
+        },
+      }),
+    );
+  };
 
   return (
     <div className="flex flex-col gap-0.5">
       <div className="flex flex-row gap-1">
         <Menu.Root trigger={<Menu.Trigger>Emulation</Menu.Trigger>}>
+          <Menu.Item label="Open..." onSelect={open} />
+
+          <Menu.Separator />
+
           <Menu.CheckboxItem
             label="Lock mouse pointer"
             checked={dos?.autolock}

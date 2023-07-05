@@ -63,12 +63,12 @@ export default function Preview() {
       <Component
         commonMenu={
           <Menu.Root trigger={<Menu.Trigger>File</Menu.Trigger>}>
-            <Menu.Item label="Open..." onSelect={() => open()} />
-            <Menu.Item label="Download" onSelect={() => download()} />
+            <Menu.Item label="Open..." onSelect={open} />
+            <Menu.Item label="Download" onSelect={download} />
 
             <Menu.Separator />
 
-            <Menu.Item label="Close" onSelect={() => close()} />
+            <Menu.Item label="Close" onSelect={close} />
           </Menu.Root>
         }
       />
