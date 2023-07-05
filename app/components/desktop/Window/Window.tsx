@@ -100,7 +100,9 @@ function getWindowStyleProps<AppType extends string>({
 
 export default function Window<T extends string>(props: WindowProps<T>) {
   const { id, appType, title, maximized, parentId, children } = props;
-  const { focus, close, toggleMaximized } = useDesktopStore();
+  const { windows, focus, close, toggleMaximized } = useDesktopStore();
+
+  const parent = windows.find((window) => window.id === parentId);
 
   /**
    * Move/resize handling
@@ -243,7 +245,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
           </div>
         </div>
 
-        <WindowProvider windowProps={props}>
+        <WindowProvider window={props} parent={parent}>
           <AppOutlet type={appType} />
         </WindowProvider>
       </div>

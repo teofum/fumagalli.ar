@@ -7,6 +7,9 @@ import type { PreviewState } from './Preview/types';
 import Minesweeper, { minesweeper } from './Minesweeper';
 import Sudoku, { sudoku } from './Sudoku';
 import Solitaire, { solitaire } from './Solitaire';
+import SolitaireDeckSelect, {
+  solitaire_deck,
+} from './Solitaire/modals/DeckSelect';
 import ThemeSettings, { themeSettings } from './ThemeSettings';
 import DOSEmu, { dosEmu } from './DOSEmu';
 import type { DOSEmuState } from './DOSEmu/types';
@@ -18,6 +21,7 @@ const applications = [
   { Component: Preview, meta: preview() },
   { Component: Minesweeper, meta: minesweeper },
   { Component: Solitaire, meta: solitaire },
+  { Component: SolitaireDeckSelect, meta: solitaire_deck },
   { Component: Sudoku, meta: sudoku },
   { Component: ThemeSettings, meta: themeSettings },
   { Component: DOSEmu, meta: dosEmu() },

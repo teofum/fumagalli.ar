@@ -12,8 +12,8 @@ import solitaireReducer from './reducer';
 import { deal } from './game';
 import useDragCard from './useDragCard';
 import winAnimation from './animation';
-import { useAppSettings } from '~/stores/system';
-import { about } from '../About';
+import { useAppSettings, useSyncedAppSettings } from '~/stores/system';
+import { solitaire_deck } from './modals/DeckSelect';
 
 const resources = getAppResourcesUrl('solitaire');
 
@@ -46,6 +46,7 @@ export default function Solitaire() {
   const { close, modal } = useWindow();
 
   const [settings, set] = useAppSettings('solitaire');
+  const [{ back }] = useSyncedAppSettings('solitaire');
   const [game, dispatch] = useReducer(solitaireReducer, deal());
 
   /**
@@ -150,29 +151,10 @@ export default function Solitaire() {
             </Menu.RadioGroup>
           </Menu.Sub>
 
-          <Menu.Sub label="Deck">
-            <Menu.RadioGroup
-              value={settings.back.toString()}
-              onValueChange={(value) =>
-                set({ ...settings, back: Number(value) })
-              }
-            >
-              <Menu.RadioItem value="0" label="Deck 1" />
-              <Menu.RadioItem value="1" label="Deck 2" />
-              <Menu.RadioItem value="2" label="Deck 3" />
-              <Menu.RadioItem value="3" label="Deck 4" />
-              <Menu.RadioItem value="4" label="Deck 5" />
-              <Menu.RadioItem value="5" label="Deck 6" />
-              <Menu.RadioItem value="6" label="Deck 7" />
-              <Menu.RadioItem value="7" label="Deck 8" />
-              <Menu.RadioItem value="8" label="Deck 9" />
-              <Menu.RadioItem value="9" label="Deck 10" />
-              <Menu.RadioItem value="10" label="Deck 11" />
-              <Menu.RadioItem value="11" label="Deck 12" />
-            </Menu.RadioGroup>
-          </Menu.Sub>
-
-          <Menu.Item label="Change deck" onSelect={() => modal(about)} />
+          <Menu.Item
+            label="Change deck..."
+            onSelect={() => modal(solitaire_deck)}
+          />
 
           <Menu.Separator />
 
@@ -220,7 +202,7 @@ export default function Solitaire() {
                   onClick={() => dispatch({ type: 'draw' })}
                 >
                   <Card
-                    back={settings.back}
+                    back={back}
                     suit={card.suit}
                     number={card.number}
                     animate
@@ -258,7 +240,7 @@ export default function Solitaire() {
                   }
                 >
                   <Card
-                    back={settings.back}
+                    back={back}
                     suit={card.suit}
                     number={card.number}
                     turned
@@ -298,7 +280,7 @@ export default function Solitaire() {
                     onPointerDown={top ? cardDragHandler : undefined}
                   >
                     <Card
-                      back={settings.back}
+                      back={back}
                       suit={card.suit}
                       number={card.number}
                       turned
@@ -333,11 +315,7 @@ export default function Solitaire() {
                         : undefined
                     }
                   >
-                    <Card
-                      back={settings.back}
-                      suit={card.suit}
-                      number={card.number}
-                    />
+                    <Card back={back} suit={card.suit} number={card.number} />
                   </div>
                 );
               })}
@@ -362,7 +340,7 @@ export default function Solitaire() {
                     }
                   >
                     <Card
-                      back={settings.back}
+                      back={back}
                       suit={card.suit}
                       number={card.number}
                       turned

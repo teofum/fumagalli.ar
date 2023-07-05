@@ -60,10 +60,10 @@ function createWindow<T extends string>(
   const fixedHeight = window.sizingY === WindowSizingMode.FIXED;
   const minHeight = fixedHeight ? window.height : window.minHeight;
 
-  // If the window is a modal, place it centered on top of parent
+  // If the window is a modal, place it on top of parent
   if (parent) {
-    window.top = parent.top + parent.height / 2 - window.height / 2;
-    window.left = parent.left + parent.width / 2 - window.width / 2;
+    window.top = parent.top + 50;
+    window.left = parent.left + 50;
   }
 
   // If the window overflows the desktop on its default position, move it toward
