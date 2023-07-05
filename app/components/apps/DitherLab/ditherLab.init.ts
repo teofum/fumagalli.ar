@@ -1,8 +1,11 @@
 import { type WindowInit } from '~/components/desktop/Window';
+import { type DitherLabState, defaultDitherLabState } from './types';
 
-export const ditherLab: WindowInit<'dither'> = {
+export const ditherLab = (
+  initialState?: DitherLabState,
+): WindowInit<'dither'> => ({
   appType: 'dither',
-  appState: undefined,
+  appState: initialState ?? defaultDitherLabState,
 
   title: 'DitherLab',
 
@@ -10,4 +13,4 @@ export const ditherLab: WindowInit<'dither'> = {
   height: 400,
   minWidth: 640,
   minHeight: 400,
-};
+});

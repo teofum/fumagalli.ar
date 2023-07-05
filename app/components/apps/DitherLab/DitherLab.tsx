@@ -1,4 +1,4 @@
-import Toolbar from '~/components/ui/Toolbar';
+import DitherLabImageInfo from './panels/DitherLabImageInfo';
 
 export default function DitherLab() {
   return (
@@ -7,14 +7,12 @@ export default function DitherLab() {
 
       <div className="grow flex flex-row gap-0.5">
         <div className="grow flex flex-col bg-default bevel-content p-0.5">
-          <div className="flex flex-row p-2 bg-surface bevel">
-            Toolbar
-          </div>
+          <div className="flex flex-row p-2 bg-surface bevel">Toolbar</div>
           <div className="grow p-2">Content</div>
         </div>
 
-        <div className="flex flex-col bevel-content w-40 p-2">
-          Toolbox
+        <div className="flex flex-col bevel-content w-56 p-0.5">
+          <DitherLabImageInfo />
         </div>
       </div>
     </div>

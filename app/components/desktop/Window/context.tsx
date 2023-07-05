@@ -2,7 +2,7 @@ import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
 
 import useDesktopStore from '~/stores/desktop';
-import type { AppState } from '~/components/apps/renderApp';
+import type { AppState, AppStateTypes } from '~/components/apps/renderApp';
 import type { WindowInit, WindowProps } from './Window';
 
 interface WindowContextType<T extends string, P extends string>
@@ -61,25 +61,29 @@ export function useWindow<T extends string, P extends string = string>(
   return context as WindowContextType<T, P>;
 }
 
-export function useAppState<T extends string>(appType: T) {
+export function useAppState<T extends keyof AppStateTypes>(appType: T) {
   const { setWindowProps } = useDesktopStore();
   const { appState, id, parentId } = useWindow(appType);
 
-  const setState = (state: AppState<T>) =>
-    setWindowProps(id, { appState: state }, parentId);
+  const setState = (state: Partial<AppState<T>>) =>
+    setWindowProps<T>(id, { appState: { ...appState, ...state } }, parentId);
 
   return [appState, setState] as const;
 }
 
-export function useParentState<P extends string>(parentType: P) {
+export function useParentState<P extends keyof AppStateTypes>(parentType: P) {
   const { setWindowProps } = useDesktopStore();
   const { parent } = useWindow('', parentType);
 
   if (!parent)
     throw new Error(`useParentState() must be used within modal window.`);
 
-  const setState = (state: AppState<P>) =>
-    setWindowProps(parent.id, { appState: state }, parent.parentId);
+  const setState = (state: Partial<AppState<P>>) =>
+    setWindowProps<P>(
+      parent.id,
+      { appState: { ...parent.appState, ...state } },
+      parent.parentId,
+    );
 
   return [parent.appState, setState] as const;
 }
