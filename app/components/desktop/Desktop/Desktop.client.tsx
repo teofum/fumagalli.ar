@@ -8,8 +8,70 @@ import { about } from '~/components/apps/About';
 import { intro } from '~/components/apps/Intro';
 import cn from 'classnames';
 import useSystemStore from '~/stores/system';
+import parseCSSColor from 'parse-css-color';
+import { files } from '~/components/apps/Files';
+import { minesweeper } from '~/components/apps/Minesweeper';
+import { sudoku } from '~/components/apps/Sudoku';
+import { solitaire } from '~/components/apps/Solitaire';
+import { dosEmu } from '~/components/apps/DOSEmu';
 
 type ComputerState = 'on' | 'off' | 'shutting-down';
+
+interface DesktopIconProps {
+  iconUrl: string;
+  title: string;
+  x?: number;
+  y?: number;
+  open: () => void;
+}
+
+function DesktopIcon({ iconUrl, title, x, y, open }: DesktopIconProps) {
+  const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
+  const desktopColor = desktopEl
+    ? getComputedStyle(desktopEl).backgroundColor
+    : 'black';
+
+  const parsed = parseCSSColor(desktopColor);
+  const [r, g, b] = parsed?.values ?? [0, 0, 0];
+  const luma = (r * 299 + g * 587 + b * 114) / (255.0 * 1000);
+  const contrastColor = luma > 0.5 ? 'black' : 'white';
+
+  return (
+    <button
+      className="flex flex-col gap-1 w-16 items-center cursor-default group outline-none"
+      onDoubleClick={() => open()}
+      onKeyDown={(ev) => {
+        if (ev.key === 'Enter') open();
+      }}
+      style={{ gridColumn: x, gridRow: y }}
+    >
+      <span className="relative">
+        <img src={iconUrl} alt="" />
+        <span
+          className={cn(
+            'absolute inset-0 bg-selection bg-opacity-50',
+            'hidden group-focus:inline',
+          )}
+          style={{
+            WebkitMaskImage: `url(${iconUrl})`,
+          }}
+        />
+      </span>
+      <div className="max-h-8">
+        <div
+          className={cn(
+            'px-0.5 text-ellipsis',
+            'group-focus:!bg-selection group-focus:!text-selection',
+            'line-clamp-2 group-focus:line-clamp-none',
+          )}
+          style={{ backgroundColor: desktopColor, color: contrastColor }}
+        >
+          {title}
+        </div>
+      </div>
+    </button>
+  );
+}
 
 export default function Desktop() {
   const { themeCustomizations } = useSystemStore();
@@ -51,6 +113,66 @@ export default function Desktop() {
           className="relative flex-1 bg-desktop"
           style={{ backgroundColor: themeCustomizations.backgroundColor }}
         >
+          <div className="w-full h-full grid grid-cols-[repeat(auto-fill,4rem)] auto-cols-[4rem] auto-rows-[4.5rem] content-start gap-2 p-2">
+            <DesktopIcon
+              iconUrl="/fs/system/Resources/Icons/computer.png"
+              title="My Computer"
+              open={() => launch(files({ path: '/' }))}
+            />
+            <DesktopIcon
+              iconUrl="/fs/system/Resources/Icons/documents.png"
+              title="My Documents"
+              open={() => launch(files({ path: '/Documents' }))}
+            />
+            <DesktopIcon
+              iconUrl="/fs/system/Applications/intro/icon_32.png"
+              title="About me"
+              open={() => launch(intro)}
+            />
+            <DesktopIcon
+              iconUrl="/fs/system/Applications/mine/icon_32.png"
+              title="Minesweeper"
+              y={2}
+              open={() => launch(minesweeper)}
+            />
+            <DesktopIcon
+              iconUrl="/fs/system/Applications/sudoku/icon_32.png"
+              title="Sudoku"
+              y={2}
+              open={() => launch(sudoku)}
+            />
+            <DesktopIcon
+              iconUrl="/fs/system/Applications/solitaire/icon_32.png"
+              title="Solitaire"
+              y={2}
+              open={() => launch(solitaire)}
+            />
+            <DesktopIcon
+              iconUrl="/fs/system/Applications/dos/icon_32.png"
+              title="DOOM"
+              y={2}
+              open={() =>
+                launch(
+                  dosEmu({
+                    bundleUrl: '/fs/system/Applications/dos/games/doom.jsdos',
+                  }),
+                )
+              }
+            />
+            <DesktopIcon
+              iconUrl="/fs/system/Applications/dos/icon_32.png"
+              title="STUNTS"
+              y={2}
+              open={() =>
+                launch(
+                  dosEmu({
+                    bundleUrl: '/fs/system/Applications/dos/games/stunts.jsdos',
+                  }),
+                )
+              }
+            />
+          </div>
+
           {windows.map((window) => (
             <Window key={window.id} {...window} />
           ))}

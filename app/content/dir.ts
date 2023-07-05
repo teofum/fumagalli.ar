@@ -1052,7 +1052,7 @@ const FS_ROOT: Directory = {
                   class: 'dir',
                   name: 'games',
                   created: 1688507476,
-                  modified: 1688527212,
+                  modified: 1688530844,
                   items: [
                     {
                       class: 'file',
@@ -1061,6 +1061,14 @@ const FS_ROOT: Directory = {
                       created: 1688507476,
                       modified: 1688507476,
                       size: 5539791,
+                    },
+                    {
+                      class: 'file',
+                      type: 'dos',
+                      name: 'stunts.jsdos',
+                      created: 1688530844,
+                      modified: 1688530844,
+                      size: 1082534,
                     },
                   ],
                 },
@@ -2150,7 +2158,7 @@ const FS_ROOT: Directory = {
               class: 'dir',
               name: 'Icons',
               created: 1687638059,
-              modified: 1687724554,
+              modified: 1688529602,
               items: [
                 {
                   class: 'dir',
@@ -2311,6 +2319,22 @@ const FS_ROOT: Directory = {
                       size: 546,
                     },
                   ],
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'computer.png',
+                  created: 1688529516,
+                  modified: 1688529516,
+                  size: 632,
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'documents.png',
+                  created: 1688529598,
+                  modified: 1688529598,
+                  size: 570,
                 },
                 {
                   class: 'file',
