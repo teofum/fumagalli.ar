@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 
 import { useAppState, useWindow } from '~/components/desktop/Window/context';
 
-import { PreviewAppProvider } from './context';
 import type { PreviewSupportedFile } from './types';
 import PreviewMarkdown from './modes/PreviewMarkdown';
 import PreviewImage from './modes/PreviewImage';
@@ -21,20 +20,15 @@ export default function Preview() {
   const { id } = useWindow();
   const { setTitle } = useDesktopStore();
 
-  const [{ file, filePath }] = useAppState('preview');
+  const [state] = useAppState('preview');
 
   // Set window title to file title
   useEffect(() => {
-    if (file) setTitle(id, `${file.name} - Preview`);
-  }, [setTitle, id, file]);
+    if (state.file) setTitle(id, `${state.file.name} - Preview`);
+  }, [setTitle, id, state.file]);
 
-  if (!file || !filePath) return null;
+  if (!state.file || !state.filePath) return null;
 
-  const resourceUrl = '/fs' + filePath;
-  const Component = getPreviewMode(file.type);
-  return (
-    <PreviewAppProvider file={file} resourceUrl={resourceUrl}>
-      <Component />
-    </PreviewAppProvider>
-  );
+  const Component = getPreviewMode(state.file.type);
+  return <Component />;
 }

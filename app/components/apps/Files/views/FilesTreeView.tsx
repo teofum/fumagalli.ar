@@ -5,6 +5,8 @@ import { useState } from 'react';
 import TreeLess from '~/components/ui/icons/TreeLess';
 import TreeMore from '~/components/ui/icons/TreeMore';
 import type FilesViewProps from './FilesViewProps';
+import filterByType from '../utils/filterByType';
+import { useAppState } from '~/components/desktop/Window/context';
 
 interface BranchProps {
   item: Directory;
@@ -24,6 +26,7 @@ function Branch({
   select,
 }: BranchProps) {
   const [expanded, setExpanded] = useState(root);
+  const [state] = useAppState('files');
 
   return (
     <div className="relative group tree-branch">
@@ -52,7 +55,7 @@ function Branch({
           />
           {expanded ? (
             <div className="">
-              {item.items.map((child) =>
+              {filterByType(item.items, state.typeFilter).map((child) =>
                 child.class === 'dir' ? (
                   <Branch
                     key={child.name}

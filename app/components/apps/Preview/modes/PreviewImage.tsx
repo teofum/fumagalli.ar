@@ -1,12 +1,13 @@
 import ScrollContainer from '~/components/ui/ScrollContainer';
-import { usePreviewApp } from '../context';
 import Menu from '~/components/ui/Menu';
-import { useWindow } from '~/components/desktop/Window/context';
+import { useAppState, useWindow } from '~/components/desktop/Window/context';
 import { useEffect, useRef, useState } from 'react';
 import Button from '~/components/ui/Button';
 import { getAppResourcesUrl } from '~/content/utils';
 import Toolbar from '~/components/ui/Toolbar';
 import useDesktopStore from '~/stores/desktop';
+import { files } from '../../Files';
+import { isPreviewable } from '../types';
 
 const resources = getAppResourcesUrl('preview');
 
@@ -17,11 +18,13 @@ const ZOOM_STOPS = [
 ];
 
 export default function PreviewImage() {
-  const { id, minWidth, minHeight, close } = useWindow();
+  const { id, minWidth, minHeight, close, modal } = useWindow();
   const { moveAndResize } = useDesktopStore();
 
-  const { file, resourceUrl } = usePreviewApp();
-  if (file.type !== 'image') throw new Error('Wrong file type');
+  const [state, setState] = useAppState('preview');
+  const resourceUrl = '/fs' + state.filePath;
+
+  if (state.file?.type !== 'image') throw new Error('Wrong file type');
 
   const viewportRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -74,6 +77,18 @@ export default function PreviewImage() {
     }
   }, [moveAndResize, id, minHeight, minWidth]);
 
+  const open = () => {
+    modal(
+      files({
+        path: '/Documents',
+        typeFilter: ['image'],
+        modalCallback: (file, filePath) => {
+          if (isPreviewable(file)) setState({ file, filePath });
+        },
+      }),
+    );
+  };
+
   const download = () => {
     const a = document.createElement('a');
     a.href = resourceUrl;
@@ -116,6 +131,7 @@ export default function PreviewImage() {
     <div className="flex flex-col gap-0.5 min-w-0">
       <div className="flex flex-row gap-1">
         <Menu.Root trigger={<Menu.Trigger>File</Menu.Trigger>}>
+          <Menu.Item label="Open..." onSelect={open} />
           <Menu.Item label="Download" onSelect={download} />
 
           <Menu.Separator />
@@ -190,7 +206,7 @@ export default function PreviewImage() {
           <img
             ref={imageRef}
             src={resourceUrl}
-            alt={file.altText}
+            alt={state.file?.altText}
             style={{ width, minWidth: width }}
           />
         </div>

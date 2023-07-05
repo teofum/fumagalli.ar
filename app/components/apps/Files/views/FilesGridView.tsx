@@ -1,12 +1,16 @@
 import cn from 'classnames';
 import ScrollContainer from '~/components/ui/ScrollContainer';
 import type FilesViewProps from './FilesViewProps';
+import filterByType from '../utils/filterByType';
+import { useAppState } from '~/components/desktop/Window/context';
 
 export default function FilesGridView({ dir, open, select }: FilesViewProps) {
+  const [state] = useAppState('files');
+
   return (
     <ScrollContainer className="flex-1">
       <div className="p-1 select-none grid grid-cols-[repeat(auto-fill,4rem)] gap-2">
-        {dir.items.map((item) => {
+        {filterByType(dir.items, state.typeFilter).map((item) => {
           const type = item.class === 'file' ? item.type : item.class;
 
           let iconUrl = `/fs/system/Resources/Icons/FileType/${type}_32.png`;

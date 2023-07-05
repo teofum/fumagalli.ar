@@ -1,3 +1,5 @@
+import type { AnyFile } from '~/content/types';
+
 export type FilesView = 'grid' | 'list' | 'details' | 'tree';
 
 export interface FilesSettings {
@@ -14,6 +16,8 @@ export const defaultFilesSettings: FilesSettings = {
 
 export interface FilesState {
   path: string;
+  typeFilter?: AnyFile['type'][];
+  modalCallback?: (file: AnyFile, path: string) => void;
 }
 
 export const defaultFilesState: FilesState = {

@@ -3,8 +3,12 @@ import ScrollContainer from '~/components/ui/ScrollContainer';
 import useResizeObserver from '../utils/useResizeObserver';
 import FilesListItem from './FilesListItem';
 import type FilesViewProps from './FilesViewProps';
+import { useAppState } from '~/components/desktop/Window/context';
+import filterByType from '../utils/filterByType';
 
 export default function FilesListView({ dir, open, select }: FilesViewProps) {
+  const [state] = useAppState('files');
+
   const viewportRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -27,7 +31,7 @@ export default function FilesListView({ dir, open, select }: FilesViewProps) {
         className="p-1 select-none grid grid-flow-col auto-cols-max"
         ref={contentRef}
       >
-        {dir.items.map((item) => (
+        {filterByType(dir.items, state.typeFilter).map((item) => (
           <FilesListItem
             key={item.name}
             item={item}
