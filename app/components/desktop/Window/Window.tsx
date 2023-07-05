@@ -99,7 +99,7 @@ function getWindowStyleProps<AppType extends string>({
 }
 
 export default function Window<T extends string>(props: WindowProps<T>) {
-  const { id, appType, title, maximized, focused, parentId, children } = props;
+  const { id, appType, title, maximized, parentId, children } = props;
   const { focus, close, toggleMaximized } = useDesktopStore();
 
   /**
@@ -120,6 +120,9 @@ export default function Window<T extends string>(props: WindowProps<T>) {
   const canResizeEW = props.sizingX === WindowSizingMode.RESIZABLE;
   const canResizeNS = props.sizingY === WindowSizingMode.RESIZABLE;
   const canResizeNSEW = canResizeEW && canResizeNS;
+
+  // Window will appear inactive if it has any modals
+  const active = props.focused && props.children.length === 0;
 
   const resizeHandles = [
     <div
@@ -189,8 +192,8 @@ export default function Window<T extends string>(props: WindowProps<T>) {
   ];
 
   const titlebarSpacerClass = cn('flex-1 h-1.5 border-t border-b', {
-    'border-light': focused,
-    'border-disabled drop-shadow-disabled': !focused,
+    'border-light': active,
+    'border-disabled drop-shadow-disabled': !active,
   });
 
   /**
@@ -206,7 +209,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
       "
       style={getWindowStyleProps(props)}
       onPointerDown={() => focus(id)}
-      data-state={focused ? 'active' : 'inactive'}
+      data-state={active ? 'active' : 'inactive'}
     >
       <div className="col-start-2 row-start-2 grid grid-rows-[1.125rem_calc(100%-1.125rem)]">
         <div
@@ -220,7 +223,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
 
           <span
             className={cn('font-title text-title bold', {
-              'text-disabled': !focused,
+              'text-disabled': !active,
             })}
           >
             {title}
@@ -246,6 +249,9 @@ export default function Window<T extends string>(props: WindowProps<T>) {
       </div>
 
       {!maximized ? resizeHandles : null}
+
+      {/* Block interaction with window if it has modals */}
+      {children.length > 0 ? <div className="absolute inset-0" /> : null}
 
       {children.map((window) => (
         <Window key={window.id} {...window} />

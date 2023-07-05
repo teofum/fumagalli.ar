@@ -209,6 +209,12 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
                   : window.order > target.order
                   ? window.order - 1 // Lower any window on top of target by 1
                   : window.order, // Keep the rest the same
+
+              // Modals always share focus state with their parent
+              children: window.children.map((child) => ({
+                ...child,
+                focused: window.id === id,
+              })),
             })),
           };
         }),
