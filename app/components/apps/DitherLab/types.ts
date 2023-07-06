@@ -4,6 +4,13 @@ export interface DitherLabState {
     url: string;
     size: number;
   };
+  resizeMode: 'none' | 'fit' | 'stretch';
+  width: number;
+  height: number;
 }
 
-export const defaultDitherLabState: DitherLabState = {};
+export const defaultDitherLabState: DitherLabState = {
+  resizeMode: 'fit',
+  width: 800,
+  height: 600,
+};

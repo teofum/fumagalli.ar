@@ -39,7 +39,7 @@
 
   /* Input */
   .input {
-    @apply py-1 px-2 bg-default bevel-content outline-none;
+    @apply py-1 px-2 bg-default bevel-content outline-none min-w-0;
   }
 
   /* Menus */

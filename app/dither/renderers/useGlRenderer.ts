@@ -48,8 +48,6 @@ export default function useGlRenderer(
     const vert = createShader(gl, gl.VERTEX_SHADER, shaders.imageVert);
     const frag = createShader(gl, gl.FRAGMENT_SHADER, fragSource);
 
-    console.log(fragSource);
-
     return linkProgram(gl, vert, frag);
   }, [gl, shader, settings.clistSize]);
 

@@ -4,13 +4,14 @@ import ScrollContainer from '~/components/ui/ScrollContainer';
 import Toolbar from '~/components/ui/Toolbar';
 
 import DitherLabImageInfo from './panels/DitherLabImageInfo';
-// import { useAppState } from '~/components/desktop/Window/context';
+import { useAppState } from '~/components/desktop/Window/context';
 import useGlRenderer from '~/dither/renderers/useGlRenderer';
 import shaders from '~/dither/shaders';
 import Button from '~/components/ui/Button';
+import DitherLabResizeOptions from './panels/DitherLabResizeOptions';
 
 export default function DitherLab() {
-  // const [state] = useAppState('dither');
+  const [state] = useAppState('dither');
 
   const rtRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -34,35 +35,43 @@ export default function DitherLab() {
     ];
     let [wNew, hNew] = [0, 0];
 
-    // switch (opt.resize.mode) {
-    //   case DlabResizeMode.KeepOriginalSize:
+    switch (state.resizeMode) {
+      case 'none':
         wNew = iw;
         hNew = ih;
-      //   break;
-      // case DlabResizeMode.ForceResize:
-      //   wNew = opt.resize.x;
-      //   hNew = opt.resize.y;
-      //   break;
-      // case DlabResizeMode.FitToSize: {
-      //   const wRatio = Math.min((opt.resize.x || 0) / iw, 1);
-      //   const hRatio = Math.min((opt.resize.y || 0) / ih, 1);
-      //   const resizeFactor = Math.min(wRatio, hRatio);
+        break;
+      case 'stretch':
+        wNew = state.width;
+        hNew = state.height;
+        break;
+      case 'fit': {
+        const wRatio = Math.min(state.width / iw, 1);
+        const hRatio = Math.min(state.height / ih, 1);
+        const resizeFactor = Math.min(wRatio, hRatio);
 
-      //   wNew = ~~(iw * resizeFactor);
-      //   hNew = ~~(ih * resizeFactor);
-      //   break;
-      // }
-    // }
+        wNew = ~~(iw * resizeFactor);
+        hNew = ~~(ih * resizeFactor);
+        break;
+      }
+    }
 
     if (wNew !== rt.width || hNew !== rt.height) {
       rt.width = wNew;
       rt.height = hNew;
     }
-    rt.style.width = `${(1 * rt.width)}px`;
+    rt.style.width = `${1 * rt.width}px`;
   });
 
   return (
     <div className="flex flex-col gap-0.5 min-w-0">
+      {state.image ? (
+        <img
+          className="hidden"
+          src={state.image.url}
+          alt={state.image.filename}
+          ref={imgRef}
+        />
+      ) : null}
       <div className="flex flex-row gap-1">Menu</div>
 
       <div className="grow flex flex-row gap-0.5 min-h-0">
@@ -78,7 +87,8 @@ export default function DitherLab() {
         </div>
 
         <div className="flex flex-col bevel-content w-56 min-w-56 p-0.5">
-          <DitherLabImageInfo ref={imgRef} />
+          <DitherLabImageInfo />
+          <DitherLabResizeOptions />
         </div>
       </div>
     </div>
