@@ -36,9 +36,13 @@ export default function useGlRenderer(
     return gl;
   }, [rt]);
 
-  const colors = useMemo(() => getPaletteColors(palette), [palette])
-    .flat()
-    .map((n) => n / 255);
+  const colors = useMemo(
+    () =>
+      getPaletteColors(palette)
+        .flat()
+        .map((n) => n / 255),
+    [palette],
+  );
   const paletteSize = useMemo(() => getPaletteSize(palette), [palette]);
 
   const program = useMemo(() => {
@@ -58,6 +62,7 @@ export default function useGlRenderer(
 
   const render = useCallback(() => {
     if (!rt || !img || !gl || !program) return;
+    console.log('Rendering...');
 
     autosizeViewport(gl);
 
