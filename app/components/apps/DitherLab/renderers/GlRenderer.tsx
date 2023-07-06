@@ -33,6 +33,7 @@ export default function GlRenderer() {
     rtRef.current,
     imgRef.current,
     process.shader,
+    state.palette,
     settings,
     state.uniforms,
   );

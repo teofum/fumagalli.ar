@@ -1,3 +1,6 @@
+import Win4bRGBI from '~/dither/palettes/Win4bRGBI';
+import { type Palette, PaletteGroup } from '~/dither/palettes/types';
+
 export interface DitherLabState {
   image?: {
     filename: string;
@@ -13,6 +16,9 @@ export interface DitherLabState {
   renderWidth: number;
   renderHeight: number;
 
+  paletteGroup: PaletteGroup;
+  palette: Palette;
+
   process: string;
   settings: { [key: string]: number | string };
   uniforms: { [key: string]: number };
@@ -24,6 +30,9 @@ export const defaultDitherLabState: DitherLabState = {
   height: 300,
   renderWidth: 0,
   renderHeight: 0,
+
+  paletteGroup: PaletteGroup.RetroPC,
+  palette: Win4bRGBI,
 
   process: 'pattern',
   settings: {

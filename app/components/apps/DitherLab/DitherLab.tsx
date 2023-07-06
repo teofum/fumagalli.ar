@@ -1,11 +1,11 @@
 import ScrollContainer from '~/components/ui/ScrollContainer';
 import Toolbar from '~/components/ui/Toolbar';
-// import Button from '~/components/ui/Button';
 
 import DitherLabImageInfo from './panels/DitherLabImageInfo';
 import DitherLabResizeOptions from './panels/DitherLabResizeOptions';
 import GlRenderer from './renderers/GlRenderer';
 import DitherLabRenderOptions from './panels/DitherLabRenderOptions';
+import DitherLabPaletteSelect from './panels/DitherLabPaletteSelect';
 
 export default function DitherLab() {
   return (
@@ -20,10 +20,11 @@ export default function DitherLab() {
           </ScrollContainer>
         </div>
 
-        <ScrollContainer hide="x" className="w-64 min-w-64">
-          <div className="flex flex-col w-60 min-w-60">
+        <ScrollContainer hide="x" className="bg-surface w-[14.5rem] min-w-[14.5rem]">
+          <div className="flex flex-col w-[13.5rem] min-w-[13.5rem]">
             <DitherLabImageInfo />
             <DitherLabResizeOptions />
+            <DitherLabPaletteSelect />
             <DitherLabRenderOptions />
           </div>
         </ScrollContainer>

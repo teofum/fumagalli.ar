@@ -9,6 +9,8 @@ import shaders from '../shaders';
 import thresholds from '../thresholdMaps';
 import makeRandomThreshold from '../thresholdMaps/makeRandomThreshold';
 import { useCallback, useMemo } from 'react';
+import type { Palette } from '../palettes/types';
+import getPaletteColors, { getPaletteSize } from '../utils/paletteColors';
 
 export interface RenderSettings {
   clistSize: number;
@@ -18,13 +20,11 @@ export interface RenderSettings {
 const POSITIONS = [-1, 1, -1, -1, 1, 1, -1, -1, 1, -1, 1, 1];
 const TEXCOORDS = [0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0];
 
-const palette = [0, 0, 0, 1, 1, 1];
-const paletteSize = ~~(palette.length / 3);
-
 export default function useGlRenderer(
   rt: HTMLCanvasElement | null,
   img: HTMLImageElement | null,
   shader: string,
+  palette: Palette,
   settings: RenderSettings,
   uniforms: { [key: string]: number },
 ) {
@@ -35,6 +35,11 @@ export default function useGlRenderer(
     if (!gl) throw new Error('useGlRenderer: WebGL is unavailable');
     return gl;
   }, [rt]);
+
+  const colors = useMemo(() => getPaletteColors(palette), [palette])
+    .flat()
+    .map((n) => n / 255);
+  const paletteSize = useMemo(() => getPaletteSize(palette), [palette]);
 
   const program = useMemo(() => {
     if (!gl) return null;
@@ -49,7 +54,7 @@ export default function useGlRenderer(
     const frag = createShader(gl, gl.FRAGMENT_SHADER, fragSource);
 
     return linkProgram(gl, vert, frag);
-  }, [gl, shader, settings.clistSize]);
+  }, [gl, shader, settings.clistSize, paletteSize]);
 
   const render = useCallback(() => {
     if (!rt || !img || !gl || !program) return;
@@ -111,7 +116,7 @@ export default function useGlRenderer(
     gl.useProgram(program);
 
     // Set uniforms
-    gl.uniform3fv(u_palette, palette);
+    gl.uniform3fv(u_palette, colors);
     gl.uniform2f(u_texSize, gl.canvas.width, gl.canvas.height);
     gl.uniform1i(u_image, 0);
     gl.uniform1i(u_threshold, 1);
@@ -133,7 +138,7 @@ export default function useGlRenderer(
 
     // Execute program
     gl.drawArrays(gl.TRIANGLES, 0, 6);
-  }, [rt, img, gl, program, settings, uniforms]);
+  }, [rt, img, gl, program, settings, uniforms, colors]);
 
   return { render };
 }

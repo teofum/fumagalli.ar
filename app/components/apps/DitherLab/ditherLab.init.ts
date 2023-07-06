@@ -7,7 +7,7 @@ export const ditherLab = (
   appType: 'dither',
   appState: initialState ?? defaultDitherLabState,
 
-  title: 'DitherLab',
+  title: 'DitherLab 2',
 
   width: 640,
   height: 400,
