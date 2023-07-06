@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import { createContext, useContext } from 'react';
+import { createContext, useCallback, useContext } from 'react';
 
 import useDesktopStore from '~/stores/desktop';
 import type { AppState, AppStateTypes } from '~/components/apps/renderApp';
@@ -65,8 +65,11 @@ export function useAppState<T extends keyof AppStateTypes>(appType: T) {
   const { setWindowProps } = useDesktopStore();
   const { appState, id, parentId } = useWindow(appType);
 
-  const setState = (state: Partial<AppState<T>>) =>
-    setWindowProps<T>(id, { appState: { ...appState, ...state } }, parentId);
+  const setState = useCallback(
+    (state: Partial<AppState<T>>) =>
+      setWindowProps<T>(id, { appState: { ...appState, ...state } }, parentId),
+    [id, parentId, appState, setWindowProps],
+  );
 
   return [appState, setState] as const;
 }

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useAppState } from '~/components/desktop/Window/context';
 import Button from '~/components/ui/Button';
 import Collapsible from '~/components/ui/Collapsible';
@@ -6,7 +6,6 @@ import getReadableSize from '../../Files/utils/getReadableSize';
 
 export default function DitherLabImageInfo() {
   const [state, setState] = useAppState('dither');
-  const [size, setSize] = useState<{ x: number; y: number } | null>(null);
 
   const hiddenInputRef = useRef<HTMLInputElement>(null);
 
@@ -34,11 +33,8 @@ export default function DitherLabImageInfo() {
   };
 
   const onLoad = (ev: React.SyntheticEvent<HTMLImageElement>) => {
-    const target = ev.target as HTMLImageElement;
-    setSize({
-      x: target.naturalWidth,
-      y: target.naturalHeight,
-    });
+    const { naturalWidth, naturalHeight } = ev.target as HTMLImageElement;
+    setState({ naturalWidth, naturalHeight });
   };
 
   return (
@@ -82,11 +78,11 @@ export default function DitherLabImageInfo() {
               <span>{getReadableSize(state.image.size)}</span>
             </div>
 
-            {size ? (
+            {state.naturalWidth ? (
               <div className="flex flex-row justify-between">
                 <span>Dimensions</span>
                 <span>
-                  {size.x}x{size.y}
+                  {state.naturalWidth}x{state.naturalHeight}
                 </span>
               </div>
             ) : null}

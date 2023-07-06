@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { memo, useRef } from 'react';
 import useMoveWindow from './useMoveWindow';
 import useResizeWindow from './useResizeWindow';
 import cn from 'classnames';
@@ -85,7 +85,7 @@ function getWindowStyleProps<AppType extends string>({
       top: '0',
       left: '0',
       width: '100%',
-      height: '100%',
+      height: 'calc(100% - 30px)',
       zIndex: order,
     };
 
@@ -97,6 +97,8 @@ function getWindowStyleProps<AppType extends string>({
     zIndex: order,
   };
 }
+
+const MemoizedOutlet = memo(AppOutlet);
 
 export default function Window<T extends string>(props: WindowProps<T>) {
   const { id, appType, title, maximized, parentId, children } = props;
@@ -247,7 +249,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
         </div>
 
         <WindowProvider window={props} parent={parent}>
-          <AppOutlet type={appType} />
+          <MemoizedOutlet type={appType} />
         </WindowProvider>
       </div>
 

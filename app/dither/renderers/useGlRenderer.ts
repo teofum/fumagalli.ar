@@ -8,7 +8,7 @@ import tex2DFromImage from '~/utils/gl/tex2DFromImage';
 import shaders from '../shaders';
 import thresholds from '../thresholdMaps';
 import makeRandomThreshold from '../thresholdMaps/makeRandomThreshold';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 export interface RenderSettings {
   clistSize: number;
@@ -51,7 +51,7 @@ export default function useGlRenderer(
     return linkProgram(gl, vert, frag);
   }, [gl, shader, settings.clistSize]);
 
-  const render = () => {
+  const render = useCallback(() => {
     if (!rt || !img || !gl || !program) return;
 
     autosizeViewport(gl);
@@ -133,7 +133,7 @@ export default function useGlRenderer(
 
     // Execute program
     gl.drawArrays(gl.TRIANGLES, 0, 6);
-  };
+  }, [rt, img, gl, program, settings, uniforms]);
 
   return { render };
 }
