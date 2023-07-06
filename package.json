@@ -7,7 +7,8 @@
     "dev": "remix dev -p 3200",
     "typecheck": "tsc",
     "convert-images": "cd .photos-original && ./convert.sh",
-    "make-fs": "cd public && ./make_fs.sh fs > ../app/content/dir.ts"
+    "make-fs": "cd public && ./make_fs.sh fs > ../app/content/dir.ts",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@radix-ui/react-collapsible": "^1.0.3",
@@ -32,6 +33,7 @@
     "js-dos": "^7.5.0",
     "nanoid": "^3.3.6",
     "parse-css-color": "^0.2.1",
+    "patch-package": "^7.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^8.0.7",
