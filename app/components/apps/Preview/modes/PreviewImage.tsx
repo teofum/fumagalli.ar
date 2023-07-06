@@ -169,7 +169,7 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
         </Button>
       </Toolbar>
 
-      <ScrollContainer className="flex-1" ref={viewportRef}>
+      <ScrollContainer centerContent className="flex-1" ref={viewportRef}>
         <div className="flex w-min border border-default bg-surface-light bg-checkered-lg select-none">
           <img
             ref={imageRef}

@@ -81,7 +81,7 @@ export default function DitherLab() {
               <span>Render</span>
             </Button>
           </Toolbar>
-          <ScrollContainer className="grow min-w-0 min-h-0">
+          <ScrollContainer centerContent className="grow min-w-0 min-h-0">
             <canvas ref={rtRef} className="border border-default" />
           </ScrollContainer>
         </div>

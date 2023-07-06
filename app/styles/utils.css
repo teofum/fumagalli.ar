@@ -157,4 +157,12 @@
   .tree-branch:last-child > .tree-branch-decoration-bottom {
     display: none;
   }
+
+  .scroll-viewport-center > div {
+    display: flex !important;
+    min-width: 100%;
+    min-height: 100%;
+    align-items: center;
+    justify-content: center;
+  }
 }
