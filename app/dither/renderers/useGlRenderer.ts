@@ -12,7 +12,7 @@ import { useCallback, useMemo } from 'react';
 
 export interface RenderSettings {
   clistSize: number;
-  threshold: number;
+  threshold: keyof typeof thresholds | 'random';
 }
 
 const POSITIONS = [-1, 1, -1, -1, 1, 1, -1, -1, 1, -1, 1, 1];
@@ -84,9 +84,9 @@ export default function useGlRenderer(
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(TEXCOORDS), gl.STATIC_DRAW);
 
     const threshold =
-      settings.threshold === -1
+      settings.threshold === 'random'
         ? makeRandomThreshold(Math.max(rt.width, rt.height))
-        : thresholds[settings.threshold || 0];
+        : thresholds[settings.threshold];
 
     // Load image to texture 0 and threshold matrix to texture 1
     tex2DFromImage(gl, img);

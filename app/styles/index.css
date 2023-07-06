@@ -12,7 +12,8 @@
     overflow: hidden;
   }
 
-  img {
+  img,
+  canvas {
     image-rendering: pixelated;
   }
 

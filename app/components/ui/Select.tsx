@@ -35,7 +35,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
             triggerProps?.className,
           )}
         >
-          <div className="m-px py-px px-0.5 flex-1 text-start group-focus:bg-selection group-focus:text-selection">
+          <div className="m-px py-px px-1.5 flex-1 text-start group-focus:bg-selection group-focus:text-selection">
             <SelectPrimitive.Value
               placeholder={placeholder ?? 'Select an option'}
             >

@@ -1,12 +1,17 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { useAppState } from '~/components/desktop/Window/context';
 
-import useGlRenderer from '~/dither/renderers/useGlRenderer';
-import shaders from '~/dither/shaders';
+import useGlRenderer, {
+  type RenderSettings,
+} from '~/dither/renderers/useGlRenderer';
+import { gpuProcess } from '../process';
 
-const SETTINGS = { clistSize: 64, threshold: 0 };
-const UNIFORMS = { u_err_mult: 0.2, u_gamma: 2.2 };
+const clistSize: { [key: string]: number | undefined } = {
+  high: 64,
+  medium: 16,
+  low: 4,
+};
 
 export default function GlRenderer() {
   const [state, setState] = useAppState('dither');
@@ -14,12 +19,22 @@ export default function GlRenderer() {
   const rtRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
 
+  const settings = useMemo<RenderSettings>(
+    () => ({
+      clistSize: clistSize[state.settings.quality] ?? 64,
+      threshold: (state.settings.threshold as any) ?? 'bayer8',
+    }),
+    [state.settings],
+  );
+
+  const process = useMemo(() => gpuProcess[state.process], [state.process]);
+
   const { render } = useGlRenderer(
     rtRef.current,
     imgRef.current,
-    shaders.patternFrag,
-    SETTINGS,
-    UNIFORMS,
+    process.shader,
+    settings,
+    state.uniforms,
   );
   useEffect(render, [render, state.renderWidth, state.renderHeight]);
 

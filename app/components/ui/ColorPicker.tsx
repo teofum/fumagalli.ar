@@ -63,7 +63,7 @@ function ColorSlider({
         <Slider.Thumb
           {...thumbProps}
           className={cn(
-            'absolute w-2 h-6 bg-surface bevel -translate-x-1/2 -translate-y-1/2',
+            'absolute w-2.5 h-5 bg-surface bevel -translate-x-1/2 -translate-y-1/2',
             thumbProps?.className,
           )}
         />
