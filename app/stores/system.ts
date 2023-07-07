@@ -26,6 +26,10 @@ import {
   defaultSudokuSettings,
   type SudokuSettings,
 } from '~/components/apps/Sudoku/types';
+import {
+  defaultDitherLabSettings,
+  type DitherLabSettings,
+} from '~/components/apps/DitherLab/types';
 
 const MAX_FILE_HISTORY = 10; // Number of last accessed files to keep
 const MAX_DIR_HISTORY = 10; // Number of last accessed directories to keep
@@ -53,6 +57,7 @@ interface SystemState {
     solitaire: SolitaireSettings;
     sudoku: SudokuSettings;
     minesweeper: MinesweeperSettings;
+    dither: DitherLabSettings;
   };
   fileHistory: FileAccess[];
   dirHistory: DirectoryAccess[];
@@ -98,6 +103,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
         solitaire: defaultSolitaireSettings,
         sudoku: defaultSudokuSettings,
         minesweeper: defaultMinesweeperSettings,
+        dither: defaultDitherLabSettings,
       },
       fileHistory: [],
       dirHistory: [],

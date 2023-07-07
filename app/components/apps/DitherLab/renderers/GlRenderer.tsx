@@ -17,9 +17,19 @@ interface GlRendererProps {
   rt: HTMLCanvasElement | null;
   setRt: React.Dispatch<React.SetStateAction<HTMLCanvasElement | null>>;
   img: HTMLImageElement | null;
+  setStatus: React.Dispatch<
+    React.SetStateAction<'ready' | 'rendering' | 'done'>
+  >;
+  setRenderTime: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function GlRenderer({ rt, setRt, img }: GlRendererProps) {
+export default function GlRenderer({
+  rt,
+  setRt,
+  img,
+  setStatus,
+  setRenderTime,
+}: GlRendererProps) {
   const [state, setState] = useAppState('dither');
 
   const settings = useMemo<RenderSettings>(

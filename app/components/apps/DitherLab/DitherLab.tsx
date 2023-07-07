@@ -11,6 +11,8 @@ import DitherLabPaletteSelect from './panels/DitherLabPaletteSelect';
 import { files } from '../Files';
 import Menu from '~/components/ui/Menu';
 import Button from '~/components/ui/Button';
+import { useAppSettings } from '~/stores/system';
+import cn from 'classnames';
 
 export const ZOOM_STOPS = [1, 1.5, 2, 3, 4, 6, 8, 16, 32, 64];
 
@@ -73,12 +75,16 @@ function ZoomControls({
 export default function DitherLab() {
   const { close, modal } = useWindow();
   const [state, setState] = useAppState('dither');
+  const [settings, set] = useAppSettings('dither');
 
   const hiddenInputRef = useRef<HTMLInputElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
 
   const [rt, setRt] = useState<HTMLCanvasElement | null>(null);
   const [img, setImg] = useState<HTMLImageElement | null>(null);
+
+  const [status, setStatus] = useState<'ready' | 'rendering' | 'done'>('ready');
+  const [renderTime, setRenderTime] = useState(0);
 
   const uploadImage = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const input = ev.target;
@@ -225,10 +231,37 @@ export default function DitherLab() {
             <Menu.Item label="Zoom to fit" onSelect={() => zoomTo('fit')} />
             <Menu.Item label="Zoom to fill" onSelect={() => zoomTo('fill')} />
           </Menu.Sub>
+
+          <Menu.Separator />
+
+          <Menu.CheckboxItem
+            label="Status Bar"
+            checked={settings.showStatusBar}
+            onCheckedChange={(checked) => set({ showStatusBar: checked })}
+          />
+          <Menu.CheckboxItem
+            label="Palette Editor"
+            checked={settings.showPaletteEditor}
+            onCheckedChange={(checked) => set({ showPaletteEditor: checked })}
+          />
+          <Menu.Sub label="Tool Panel">
+            <Menu.RadioGroup
+              value={settings.panelSide}
+              onValueChange={(value) => set({ panelSide: value as any })}
+            >
+              <Menu.RadioItem label="Left" value="left" />
+              <Menu.RadioItem label="Right" value="right" />
+            </Menu.RadioGroup>
+          </Menu.Sub>
         </Menu.Root>
       </div>
 
-      <div className="grow flex flex-row gap-0.5 min-h-0">
+      <div
+        className={cn('grow flex gap-0.5 min-h-0', {
+          'flex-row': settings.panelSide === 'right',
+          'flex-row-reverse': settings.panelSide === 'left',
+        })}
+      >
         <div className="grow flex flex-col gap-0.5 min-w-0">
           <div className="flex flex-row bevel-light-inset p-px select-none">
             <div className="grow flex flex-row items-center bevel-light p-px">
@@ -249,7 +282,13 @@ export default function DitherLab() {
 
           <ScrollContainer className="grow min-w-0 min-h-0" ref={viewportRef}>
             <div className="scroll-center">
-              <GlRenderer rt={rt} img={img} setRt={setRt} />
+              <GlRenderer
+                rt={rt}
+                img={img}
+                setRt={setRt}
+                setStatus={setStatus}
+                setRenderTime={setRenderTime}
+              />
             </div>
           </ScrollContainer>
         </div>
@@ -266,6 +305,27 @@ export default function DitherLab() {
           </div>
         </ScrollContainer>
       </div>
+
+      {settings.showStatusBar ? (
+        <div className="flex flex-row gap-0.5">
+          <div className="py-0.5 px-2 bevel-light-inset flex-[3]">
+            {status === 'done'
+              ? `Done (${renderTime.toFixed(0)}ms)`
+              : status === 'ready'
+              ? 'Ready'
+              : 'Rendering...'}
+          </div>
+          <div className="py-0.5 px-2 bevel-light-inset flex-1">
+            {state.image?.filename}
+          </div>
+          <div className="py-0.5 px-2 bevel-light-inset flex-1">
+            {state.renderWidth}x{state.renderHeight}
+          </div>
+          <div className="py-0.5 px-2 bevel-light-inset flex-1">
+            {state.palette.name}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

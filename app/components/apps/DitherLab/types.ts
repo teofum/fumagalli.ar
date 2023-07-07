@@ -1,6 +1,18 @@
 import Win4bRGBI from '~/dither/palettes/Win4bRGBI';
 import { type Palette, PaletteGroup } from '~/dither/palettes/types';
 
+export interface DitherLabSettings {
+  showStatusBar: boolean;
+  showPaletteEditor: boolean;
+  panelSide: 'left' | 'right';
+}
+
+export const defaultDitherLabSettings: DitherLabSettings = {
+  showStatusBar: true,
+  showPaletteEditor: false,
+  panelSide: 'right',
+};
+
 export interface DitherLabState {
   image?: {
     filename: string;
