@@ -18,7 +18,8 @@ export default function DOSEmu() {
         path: '/system/Applications/dos/games',
         typeFilter: ['dos'],
         modalCallback: (file, filePath) => {
-          if (file.type === 'dos') setState({ bundleUrl: `/fs${filePath}` });
+          if (file.type === 'dos')
+            setState({ bundleUrl: `/fs${filePath}`, title: file.name });
         },
       }),
     );
@@ -63,7 +64,7 @@ export default function DOSEmu() {
             : 'Pointer lock OFF'}
         </div>
         <div className="grow bg-surface bevel-light-inset py-0.5 px-1">
-          DOOM
+          {state.title}
         </div>
       </div>
     </div>
