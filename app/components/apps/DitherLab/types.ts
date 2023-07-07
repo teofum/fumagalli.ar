@@ -22,6 +22,8 @@ export interface DitherLabState {
   process: string;
   settings: { [key: string]: number | string };
   uniforms: { [key: string]: number };
+
+  zoom: number;
 }
 
 export const defaultDitherLabState: DitherLabState = {
@@ -40,4 +42,6 @@ export const defaultDitherLabState: DitherLabState = {
     threshold: 'bayer8',
   },
   uniforms: { u_err_mult: 0.2, u_gamma: 2.2, u_variance: 3 },
+
+  zoom: 1,
 };

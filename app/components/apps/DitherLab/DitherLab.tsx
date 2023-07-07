@@ -12,11 +12,70 @@ import { files } from '../Files';
 import Menu from '~/components/ui/Menu';
 import Button from '~/components/ui/Button';
 
+export const ZOOM_STOPS = [1, 1.5, 2, 3, 4, 6, 8, 16, 32, 64];
+
+interface ZoomControlsProps {
+  zoom: number;
+  setZoom: (zoom: number) => void;
+  zoomOut: () => void;
+  zoomIn: () => void;
+  zoomTo: (mode: 'fit' | 'fill') => void;
+}
+
+function ZoomControls({
+  zoom,
+  setZoom,
+  zoomOut,
+  zoomIn,
+  zoomTo,
+}: ZoomControlsProps) {
+  return (
+    <>
+      <span className="px-2">Zoom</span>
+      <div className="bg-default bevel-content p-0.5 flex flex-row">
+        <Button
+          className="py-0.5 px-1.5"
+          onClick={zoomOut}
+          disabled={zoom <= (ZOOM_STOPS.at(0) ?? 0)}
+        >
+          <span>-</span>
+        </Button>
+        <div className="py-0.5 px-2 w-12">{(zoom * 100).toFixed(0)}%</div>
+        <Button
+          className="py-0.5 px-1.5"
+          onClick={zoomIn}
+          disabled={zoom >= (ZOOM_STOPS.at(-1) ?? 0)}
+        >
+          <span>+</span>
+        </Button>
+      </div>
+      <Button variant="light" className="py-1 px-2" onClick={() => setZoom(1)}>
+        Reset
+      </Button>
+      <Button
+        variant="light"
+        className="py-1 px-2"
+        onClick={() => zoomTo('fit')}
+      >
+        Fit
+      </Button>
+      <Button
+        variant="light"
+        className="py-1 px-2"
+        onClick={() => zoomTo('fill')}
+      >
+        Fill
+      </Button>
+    </>
+  );
+}
+
 export default function DitherLab() {
   const { close, modal } = useWindow();
   const [state, setState] = useAppState('dither');
 
   const hiddenInputRef = useRef<HTMLInputElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
 
   const [rt, setRt] = useState<HTMLCanvasElement | null>(null);
   const [img, setImg] = useState<HTMLImageElement | null>(null);
@@ -83,6 +142,38 @@ export default function DitherLab() {
     link.click();
   };
 
+  const zoom = state.zoom;
+  const setZoom = (zoom: number) => {
+    setState({ zoom });
+  };
+
+  const zoomOut = () => {
+    const nextZoomStop = ZOOM_STOPS.filter((stop) => stop < zoom).at(-1);
+    setZoom(nextZoomStop ?? 1);
+  };
+
+  const zoomIn = () => {
+    const nextZoomStop = ZOOM_STOPS.filter((stop) => stop > zoom).at(0);
+    setZoom(nextZoomStop ?? 1);
+  };
+
+  const zoomTo = (mode: 'fit' | 'fill') => {
+    if (!viewportRef.current || !rt) return;
+
+    const { width: rtWidth, height: rtHeight } = rt;
+    const { width, height } = viewportRef.current.getBoundingClientRect();
+
+    // Account for image border and scrollbar
+    const zoomToFitWidth = (width - 18) / rtWidth;
+    const zoomToFitHeight = (height - 18) / rtHeight;
+
+    setZoom(
+      mode === 'fit'
+        ? Math.min(zoomToFitWidth, zoomToFitHeight)
+        : Math.max(zoomToFitWidth, zoomToFitHeight),
+    );
+  };
+
   return (
     <div className="flex flex-col gap-0.5 min-w-0">
       <input
@@ -114,6 +205,27 @@ export default function DitherLab() {
 
           <Menu.Item label="Exit" onSelect={close} />
         </Menu.Root>
+
+        <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>
+          <Menu.Sub label="Zoom">
+            <Menu.RadioGroup
+              value={zoom.toString()}
+              onValueChange={(value) => setZoom(Number(value))}
+            >
+              <Menu.RadioItem value="1" label="100%" />
+              <Menu.RadioItem value="2" label="200%" />
+              <Menu.RadioItem value="3" label="300%" />
+              <Menu.RadioItem value="4" label="400%" />
+              <Menu.RadioItem value="6" label="600%" />
+              <Menu.RadioItem value="8" label="800%" />
+            </Menu.RadioGroup>
+
+            <Menu.Separator />
+
+            <Menu.Item label="Zoom to fit" onSelect={() => zoomTo('fit')} />
+            <Menu.Item label="Zoom to fill" onSelect={() => zoomTo('fill')} />
+          </Menu.Sub>
+        </Menu.Root>
       </div>
 
       <div className="grow flex flex-row gap-0.5 min-h-0">
@@ -124,9 +236,21 @@ export default function DitherLab() {
                 <img src="fs/system/Resources/UI/save2.png" alt="Save" />
               </Button>
             </div>
+            <div className="flex flex-row items-center bevel-light p-px">
+              <ZoomControls
+                zoom={zoom}
+                setZoom={setZoom}
+                zoomOut={zoomOut}
+                zoomIn={zoomIn}
+                zoomTo={zoomTo}
+              />
+            </div>
           </div>
-          <ScrollContainer centerContent className="grow min-w-0 min-h-0">
-            <GlRenderer rt={rt} img={img} setRt={setRt} />
+
+          <ScrollContainer className="grow min-w-0 min-h-0" ref={viewportRef}>
+            <div className="scroll-center">
+              <GlRenderer rt={rt} img={img} setRt={setRt} />
+            </div>
           </ScrollContainer>
         </div>
 

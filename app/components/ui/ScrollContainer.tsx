@@ -10,23 +10,23 @@ import cn from 'classnames';
 
 type ScrollContainerProps = {
   viewportProps?: React.ComponentProps<typeof ScrollAreaViewport>;
-  centerContent?: boolean;
   hide?: 'x' | 'y';
 } & React.ComponentProps<typeof ScrollArea>;
 
 const ScrollContainer = React.forwardRef<HTMLDivElement, ScrollContainerProps>(
   function ScrollContainer(
-    {
-      children,
-      className,
-      type = 'always',
-      viewportProps,
-      centerContent = false,
-      hide,
-      ...props
-    },
+    { children, className, type = 'always', viewportProps, hide, ...props },
     ref,
   ) {
+    const setViewportSizeVars = (el: HTMLDivElement | null) => {
+      if (!el) return;
+
+      const { width, height } = el.getBoundingClientRect();
+
+      el.style.setProperty('--scroll-viewport-width', `${width}px`);
+      el.style.setProperty('--scroll-viewport-height', `${height}px`);
+    };
+
     return (
       <ScrollArea
         type={type}
@@ -39,10 +39,9 @@ const ScrollContainer = React.forwardRef<HTMLDivElement, ScrollContainerProps>(
         {...props}
       >
         <ScrollAreaViewport
-          className={cn('w-full h-full', {
-            'scroll-viewport-center': centerContent,
-          })}
+          className="w-full h-full"
           {...viewportProps}
+          ref={setViewportSizeVars}
         >
           {children}
         </ScrollAreaViewport>

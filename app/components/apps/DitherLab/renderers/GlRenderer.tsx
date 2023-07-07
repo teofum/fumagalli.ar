@@ -90,6 +90,7 @@ export default function GlRenderer({ rt, setRt, img }: GlRendererProps) {
       className="border border-default"
       width={state.renderWidth}
       height={state.renderHeight}
+      style={{ minWidth: `${state.renderWidth * state.zoom + 2}px` }}
     />
   );
 }

@@ -158,11 +158,10 @@
     display: none;
   }
 
-  .scroll-viewport-center > div {
-    display: flex !important;
-    min-width: 100%;
-    min-height: 100%;
-    align-items: center;
-    justify-content: center;
+  .scroll-center {
+    @apply flex items-center justify-center;
+
+    min-width: var(--scroll-viewport-width);
+    min-height: var(--scroll-viewport-height);
   }
 }

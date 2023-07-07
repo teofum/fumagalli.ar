@@ -169,14 +169,16 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
         </Button>
       </Toolbar>
 
-      <ScrollContainer centerContent className="flex-1" ref={viewportRef}>
-        <div className="flex w-min border border-default bg-surface-light bg-checkered-lg select-none">
-          <img
-            ref={imageRef}
-            src={resourceUrl}
-            alt={state.file?.altText}
-            style={{ width, minWidth: width }}
-          />
+      <ScrollContainer className="flex-1" ref={viewportRef}>
+        <div className="scroll-center">
+          <div className="flex w-min border border-default bg-surface-light bg-checkered-lg select-none">
+            <img
+              ref={imageRef}
+              src={resourceUrl}
+              alt={state.file?.altText}
+              style={{ width, minWidth: width }}
+            />
+          </div>
         </div>
       </ScrollContainer>
     </>
