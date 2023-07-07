@@ -6,6 +6,7 @@ import useGlRenderer, {
   type RenderSettings,
 } from '~/dither/renderers/useGlRenderer';
 import { gpuProcess } from '../process';
+import ScrollContainer from '~/components/ui/ScrollContainer';
 
 const clistSize: { [key: string]: number | undefined } = {
   high: 64,
@@ -13,23 +14,25 @@ const clistSize: { [key: string]: number | undefined } = {
   low: 4,
 };
 
-interface GlRendererProps {
+export type RendererProps = React.PropsWithChildren<{
   rt: HTMLCanvasElement | null;
   setRt: React.Dispatch<React.SetStateAction<HTMLCanvasElement | null>>;
   img: HTMLImageElement | null;
+  status: 'ready' | 'rendering' | 'done';
   setStatus: React.Dispatch<
     React.SetStateAction<'ready' | 'rendering' | 'done'>
   >;
   setRenderTime: React.Dispatch<React.SetStateAction<number>>;
-}
+  viewportRef: React.RefObject<HTMLDivElement>;
+}>;
 
 export default function GlRenderer({
   rt,
   setRt,
   img,
-  setStatus,
-  setRenderTime,
-}: GlRendererProps) {
+  viewportRef,
+  children,
+}: RendererProps) {
   const [state, setState] = useAppState('dither');
 
   const settings = useMemo<RenderSettings>(
@@ -95,12 +98,22 @@ export default function GlRenderer({
   ]);
 
   return (
-    <canvas
-      ref={(el) => setRt(el)}
-      className="border border-default"
-      width={state.renderWidth}
-      height={state.renderHeight}
-      style={{ minWidth: `${state.renderWidth * state.zoom + 2}px` }}
-    />
+    <div className="grow flex flex-col gap-0.5 min-w-0">
+      <div className="flex flex-row bevel-light-inset p-px select-none">
+        {children}
+      </div>
+
+      <ScrollContainer className="grow min-w-0 min-h-0" ref={viewportRef}>
+        <div className="scroll-center">
+          <canvas
+            ref={(el) => setRt(el)}
+            className="border border-default"
+            width={state.renderWidth}
+            height={state.renderHeight}
+            style={{ minWidth: `${state.renderWidth * state.zoom + 2}px` }}
+          />
+        </div>
+      </ScrollContainer>
+    </div>
   );
 }

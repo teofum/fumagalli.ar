@@ -5,33 +5,46 @@ import { useAppState } from '~/components/desktop/Window/context';
 import useSoftwareRenderer from '~/dither/renderers/useSoftwareRenderer';
 import type softwareRenderProcess from '~/dither/software';
 import Button from '~/components/ui/Button';
-
-interface GlRendererProps {
-  rt: HTMLCanvasElement | null;
-  setRt: React.Dispatch<React.SetStateAction<HTMLCanvasElement | null>>;
-  img: HTMLImageElement | null;
-  setStatus: React.Dispatch<
-    React.SetStateAction<'ready' | 'rendering' | 'done'>
-  >;
-  setRenderTime: React.Dispatch<React.SetStateAction<number>>;
-}
+import type { RendererProps } from './GlRenderer';
+import ScrollContainer from '~/components/ui/ScrollContainer';
 
 export default function SoftwareRenderer({
   rt,
   setRt,
   img,
+  status,
   setStatus,
   setRenderTime,
-}: GlRendererProps) {
+  viewportRef,
+  children,
+}: RendererProps) {
   const [state, setState] = useAppState('dither');
 
-  const { render } = useSoftwareRenderer(
+  const renderer = useSoftwareRenderer(
     rt,
     img,
     state.process as keyof typeof softwareRenderProcess,
     state.palette,
     state.settings,
   );
+
+  const render = async () => {
+    const start = performance.now();
+    setStatus('rendering');
+    await renderer.render();
+    const time = performance.now() - start;
+    setStatus('done');
+    setRenderTime(time);
+  };
+
+  const stop = () => {
+    renderer.stop();
+    setStatus('ready');
+  };
+
+  useEffect(() => {
+    setStatus((s) => (s === 'done' ? 'ready' : s));
+  }, [state, setStatus]);
 
   useEffect(() => {
     console.log('resize');
@@ -76,15 +89,40 @@ export default function SoftwareRenderer({
   ]);
 
   return (
-    <>
-      <Button className="p-2" onClick={render}>Render</Button>
-      <canvas
-        ref={(el) => setRt(el)}
-        className="border border-default"
-        width={state.renderWidth}
-        height={state.renderHeight}
-        style={{ minWidth: `${state.renderWidth * state.zoom + 2}px` }}
-      />
-    </>
+    <div className="grow flex flex-col gap-0.5 min-w-0">
+      <div className="flex flex-row bevel-light-inset p-px select-none">
+        {children}
+        <div className="flex flex-row items-center bevel-light p-px">
+          <Button
+            className="py-1 px-2 w-20"
+            onClick={status === 'rendering' ? stop : render}
+          >
+            <div className="flex flex-row items-center justify-center gap-1">
+              <span>{status === 'rendering' ? 'Stop' : 'Render'}</span>
+              {status === 'rendering' ? null : (
+                <img
+                  src={`/fs/system/Resources/UI/light_${
+                    status === 'ready' ? 'on' : 'off'
+                  }.png`}
+                  alt=""
+                />
+              )}
+            </div>
+          </Button>
+        </div>
+      </div>
+
+      <ScrollContainer className="grow min-w-0 min-h-0" ref={viewportRef}>
+        <div className="scroll-center">
+          <canvas
+            ref={(el) => setRt(el)}
+            className="border border-default"
+            width={state.renderWidth}
+            height={state.renderHeight}
+            style={{ minWidth: `${state.renderWidth * state.zoom + 2}px` }}
+          />
+        </div>
+      </ScrollContainer>
+    </div>
   );
 }

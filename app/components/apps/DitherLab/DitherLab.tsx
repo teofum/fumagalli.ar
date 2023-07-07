@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import { useAppState, useWindow } from '~/components/desktop/Window/context';
 import ScrollContainer from '~/components/ui/ScrollContainer';
@@ -183,6 +183,11 @@ export default function DitherLab() {
     );
   };
 
+  const Renderer = useMemo(
+    () => (state.device === DitherLabDevice.GL ? GlRenderer : SoftwareRenderer),
+    [state.device],
+  );
+
   return (
     <div className="flex flex-col gap-0.5 min-w-0 select-none">
       <input
@@ -265,46 +270,30 @@ export default function DitherLab() {
           'flex-row-reverse': settings.panelSide === 'left',
         })}
       >
-        <div className="grow flex flex-col gap-0.5 min-w-0">
-          <div className="flex flex-row bevel-light-inset p-px select-none">
-            <div className="grow flex flex-row items-center bevel-light p-px">
-              <Button variant="light" className="p-1" onClick={download}>
-                <img src="fs/system/Resources/UI/save2.png" alt="Save" />
-              </Button>
-            </div>
-            <div className="flex flex-row items-center bevel-light p-px">
-              <ZoomControls
-                zoom={zoom}
-                setZoom={setZoom}
-                zoomOut={zoomOut}
-                zoomIn={zoomIn}
-                zoomTo={zoomTo}
-              />
-            </div>
+        <Renderer
+          rt={rt}
+          img={img}
+          setRt={setRt}
+          status={status}
+          setStatus={setStatus}
+          setRenderTime={setRenderTime}
+          viewportRef={viewportRef}
+        >
+          <div className="grow flex flex-row items-center bevel-light p-px">
+            <Button variant="light" className="p-1" onClick={download}>
+              <img src="fs/system/Resources/UI/save2.png" alt="Save" />
+            </Button>
           </div>
-
-          <ScrollContainer className="grow min-w-0 min-h-0" ref={viewportRef}>
-            <div className="scroll-center">
-              {state.device === DitherLabDevice.GL ? (
-                <GlRenderer
-                  rt={rt}
-                  img={img}
-                  setRt={setRt}
-                  setStatus={setStatus}
-                  setRenderTime={setRenderTime}
-                />
-              ) : (
-                <SoftwareRenderer
-                  rt={rt}
-                  img={img}
-                  setRt={setRt}
-                  setStatus={setStatus}
-                  setRenderTime={setRenderTime}
-                />
-              )}
-            </div>
-          </ScrollContainer>
-        </div>
+          <div className="flex flex-row items-center bevel-light p-px">
+            <ZoomControls
+              zoom={zoom}
+              setZoom={setZoom}
+              zoomOut={zoomOut}
+              zoomIn={zoomIn}
+              zoomTo={zoomTo}
+            />
+          </div>
+        </Renderer>
 
         <div className="flex flex-row gap-0.5">
           <ScrollContainer
