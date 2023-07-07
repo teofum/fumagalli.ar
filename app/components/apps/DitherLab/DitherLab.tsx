@@ -13,6 +13,7 @@ import Menu from '~/components/ui/Menu';
 import Button from '~/components/ui/Button';
 import { useAppSettings } from '~/stores/system';
 import cn from 'classnames';
+import DitherLabPaletteEditor from './panels/DitherLabPaletteEditor';
 
 export const ZOOM_STOPS = [1, 1.5, 2, 3, 4, 6, 8, 16, 32, 64];
 
@@ -181,7 +182,7 @@ export default function DitherLab() {
   };
 
   return (
-    <div className="flex flex-col gap-0.5 min-w-0">
+    <div className="flex flex-col gap-0.5 min-w-0 select-none">
       <input
         type="file"
         className="hidden"
@@ -244,7 +245,7 @@ export default function DitherLab() {
             checked={settings.showPaletteEditor}
             onCheckedChange={(checked) => set({ showPaletteEditor: checked })}
           />
-          <Menu.Sub label="Tool Panel">
+          <Menu.Sub label="Tool Panels">
             <Menu.RadioGroup
               value={settings.panelSide}
               onValueChange={(value) => set({ panelSide: value as any })}
@@ -293,17 +294,27 @@ export default function DitherLab() {
           </ScrollContainer>
         </div>
 
-        <ScrollContainer
-          hide="x"
-          className="bg-surface w-[14.5rem] min-w-[14.5rem]"
-        >
-          <div className="flex flex-col w-[13.5rem] min-w-[13.5rem]">
-            <DitherLabImageInfo upload={upload} open={open} />
-            <DitherLabResizeOptions />
-            <DitherLabPaletteSelect />
-            <DitherLabRenderOptions />
-          </div>
-        </ScrollContainer>
+        <div className="flex flex-row gap-0.5">
+          <ScrollContainer
+            hide="x"
+            className="bg-surface w-[14.5rem] min-w-[14.5rem]"
+          >
+            <div className="flex flex-col w-[13.5rem] min-w-[13.5rem]">
+              <DitherLabImageInfo upload={upload} open={open} />
+              <DitherLabResizeOptions />
+              <DitherLabPaletteSelect
+                openEditor={() => set({ showPaletteEditor: true })}
+              />
+              <DitherLabRenderOptions />
+            </div>
+          </ScrollContainer>
+
+          {settings.showPaletteEditor ? (
+            <DitherLabPaletteEditor
+              close={() => set({ showPaletteEditor: false })}
+            />
+          ) : null}
+        </div>
       </div>
 
       {settings.showStatusBar ? (

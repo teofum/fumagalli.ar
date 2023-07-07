@@ -5,12 +5,16 @@ export interface DitherLabSettings {
   showStatusBar: boolean;
   showPaletteEditor: boolean;
   panelSide: 'left' | 'right';
+
+  customPalettes: Palette[];
 }
 
 export const defaultDitherLabSettings: DitherLabSettings = {
   showStatusBar: true,
   showPaletteEditor: false,
   panelSide: 'right',
+
+  customPalettes: [],
 };
 
 export interface DitherLabState {

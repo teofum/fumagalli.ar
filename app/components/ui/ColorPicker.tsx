@@ -2,40 +2,44 @@ import { useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import * as Slider from '@radix-ui/react-slider';
 import cn from 'classnames';
-import parse from 'parse-css-color';
 
 import Button from './Button';
 import { ToggleButton, ToggleGroup } from './ToggleGroup';
 
 const PRESET_COLORS = [
-  '#ffffff',
-  '#000000',
-  '#c0c0c0',
-  '#808080',
-  '#ff0000',
-  '#800000',
-  '#ffff00',
-  '#808000',
-  '#00ff00',
-  '#008000',
-  '#00ffff',
-  '#008080',
-  '#0000ff',
-  '#000080',
-  '#ff00ff',
-  '#800080',
+  [0xff, 0xff, 0xff],
+  [0x00, 0x00, 0x00],
+  [0xc0, 0xc0, 0xc0],
+  [0x80, 0x80, 0x80],
+  [0xff, 0x00, 0x00],
+  [0x80, 0x00, 0x00],
+  [0xff, 0xff, 0x00],
+  [0x80, 0x80, 0x00],
+  [0x00, 0xff, 0x00],
+  [0x00, 0x80, 0x00],
+  [0x00, 0xff, 0xff],
+  [0x00, 0x80, 0x80],
+  [0x00, 0x00, 0xff],
+  [0x00, 0x00, 0x80],
+  [0xff, 0x00, 0xff],
+  [0x80, 0x00, 0x80],
 ];
 
 type ColorSliderProps = {
   value: number;
   onValueChange?: (value: number) => void;
+  onValueCommit?: (value: number) => void;
   trackProps?: React.ComponentProps<typeof Slider.Track>;
   thumbProps?: React.ComponentProps<typeof Slider.Thumb>;
-} & Omit<React.ComponentProps<typeof Slider.Root>, 'value' | 'onValueChange'>;
+} & Omit<
+  React.ComponentProps<typeof Slider.Root>,
+  'value' | 'onValueChange' | 'onValueCommit'
+>;
 
 function ColorSlider({
   value,
   onValueChange,
+  onValueCommit,
   className,
   trackProps,
   thumbProps,
@@ -43,7 +47,6 @@ function ColorSlider({
 }: ColorSliderProps) {
   return (
     <div className="flex flex-row gap-2 items-center">
-      <span className="w-6 text-right">{value}</span>
       <Slider.Root
         className={cn(
           'grow relative flex items-center touch-none h-6',
@@ -51,6 +54,7 @@ function ColorSlider({
         )}
         value={[value]}
         onValueChange={(value) => onValueChange?.(value[0])}
+        onValueCommit={(value) => onValueCommit?.(value[0])}
         {...props}
       >
         <Slider.Track
@@ -68,13 +72,18 @@ function ColorSlider({
           )}
         />
       </Slider.Root>
+      <span className="w-6 text-right">{value}</span>
     </div>
   );
 }
 
 interface ColorPickerProps {
-  value?: string;
-  onValueChange?: (value: string) => void;
+  value?: number[];
+  onValueChange?: (value: number[]) => void;
+  onValueCommit?: (value: number[]) => void;
+
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 
   className?: string;
 }
@@ -82,42 +91,66 @@ interface ColorPickerProps {
 export default function ColorPicker({
   value,
   onValueChange,
+  onValueCommit,
+  open,
+  onOpenChange,
   className,
 }: ColorPickerProps) {
-  const defaultMode = !value || PRESET_COLORS.includes(value)
-    ? 'presets'
-    : 'custom';
+  const defaultMode =
+    !value ||
+    PRESET_COLORS.some(
+      ([r, g, b]) => r === value[0] && g === value[1] && b === value[2],
+    )
+      ? 'presets'
+      : 'custom';
 
-  const [open, setOpen] = useState(false);
+  const [_open, _setOpen] = useState(false);
+  const isOpen = open ?? _open;
+  const setOpen = (open: boolean) =>
+    onOpenChange ? onOpenChange(open) : _setOpen(open);
+
   const [mode, setMode] = useState<'presets' | 'custom'>(defaultMode);
 
-  const color = parse(value ?? '#000');
-  const [r, setR] = useState(color?.values[0] ?? 0);
-  const [g, setG] = useState(color?.values[1] ?? 0);
-  const [b, setB] = useState(color?.values[2] ?? 0);
+  const [r, setR] = useState(value?.[0] ?? 0);
+  const [g, setG] = useState(value?.[1] ?? 0);
+  const [b, setB] = useState(value?.[2] ?? 0);
 
-  const commitCustomValue = () => {
-    onValueChange?.(`rgb(${r}, ${g}, ${b})`);
+  const change = ([r, g, b]: number[]) => {
+    setR(r);
+    setG(g);
+    setB(b);
+
+    onValueChange?.([r, g, b]);
+  };
+  const commit = ([r, g, b]: number[]) => {
+    setR(r);
+    setG(g);
+    setB(b);
+
+    onValueChange?.([r, g, b]);
+    onValueCommit?.([r, g, b]);
   };
 
   return (
-    <Popover.Root open={open} onOpenChange={setOpen}>
+    <Popover.Root open={isOpen} onOpenChange={setOpen}>
       <Popover.Trigger asChild>
         <Button className={cn('p-1', { 'bevel-inset': open }, className)}>
           {value ? (
             <div
-              className="min-w-12 w-full h-4 border border-black"
-              style={{ backgroundColor: value }}
+              className="min-w-12 w-full h-4 bevel-light-inset"
+              style={{
+                backgroundColor: `rgb(${value[0]} ${value[1]} ${value[2]})`,
+              }}
             />
           ) : (
-            'No color selected'
+            <div>No color selected</div>
           )}
         </Button>
       </Popover.Trigger>
 
       <Popover.Portal>
         <Popover.Content
-          className="bg-surface bevel-window p-1 z-2000 flex flex-col gap-1 w-[150px] select-none"
+          className="bg-surface bevel-window p-2 z-2000 flex flex-col w-52 gap-1 select-none"
           align="start"
         >
           <ToggleGroup
@@ -134,14 +167,14 @@ export default function ColorPicker({
           </ToggleGroup>
 
           {mode === 'presets' ? (
-            <div className="grid grid-rows-2 gap-0.5 self-start grid-flow-col">
-              {PRESET_COLORS.map((color) => (
+            <div className="grid grid-rows-2 self-start grid-flow-col">
+              {PRESET_COLORS.map(([r, g, b]) => (
                 <button
-                  className="button bevel-content w-4 h-4"
-                  style={{ backgroundColor: color }}
-                  key={color}
+                  className="button bevel-content w-6 h-6"
+                  style={{ backgroundColor: `rgb(${r} ${g} ${b})` }}
+                  key={`${r}-${g}-${b}`}
                   onClick={() => {
-                    onValueChange?.(color);
+                    commit([r, g, b]);
                     setOpen(false);
                   }}
                 />
@@ -149,12 +182,15 @@ export default function ColorPicker({
             </div>
           ) : (
             <div className="flex flex-col gap-1">
+              <div
+                className="w-full h-6 bevel-content"
+                style={{ backgroundColor: `rgb(${r} ${g} ${b})` }}
+              />
+
               <ColorSlider
                 value={r}
-                onValueChange={(value) => {
-                  setR(value);
-                  commitCustomValue();
-                }}
+                onValueChange={(value) => change([value, g, b])}
+                onValueCommit={(value) => commit([value, g, b])}
                 max={255}
                 trackProps={{
                   style: {
@@ -164,10 +200,8 @@ export default function ColorPicker({
               />
               <ColorSlider
                 value={g}
-                onValueChange={(value) => {
-                  setG(value);
-                  commitCustomValue();
-                }}
+                onValueChange={(value) => change([r, value, b])}
+                onValueCommit={(value) => commit([r, value, b])}
                 max={255}
                 trackProps={{
                   style: {
@@ -177,10 +211,8 @@ export default function ColorPicker({
               />
               <ColorSlider
                 value={b}
-                onValueChange={(value) => {
-                  setB(value);
-                  commitCustomValue();
-                }}
+                onValueChange={(value) => change([r, g, value])}
+                onValueCommit={(value) => commit([r, g, value])}
                 max={255}
                 trackProps={{
                   style: {

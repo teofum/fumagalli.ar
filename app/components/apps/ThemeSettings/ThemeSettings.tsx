@@ -6,15 +6,33 @@ import { useWindow } from '~/components/desktop/Window/context';
 import Button from '~/components/ui/Button';
 import Divider from '~/components/ui/Divider';
 import ColorPicker from '~/components/ui/ColorPicker';
+import parseCSSColor from 'parse-css-color';
+import { useState } from 'react';
 
 export default function ThemeSettings() {
   const { theme, updateTheme, themeCustomizations, updateThemeCustomizations } =
     useSystemStore();
   const { close } = useWindow();
 
+  const [bg, setBg] = useState<number[] | undefined>(() => {
+    const bg = themeCustomizations.backgroundColor;
+    if (!bg) return;
+
+    return parseCSSColor(bg)?.values;
+  });
+
   const selectTheme = (value: string) => {
     const newTheme = themes.find((t) => t.cssClass === value);
     if (newTheme) updateTheme(newTheme);
+  };
+
+  const updateBackground = (value?: number[]) => {
+    setBg(value);
+
+    if (value) {
+      const [r, g, b] = value;
+      updateThemeCustomizations({ backgroundColor: `rgb(${r} ${g} ${b})` });
+    } else updateThemeCustomizations({ backgroundColor: undefined });
   };
 
   return (
@@ -44,18 +62,14 @@ export default function ThemeSettings() {
 
         <ColorPicker
           className="flex-1"
-          value={themeCustomizations.backgroundColor}
-          onValueChange={(value) =>
-            updateThemeCustomizations({ backgroundColor: value })
-          }
+          value={bg}
+          onValueCommit={updateBackground}
         />
 
         <Button
           className="px-2 py-1 w-16"
           disabled={!themeCustomizations.backgroundColor}
-          onClick={() =>
-            updateThemeCustomizations({ backgroundColor: undefined })
-          }
+          onClick={() => updateBackground(undefined)}
         >
           <span>Reset</span>
         </Button>
