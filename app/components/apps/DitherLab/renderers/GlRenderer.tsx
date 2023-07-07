@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { useAppState } from '~/components/desktop/Window/context';
 
@@ -13,11 +13,14 @@ const clistSize: { [key: string]: number | undefined } = {
   low: 4,
 };
 
-export default function GlRenderer() {
-  const [state, setState] = useAppState('dither');
+interface GlRendererProps {
+  rt: HTMLCanvasElement | null;
+  setRt: React.Dispatch<React.SetStateAction<HTMLCanvasElement | null>>;
+  img: HTMLImageElement | null;
+}
 
-  const rtRef = useRef<HTMLCanvasElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
+export default function GlRenderer({ rt, setRt, img }: GlRendererProps) {
+  const [state, setState] = useAppState('dither');
 
   const settings = useMemo<RenderSettings>(
     () => ({
@@ -30,20 +33,19 @@ export default function GlRenderer() {
   const process = useMemo(() => gpuProcess[state.process], [state.process]);
 
   const { render } = useGlRenderer(
-    rtRef.current,
-    imgRef.current,
+    rt,
+    img,
     process.shader,
     state.palette,
     settings,
     state.uniforms,
   );
-  useEffect(render, [render, state.renderWidth, state.renderHeight]);
+  useEffect(render, [render, state.renderWidth, state.renderHeight, rt, img]);
 
   useEffect(() => {
     console.log('resize');
 
     // Get the DOM element for the render target canvas
-    const rt = rtRef.current;
     if (!rt) return;
 
     const [iw, ih] = [state.naturalWidth ?? 0, state.naturalHeight ?? 0];
@@ -79,24 +81,15 @@ export default function GlRenderer() {
     state.naturalWidth,
     state.naturalHeight,
     setState,
+    rt,
   ]);
 
   return (
-    <>
-      {state.image ? (
-        <img
-          className="hidden"
-          src={state.image.url}
-          alt={state.image.filename}
-          ref={imgRef}
-        />
-      ) : null}
-      <canvas
-        ref={rtRef}
-        className="border border-default"
-        width={state.renderWidth}
-        height={state.renderHeight}
-      />
-    </>
+    <canvas
+      ref={(el) => setRt(el)}
+      className="border border-default"
+      width={state.renderWidth}
+      height={state.renderHeight}
+    />
   );
 }

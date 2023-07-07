@@ -2382,7 +2382,7 @@ const FS_ROOT: Directory = {
               class: 'dir',
               name: 'UI',
               created: 1687638461,
-              modified: 1687674052,
+              modified: 1688688859,
               items: [
                 {
                   class: 'file',
@@ -2543,6 +2543,14 @@ const FS_ROOT: Directory = {
                   created: 1687441743,
                   modified: 1687441743,
                   size: 165,
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'save2.png',
+                  created: 1688688859,
+                  modified: 1688688859,
+                  size: 403,
                 },
                 {
                   class: 'file',
