@@ -5,6 +5,7 @@ import cn from 'classnames';
 
 import Button from './Button';
 import { ToggleButton, ToggleGroup } from './ToggleGroup';
+import ArrowDown from './icons/ArrowDown';
 
 const PRESET_COLORS = [
   [0xff, 0xff, 0xff],
@@ -134,18 +135,22 @@ export default function ColorPicker({
   return (
     <Popover.Root open={isOpen} onOpenChange={setOpen}>
       <Popover.Trigger asChild>
-        <Button className={cn('p-1', { 'bevel-inset': open }, className)}>
-          {value ? (
-            <div
-              className="min-w-12 w-full h-4 bevel-light-inset"
-              style={{
-                backgroundColor: `rgb(${value[0]} ${value[1]} ${value[2]})`,
-              }}
-            />
-          ) : (
-            <div>No color selected</div>
+        <div
+          className={cn(
+            'min-w-12 w-full h-6 bevel-content p-0.5 flex flex-row items-center',
+            className,
           )}
-        </Button>
+          style={{
+            backgroundColor: value
+              ? `rgb(${value[0]} ${value[1]} ${value[2]})`
+              : undefined,
+          }}
+        >
+          <div className="grow">{value ? null : 'No color selected'}</div>
+          <Button className={cn('py-1', { 'bevel-inset': open })}>
+            <ArrowDown />
+          </Button>
+        </div>
       </Popover.Trigger>
 
       <Popover.Portal>
