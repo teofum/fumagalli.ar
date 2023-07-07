@@ -9,8 +9,8 @@ export const ditherLab = (
 
   title: 'DitherLab 2',
 
-  width: 640,
+  width: 800,
   height: 400,
-  minWidth: 640,
+  minWidth: 800,
   minHeight: 400,
 });

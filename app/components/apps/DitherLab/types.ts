@@ -1,6 +1,11 @@
 import Win4bRGBI from '~/dither/palettes/Win4bRGBI';
 import { type Palette, PaletteGroup } from '~/dither/palettes/types';
 
+export enum DitherLabDevice {
+  GL = 'WebGL',
+  SOFTWARE = 'Software',
+}
+
 export interface DitherLabSettings {
   showStatusBar: boolean;
   showPaletteEditor: boolean;
@@ -35,6 +40,8 @@ export interface DitherLabState {
   paletteGroup: PaletteGroup;
   palette: Palette;
 
+  device: DitherLabDevice;
+
   process: string;
   settings: { [key: string]: number | string };
   uniforms: { [key: string]: number };
@@ -52,10 +59,18 @@ export const defaultDitherLabState: DitherLabState = {
   paletteGroup: PaletteGroup.RetroPC,
   palette: Win4bRGBI,
 
+  device: DitherLabDevice.GL,
+
   process: 'pattern',
   settings: {
     quality: 'high',
     threshold: 'bayer8',
+
+    matrix: 'floydSteinberg',
+    error_mult: 1, // Used by ED process
+    err_mult: 0.2, // Used by Pattern process
+    gamma: 2.2,
+    threads: 0,
   },
   uniforms: { u_err_mult: 0.2, u_gamma: 2.2, u_variance: 3 },
 

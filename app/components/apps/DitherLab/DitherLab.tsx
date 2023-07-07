@@ -14,6 +14,8 @@ import Button from '~/components/ui/Button';
 import { useAppSettings } from '~/stores/system';
 import cn from 'classnames';
 import DitherLabPaletteEditor from './panels/DitherLabPaletteEditor';
+import { DitherLabDevice } from './types';
+import SoftwareRenderer from './renderers/SoftwareRenderer';
 
 export const ZOOM_STOPS = [1, 1.5, 2, 3, 4, 6, 8, 16, 32, 64];
 
@@ -283,13 +285,23 @@ export default function DitherLab() {
 
           <ScrollContainer className="grow min-w-0 min-h-0" ref={viewportRef}>
             <div className="scroll-center">
-              <GlRenderer
-                rt={rt}
-                img={img}
-                setRt={setRt}
-                setStatus={setStatus}
-                setRenderTime={setRenderTime}
-              />
+              {state.device === DitherLabDevice.GL ? (
+                <GlRenderer
+                  rt={rt}
+                  img={img}
+                  setRt={setRt}
+                  setStatus={setStatus}
+                  setRenderTime={setRenderTime}
+                />
+              ) : (
+                <SoftwareRenderer
+                  rt={rt}
+                  img={img}
+                  setRt={setRt}
+                  setStatus={setStatus}
+                  setRenderTime={setRenderTime}
+                />
+              )}
             </div>
           </ScrollContainer>
         </div>

@@ -1,14 +1,20 @@
+import cn from 'classnames';
+
 import { useAppState } from '~/components/desktop/Window/context';
 import Collapsible from '~/components/ui/Collapsible';
 import { Select, SelectItem } from '~/components/ui/Select';
 import {
   type DitherProcessRangeOption,
+  type DitherGlProcess,
   gpuProcess,
   mapFns,
   reverseMapFns,
+  softwareProcess,
 } from '../process';
 import Divider from '~/components/ui/Divider';
 import Slider from '~/components/ui/Slider';
+import { DitherLabDevice } from '../types';
+import { THREADS_AUTO_MAX } from '~/dither/renderers/useSoftwareRenderer';
 
 interface RangeOptionProps {
   type: 'settings' | 'uniforms';
@@ -18,7 +24,8 @@ interface RangeOptionProps {
 function RangeOption({ type, option }: RangeOptionProps) {
   const [state, setState] = useAppState('dither');
 
-  let defaultValue = state[type][option.name] as number;
+  const value = Number(state[type][option.name] ?? option.min);
+  let defaultValue = value;
   if (option.map) defaultValue = reverseMapFns[option.map](defaultValue);
 
   const onChange = (value: number) => {
@@ -40,20 +47,55 @@ function RangeOption({ type, option }: RangeOptionProps) {
         max={option.max}
         step={option.step}
       />
-      <div className="w-8 text-end">
-        {(state[type][option.name] as number).toFixed(2)}
-      </div>
+      {option.name === 'threads' ? (
+        <div
+          className={cn('w-8 text-end', {
+            'text-[#008000]': value === 0,
+            'text-[#C00000]': value > THREADS_AUTO_MAX,
+          })}
+        >
+          {value === 0 ? 'A' : value.toFixed(0)}
+        </div>
+      ) : (
+        <div className="w-8 text-end">{value.toFixed(2)}</div>
+      )}
     </div>
   );
 }
 
 export default function DitherLabRenderOptions() {
   const [state, setState] = useAppState('dither');
-  const process = gpuProcess[state.process];
+  const processes =
+    state.device === DitherLabDevice.GL ? gpuProcess : softwareProcess;
+  const process = processes[state.process];
+
+  const selectDevice = (device: DitherLabDevice) => {
+    const defaultProcess =
+      device === DitherLabDevice.GL
+        ? Object.keys(gpuProcess)[0]
+        : Object.keys(softwareProcess)[0];
+
+    setState({ device, process: defaultProcess });
+  };
 
   return (
     <Collapsible defaultOpen title="Render Settings">
       <div className="flex flex-col gap-2">
+        <div className="flex flex-row gap-1 items-center">
+          <div className="w-12">Device</div>
+          <Select
+            triggerProps={{ className: 'grow' }}
+            value={state.device}
+            onValueChange={(value) => selectDevice(value as DitherLabDevice)}
+          >
+            {Object.values(DitherLabDevice).map((device) => (
+              <SelectItem value={device} key={device}>
+                {device}
+              </SelectItem>
+            ))}
+          </Select>
+        </div>
+
         <div className="flex flex-row gap-1 items-center">
           <div className="w-12">Process</div>
           <Select
@@ -61,9 +103,9 @@ export default function DitherLabRenderOptions() {
             value={state.process}
             onValueChange={(value) => setState({ process: value })}
           >
-            {Object.keys(gpuProcess).map((key) => (
+            {Object.keys(processes).map((key) => (
               <SelectItem value={key} key={key}>
-                {gpuProcess[key as keyof typeof gpuProcess].name}
+                {processes[key].name}
               </SelectItem>
             ))}
           </Select>
@@ -99,9 +141,15 @@ export default function DitherLabRenderOptions() {
           ),
         )}
 
-        {process.uniforms.map((uniform) => (
-          <RangeOption key={uniform.name} option={uniform} type="uniforms" />
-        ))}
+        {state.device === DitherLabDevice.GL
+          ? (process as DitherGlProcess).uniforms.map((uniform) => (
+              <RangeOption
+                key={uniform.name}
+                option={uniform}
+                type="uniforms"
+              />
+            ))
+          : null}
       </div>
     </Collapsible>
   );

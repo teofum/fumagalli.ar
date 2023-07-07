@@ -3,6 +3,7 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
+    "build:workers": "esbuild ./app/dither/workers/worker.ts --bundle --outdir=./public/workers",
     "build": "remix build",
     "dev": "remix dev -p 3200",
     "typecheck": "tsc",

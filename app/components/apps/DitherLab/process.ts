@@ -1,3 +1,4 @@
+import { THREADS_AVAILABLE } from '~/dither/renderers/useSoftwareRenderer';
 import shaders from '~/dither/shaders';
 
 export interface DitherProcessOptionBase {
@@ -24,12 +25,19 @@ export type DitherProcessOption =
   | DitherProcessRangeOption
   | DitherProcessSelectOption;
 
-export interface DitherProcess {
+export interface DitherGlProcess {
   name: string;
   shader: string;
 
   settings: DitherProcessOption[];
   uniforms: DitherProcessRangeOption[];
+}
+
+export interface DitherSoftwareProcess {
+  name: string;
+  process: string;
+
+  settings: DitherProcessOption[];
 }
 
 export const mapFns: { [key: string]: (n: number) => number } = {
@@ -56,7 +64,7 @@ const thresholdSetting = {
   ],
 } satisfies DitherProcessSelectOption;
 
-export const gpuProcess: { [key: string]: DitherProcess } = {
+export const gpuProcess: { [key: string]: DitherGlProcess } = {
   pattern: {
     name: 'Pattern Dithering',
     shader: shaders.patternFrag,
@@ -111,6 +119,87 @@ export const gpuProcess: { [key: string]: DitherProcess } = {
       {
         type: 'range',
         name: 'u_gamma',
+        displayName: 'Gamma',
+        min: 1,
+        max: 8,
+        step: 0.2,
+      },
+    ],
+  },
+};
+
+export const softwareProcess: { [key: string]: DitherSoftwareProcess } = {
+  errorDiffusion: {
+    name: 'Error Diffusion',
+    process: 'errorDiffusion',
+
+    settings: [
+      {
+        type: 'select',
+        name: 'matrix',
+        displayName: 'Matrix',
+        options: [
+          { name: 'Floyd-Steinberg', value: 'floydSteinberg' },
+          { name: 'JJ&N', value: 'minAverageError' },
+          { name: 'Stucki', value: 'stucki' },
+          { name: 'Sierra', value: 'sierra' },
+          { name: 'Simple 2x2', value: 'simple' },
+        ],
+      },
+      {
+        type: 'range',
+        name: 'error_mult',
+        displayName: 'Diffuse',
+        min: 0.5,
+        max: 1,
+        step: 0.05,
+      },
+      {
+        type: 'range',
+        name: 'gamma',
+        displayName: 'Gamma',
+        min: 1,
+        max: 8,
+        step: 0.2,
+      },
+    ],
+  },
+  pattern: {
+    name: 'Pattern Dithering',
+    process: 'pattern',
+
+    settings: [
+      {
+        type: 'range',
+        name: 'threads',
+        displayName: 'Threads',
+        min: 0,
+        max: THREADS_AVAILABLE,
+        step: 1,
+      },
+      thresholdSetting,
+      {
+        type: 'select',
+        name: 'quality',
+        displayName: 'Quality',
+        options: [
+          { name: 'High (64 level)', value: 'high' },
+          { name: 'Medium (16 level)', value: 'medium' },
+          { name: 'Low (4 level)', value: 'low' },
+        ],
+      },
+      {
+        type: 'range',
+        name: 'err_mult',
+        displayName: 'Dither',
+        min: 0,
+        max: 9,
+        step: 1,
+        map: 'dither',
+      },
+      {
+        type: 'range',
+        name: 'gamma',
         displayName: 'Gamma',
         min: 1,
         max: 8,

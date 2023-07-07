@@ -146,7 +146,7 @@ export default function ColorPicker({
               : undefined,
           }}
         >
-          <div className="grow">{value ? null : 'No color selected'}</div>
+          <div className="grow px-1">{value ? null : 'No color selected'}</div>
           <Button className={cn('py-1', { 'bevel-inset': open })}>
             <ArrowDown />
           </Button>

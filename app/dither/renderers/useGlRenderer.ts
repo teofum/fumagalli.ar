@@ -32,7 +32,7 @@ export default function useGlRenderer(
     if (!rt) return null;
 
     const gl = rt.getContext('webgl2', { preserveDrawingBuffer: true });
-    if (!gl) throw new Error('useGlRenderer: WebGL is unavailable');
+    if (!gl) return;
     return gl;
   }, [rt]);
 
