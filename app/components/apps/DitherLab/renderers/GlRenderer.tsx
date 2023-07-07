@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+import cn from 'classnames';
 
 import { useAppState } from '~/components/desktop/Window/context';
 
@@ -107,11 +108,12 @@ export default function GlRenderer({
         <div className="scroll-center">
           <canvas
             ref={(el) => setRt(el)}
-            className="border border-default"
+            className={cn('border border-default', { hidden: !img })}
             width={state.renderWidth}
             height={state.renderHeight}
             style={{ minWidth: `${state.renderWidth * state.zoom + 2}px` }}
           />
+          {!img ? <div>No image loaded</div> : null}
         </div>
       </ScrollContainer>
     </div>

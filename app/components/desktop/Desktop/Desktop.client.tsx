@@ -14,6 +14,7 @@ import { minesweeper } from '~/components/apps/Minesweeper';
 import { sudoku } from '~/components/apps/Sudoku';
 import { solitaire } from '~/components/apps/Solitaire';
 import { dosEmu } from '~/components/apps/DOSEmu';
+import { ditherLab } from '~/components/apps/DitherLab';
 
 type ComputerState = 'on' | 'off' | 'shutting-down';
 
@@ -130,27 +131,33 @@ export default function Desktop() {
               open={() => launch(intro)}
             />
             <DesktopIcon
+              iconUrl="/fs/system/Applications/dither/icon_32.png"
+              title="DitherLab 2"
+              y={2}
+              open={() => launch(ditherLab())}
+            />
+            <DesktopIcon
               iconUrl="/fs/system/Applications/mine/icon_32.png"
               title="Minesweeper"
-              y={2}
+              y={3}
               open={() => launch(minesweeper)}
             />
             <DesktopIcon
               iconUrl="/fs/system/Applications/sudoku/icon_32.png"
               title="Sudoku"
-              y={2}
+              y={3}
               open={() => launch(sudoku)}
             />
             <DesktopIcon
               iconUrl="/fs/system/Applications/solitaire/icon_32.png"
               title="Solitaire"
-              y={2}
+              y={3}
               open={() => launch(solitaire)}
             />
             <DesktopIcon
               iconUrl="/fs/system/Applications/dos/icon_32.png"
               title="DOOM"
-              y={2}
+              y={3}
               open={() =>
                 launch(
                   dosEmu({
@@ -162,7 +169,7 @@ export default function Desktop() {
             <DesktopIcon
               iconUrl="/fs/system/Applications/dos/icon_32.png"
               title="STUNTS"
-              y={2}
+              y={3}
               open={() =>
                 launch(
                   dosEmu({
