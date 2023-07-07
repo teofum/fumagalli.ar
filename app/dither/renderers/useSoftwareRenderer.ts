@@ -34,7 +34,6 @@ export default function useSoftwareRenderer(
 
       ctxTemp.drawImage(img, 0, 0, rt.width, rt.height);
 
-      console.log(rt, img, process, palette, settings);
       const renderProcess = softwareRenderProcess[process];
 
       // Set the number of threads to use
