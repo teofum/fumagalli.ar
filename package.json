@@ -4,7 +4,7 @@
   "sideEffects": false,
   "scripts": {
     "build:workers": "esbuild ./app/dither/workers/worker.ts --bundle --outdir=./public/workers",
-    "build": "remix build",
+    "build": "npm run build:workers && remix build",
     "dev": "remix dev -p 3200",
     "typecheck": "tsc",
     "convert-images": "cd .photos-original && ./convert.sh",
