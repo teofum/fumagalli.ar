@@ -14,6 +14,7 @@ import { sudoku } from '../apps/Sudoku';
 import { solitaire } from '../apps/Solitaire';
 import { themeSettings } from '../apps/ThemeSettings';
 import { dosEmu } from '../apps/DOSEmu';
+import { ditherLab } from '../apps/DitherLab';
 import { DOS_GAMES } from '../apps/DOSEmu/types';
 
 const ICON_PATH = '/fs/system/Resources/Icons/Start';
@@ -65,14 +66,16 @@ export default function StartMenu() {
                 />
               ))}
             </Menu.Sub>
-            {[files({ path: '/Documents' }), about, intro].map((app) => (
-              <Menu.Item
-                key={app.appType}
-                label={app.title ?? ''}
-                icon={`/fs/system/Applications/${app.appType}/icon_16.png`}
-                onSelect={() => launch(app)}
-              />
-            ))}
+            {[files({ path: '/Documents' }), ditherLab(), about, intro].map(
+              (app) => (
+                <Menu.Item
+                  key={app.appType}
+                  label={app.title ?? ''}
+                  icon={`/fs/system/Applications/${app.appType}/icon_16.png`}
+                  onSelect={() => launch(app)}
+                />
+              ),
+            )}
           </Menu.Sub>
 
           <Menu.Sub

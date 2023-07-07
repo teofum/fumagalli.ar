@@ -17,6 +17,8 @@ import SolitaireDeckSelect, {
 import ThemeSettings, { themeSettings } from './ThemeSettings';
 import DOSEmu, { dosEmu } from './DOSEmu';
 import type { DOSEmuState } from './DOSEmu/types';
+import DitherLab, { ditherLab } from './DitherLab';
+import type { DitherLabState } from './DitherLab/types';
 
 const applications = [
   { Component: About, meta: about },
@@ -30,12 +32,14 @@ const applications = [
   { Component: Sudoku, meta: sudoku },
   { Component: ThemeSettings, meta: themeSettings },
   { Component: DOSEmu, meta: dosEmu() },
+  { Component: DitherLab, meta: ditherLab() },
 ];
 
-interface AppStateTypes {
+export interface AppStateTypes {
   files: FilesState;
   preview: PreviewState;
   dos: DOSEmuState;
+  dither: DitherLabState;
   mine_difficulty: MinesweeperCustomDifficultyState;
 }
 

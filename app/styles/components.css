@@ -39,7 +39,14 @@
 
   /* Input */
   .input {
-    @apply py-1 px-2 bg-default bevel-content outline-none;
+    @apply py-1 px-2 bg-default bevel-content outline-none min-w-0;
+  }
+
+  .input:disabled {
+    @apply bg-surface;
+
+    color: theme('colors.disabled');
+    text-shadow: 1px 1px theme('colors.disabled-shadow')
   }
 
   /* Menus */

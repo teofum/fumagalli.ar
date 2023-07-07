@@ -1,0 +1,15 @@
+diff --git a/node_modules/@remix-run/dev/dist/modules.d.ts b/node_modules/@remix-run/dev/dist/modules.d.ts
+index 25fd1f6..a867006 100644
+--- a/node_modules/@remix-run/dev/dist/modules.d.ts
++++ b/node_modules/@remix-run/dev/dist/modules.d.ts
+@@ -41,6 +41,10 @@ declare module "*.glb" {
+     let asset: string;
+     export default asset;
+ }
++declare module "*.glsl" {
++    let asset: string;
++    export default asset;
++}
+ declare module "*.gltf" {
+     let asset: string;
+     export default asset;
