@@ -40,6 +40,9 @@
   /* Input */
   .input {
     @apply py-1 px-2 bg-default bevel-content outline-none min-w-0;
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 0;
   }
 
   .input:disabled {
