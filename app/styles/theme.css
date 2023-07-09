@@ -18,7 +18,7 @@
     --color-text: 0 0 0;
     --color-heading: var(--color-text);
     --color-heading-2: var(--color-heading);
-    --color-heading-3: 0 0 128;
+    --color-heading-3: var(--color-heading);
   
     --color-text-light: var(--color-dark);
     --color-text-disabled: var(--color-dark);
@@ -49,7 +49,7 @@
     --color-text: 0 0 0;
     --color-heading: var(--color-text);
     --color-heading-2: var(--color-heading);
-    --color-heading-3: 0 0 128;
+    --color-heading-3: var(--color-heading);
   
     --color-text-light: var(--color-dark);
     --color-text-disabled: var(--color-dark);
@@ -80,7 +80,7 @@
     --color-text: 0 0 0;
     --color-heading: var(--color-text);
     --color-heading-2: var(--color-heading);
-    --color-heading-3: 0 0 128;
+    --color-heading-3: var(--color-heading);
   
     --color-text-light: 128 128 128;
     --color-text-disabled: var(--color-dark);
@@ -114,7 +114,7 @@
     --color-text: 222 222 222;
     --color-heading: var(--color-text);
     --color-heading-2: var(--color-heading);
-    --color-heading-3: 255 255 128;
+    --color-heading-3: var(--color-heading);
   
     --color-text-light: 128 128 128;
     --color-text-disabled: 0 0 0;
@@ -176,7 +176,7 @@
     --color-text: 255 255 255;
     --color-heading: var(--color-text);
     --color-heading-2: var(--color-heading);
-    --color-heading-3: 255 255 128;
+    --color-heading-3: var(--color-heading);
   
     --color-text-light: var(--color-lighter);
     --color-text-disabled: 0 0 0;

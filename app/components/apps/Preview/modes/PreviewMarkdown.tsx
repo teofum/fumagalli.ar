@@ -28,7 +28,7 @@ export default function PreviewMarkdown({ commonMenu }: PreviewModeProps) {
       <div className="flex flex-row gap-1">{commonMenu}</div>
 
       <ScrollContainer className="flex-1">
-        <div className="p-4 max-w-3xl">
+        <div className="p-4 max-w-3xl font-text text-content-sm">
           <Markdown>{content}</Markdown>
         </div>
       </ScrollContainer>

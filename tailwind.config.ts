@@ -6,23 +6,40 @@ export default {
   content: ['./app/**/*.{js,jsx,ts,tsx}'],
   theme: {
     fontFamily: {
+      // UI fonts
       sans: '"PX Sans Nouveaux"',
-      title: '"PX Sans Nouveaux"',
-      text: 'Paradise132',
-      heading: 'ToshibaTxL1',
       display: '"DOS/V re. JPN24"',
+      'display-text': 'Paradise132',
+
+      // Article fonts
+      text: '"IBM Plex Sans"',
+      heading: '"IBM Plex Sans"',
+      title: '"DM Serif Display"',
+      mono: '"IBM Plex Mono"',
+
+      // Utility fonts
       minesweeper: '"Nix8810 M15"',
     },
     fontSize: {
+      // UI font sizes
       base: ['0.5rem', '1rem'],
       lg: ['0.75rem', '1rem'],
       xl: ['1rem', '1.25rem'],
       '2xl': ['1.5rem', '1'],
       '3xl': ['2rem', '1'],
       '4xl': ['3rem', '1'],
-    },
-    fontWeight: {
-      normal: '400',
+
+      // Article font sizes
+      'content-xs': ['0.75rem', '1rem'],
+      'content-sm': ['0.875rem', '1.25rem'],
+      'content-base': ['1rem', '1.5rem'],
+      'content-lg': ['1.125rem', '1.75rem'],
+      'content-xl': ['1.25rem', '2rem'],
+      'content-2xl': ['1.5rem', '1'],
+      'content-3xl': ['2rem', '1'],
+      'content-4xl': ['2.5rem', '1'],
+      'content-5xl': ['3rem', '1'],
+      'content-6xl': ['4rem', '1'],
     },
     colors: {
       // Utility colors

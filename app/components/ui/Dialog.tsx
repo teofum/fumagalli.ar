@@ -48,7 +48,7 @@ export default function Dialog({
 
             <div className="flex-1 h-1.5 border-t border-b border-light" />
 
-            <DialogPrimitive.Title className="font-title bold">
+            <DialogPrimitive.Title className="bold">
               {title}
             </DialogPrimitive.Title>
 
