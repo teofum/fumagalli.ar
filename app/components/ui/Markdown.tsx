@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import type { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
 
-const baseComponents = {
+export const baseComponents = {
   h1: (props) => <h1 className="font-display text-2xl text-h1" {...props} />,
   h2: (props) => (
     <h2

@@ -10,14 +10,22 @@ const FS_ROOT: Directory = {
       class: 'dir',
       name: 'Documents',
       created: 1687629014,
-      modified: 1687629028,
+      modified: 1688916010,
       items: [
         {
           class: 'dir',
           name: 'Articles',
           created: 1687555586,
-          modified: 1687629026,
+          modified: 1688919477,
           items: [
+            {
+              class: 'file',
+              type: 'mdx',
+              name: 'dither.mdx',
+              created: 1688919477,
+              modified: 1688919521,
+              size: 19137,
+            },
           ],
         },
         {
@@ -996,6 +1004,14 @@ const FS_ROOT: Directory = {
           modified: 1687496152,
           size: 1127,
         },
+        {
+          class: 'file',
+          type: 'mdx',
+          name: 'test.mdx',
+          created: 1688916006,
+          modified: 1688917696,
+          size: 1244,
+        },
       ],
     },
     {
@@ -1008,7 +1024,7 @@ const FS_ROOT: Directory = {
           class: 'dir',
           name: 'Applications',
           created: 1687629318,
-          modified: 1688593172,
+          modified: 1688772554,
           items: [
             {
               class: 'dir',
@@ -1045,31 +1061,31 @@ const FS_ROOT: Directory = {
             {
               class: 'dir',
               name: 'dither',
-              created: 1688593172,
-              modified: 1688593270,
+              created: 1688772554,
+              modified: 1688772554,
               items: [
                 {
                   class: 'file',
                   type: 'app',
                   name: 'dither.app',
-                  created: 1688593177,
-                  modified: 1688593177,
+                  created: 1688772554,
+                  modified: 1688772554,
                   size: 0,
                 },
                 {
                   class: 'file',
                   type: 'image',
                   name: 'icon_16.png',
-                  created: 1688593268,
-                  modified: 1688593268,
+                  created: 1688772554,
+                  modified: 1688772554,
                   size: 370,
                 },
                 {
                   class: 'file',
                   type: 'image',
                   name: 'icon_32.png',
-                  created: 1688593252,
-                  modified: 1688593252,
+                  created: 1688772554,
+                  modified: 1688772554,
                   size: 523,
                 },
               ],
@@ -2196,7 +2212,7 @@ const FS_ROOT: Directory = {
                   class: 'dir',
                   name: 'FileType',
                   created: 1687548703,
-                  modified: 1688507476,
+                  modified: 1688916873,
                   items: [
                     {
                       class: 'file',
@@ -2294,6 +2310,22 @@ const FS_ROOT: Directory = {
                       modified: 1687581176,
                       size: 451,
                     },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'mdx_16.png',
+                      created: 1688916863,
+                      modified: 1688916863,
+                      size: 382,
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'mdx_32.png',
+                      created: 1688916863,
+                      modified: 1688916863,
+                      size: 451,
+                    },
                   ],
                 },
                 {
@@ -2382,7 +2414,7 @@ const FS_ROOT: Directory = {
               class: 'dir',
               name: 'UI',
               created: 1687638461,
-              modified: 1688770695,
+              modified: 1688772554,
               items: [
                 {
                   class: 'file',
@@ -2460,16 +2492,16 @@ const FS_ROOT: Directory = {
                   class: 'file',
                   type: 'image',
                   name: 'light_off.png',
-                  created: 1688770671,
-                  modified: 1688770671,
+                  created: 1688772554,
+                  modified: 1688772554,
                   size: 204,
                 },
                 {
                   class: 'file',
                   type: 'image',
                   name: 'light_on.png',
-                  created: 1688770695,
-                  modified: 1688770695,
+                  created: 1688772554,
+                  modified: 1688772554,
                   size: 203,
                 },
                 {
@@ -2564,8 +2596,8 @@ const FS_ROOT: Directory = {
                   class: 'file',
                   type: 'image',
                   name: 'save2.png',
-                  created: 1688688859,
-                  modified: 1688688859,
+                  created: 1688772554,
+                  modified: 1688772554,
                   size: 403,
                 },
                 {
