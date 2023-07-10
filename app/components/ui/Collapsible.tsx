@@ -22,7 +22,7 @@ export default function Collapsible({
         <div className="grow h-1.5 border-t border-b border-light" />
         <ArrowDown className="group-data-[state=open]/collapse:rotate-180" />
       </CollapsiblePrimitive.Trigger>
-      <CollapsiblePrimitive.Content className="p-3">
+      <CollapsiblePrimitive.Content className="p-3 min-h-0">
         {children}
       </CollapsiblePrimitive.Content>
     </CollapsiblePrimitive.Root>

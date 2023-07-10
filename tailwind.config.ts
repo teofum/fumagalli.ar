@@ -19,6 +19,7 @@ export default {
 
       // Utility fonts
       minesweeper: '"Nix8810 M15"',
+      bsod: '"IBM VGA"',
     },
     fontSize: {
       // UI font sizes

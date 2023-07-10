@@ -11,6 +11,7 @@ import useDesktopStore from '~/stores/desktop';
 import Restore from '~/components/ui/icons/Restore';
 import Max from '~/components/ui/icons/Max';
 import Close from '~/components/ui/icons/Close';
+import ApplicationError from '~/components/ui/ApplicationError';
 
 export enum WindowSizingMode {
   RESIZABLE = 'standard',
@@ -251,14 +252,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
         </div>
 
         <WindowProvider window={props} parent={parent}>
-          <ErrorBoundary
-            fallback={
-              <div>
-                The application encountered and unexpected error. Please
-                restart.
-              </div>
-            }
-          >
+          <ErrorBoundary FallbackComponent={ApplicationError}>
             <MemoizedOutlet type={appType} />
           </ErrorBoundary>
         </WindowProvider>
