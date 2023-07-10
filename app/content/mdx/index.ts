@@ -1,7 +1,5 @@
-import test from './test.mdx';
 import dither from './dither/dither.mdx';
 
 export default {
-  test,
-  dither
+  'Dithering: a visual introduction': dither
 };
