@@ -1247,7 +1247,7 @@ const FS_ROOT: Directory = {
               type: 'md',
               name: 'DitherOS.md',
               created: 1687818279,
-              modified: 1687818279,
+              modified: 1689007072,
               size: 2585,
             },
             {

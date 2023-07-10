@@ -54,10 +54,10 @@ const ScrollContainer = React.forwardRef<HTMLDivElement, ScrollContainerProps>(
             <ScrollAreaThumb className="relative flex-1 bg-surface bevel">
               <div
                 className="
-              absolute left-1 right-1 top-1/2 -translate-y-1/2
-              flex flex-col gap-0.5
-              pointer-events-none
-            "
+                  absolute left-1 right-1 top-1/2 -translate-y-1/2
+                  flex flex-col gap-0.5
+                  pointer-events-none
+                "
               >
                 <div className="h-0.5 bevel-light-inset" />
                 <div className="h-0.5 bevel-light-inset" />
@@ -75,10 +75,10 @@ const ScrollContainer = React.forwardRef<HTMLDivElement, ScrollContainerProps>(
             <ScrollAreaThumb className="relative flex-1 bg-surface bevel">
               <div
                 className="
-              absolute top-1 bottom-1 left-1/2 -translate-x-1/2
-              flex flex-row gap-0.5
-              pointer-events-none
-            "
+                  absolute top-1 bottom-1 left-1/2 -translate-x-1/2
+                  flex flex-row gap-0.5
+                  pointer-events-none
+                "
               >
                 <div className="w-0.5 bevel-light-inset" />
                 <div className="w-0.5 bevel-light-inset" />
