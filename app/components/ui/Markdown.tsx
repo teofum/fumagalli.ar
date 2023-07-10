@@ -15,12 +15,12 @@ export const baseComponents = {
   li: (props) => (
     <li className="mt-2 list-outside list-['>__'] ml-4" {...props} />
   ),
-  code: (props) => (
-    <code className="text-content-xs" {...props} />
-  ),
   pre: (props) => (
-    <pre className="paragraph bevel-content py-2 px-3" {...props} />
-  )
+    <pre
+      className="paragraph text-content-xs bevel-content py-2 px-3"
+      {...props}
+    />
+  ),
 } satisfies ReactMarkdownOptions['components'];
 
 export default function Markdown({

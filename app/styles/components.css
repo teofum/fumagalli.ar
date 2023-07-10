@@ -89,4 +89,17 @@
   .menu-item.menu-sub {
     grid-template-columns: minmax(1rem, auto) 1fr minmax(0.75rem, auto);
   }
+
+  /* Article components */
+  .demo {
+    @apply flex flex-row items-center gap-4 my-6 bevel bg-surface mx-auto w-min p-2 pr-4 font-sans text-base;
+  }
+
+  .demo-controls {
+    @apply flex flex-col gap-2 min-w-48;
+  }
+
+  .demo-label {
+    @apply flex flex-row items-center gap-1;
+  }
 }

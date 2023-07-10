@@ -13,8 +13,8 @@ import type { Palette } from '../palettes/types';
 import getPaletteColors, { getPaletteSize } from '../utils/paletteColors';
 
 export interface RenderSettings {
-  clistSize: number;
-  threshold: keyof typeof thresholds | 'random';
+  clistSize?: number;
+  threshold?: keyof typeof thresholds | 'random';
 }
 
 const POSITIONS = [-1, 1, -1, -1, 1, 1, -1, -1, 1, -1, 1, 1];
@@ -96,7 +96,7 @@ export default function useGlRenderer(
     const threshold =
       settings.threshold === 'random'
         ? makeRandomThreshold(Math.max(rt.width, rt.height))
-        : thresholds[settings.threshold];
+        : thresholds[settings.threshold ?? 'bayer8'];
 
     // Load image to texture 0 and threshold matrix to texture 1
     tex2DFromImage(gl, img);
@@ -121,11 +121,11 @@ export default function useGlRenderer(
     gl.useProgram(program);
 
     // Set uniforms
-    gl.uniform3fv(u_palette, colors);
-    gl.uniform2f(u_texSize, gl.canvas.width, gl.canvas.height);
-    gl.uniform1i(u_image, 0);
-    gl.uniform1i(u_threshold, 1);
-    gl.uniform1f(u_thres_size, threshold.size);
+    if (u_palette) gl.uniform3fv(u_palette, colors);
+    if (u_texSize) gl.uniform2f(u_texSize, gl.canvas.width, gl.canvas.height);
+    if (u_image) gl.uniform1i(u_image, 0);
+    if (u_threshold) gl.uniform1i(u_threshold, 1);
+    if (u_thres_size) gl.uniform1f(u_thres_size, threshold.size);
 
     Object.keys(uniforms).forEach((key) => {
       gl.uniform1f(uniformLocations[key], uniforms[key]);
