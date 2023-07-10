@@ -32,6 +32,10 @@ export interface MarkdownFile extends FileBase {
   type: 'md';
 }
 
+export interface MDXFile extends FileBase {
+  type: 'mdx';
+}
+
 export interface DosRomFile extends FileBase {
   type: 'dos';
 }
@@ -43,6 +47,7 @@ export interface AppFile extends FileBase {
 export type AnyFile =
   | ImageFile
   | MarkdownFile
+  | MDXFile
   | DosRomFile
   | AppFile
   | GenericFile;

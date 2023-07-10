@@ -9,11 +9,11 @@ import filterByType from '../utils/filterByType';
 export default function FilesListView({ dir, open, select }: FilesViewProps) {
   const [state] = useAppState('files');
 
-  const viewportRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
 
   const onViewportResize = () => {
-    if (viewportRef.current && contentRef.current) {
+    if (contentRef.current && viewportRef.current) {
       const vh = viewportRef.current.getBoundingClientRect().height;
       const count = Math.floor((vh - 8) / 18);
       contentRef.current.style.setProperty(
@@ -26,20 +26,22 @@ export default function FilesListView({ dir, open, select }: FilesViewProps) {
   useLayoutEffect(onViewportResize, []);
 
   return (
-    <ScrollContainer className="flex-1" viewportProps={{ ref: viewportRef }}>
-      <div
-        className="p-1 select-none grid grid-flow-col auto-cols-max"
-        ref={contentRef}
-      >
-        {filterByType(dir.items, state.typeFilter).map((item) => (
-          <FilesListItem
-            key={item.name}
-            item={item}
-            open={open}
-            select={select}
-            className="mr-0.5 w-full"
-          />
-        ))}
+    <ScrollContainer className="flex-1">
+      <div className="h-[var(--scroll-viewport-height)]" ref={viewportRef}>
+        <div
+          className="p-1 select-none grid grid-flow-col auto-cols-max"
+          ref={contentRef}
+        >
+          {filterByType(dir.items, state.typeFilter).map((item) => (
+            <FilesListItem
+              key={item.name}
+              item={item}
+              open={open}
+              select={select}
+              className="mr-0.5 w-full"
+            />
+          ))}
+        </div>
       </div>
     </ScrollContainer>
   );

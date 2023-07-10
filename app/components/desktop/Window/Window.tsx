@@ -1,7 +1,9 @@
 import { memo, useRef } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import cn from 'classnames';
+
 import useMoveWindow from './useMoveWindow';
 import useResizeWindow from './useResizeWindow';
-import cn from 'classnames';
 import Button from '~/components/ui/Button';
 import AppOutlet, { type AppState } from '~/components/apps/renderApp';
 import { WindowProvider } from './context';
@@ -227,7 +229,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
           <div className={titlebarSpacerClass} />
 
           <span
-            className={cn('font-title text-title bold', {
+            className={cn('text-title bold', {
               'text-disabled': !active,
             })}
           >
@@ -249,7 +251,16 @@ export default function Window<T extends string>(props: WindowProps<T>) {
         </div>
 
         <WindowProvider window={props} parent={parent}>
-          <MemoizedOutlet type={appType} />
+          <ErrorBoundary
+            fallback={
+              <div>
+                The application encountered and unexpected error. Please
+                restart.
+              </div>
+            }
+          >
+            <MemoizedOutlet type={appType} />
+          </ErrorBoundary>
         </WindowProvider>
       </div>
 

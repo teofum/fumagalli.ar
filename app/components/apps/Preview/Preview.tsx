@@ -8,6 +8,7 @@ import {
   isPreviewable,
 } from './types';
 import PreviewMarkdown from './modes/PreviewMarkdown';
+import PreviewMDX from './modes/PreviewMDX';
 import PreviewImage from './modes/PreviewImage';
 import useDesktopStore from '~/stores/desktop';
 import Menu from '~/components/ui/Menu';
@@ -17,6 +18,8 @@ const getPreviewMode = (fileType: PreviewSupportedFile['type']) => {
   switch (fileType) {
     case 'md':
       return PreviewMarkdown;
+    case 'mdx':
+      return PreviewMDX;
     case 'image':
       return PreviewImage;
   }
