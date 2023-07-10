@@ -1200,7 +1200,7 @@ const FS_ROOT: Directory = {
           class: 'dir',
           name: 'Projects',
           created: 1687555568,
-          modified: 1687958010,
+          modified: 1689014876,
           items: [
             {
               class: 'dir',
@@ -1246,8 +1246,8 @@ const FS_ROOT: Directory = {
               class: 'file',
               type: 'md',
               name: 'DitherOS.md',
-              created: 1687818279,
-              modified: 1689007072,
+              created: 1689014876,
+              modified: 1689014876,
               size: 2585,
             },
             {
@@ -2462,7 +2462,7 @@ const FS_ROOT: Directory = {
               class: 'dir',
               name: 'Icons',
               created: 1687638059,
-              modified: 1688531888,
+              modified: 1689026219,
               items: [
                 {
                   class: 'dir',
@@ -2655,6 +2655,14 @@ const FS_ROOT: Directory = {
                   created: 1688531888,
                   modified: 1688531888,
                   size: 570,
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'error.png',
+                  created: 1689026219,
+                  modified: 1689026219,
+                  size: 451,
                 },
                 {
                   class: 'file',
