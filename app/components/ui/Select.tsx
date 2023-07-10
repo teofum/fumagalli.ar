@@ -54,7 +54,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
             side="bottom"
             {...contentProps}
             className={cn(
-              'bg-default border border-default z-2000',
+              'bg-default border border-default z-2000 select-none',
               'w-[var(--radix-select-trigger-width)]',
               contentProps?.className,
             )}

@@ -10,7 +10,7 @@ export const ditherLab = (
   title: 'DitherLab 2',
 
   width: 800,
-  height: 400,
+  height: 640,
   minWidth: 800,
   minHeight: 400,
 });

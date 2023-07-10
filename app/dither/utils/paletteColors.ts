@@ -79,6 +79,7 @@ export const getPaletteColor = (palette: Palette, i: number): number[] => {
       );
     }
     case PaletteType.Auto:
+      return [];
     default:
       throw new Error('Invalid or Auto palette type');
   }

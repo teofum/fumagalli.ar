@@ -74,7 +74,10 @@ function PaletteEditor() {
     });
 
     // Update state
-    setState({ palette: { ...state.palette, ...newPalette } });
+    setState({
+      palette: { ...state.palette, ...newPalette },
+      paletteName: newPalette.name,
+    });
   };
 
   const nameTaken = settings.customPalettes.some((pal) => pal.name === name);

@@ -43,12 +43,15 @@ export default function DitherLabPaletteSelect({
 
   const selectGroup = (group: string) => {
     const palette = allPalettes.find((pal) => pal.group === group);
-    if (palette) setState({ paletteGroup: group as PaletteGroup, palette });
+    if (palette)
+      setState({
+        paletteGroup: group as PaletteGroup,
+        paletteName: palette.name,
+      });
   };
 
   const selectPalette = (name: string) => {
-    const palette = allPalettes.find((pal) => pal.name === name);
-    if (palette) setState({ palette });
+    setState({ paletteName: name });
   };
 
   return (
@@ -62,7 +65,7 @@ export default function DitherLabPaletteSelect({
           ))}
         </Select>
 
-        <Select value={state.palette.name} onValueChange={selectPalette}>
+        <Select value={state.paletteName} onValueChange={selectPalette}>
           {paletteOptions.map((palette) => (
             <SelectItem key={palette} value={palette}>
               {palette}

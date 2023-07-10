@@ -38,6 +38,7 @@ export interface DitherLabState {
   renderHeight: number;
 
   paletteGroup: PaletteGroup;
+  paletteName: string;
   palette: Palette;
 
   device: DitherLabDevice;
@@ -57,6 +58,7 @@ export const defaultDitherLabState: DitherLabState = {
   renderHeight: 0,
 
   paletteGroup: PaletteGroup.RetroPC,
+  paletteName: Win4bRGBI.name,
   palette: Win4bRGBI,
 
   device: DitherLabDevice.GL,

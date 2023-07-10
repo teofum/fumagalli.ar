@@ -16,6 +16,7 @@ import { GameBoy } from './Gameboy';
 import NES56 from './NES';
 import { RGB16, RGB216, RGB256, RGB32, RGB64, RGB8 } from './RGB';
 import { Mono2W, Mono2G, Mono2A, Mono4W, Mono4A, Mono16, PipBoy } from './Mono';
+import { Auto16, Auto256, Auto64 } from './Auto';
 
 const palettes = [
   // CGA 4-color
@@ -58,6 +59,11 @@ const palettes = [
   // Other
   NicePalette,
   PipBoy,
+
+  // Autogenerate
+  Auto16,
+  Auto64,
+  Auto256,
 ];
 
 export default palettes;

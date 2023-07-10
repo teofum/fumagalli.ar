@@ -1,6 +1,6 @@
 # DitherOS
 
-[View site](https://fumagalli.ar/dither)  
+[View site](https://dither.fumagalli.ar)  
 [Source code](https://github.com/teofum/dither)
 
 ![Screenshot](/fs/Documents/Projects/screenshots/DitherOS.webp)
