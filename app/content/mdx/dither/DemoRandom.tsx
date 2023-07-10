@@ -7,7 +7,7 @@ import Switch from '~/components/ui/Switch';
 const shader = `
 precision mediump float;
 uniform sampler2D u_image;
-uniform float u_threshold;
+uniform float u_threshold_fixed;
 uniform float u_amplitude;
 varying vec2 v_texCoord;
 
@@ -23,7 +23,7 @@ void main() {
   vec3 color = texture2D(u_image, v_texCoord).xyz;
   float noise = u_amplitude * (rand() - 0.5);
   float value = luma(color) + noise;
-  color = value < u_threshold ? vec3(0.0) : vec3(1.0);
+  color = value < u_threshold_fixed ? vec3(0.0) : vec3(1.0);
   gl_FragColor = vec4(color, 1.0);
 }`;
 
@@ -40,7 +40,7 @@ export default function DemoThreshold() {
     shader,
     NULL_PALETTE,
     {},
-    { u_threshold: 0.5, u_amplitude: k },
+    { u_threshold_fixed: 0.5, u_amplitude: k },
   );
   useEffect(() => {
     const canvas = canvasRef.current;
