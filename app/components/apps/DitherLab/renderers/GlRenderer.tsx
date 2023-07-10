@@ -54,7 +54,14 @@ export default function GlRenderer({
     settings,
     state.uniforms,
   );
-  useEffect(render, [render, state.renderWidth, state.renderHeight, rt, img]);
+  useEffect(render, [
+    render,
+    state.renderWidth,
+    state.renderHeight,
+    rt,
+    img,
+    img?.src,
+  ]);
 
   useEffect(() => {
     console.log('resize');
