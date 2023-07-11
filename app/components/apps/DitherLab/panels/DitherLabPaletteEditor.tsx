@@ -66,6 +66,8 @@ function PaletteEditor() {
   useEffect(() => setName(state.palette.name), [state.palette.name]);
 
   const update = (newPalette: Partial<Palette>) => {
+    const paletteName = newPalette.name ?? state.palette.name;
+
     // Update settings
     set({
       customPalettes: settings.customPalettes.map((pal) =>
@@ -76,7 +78,7 @@ function PaletteEditor() {
     // Update state
     setState({
       palette: { ...state.palette, ...newPalette },
-      paletteName: newPalette.name,
+      paletteName,
     });
   };
 
@@ -219,7 +221,11 @@ export default function DitherLabPaletteEditor({
         (pal) => pal.name !== state.palette.name,
       ),
     });
-    setState({ paletteGroup: PaletteGroup.RetroPC, palette: Win4bRGBI });
+    setState({
+      paletteGroup: PaletteGroup.RetroPC,
+      palette: Win4bRGBI,
+      paletteName: Win4bRGBI.name,
+    });
   };
 
   return (
