@@ -4,6 +4,8 @@ import Files, { files } from './Files';
 import type { FilesState } from './Files/types';
 import Preview, { preview } from './Preview';
 import type { PreviewState } from './Preview/types';
+import Help, { help } from './Help';
+import type { HelpState } from './Help/types';
 import Minesweeper, { minesweeper } from './Minesweeper';
 import MinesweeperCustomDifficulty, {
   mine_difficulty,
@@ -25,6 +27,7 @@ const applications = [
   { Component: Intro, meta: intro },
   { Component: Files, meta: files() },
   { Component: Preview, meta: preview() },
+  { Component: Help, meta: help() },
   { Component: Minesweeper, meta: minesweeper },
   { Component: MinesweeperCustomDifficulty, meta: mine_difficulty() },
   { Component: Solitaire, meta: solitaire },
@@ -38,6 +41,7 @@ const applications = [
 export interface AppStateTypes {
   files: FilesState;
   preview: PreviewState;
+  help: HelpState;
   dos: DOSEmuState;
   dither: DitherLabState;
   mine_difficulty: MinesweeperCustomDifficultyState;
