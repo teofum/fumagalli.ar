@@ -51,7 +51,7 @@ export default function Intro() {
         </div>
 
         <p className="font-display-text text-xl mt-auto">
-          Want to work together?{' '}
+          Let's build awesome things together!{' '}
           <a href="mailto:teo.fum@outlook.com">Get in touch</a>
         </p>
       </div>

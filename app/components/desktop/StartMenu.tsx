@@ -16,6 +16,7 @@ import { themeSettings } from '../apps/ThemeSettings';
 import { dosEmu } from '../apps/DOSEmu';
 import { ditherLab } from '../apps/DitherLab';
 import { DOS_GAMES } from '../apps/DOSEmu/types';
+import { help } from '../apps/Help';
 
 const ICON_PATH = '/fs/system/Resources/Icons/Start';
 
@@ -146,6 +147,7 @@ export default function StartMenu() {
             className="gap-2 w-44"
             label="Help"
             icon={`${ICON_PATH}/help.png`}
+            onSelect={() => launch(help())}
           />
 
           <Menu.Separator />

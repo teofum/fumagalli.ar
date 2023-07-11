@@ -6,7 +6,6 @@ export const files = (initialState?: FilesState): WindowInit<'files'> => ({
   appState: initialState ?? defaultFilesState,
 
   title: 'File Explorer',
-  icon: 'files',
 
   minWidth: 400,
   minHeight: 300,
