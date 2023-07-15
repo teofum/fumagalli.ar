@@ -3,6 +3,8 @@ import Button from '~/components/ui/Button';
 import { files } from '../Files';
 import { help } from '../Help';
 
+const resources = '/fs/system/Applications/intro/resources';
+
 export default function Intro() {
   const { launch } = useDesktopStore();
 
@@ -35,19 +37,28 @@ export default function Intro() {
             className="py-1 px-2 w-20"
             onClick={() => openFolder('/Documents/Articles')}
           >
-            Articles
+            <div className="flex flex-col items-center gap-1 pt-1">
+              <img src={`${resources}/articles.png`} alt="" />
+              Articles
+            </div>
           </Button>
           <Button
             className="py-1 px-2 w-20"
             onClick={() => openFolder('/Documents/Photos')}
           >
-            Photos
+            <div className="flex flex-col items-center gap-1 pt-1">
+              <img src={`${resources}/photos.png`} alt="" />
+              Photos
+            </div>
           </Button>
           <Button
             className="py-1 px-2 w-20"
             onClick={() => openFolder('/Documents/Projects')}
           >
-            Projects
+            <div className="flex flex-col items-center gap-1 pt-1">
+              <img src={`${resources}/projects.png`} alt="" />
+              Projects
+            </div>
           </Button>
         </div>
 
@@ -60,17 +71,13 @@ export default function Intro() {
           to learn more about the different features of this site.
         </p>
 
-        <p className="font-display-text text-xl mt-auto">
+        <p className="font-display-text text-xl mt-auto pt-8">
           Let's build awesome things together!{' '}
           <a href="mailto:teo.fum@outlook.com">Get in touch</a>
         </p>
       </div>
 
-      <img
-        src="/fs/system/Applications/intro/resources/me.png"
-        alt="me"
-        className="self-end mt-6"
-      />
+      <img src={`${resources}/me.png`} alt="me" className="self-end mt-6" />
     </div>
   );
 }
