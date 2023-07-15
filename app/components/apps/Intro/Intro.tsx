@@ -1,6 +1,7 @@
 import useDesktopStore from '~/stores/desktop';
 import Button from '~/components/ui/Button';
 import { files } from '../Files';
+import { help } from '../Help';
 
 export default function Intro() {
   const { launch } = useDesktopStore();
@@ -31,24 +32,33 @@ export default function Intro() {
 
         <div className="flex flex-row gap-1">
           <Button
-            className="py-1 px-2"
+            className="py-1 px-2 w-20"
             onClick={() => openFolder('/Documents/Articles')}
           >
             Articles
           </Button>
           <Button
-            className="py-1 px-2"
+            className="py-1 px-2 w-20"
             onClick={() => openFolder('/Documents/Photos')}
           >
             Photos
           </Button>
           <Button
-            className="py-1 px-2"
+            className="py-1 px-2 w-20"
             onClick={() => openFolder('/Documents/Projects')}
           >
             Projects
           </Button>
         </div>
+
+        <p className="font-display-text text-xl">
+          You can take a look at the{' '}
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a href="" onClick={() => launch(help())}>
+            help pages
+          </a>{' '}
+          to learn more about the different features of this site.
+        </p>
 
         <p className="font-display-text text-xl mt-auto">
           Let's build awesome things together!{' '}

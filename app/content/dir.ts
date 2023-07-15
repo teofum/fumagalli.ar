@@ -1473,7 +1473,7 @@ const FS_ROOT: Directory = {
                           type: 'md',
                           name: '01.About TeOS.md',
                           created: 1689036555,
-                          modified: 1689046943,
+                          modified: 1689454735,
                           size: 1497,
                         },
                         {
@@ -1506,11 +1506,35 @@ const FS_ROOT: Directory = {
                       class: 'dir',
                       name: '02.Applications',
                       created: 1689036555,
-                      modified: 1689046881,
+                      modified: 1689454526,
                       items: [
                         {
                           class: 'dir',
-                          name: '01.DitherLab',
+                          name: '01.File Explorer',
+                          created: 1689454512,
+                          modified: 1689454607,
+                          items: [
+                            {
+                              class: 'file',
+                              type: 'md',
+                              name: '01.About File Explorer.md',
+                              created: 1689453279,
+                              modified: 1689454783,
+                              size: 473,
+                            },
+                            {
+                              class: 'file',
+                              type: 'md',
+                              name: '02.Using the File Explorer.md',
+                              created: 1689454569,
+                              modified: 1689455466,
+                              size: 2126,
+                            },
+                          ],
+                        },
+                        {
+                          class: 'dir',
+                          name: '02.DitherLab',
                           created: 1689036555,
                           modified: 1689045062,
                           items: [
@@ -1549,7 +1573,7 @@ const FS_ROOT: Directory = {
                                   type: 'md',
                                   name: '04.Pattern Dithering.md',
                                   created: 1689036555,
-                                  modified: 1689046704,
+                                  modified: 1689454705,
                                   size: 2708,
                                 },
                               ],
@@ -1567,7 +1591,7 @@ const FS_ROOT: Directory = {
                               type: 'md',
                               name: '02.Using DitherLab.md',
                               created: 1689036555,
-                              modified: 1689045143,
+                              modified: 1689454705,
                               size: 1761,
                             },
                             {
@@ -1575,7 +1599,7 @@ const FS_ROOT: Directory = {
                               type: 'md',
                               name: '03.DitherLab settings.md',
                               created: 1689036555,
-                              modified: 1689046686,
+                              modified: 1689454705,
                               size: 1499,
                             },
                             {
@@ -1590,7 +1614,7 @@ const FS_ROOT: Directory = {
                         },
                         {
                           class: 'dir',
-                          name: '02.DOSEmu',
+                          name: '03.DOSEmu',
                           created: 1689046881,
                           modified: 1689046895,
                           items: [
@@ -1599,15 +1623,23 @@ const FS_ROOT: Directory = {
                               type: 'md',
                               name: '01.About DOSEmu.md',
                               created: 1689046891,
-                              modified: 1689047312,
-                              size: 750,
+                              modified: 1689448535,
+                              size: 465,
                             },
                           ],
                         },
                         {
                           class: 'file',
                           type: 'md',
-                          name: '01.Minesweeper.md',
+                          name: '02.Preview.md',
+                          created: 1689453321,
+                          modified: 1689453321,
+                          size: 0,
+                        },
+                        {
+                          class: 'file',
+                          type: 'md',
+                          name: '03.Minesweeper.md',
                           created: 1689036555,
                           modified: 1689040945,
                           size: 488,
@@ -1615,7 +1647,7 @@ const FS_ROOT: Directory = {
                         {
                           class: 'file',
                           type: 'md',
-                          name: '02.Sudoku.md',
+                          name: '04.Sudoku.md',
                           created: 1689036555,
                           modified: 1689040900,
                           size: 536,
@@ -1623,7 +1655,7 @@ const FS_ROOT: Directory = {
                         {
                           class: 'file',
                           type: 'md',
-                          name: '03.Solitaire.md',
+                          name: '05.Solitaire.md',
                           created: 1689040734,
                           modified: 1689044356,
                           size: 1955,
@@ -2726,7 +2758,7 @@ const FS_ROOT: Directory = {
               class: 'dir',
               name: 'Icons',
               created: 1687638059,
-              modified: 1689030374,
+              modified: 1689446956,
               items: [
                 {
                   class: 'dir',
@@ -2931,10 +2963,26 @@ const FS_ROOT: Directory = {
                 {
                   class: 'file',
                   type: 'image',
+                  name: 'info.png',
+                  created: 1689446954,
+                  modified: 1689446954,
+                  size: 470,
+                },
+                {
+                  class: 'file',
+                  type: 'image',
                   name: 'shutdown.png',
                   created: 1687724532,
                   modified: 1687724532,
                   size: 495,
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'warning.png',
+                  created: 1689446934,
+                  modified: 1689446934,
+                  size: 458,
                 },
               ],
             },

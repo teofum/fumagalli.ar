@@ -3,5 +3,5 @@ export interface HelpState {
 }
 
 export const defaultHelpState: HelpState = {
-  path: '/Welcome to Help.md',
+  path: '/01.Welcome to Help.md',
 };
