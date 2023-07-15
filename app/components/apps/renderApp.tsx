@@ -21,6 +21,8 @@ import DOSEmu, { dosEmu } from './DOSEmu';
 import type { DOSEmuState } from './DOSEmu/types';
 import DitherLab, { ditherLab } from './DitherLab';
 import type { DitherLabState } from './DitherLab/types';
+import MessageBox, { messageBox } from './MessageBox';
+import type { MessageBoxState } from './MessageBox/types';
 
 const applications = [
   { Component: About, meta: about },
@@ -36,6 +38,7 @@ const applications = [
   { Component: ThemeSettings, meta: themeSettings },
   { Component: DOSEmu, meta: dosEmu() },
   { Component: DitherLab, meta: ditherLab() },
+  { Component: MessageBox, meta: messageBox() },
 ];
 
 export interface AppStateTypes {
@@ -44,6 +47,7 @@ export interface AppStateTypes {
   help: HelpState;
   dos: DOSEmuState;
   dither: DitherLabState;
+  messageBox: MessageBoxState;
   mine_difficulty: MinesweeperCustomDifficultyState;
 }
 
