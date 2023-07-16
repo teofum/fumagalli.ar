@@ -33,6 +33,10 @@
   }
 
   /* Toggle button */
+  .toggle-button {
+    @apply px-2;
+  }
+
   .toggle-button[data-state='on'] {
     @apply bg-checkered bevel-inset;
   }
@@ -49,7 +53,7 @@
     @apply bg-surface;
 
     color: theme('colors.disabled');
-    text-shadow: 1px 1px theme('colors.disabled-shadow')
+    text-shadow: 1px 1px theme('colors.disabled-shadow');
   }
 
   /* Menus */

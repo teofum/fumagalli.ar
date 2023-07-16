@@ -1,3 +1,4 @@
+import type { PaintBrushFn } from '../types';
 import setPixel from './setPixel';
 
 function drawLine(
@@ -6,17 +7,15 @@ function drawLine(
   y1: number,
   x2: number,
   y2: number,
-  color?: string,
+  brushFn?: PaintBrushFn,
   dense: boolean = false,
 ): void {
-  if (color) ctx.fillStyle = color;
-
   const dx = x2 - x1;
   const dy = y2 - y1;
 
   // Line is a single point, draw one pixel
   if (x1 === x2 && y1 === y2) {
-    // if (customBrushFunction) customBrushFunction(x1, y1, ctx);
+    if (brushFn) brushFn(ctx, x1, y1);
     setPixel(ctx, x1, y1);
     return;
   }
@@ -30,7 +29,7 @@ function drawLine(
     const deltaerr = dy / dx; // Change in Y per 1 pixel in X
     let y = y1;
     for (let x = Math.round(x1); x <= Math.round(x2); x++) {
-      // if (customBrushFunction) customBrushFunction(x, Math.round(y), ctx);
+      if (brushFn) brushFn(ctx, x, Math.round(y));
       setPixel(ctx, x, Math.round(y));
 
       y += deltaerr;
@@ -38,7 +37,7 @@ function drawLine(
       // Dense line, if Y will be different next pixel draw at next Y too
       // Makes the line continuous in 4-adjacent as well as 8-adjacent
       if (dense && Math.round(y) !== Math.round(y - deltaerr)) {
-        // if (customBrushFunction) customBrushFunction(x, Math.round(y), ctx);
+        if (brushFn) brushFn(ctx, x, Math.round(y));
         setPixel(ctx, x, Math.round(y));
       }
     }
@@ -51,7 +50,7 @@ function drawLine(
     const deltaerr = dx / dy; // Change in X per 1 pixel in Y
     let x = x1;
     for (let y = Math.round(y1); y <= Math.round(y2); y++) {
-      // if (customBrushFunction) customBrushFunction(Math.round(x), y, ctx);
+      if (brushFn) brushFn(ctx, Math.round(x), y);
       setPixel(ctx, Math.round(x), y);
 
       x += deltaerr;
@@ -59,7 +58,7 @@ function drawLine(
       // Dense line, if X will be different next pixel draw at next X too
       // Makes the line continuous in 4-adjacent as well as 8-adjacent
       if (dense && Math.round(x) !== Math.round(x - deltaerr)) {
-        // if (customBrushFunction) customBrushFunction(Math.round(x), y, ctx);
+        if (brushFn) brushFn(ctx, Math.round(x), y);
         setPixel(ctx, Math.round(x), y);
       }
     }

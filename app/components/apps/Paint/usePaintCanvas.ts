@@ -57,6 +57,7 @@ export default function usePaintCanvas() {
 
         fg: fgColor,
         bg: bgColor,
+        brushVariant: state.brushVariant,
       };
 
       brush.onPointerDown(event);
@@ -87,6 +88,7 @@ export default function usePaintCanvas() {
 
         fg: fgColor,
         bg: bgColor,
+        brushVariant: state.brushVariant,
       };
 
       brush.onPointerMove(event);

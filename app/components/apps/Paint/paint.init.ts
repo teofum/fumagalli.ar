@@ -10,6 +10,6 @@ export const paint = (initialState?: PaintState): WindowInit<'paint'> => ({
   minWidth: 300,
   minHeight: 400,
 
-  width: 600,
-  height: 480,
+  width: 700,
+  height: 540,
 });

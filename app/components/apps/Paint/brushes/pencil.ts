@@ -12,6 +12,7 @@ export const pencil: PaintBrush = {
     if (!pointerEvent.buttons) return;
     const color = pointerEvent.buttons === 2 ? bg : fg;
 
-    drawLine(ctx, fromX, fromY, x, y, color);
+    ctx.fillStyle = color;
+    drawLine(ctx, fromX, fromY, x, y);
   },
 };

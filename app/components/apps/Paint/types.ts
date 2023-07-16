@@ -13,6 +13,7 @@ export interface PaintEvent {
 
   fg: string;
   bg: string;
+  brushVariant: number;
 }
 
 export interface PaintBrush {
@@ -22,8 +23,15 @@ export interface PaintBrush {
   onPointerMove: (ev: PaintEvent) => void;
 }
 
+export type PaintBrushFn = (
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+) => void;
+
 export interface PaintState {
   brush: keyof typeof brushes;
+  brushVariant: number;
 
   fgColor: number[];
   bgColor: number[];
@@ -31,6 +39,7 @@ export interface PaintState {
 
 export const defaultPaintState: PaintState = {
   brush: 'pencil',
+  brushVariant: 0,
 
   fgColor: [0, 0, 0],
   bgColor: [255, 255, 255],
