@@ -70,7 +70,7 @@ export default function StartMenu() {
             </Menu.Sub>
             {[
               files({ path: '/Documents' }),
-              paint,
+              paint(),
               ditherLab(),
               about,
               intro,

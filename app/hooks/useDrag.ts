@@ -4,6 +4,10 @@ interface Handlers {
   onDragEnd?: (ev: PointerEvent, target: EventTarget | null) => void;
 }
 
+interface DragOptions {
+  allowSecondaryButton: boolean;
+}
+
 /**
  * Utility hook for draggable elements
  * @param onDragStart Event handler fired on drag start
@@ -11,11 +15,10 @@ interface Handlers {
  * @param onDragEnd Event handler fired on drag end (released)
  * @returns Pointer down event handler to pass to onPointerDown prop
  */
-export default function useDrag({
-  onDragStart,
-  onDragMove,
-  onDragEnd,
-}: Handlers) {
+export default function useDrag(
+  { onDragStart, onDragMove, onDragEnd }: Handlers,
+  options?: DragOptions,
+) {
   const drag = (ev: PointerEvent, target: EventTarget | null) => {
     onDragStart?.(ev, target);
 
@@ -27,7 +30,11 @@ export default function useDrag({
 
     // At the end of a drag event (release)...
     const dragEnd = (ev: PointerEvent) => {
-      if (ev.button !== 0) return;
+      if (
+        ev.button !== 0 &&
+        (ev.button !== 2 || !options?.allowSecondaryButton)
+      )
+        return;
 
       onDragEnd?.(ev, target);
 
@@ -41,7 +48,12 @@ export default function useDrag({
   };
 
   const pointerDownHandler = (ev?: React.PointerEvent) => {
-    if (ev && ev.button > 0) return;
+    if (
+      ev &&
+      ev.button !== 0 &&
+      (ev.button !== 2 || !options?.allowSecondaryButton)
+    )
+      return;
 
     const start = (ev: PointerEvent) => {
       const { target } = ev;

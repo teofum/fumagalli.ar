@@ -8,9 +8,10 @@ export const pencil: PaintBrush = {
     ctx.fillStyle = fg;
     setPixel(ctx, x, y);
   },
-  onPointerMove: ({ ctx, x, y, fromX, fromY, fg, pointerEvent }) => {
+  onPointerMove: ({ ctx, x, y, fromX, fromY, fg, bg, pointerEvent }) => {
     if (!pointerEvent.buttons) return;
+    const color = pointerEvent.buttons === 2 ? bg : fg;
 
-    drawLine(ctx, fromX, fromY, x, y, fg);
+    drawLine(ctx, fromX, fromY, x, y, color);
   },
 };
