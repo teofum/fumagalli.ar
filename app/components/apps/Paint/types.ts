@@ -14,6 +14,9 @@ export interface PaintEvent {
   fg: string;
   bg: string;
   brushVariant: number;
+
+  state: PaintState;
+  setState: (state: Partial<PaintState>) => void;
 }
 
 export interface PaintBrush {

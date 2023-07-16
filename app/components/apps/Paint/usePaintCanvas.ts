@@ -1,11 +1,12 @@
-import useDrag from '~/hooks/useDrag';
-import type { PaintEvent } from './types';
 import { useEffect, useRef, useState } from 'react';
+
+import type { PaintEvent } from './types';
 import { useAppState } from '~/components/desktop/Window/context';
 import { brushes } from './brushes';
+import usePaint from './usePaint';
 
 export default function usePaintCanvas() {
-  const [state] = useAppState('paint');
+  const [state, setState] = useAppState('paint');
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
   const brush = brushes[state.brush];
@@ -46,12 +47,12 @@ export default function usePaintCanvas() {
     }
   };
 
-  const brushDown = (ev: PointerEvent) => {
+  const onPaintStart = (ev: PointerEvent) => {
     const ctx = canvas?.getContext('2d');
     if (canvas && ctx) {
       const canvasRect = canvas.getBoundingClientRect();
-      const x = ev.clientX - canvasRect.x;
-      const y = ev.clientY - canvasRect.y;
+      const x = Math.round(ev.clientX - canvasRect.x);
+      const y = Math.round(ev.clientY - canvasRect.y);
 
       const fromX = lastPos.current.x;
       const fromY = lastPos.current.y;
@@ -71,18 +72,21 @@ export default function usePaintCanvas() {
         fg: fgColor,
         bg: bgColor,
         brushVariant: state.brushVariant,
+
+        state,
+        setState,
       };
 
       brush.onPointerDown(event);
     }
   };
 
-  const brushMove = (ev: PointerEvent) => {
+  const onPaintMove = (ev: PointerEvent) => {
     const ctx = canvas?.getContext('2d');
     if (canvas && ctx) {
       const canvasRect = canvas.getBoundingClientRect();
-      const x = ev.clientX - canvasRect.x;
-      const y = ev.clientY - canvasRect.y;
+      const x = Math.round(ev.clientX - canvasRect.x);
+      const y = Math.round(ev.clientY - canvasRect.y);
 
       const fromX = lastPos.current.x;
       const fromY = lastPos.current.y;
@@ -102,21 +106,19 @@ export default function usePaintCanvas() {
         fg: fgColor,
         bg: bgColor,
         brushVariant: state.brushVariant,
+
+        state,
+        setState,
       };
 
       brush.onPointerMove(event);
     }
   };
 
-  // Originally intended for dragging, but this hook
-  // works just as well for painting!
-  const onPointerDown = useDrag(
-    {
-      onDragStart: brushDown,
-      onDragMove: brushMove,
-    },
-    { allowSecondaryButton: true },
-  );
+  const onPointerDown = usePaint({
+    onPaintStart,
+    onPaintMove,
+  });
 
   const onContextMenu = (ev: React.MouseEvent) => ev.preventDefault();
 

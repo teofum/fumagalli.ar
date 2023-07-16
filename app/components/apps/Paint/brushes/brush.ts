@@ -45,10 +45,11 @@ const functions: PaintBrushFn[] = [
 
 export const brush: PaintBrush = {
   name: 'brush',
-  onPointerDown: ({ ctx, x, y, fg, brushVariant }) => {
+  onPointerDown: ({ ctx, x, y, fg, bg, brushVariant, pointerEvent }) => {
+    const color = pointerEvent.buttons === 2 ? bg : fg;
     const brushFn = functions[brushVariant];
 
-    ctx.fillStyle = fg;
+    ctx.fillStyle = color;
     brushFn(ctx, x, y);
   },
   onPointerMove: ({
