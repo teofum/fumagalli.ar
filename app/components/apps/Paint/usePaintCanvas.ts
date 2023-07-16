@@ -33,6 +33,19 @@ export default function usePaintCanvas() {
     }
   }, [canvas]);
 
+  const clear = () => {
+    const ctx = canvas?.getContext('2d');
+    if (canvas && ctx) {
+      const { width, height } = canvas.getBoundingClientRect();
+      canvas.width = width;
+      canvas.height = height;
+
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.imageSmoothingEnabled = false;
+    }
+  };
+
   const brushDown = (ev: PointerEvent) => {
     const ctx = canvas?.getContext('2d');
     if (canvas && ctx) {
@@ -107,5 +120,8 @@ export default function usePaintCanvas() {
 
   const onContextMenu = (ev: React.MouseEvent) => ev.preventDefault();
 
-  return { ref, onPointerDown, onContextMenu };
+  return {
+    canvasProps: { ref, onPointerDown, onContextMenu },
+    clear,
+  };
 }

@@ -16,7 +16,7 @@ export default function Paint() {
   const { close } = useWindow();
 
   const [state, setState] = useAppState('paint');
-  const canvasProps = usePaintCanvas();
+  const { clear, canvasProps } = usePaintCanvas();
 
   const [fr, fg, fb] = state.fgColor;
   const [br, bg, bb] = state.bgColor;
@@ -29,6 +29,10 @@ export default function Paint() {
     <div className="flex flex-col gap-0.5 min-w-0 select-none">
       <div className="flex flex-row gap-1">
         <Menu.Root trigger={<Menu.Trigger>File</Menu.Trigger>}>
+          <Menu.Item label="New" onSelect={clear} />
+
+          <Menu.Separator />
+
           <Menu.Item label="Exit" onSelect={close} />
         </Menu.Root>
       </div>
