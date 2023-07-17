@@ -7,6 +7,7 @@ import { brush } from './brush';
 import { line } from './line';
 import { curve } from './curve';
 import { ellipse, rectangle, roundedrect } from './shapes';
+import { polygon } from './polygon';
 
 export const brushes = {
   eraser,
@@ -18,6 +19,7 @@ export const brushes = {
   line,
   curve,
   rectangle,
+  polygon,
   ellipse,
   roundedrect,
 };

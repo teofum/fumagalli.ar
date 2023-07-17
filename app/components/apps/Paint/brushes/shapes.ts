@@ -22,7 +22,7 @@ function shape(name: string, drawFn: PaintShapeFn): PaintBrush {
 
       clear(scratchCtx);
 
-      // Set up line data
+      // Set up shape data
       scratch.fill = brushVariant === 1 ? secondary : color;
       scratch.stroke = color;
       scratch.x0 = x;
