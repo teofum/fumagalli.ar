@@ -28,6 +28,10 @@ export default function Paint() {
 
           <Menu.Item label="Exit" onSelect={close} />
         </Menu.Root>
+
+        <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>
+          <Menu.Item label="Reset zoom" onSelect={() => setState({ zoom: 1 })} />
+        </Menu.Root>
       </div>
 
       <div className="flex-1 flex flex-row gap-0.5 min-h-0">
@@ -36,7 +40,7 @@ export default function Paint() {
         <ScrollContainer className="flex-1 !bg-[#808080]">
           <canvas
             className="m-1 [image-rendering:pixelated] touch-none"
-            style={{ width: 600, height: 400 }}
+            style={{ width: 600 * state.zoom, height: 400 * state.zoom }}
             {...canvasProps}
           />
         </ScrollContainer>

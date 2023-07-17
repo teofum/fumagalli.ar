@@ -38,6 +38,8 @@ export interface PaintState {
 
   fgColor: number[];
   bgColor: number[];
+
+  zoom: number;
 }
 
 export const defaultPaintState: PaintState = {
@@ -46,4 +48,6 @@ export const defaultPaintState: PaintState = {
 
   fgColor: [0, 0, 0],
   bgColor: [255, 255, 255],
+
+  zoom: 1,
 };

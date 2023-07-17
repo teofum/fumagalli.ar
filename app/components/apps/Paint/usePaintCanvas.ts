@@ -25,21 +25,22 @@ export default function usePaintCanvas() {
     const ctx = canvas?.getContext('2d');
     if (canvas && ctx) {
       const { width, height } = canvas.getBoundingClientRect();
-      canvas.width = width;
-      canvas.height = height;
+      canvas.width = width / state.zoom;
+      canvas.height = height / state.zoom;
 
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.imageSmoothingEnabled = false;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvas]);
 
   const clear = () => {
     const ctx = canvas?.getContext('2d');
     if (canvas && ctx) {
       const { width, height } = canvas.getBoundingClientRect();
-      canvas.width = width;
-      canvas.height = height;
+      canvas.width = width / state.zoom;
+      canvas.height = height / state.zoom;
 
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -51,8 +52,8 @@ export default function usePaintCanvas() {
     const ctx = canvas?.getContext('2d');
     if (canvas && ctx) {
       const canvasRect = canvas.getBoundingClientRect();
-      const x = Math.round(ev.clientX - canvasRect.x);
-      const y = Math.round(ev.clientY - canvasRect.y);
+      const x = Math.round((ev.clientX - canvasRect.x) / state.zoom);
+      const y = Math.round((ev.clientY - canvasRect.y) / state.zoom);
 
       const fromX = lastPos.current.x;
       const fromY = lastPos.current.y;
@@ -85,8 +86,8 @@ export default function usePaintCanvas() {
     const ctx = canvas?.getContext('2d');
     if (canvas && ctx) {
       const canvasRect = canvas.getBoundingClientRect();
-      const x = Math.round(ev.clientX - canvasRect.x);
-      const y = Math.round(ev.clientY - canvasRect.y);
+      const x = Math.round((ev.clientX - canvasRect.x) / state.zoom);
+      const y = Math.round((ev.clientY - canvasRect.y) / state.zoom);
 
       const fromX = lastPos.current.x;
       const fromY = lastPos.current.y;
