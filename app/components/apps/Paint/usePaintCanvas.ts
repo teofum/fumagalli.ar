@@ -32,7 +32,11 @@ export default function usePaintCanvas() {
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.imageSmoothingEnabled = false;
-      ctx.putImageData(data, 0, 0);
+
+      // Restore image data if not empty
+      if (data.data[3] !== 0) {
+        ctx.putImageData(data, 0, 0);
+      }
     }
   }, [canvas, state.canvasWidth, state.canvasHeight]);
 
