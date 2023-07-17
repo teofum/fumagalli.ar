@@ -17,13 +17,18 @@ export interface PaintEvent {
 
   state: PaintState;
   setState: (state: Partial<PaintState>) => void;
+
+  scratch: any;
+  scratchCanvas: HTMLCanvasElement;
+  scratchCtx: CanvasRenderingContext2D;
 }
 
 export interface PaintBrush {
   name: string;
 
-  onPointerDown: (ev: PaintEvent) => void;
-  onPointerMove: (ev: PaintEvent) => void;
+  onPointerDown?: (ev: PaintEvent) => void;
+  onPointerMove?: (ev: PaintEvent) => void;
+  onPointerUp?: (ev: PaintEvent) => void;
 }
 
 export type PaintBrushFn = (

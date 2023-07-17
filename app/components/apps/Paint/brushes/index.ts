@@ -4,6 +4,7 @@ import { dropper } from './dropper';
 import { zoom } from './zoom';
 import { pencil } from './pencil';
 import { brush } from './brush';
+import { line } from './line';
 
 export const brushes = {
   eraser,
@@ -12,4 +13,5 @@ export const brushes = {
   zoom,
   pencil,
   brush,
+  line,
 };

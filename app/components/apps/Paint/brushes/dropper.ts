@@ -13,5 +13,4 @@ export const dropper: PaintBrush = {
     if (bg) setState({ bgColor: [r, g, b] });
     else setState({ fgColor: [r, g, b] });
   },
-  onPointerMove: () => {},
 };

@@ -14,7 +14,7 @@ export default function Paint() {
   const { close, modal } = useWindow();
 
   const [state, setState] = useAppState('paint');
-  const { clear, canvasProps } = usePaintCanvas();
+  const { clear, canvasProps, scratchCanvasProps } = usePaintCanvas();
 
   const [fr, fg, fb] = state.fgColor;
   const [br, bg, bb] = state.bgColor;
@@ -55,14 +55,24 @@ export default function Paint() {
         <PaintToolbox />
 
         <ScrollContainer className="flex-1 !bg-[#808080]">
-          <canvas
-            className="m-1 [image-rendering:pixelated] touch-none"
-            style={{
-              width: state.canvasWidth * state.zoom,
-              height: state.canvasHeight * state.zoom,
-            }}
-            {...canvasProps}
-          />
+          <div className="m-1 relative touch-none">
+            <canvas
+              className="[image-rendering:pixelated]"
+              style={{
+                width: state.canvasWidth * state.zoom,
+                height: state.canvasHeight * state.zoom,
+              }}
+              {...canvasProps}
+            />
+            <canvas
+              className="absolute inset-0 [image-rendering:pixelated] pointer-events-none"
+              style={{
+                width: state.canvasWidth * state.zoom,
+                height: state.canvasHeight * state.zoom,
+              }}
+              {...scratchCanvasProps}
+            />
+          </div>
         </ScrollContainer>
       </div>
 

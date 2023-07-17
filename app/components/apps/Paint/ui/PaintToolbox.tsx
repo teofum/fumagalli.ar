@@ -107,6 +107,32 @@ export default function PaintToolbox() {
           </ToggleGroup>
         </div>
       ) : null}
+
+      {state.brush === 'line' ? (
+        <div className="mx-1 bevel-light-inset self-center p-1">
+          <ToggleGroup
+            type="single"
+            orientation="vertical"
+            value={state.brushVariant.toString()}
+            onValueChange={(value) => setState({ brushVariant: Number(value) })}
+            className="w-10 gap-0.5"
+          >
+            {[0, 1, 2, 3, 4].map((variant) => (
+              <ToggleButton
+                key={variant}
+                className="w-full h-3 leading-3 px-1 flex flex-row items-center !shadow-none !bg-none data-[state=on]:bg-selection data-[state=on]:text-selection"
+                noInset
+                value={variant.toString()}
+              >
+                <div
+                  className="bg-current w-full"
+                  style={{ height: `${variant + 1}px` }}
+                />
+              </ToggleButton>
+            ))}
+          </ToggleGroup>
+        </div>
+      ) : null}
       <Divider className="mt-auto" />
     </div>
   );

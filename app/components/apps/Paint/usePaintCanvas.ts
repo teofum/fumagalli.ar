@@ -9,6 +9,9 @@ export default function usePaintCanvas() {
   const [state, setState] = useAppState('paint');
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
+  const scratchRef = useRef<any>({});
+  const scratchCanvasRef = useRef<HTMLCanvasElement>(null);
+
   const brush = brushes[state.brush];
 
   const [fr, fg, fb] = state.fgColor;
@@ -23,11 +26,16 @@ export default function usePaintCanvas() {
   };
   useEffect(() => {
     const ctx = canvas?.getContext('2d');
-    if (canvas && ctx) {
+    const scratchCtx = scratchCanvasRef.current?.getContext('2d');
+
+    if (canvas && ctx && scratchCanvasRef.current && scratchCtx) {
       const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
       canvas.width = state.canvasWidth;
       canvas.height = state.canvasHeight;
+
+      scratchCanvasRef.current.width = state.canvasWidth;
+      scratchCanvasRef.current.height = state.canvasHeight;
 
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -48,9 +56,11 @@ export default function usePaintCanvas() {
     }
   };
 
-  const onPaintStart = (ev: PointerEvent) => {
+  function getPaintEvent(ev: PointerEvent) {
     const ctx = canvas?.getContext('2d');
-    if (canvas && ctx) {
+    const scratchCtx = scratchCanvasRef.current?.getContext('2d');
+
+    if (canvas && ctx && scratchCanvasRef.current && scratchCtx) {
       const canvasRect = canvas.getBoundingClientRect();
       const x = Math.round((ev.clientX - canvasRect.x) / state.zoom);
       const y = Math.round((ev.clientY - canvasRect.y) / state.zoom);
@@ -76,55 +86,42 @@ export default function usePaintCanvas() {
 
         state,
         setState,
+
+        scratch: scratchRef.current,
+        scratchCanvas: scratchCanvasRef.current,
+        scratchCtx,
       };
 
-      brush.onPointerDown(event);
+      return event;
     }
+  }
+
+  const onPaintStart = (ev: PointerEvent) => {
+    const event = getPaintEvent(ev);
+    if (event) brush.onPointerDown?.(event);
   };
 
   const onPaintMove = (ev: PointerEvent) => {
-    const ctx = canvas?.getContext('2d');
-    if (canvas && ctx) {
-      const canvasRect = canvas.getBoundingClientRect();
-      const x = Math.round((ev.clientX - canvasRect.x) / state.zoom);
-      const y = Math.round((ev.clientY - canvasRect.y) / state.zoom);
+    const event = getPaintEvent(ev);
+    if (event) brush.onPointerMove?.(event);
+  };
 
-      const fromX = lastPos.current.x;
-      const fromY = lastPos.current.y;
-
-      lastPos.current = { x, y };
-
-      const event: PaintEvent = {
-        pointerEvent: ev,
-        canvas,
-        ctx,
-
-        x,
-        y,
-        fromX,
-        fromY,
-
-        fg: fgColor,
-        bg: bgColor,
-        brushVariant: state.brushVariant,
-
-        state,
-        setState,
-      };
-
-      brush.onPointerMove(event);
-    }
+  const onPaintEnd = (ev: PointerEvent) => {
+    const event = getPaintEvent(ev);
+    if (event) brush.onPointerUp?.(event);
   };
 
   const onPointerDown = usePaint({
     onPaintStart,
     onPaintMove,
+    onPaintEnd,
   });
 
   const onContextMenu = (ev: React.MouseEvent) => ev.preventDefault();
 
   return {
     canvasProps: { ref, onPointerDown, onContextMenu },
+    scratchCanvasProps: { ref: scratchCanvasRef },
     clear,
   };
 }

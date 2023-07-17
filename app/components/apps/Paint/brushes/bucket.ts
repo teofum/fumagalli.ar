@@ -10,5 +10,4 @@ export const bucket: PaintBrush = {
 
     floodFill(ctx, x, y, color);
   },
-  onPointerMove: () => {},
 };
