@@ -4,6 +4,7 @@ import type { PaintEvent } from './types';
 import { useAppState } from '~/components/desktop/Window/context';
 import { brushes } from './brushes';
 import usePaint from './usePaint';
+import clear from './utils/clear';
 
 export default function usePaintCanvas() {
   const [state, setState] = useAppState('paint');
@@ -48,12 +49,26 @@ export default function usePaintCanvas() {
     }
   }, [canvas, state.canvasWidth, state.canvasHeight]);
 
-  const clear = () => {
+  useEffect(() => {
+    const scratch = scratchRef.current;
+    if (scratch) Object.keys(scratch).forEach((key) => delete scratch[key]);
+
+    const scratchCanvas = scratchCanvasRef.current;
+    const scratchCtx = scratchCanvas?.getContext('2d');
+    if (scratchCanvas && scratchCtx) clear(scratchCtx);
+  }, [state.brush, state.brushVariant]);
+
+  const clearMainCanvas = () => {
     const ctx = canvas?.getContext('2d');
     if (canvas && ctx) {
+      clear(ctx);
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
+
+    const scratchCanvas = scratchCanvasRef.current;
+    const scratchCtx = scratchCanvas?.getContext('2d');
+    if (scratchCanvas && scratchCtx) clear(scratchCtx);
   };
 
   function getPaintEvent(ev: PointerEvent) {
@@ -122,6 +137,6 @@ export default function usePaintCanvas() {
   return {
     canvasProps: { ref, onPointerDown, onContextMenu },
     scratchCanvasProps: { ref: scratchCanvasRef },
-    clear,
+    clear: clearMainCanvas,
   };
 }

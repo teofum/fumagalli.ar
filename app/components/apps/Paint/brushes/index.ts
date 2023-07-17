@@ -5,6 +5,7 @@ import { zoom } from './zoom';
 import { pencil } from './pencil';
 import { brush } from './brush';
 import { line } from './line';
+import { curve } from './curve';
 
 export const brushes = {
   eraser,
@@ -14,4 +15,5 @@ export const brushes = {
   pencil,
   brush,
   line,
+  curve,
 };

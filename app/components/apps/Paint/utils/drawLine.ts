@@ -3,32 +3,32 @@ import setPixel from './setPixel';
 
 function drawLine(
   ctx: CanvasRenderingContext2D,
+  x0: number,
+  y0: number,
   x1: number,
   y1: number,
-  x2: number,
-  y2: number,
   brushFn?: PaintBrushFn,
   dense: boolean = false,
 ): void {
-  const dx = x2 - x1;
-  const dy = y2 - y1;
+  const dx = x1 - x0;
+  const dy = y1 - y0;
 
   // Line is a single point, draw one pixel
-  if (x1 === x2 && y1 === y2) {
-    if (brushFn) brushFn(ctx, x1, y1);
-    setPixel(ctx, x1, y1);
+  if (x0 === x1 && y0 === y1) {
+    if (brushFn) brushFn(ctx, x0, y0);
+    setPixel(ctx, x0, y0);
     return;
   }
 
   if (Math.abs(dx) >= Math.abs(dy)) {
     // Horizontal slope, sort points by ascending X axis
-    if (x1 > x2) {
-      [x1, x2, y1, y2] = [x2, x1, y2, y1];
+    if (x0 > x1) {
+      [x0, x1, y0, y1] = [x1, x0, y1, y0];
     }
 
     const deltaerr = dy / dx; // Change in Y per 1 pixel in X
-    let y = y1;
-    for (let x = Math.round(x1); x <= Math.round(x2); x++) {
+    let y = y0;
+    for (let x = Math.round(x0); x <= Math.round(x1); x++) {
       if (brushFn) brushFn(ctx, x, Math.round(y));
       setPixel(ctx, x, Math.round(y));
 
@@ -43,13 +43,13 @@ function drawLine(
     }
   } else {
     // Vertical slope, sort points by ascending Y axis
-    if (y1 > y2) {
-      [x1, x2, y1, y2] = [x2, x1, y2, y1];
+    if (y0 > y1) {
+      [x0, x1, y0, y1] = [x1, x0, y1, y0];
     }
 
     const deltaerr = dx / dy; // Change in X per 1 pixel in Y
-    let x = x1;
-    for (let y = Math.round(y1); y <= Math.round(y2); y++) {
+    let x = x0;
+    for (let y = Math.round(y0); y <= Math.round(y1); y++) {
       if (brushFn) brushFn(ctx, Math.round(x), y);
       setPixel(ctx, Math.round(x), y);
 

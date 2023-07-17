@@ -108,7 +108,7 @@ export default function PaintToolbox() {
         </div>
       ) : null}
 
-      {state.brush === 'line' ? (
+      {['line', 'curve'].includes(state.brush) ? (
         <div className="mx-1 bevel-light-inset self-center p-1">
           <ToggleGroup
             type="single"
