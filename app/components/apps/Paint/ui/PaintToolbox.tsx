@@ -3,6 +3,7 @@ import Divider from '~/components/ui/Divider';
 import { ToggleButton, ToggleGroup } from '~/components/ui/ToggleGroup';
 import { brushes } from '../brushes';
 import BrushIcons from '../icons/Brush';
+import { ZOOM_STOPS } from '../brushes/zoom';
 
 const resources = '/fs/system/Applications/paint/resources';
 
@@ -78,6 +79,29 @@ export default function PaintToolbox() {
                     height: `${4 + variant * 2}px`,
                   }}
                 />
+              </ToggleButton>
+            ))}
+          </ToggleGroup>
+        </div>
+      ) : null}
+
+      {state.brush === 'zoom' ? (
+        <div className="mx-1 bevel-light-inset self-center p-1">
+          <ToggleGroup
+            type="single"
+            orientation="vertical"
+            value={state.brushVariant.toString()}
+            onValueChange={(value) => setState({ brushVariant: Number(value) })}
+            className="w-10 gap-0.5"
+          >
+            {ZOOM_STOPS.map((zoom, i) => (
+              <ToggleButton
+                key={zoom}
+                className="w-full leading-3 text-center p-0 justify-center !shadow-none !bg-none data-[state=on]:bg-selection data-[state=on]:text-selection"
+                noInset
+                value={i.toString()}
+              >
+                {zoom}x
               </ToggleButton>
             ))}
           </ToggleGroup>

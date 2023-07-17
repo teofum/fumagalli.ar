@@ -38,13 +38,8 @@ export default function usePaintCanvas() {
   const clear = () => {
     const ctx = canvas?.getContext('2d');
     if (canvas && ctx) {
-      const { width, height } = canvas.getBoundingClientRect();
-      canvas.width = width / state.zoom;
-      canvas.height = height / state.zoom;
-
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.imageSmoothingEnabled = false;
     }
   };
 

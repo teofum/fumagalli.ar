@@ -1,6 +1,6 @@
 import type { PaintBrush } from '../types';
 
-const ZOOM_STOPS = [2, 4, 6, 8];
+export const ZOOM_STOPS = [2, 4, 6, 8];
 
 export const zoom: PaintBrush = {
   name: 'zoom',
