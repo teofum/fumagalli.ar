@@ -1,7 +1,7 @@
 import type { PaintBrushFn } from '../types';
 import setPixel from './setPixel';
 
-function drawLine(
+export default function drawLine(
   ctx: CanvasRenderingContext2D,
   x0: number,
   y0: number,
@@ -9,7 +9,7 @@ function drawLine(
   y1: number,
   brushFn?: PaintBrushFn,
   dense: boolean = false,
-): void {
+) {
   const dx = x1 - x0;
   const dy = y1 - y0;
 
@@ -64,5 +64,3 @@ function drawLine(
     }
   }
 }
-
-export default drawLine;

@@ -6,6 +6,7 @@ import { pencil } from './pencil';
 import { brush } from './brush';
 import { line } from './line';
 import { curve } from './curve';
+import { ellipse, rectangle, roundedrect } from './shapes';
 
 export const brushes = {
   eraser,
@@ -16,4 +17,7 @@ export const brushes = {
   brush,
   line,
   curve,
+  rectangle,
+  ellipse,
+  roundedrect,
 };

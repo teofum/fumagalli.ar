@@ -37,6 +37,15 @@ export type PaintBrushFn = (
   y: number,
 ) => void;
 
+export type PaintShapeFn = (
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  mode: 'fill' | 'stroke',
+) => void;
+
 export interface PaintState {
   brush: keyof typeof brushes;
   brushVariant: number;
