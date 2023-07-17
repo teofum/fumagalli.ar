@@ -40,6 +40,8 @@ export interface PaintState {
   bgColor: number[];
 
   zoom: number;
+  canvasWidth: number;
+  canvasHeight: number;
 }
 
 export const defaultPaintState: PaintState = {
@@ -50,4 +52,6 @@ export const defaultPaintState: PaintState = {
   bgColor: [255, 255, 255],
 
   zoom: 1,
+  canvasWidth: 600,
+  canvasHeight: 400,
 };

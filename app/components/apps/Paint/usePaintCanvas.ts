@@ -24,16 +24,17 @@ export default function usePaintCanvas() {
   useEffect(() => {
     const ctx = canvas?.getContext('2d');
     if (canvas && ctx) {
-      const { width, height } = canvas.getBoundingClientRect();
-      canvas.width = width / state.zoom;
-      canvas.height = height / state.zoom;
+      const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+      canvas.width = state.canvasWidth;
+      canvas.height = state.canvasHeight;
 
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.imageSmoothingEnabled = false;
+      ctx.putImageData(data, 0, 0);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canvas]);
+  }, [canvas, state.canvasWidth, state.canvasHeight]);
 
   const clear = () => {
     const ctx = canvas?.getContext('2d');

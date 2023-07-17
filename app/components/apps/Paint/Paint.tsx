@@ -5,12 +5,13 @@ import usePaintCanvas from './usePaintCanvas';
 import getPaletteColors from '~/dither/utils/paletteColors';
 import PaintColors from '~/dither/palettes/Paint';
 import PaintToolbox from './ui/PaintToolbox';
+import { paint_imageSize } from './modals/ImageSize';
 
 const PAINT_COLORS = getPaletteColors(PaintColors);
 // const resources = '/fs/system/Applications/paint/resources';
 
 export default function Paint() {
-  const { close } = useWindow();
+  const { close, modal } = useWindow();
 
   const [state, setState] = useAppState('paint');
   const { clear, canvasProps } = usePaintCanvas();
@@ -30,7 +31,23 @@ export default function Paint() {
         </Menu.Root>
 
         <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>
-          <Menu.Item label="Reset zoom" onSelect={() => setState({ zoom: 1 })} />
+          <Menu.RadioGroup
+            value={state.zoom.toString()}
+            onValueChange={(value) => setState({ zoom: Number(value) })}
+          >
+            <Menu.RadioItem label="100%" value="1" />
+            <Menu.RadioItem label="200%" value="2" />
+            <Menu.RadioItem label="400%" value="4" />
+            <Menu.RadioItem label="600%" value="6" />
+            <Menu.RadioItem label="800%" value="8" />
+          </Menu.RadioGroup>
+        </Menu.Root>
+
+        <Menu.Root trigger={<Menu.Trigger>Image</Menu.Trigger>}>
+          <Menu.Item
+            label="Canvas size..."
+            onSelect={() => modal(paint_imageSize)}
+          />
         </Menu.Root>
       </div>
 
@@ -40,7 +57,10 @@ export default function Paint() {
         <ScrollContainer className="flex-1 !bg-[#808080]">
           <canvas
             className="m-1 [image-rendering:pixelated] touch-none"
-            style={{ width: 600 * state.zoom, height: 400 * state.zoom }}
+            style={{
+              width: state.canvasWidth * state.zoom,
+              height: state.canvasHeight * state.zoom,
+            }}
             {...canvasProps}
           />
         </ScrollContainer>
