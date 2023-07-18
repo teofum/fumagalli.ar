@@ -1,4 +1,6 @@
-
+// Code from canvas-txt library
+// https://github.com/geongeorge/Canvas-Txt/tree/master
+// Inlined because dist lacks types
 
 // Hair space character for precise justification
 const SPACE = '\u{200a}'
