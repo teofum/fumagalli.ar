@@ -5,6 +5,7 @@ import { brushes } from '../brushes';
 import BrushIcons from '../icons/Brush';
 import { ZOOM_STOPS } from '../brushes/zoom';
 import cn from 'classnames';
+import AirbrushIcons from '../icons/Airbrush';
 
 const resources = '/fs/system/Applications/paint/resources';
 
@@ -162,6 +163,32 @@ export default function PaintToolbox() {
                 />
               </ToggleButton>
             ))}
+          </ToggleGroup>
+        </div>
+      ) : null}
+
+      {state.brush === 'airbrush' ? (
+        <div className="mx-1 bevel-light-inset self-center py-1 px-2">
+          <ToggleGroup
+            type="single"
+            value={state.brushVariant.toString()}
+            onValueChange={(value) => setState({ brushVariant: Number(value) })}
+            className="w-8 gap-y-1 flex-wrap"
+          >
+            {[0, 1, 2].map((variant) => {
+              const Icon = AirbrushIcons[variant];
+
+              return (
+                <ToggleButton
+                  key={variant}
+                  className="p-0 !shadow-none !bg-none data-[state=on]:bg-selection data-[state=on]:text-selection"
+                  noInset
+                  value={variant.toString()}
+                >
+                  <Icon />
+                </ToggleButton>
+              );
+            })}
           </ToggleGroup>
         </div>
       ) : null}

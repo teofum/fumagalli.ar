@@ -4,6 +4,7 @@ import { dropper } from './dropper';
 import { zoom } from './zoom';
 import { pencil } from './pencil';
 import { brush } from './brush';
+import { airbrush } from './airbrush';
 import { line } from './line';
 import { curve } from './curve';
 import { ellipse, rectangle, roundedrect } from './shapes';
@@ -16,6 +17,7 @@ export const brushes = {
   zoom,
   pencil,
   brush,
+  airbrush,
   line,
   curve,
   rectangle,
