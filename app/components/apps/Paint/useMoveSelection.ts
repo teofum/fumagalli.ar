@@ -9,8 +9,7 @@ export default function useMoveSelection(
 ) {
   const onDragStart = (ev: PointerEvent) => {
     const el = selectionRef.current;
-    const container = containerRef.current;
-    if (!el || !container) return;
+    if (!el) return;
 
     // Calculate pointer offset from selection topmost corner
     const { x, y } = el.getBoundingClientRect();
@@ -48,7 +47,7 @@ export default function useMoveSelection(
     delete el.dataset.offsetX;
     delete el.dataset.offsetY;
 
-    // Commit window changes to application state
+    // Commit changes to selection state
     const { x, y } = el.getBoundingClientRect();
     const { x: cx, y: cy } = container.getBoundingClientRect();
 

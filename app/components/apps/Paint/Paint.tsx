@@ -25,6 +25,7 @@ export default function Paint() {
     scratchCanvasProps,
     selectionContainerProps,
     selectionCanvasProps,
+    resizeHandles,
   } = usePaintCanvas(state, setState);
 
   return (
@@ -76,6 +77,7 @@ export default function Paint() {
                 <canvas {...selectionCanvasProps} />
 
                 <div className="absolute -inset-0.5 mix-blend-difference pointer-events-none border border-dashed border-white" />
+                {resizeHandles}
               </div>
 
               {/* Scratch canvas */}

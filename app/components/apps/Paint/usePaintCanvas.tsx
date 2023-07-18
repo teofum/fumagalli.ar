@@ -6,6 +6,7 @@ import { brushes } from './brushes';
 import usePaint from './usePaint';
 import clear from './utils/clear';
 import useMoveSelection from './useMoveSelection';
+import useResizeSelection from './useResizeSelection';
 
 export default function usePaintCanvas(
   state: PaintState,
@@ -227,12 +228,66 @@ export default function usePaintCanvas(
 
   const onContextMenu = (ev: React.MouseEvent) => ev.preventDefault();
 
-  const onSelectionPointerDown = useMoveSelection(
-    containerRef,
-    selectionRef,
-    state,
-    setState,
-  );
+  /**
+   * Selection event handlers
+   */
+
+  // Aliases for the sake of keeping the following lines short
+  const c = containerRef;
+  const s = selectionRef;
+  const sc = selectionCanvasRef;
+  const moveHandler = useMoveSelection(c, s, state, setState);
+  const resizeHandlerNW = useResizeSelection(c, s, sc, state, setState, 'nw');
+  const resizeHandlerN = useResizeSelection(c, s, sc, state, setState, 'n');
+  const resizeHandlerNE = useResizeSelection(c, s, sc, state, setState, 'ne');
+  const resizeHandlerE = useResizeSelection(c, s, sc, state, setState, 'e');
+  const resizeHandlerSE = useResizeSelection(c, s, sc, state, setState, 'se');
+  const resizeHandlerS = useResizeSelection(c, s, sc, state, setState, 's');
+  const resizeHandlerSW = useResizeSelection(c, s, sc, state, setState, 'sw');
+  const resizeHandlerW = useResizeSelection(c, s, sc, state, setState, 'w');
+
+  const resizeHandles = [
+    <div
+      key="nw"
+      className="absolute w-1 h-1 bg-black cursor-nwse-resize bottom-full right-full"
+      onPointerDown={resizeHandlerNW}
+    />,
+    <div
+      key="n"
+      className="absolute w-1 h-1 bg-black cursor-ns-resize bottom-full left-1/2 -translate-x-1/2"
+      onPointerDown={resizeHandlerN}
+    />,
+    <div
+      key="ne"
+      className="absolute w-1 h-1 bg-black cursor-nesw-resize bottom-full left-full"
+      onPointerDown={resizeHandlerNE}
+    />,
+    <div
+      key="e"
+      className="absolute w-1 h-1 bg-black cursor-ew-resize left-full top-1/2 -translate-y-1/2"
+      onPointerDown={resizeHandlerE}
+    />,
+    <div
+      key="se"
+      className="absolute w-1 h-1 bg-black cursor-nwse-resize top-full left-full"
+      onPointerDown={resizeHandlerSE}
+    />,
+    <div
+      key="s"
+      className="absolute w-1 h-1 bg-black cursor-ns-resize top-full left-1/2 -translate-x-1/2"
+      onPointerDown={resizeHandlerS}
+    />,
+    <div
+      key="sw"
+      className="absolute w-1 h-1 bg-black cursor-nesw-resize top-full right-full"
+      onPointerDown={resizeHandlerSW}
+    />,
+    <div
+      key="w"
+      className="absolute w-1 h-1 bg-black cursor-ew-resize right-full top-1/2 -translate-y-1/2"
+      onPointerDown={resizeHandlerW}
+    />,
+  ];
 
   return {
     containerProps: {
@@ -268,12 +323,13 @@ export default function usePaintCanvas(
         width: state.selection?.w,
         height: state.selection?.h,
       },
-      onPointerDown: onSelectionPointerDown,
+      onPointerDown: moveHandler,
     },
     selectionCanvasProps: {
       ref: selectionCanvasRef,
-      className: 'absolute inset-0 [image-rendering:pixelated]',
+      className: 'absolute inset-0 w-full h-full [image-rendering:pixelated]',
     },
     clear: clearMainCanvas,
+    resizeHandles,
   };
 }
