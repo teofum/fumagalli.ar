@@ -1,6 +1,11 @@
 import type { brushes } from './brushes';
 
-export interface Rect { x: number; y: number; w: number; h: number }
+export interface Rect {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
 
 export interface PaintEvent {
   pointerEvent: PointerEvent;
@@ -55,6 +60,8 @@ export type PaintShapeFn = (
 ) => void;
 
 export interface PaintState {
+  canvas: HTMLCanvasElement | null;
+
   brush: keyof typeof brushes;
   brushVariant: number;
 
@@ -66,11 +73,15 @@ export interface PaintState {
   canvasHeight: number;
 
   selection: Rect | null;
+  history: ImageData[];
+  undoCount: number,
 
   filename: string;
 }
 
 export const defaultPaintState: PaintState = {
+  canvas: null,
+
   brush: 'pencil',
   brushVariant: 0,
 
@@ -82,6 +93,8 @@ export const defaultPaintState: PaintState = {
   canvasHeight: 400,
 
   selection: null,
+  history: [],
+  undoCount: 0,
 
   filename: 'untitled',
 };

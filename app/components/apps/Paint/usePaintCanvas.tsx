@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import cn from 'classnames';
 
 import type { PaintEvent, PaintState, Rect } from './types';
@@ -16,7 +16,7 @@ export default function usePaintCanvas(
   /**
    * State/refs
    */
-  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+  const { canvas } = state;
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -36,7 +36,7 @@ export default function usePaintCanvas(
   const lastPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const canvasRef = (el: HTMLCanvasElement | null) => {
-    setCanvas(el);
+    if (!state.canvas && el) setState({ canvas: el });
   };
 
   /**
@@ -137,7 +137,7 @@ export default function usePaintCanvas(
       // Copy from selection to drawing canvas
       copyImageData(selectionCtx, 0, 0, w, h, ctx, x, y, w, h, {
         mask: selectionCtx,
-      })
+      });
     }
 
     setState({ selection: null });
@@ -247,42 +247,42 @@ export default function usePaintCanvas(
   const resizeHandles = [
     <div
       key="nw"
-      className="absolute w-1 h-1 bg-black cursor-nwse-resize bottom-full right-full"
+      className="absolute w-1 h-1 bg-white cursor-nwse-resize bottom-full right-full"
       onPointerDown={resizeHandlerNW}
     />,
     <div
       key="n"
-      className="absolute w-1 h-1 bg-black cursor-ns-resize bottom-full left-1/2 -translate-x-1/2"
+      className="absolute w-1 h-1 bg-white cursor-ns-resize bottom-full left-1/2 -translate-x-1/2"
       onPointerDown={resizeHandlerN}
     />,
     <div
       key="ne"
-      className="absolute w-1 h-1 bg-black cursor-nesw-resize bottom-full left-full"
+      className="absolute w-1 h-1 bg-white cursor-nesw-resize bottom-full left-full"
       onPointerDown={resizeHandlerNE}
     />,
     <div
       key="e"
-      className="absolute w-1 h-1 bg-black cursor-ew-resize left-full top-1/2 -translate-y-1/2"
+      className="absolute w-1 h-1 bg-white cursor-ew-resize left-full top-1/2 -translate-y-1/2"
       onPointerDown={resizeHandlerE}
     />,
     <div
       key="se"
-      className="absolute w-1 h-1 bg-black cursor-nwse-resize top-full left-full"
+      className="absolute w-1 h-1 bg-white cursor-nwse-resize top-full left-full"
       onPointerDown={resizeHandlerSE}
     />,
     <div
       key="s"
-      className="absolute w-1 h-1 bg-black cursor-ns-resize top-full left-1/2 -translate-x-1/2"
+      className="absolute w-1 h-1 bg-white cursor-ns-resize top-full left-1/2 -translate-x-1/2"
       onPointerDown={resizeHandlerS}
     />,
     <div
       key="sw"
-      className="absolute w-1 h-1 bg-black cursor-nesw-resize top-full right-full"
+      className="absolute w-1 h-1 bg-white cursor-nesw-resize top-full right-full"
       onPointerDown={resizeHandlerSW}
     />,
     <div
       key="w"
-      className="absolute w-1 h-1 bg-black cursor-ew-resize right-full top-1/2 -translate-y-1/2"
+      className="absolute w-1 h-1 bg-white cursor-ew-resize right-full top-1/2 -translate-y-1/2"
       onPointerDown={resizeHandlerW}
     />,
   ];
@@ -329,6 +329,5 @@ export default function usePaintCanvas(
     },
     clear: clearMainCanvas,
     resizeHandles,
-    canvas,
   };
 }
