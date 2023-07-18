@@ -25,6 +25,7 @@ import MessageBox, { messageBox } from './MessageBox';
 import type { MessageBoxState } from './MessageBox/types';
 import Paint, { paint } from './Paint';
 import PaintImageSize, { paint_imageSize } from './Paint/modals/ImageSize';
+import type { PaintImageSizeState } from './Paint/modals/ImageSize';
 
 const applications = [
   { Component: About, meta: about },
@@ -41,7 +42,7 @@ const applications = [
   { Component: DOSEmu, meta: dosEmu() },
   { Component: DitherLab, meta: ditherLab() },
   { Component: Paint, meta: paint },
-  { Component: PaintImageSize, meta: paint_imageSize },
+  { Component: PaintImageSize, meta: paint_imageSize() },
   { Component: MessageBox, meta: messageBox() },
 ];
 
@@ -53,6 +54,7 @@ export interface AppStateTypes {
   dither: DitherLabState;
   messageBox: MessageBoxState;
   mine_difficulty: MinesweeperCustomDifficultyState;
+  paint_imageSize: PaintImageSizeState;
 }
 
 export type AppState<AppType extends string> =

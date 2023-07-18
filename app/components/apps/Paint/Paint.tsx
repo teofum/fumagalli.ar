@@ -5,18 +5,18 @@ import Menu from '~/components/ui/Menu';
 import ScrollContainer from '~/components/ui/ScrollContainer';
 import usePaintCanvas from './usePaintCanvas';
 import PaintToolbox from './ui/PaintToolbox';
-import { paint_imageSize } from './modals/ImageSize';
 import { type PaintState, defaultPaintState } from './types';
 import { PaintProvider } from './context';
 import PaintColor from './ui/PaintColor';
 import useDesktopStore from '~/stores/desktop';
 import PaintFileMenu from './ui/PaintFileMenu';
 import PaintEditMenu from './ui/PaintEditMenu';
+import PaintImageMenu from './ui/PaintImageMenu';
 
 // const resources = '/fs/system/Applications/paint/resources';
 
 export default function Paint() {
-  const { id, modal } = useWindow();
+  const { id } = useWindow();
   const { setTitle } = useDesktopStore();
 
   const [state, _setState] = useState<PaintState>(defaultPaintState);
@@ -57,12 +57,7 @@ export default function Paint() {
             </Menu.RadioGroup>
           </Menu.Root>
 
-          <Menu.Root trigger={<Menu.Trigger>Image</Menu.Trigger>}>
-            <Menu.Item
-              label="Canvas size..."
-              onSelect={() => modal(paint_imageSize)}
-            />
-          </Menu.Root>
+          <PaintImageMenu />
         </div>
 
         <div className="flex-1 flex flex-row gap-0.5 min-h-0">

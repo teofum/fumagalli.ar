@@ -1,20 +1,28 @@
-import { useState } from 'react';
 import { type WindowInit, WindowSizingMode } from '~/components/desktop/Window';
-import { useParentState, useWindow } from '~/components/desktop/Window/context';
+import { useAppState, useWindow } from '~/components/desktop/Window/context';
 import Button from '~/components/ui/Button';
 import Input from '~/components/ui/Input';
 
+export interface PaintImageSizeState {
+  width: number;
+  height: number;
+
+  commit: (width: number, height: number) => void;
+}
+
+export const defaultPaintImageSizeState = {
+  width: 8,
+  height: 8,
+
+  commit: () => {},
+};
+
 export default function PaintImageSize() {
   const { close } = useWindow();
-  const [state, setState] = useParentState('paint');
+  const [state, setState] = useAppState('paint_imageSize');
 
-  const [width, setWidth] = useState(state.canvasWidth);
-  const [height, setHeight] = useState(state.canvasHeight);
   const commit = () => {
-    setState({
-      canvasWidth: width,
-      canvasHeight: height,
-    });
+    state.commit(state.width, state.height);
     close();
   };
 
@@ -25,8 +33,8 @@ export default function PaintImageSize() {
         <Input
           className="w-20"
           numeric="integer"
-          value={width}
-          onChange={(ev) => setWidth(Number(ev.target.value))}
+          value={state.width}
+          onChange={(ev) => setState({ width: Number(ev.target.value) })}
         />
       </div>
 
@@ -35,8 +43,8 @@ export default function PaintImageSize() {
         <Input
           className="w-20"
           numeric="integer"
-          value={height}
-          onChange={(ev) => setHeight(Number(ev.target.value))}
+          value={state.height}
+          onChange={(ev) => setState({ height: Number(ev.target.value) })}
         />
       </div>
 
@@ -52,9 +60,11 @@ export default function PaintImageSize() {
   );
 }
 
-export const paint_imageSize: WindowInit<'paint_imageSize'> = {
+export const paint_imageSize = (
+  initialState?: PaintImageSizeState,
+): WindowInit<'paint_imageSize'> => ({
   appType: 'paint_imageSize',
-  appState: undefined,
+  appState: initialState ?? defaultPaintImageSizeState,
 
   title: 'Canvas Size',
 
@@ -62,4 +72,4 @@ export const paint_imageSize: WindowInit<'paint_imageSize'> = {
   sizingY: WindowSizingMode.AUTO,
 
   maximizable: false,
-};
+});
