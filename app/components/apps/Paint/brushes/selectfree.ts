@@ -48,14 +48,14 @@ export const selectfree: PaintBrush = {
     select,
     deselect,
   }) => {
+    clear(scratchCtx);
+    scratchCanvas.style.setProperty('mix-blend-mode', 'normal');
+
     if (scratch.points && scratch.points.length > 2) {
       const { x: x0, y: y0 } = scratch.points[0];
 
       const dx = x - x0;
       const dy = y - y0;
-
-      clear(scratchCtx);
-      scratchCanvas.style.setProperty('mix-blend-mode', 'normal');
 
       // Draw the filled polygon to the scratch canvas, to be used as a selection mask
       scratchCtx.fillStyle = 'white';
