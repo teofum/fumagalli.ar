@@ -70,7 +70,8 @@ export const airbrush: PaintBrush = {
     };
     scratch.raf = requestAnimationFrame(frame);
   },
-  onPointerUp: ({ scratch }) => {
+  onPointerUp: ({ scratch, updateHistory }) => {
     cancelAnimationFrame(scratch.raf);
+    updateHistory();
   },
 };

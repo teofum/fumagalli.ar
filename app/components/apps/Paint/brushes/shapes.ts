@@ -72,6 +72,7 @@ function shape(name: string, drawFn: PaintShapeFn): PaintBrush {
       scratchCtx,
       brushVariant,
       pointerEvent,
+      updateHistory,
     }) => {
       clear(scratchCtx);
 
@@ -100,6 +101,8 @@ function shape(name: string, drawFn: PaintShapeFn): PaintBrush {
         ctx.fillStyle = scratch.stroke;
         drawFn(ctx, x0, y0, w, h, 'stroke');
       }
+
+      updateHistory();
 
       // Clear scratch
       Object.keys(scratch).forEach((key) => delete scratch[key]);

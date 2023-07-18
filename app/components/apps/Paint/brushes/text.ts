@@ -23,7 +23,15 @@ export const text: PaintBrush = {
     scratchCtx.fillStyle = 'black';
     drawRect(scratchCtx, scratch.x, scratch.y, scratch.w, scratch.h, 'stroke');
   },
-  onPointerUp: ({ ctx, scratchCtx, scratch, fg, bg, pointerEvent }) => {
+  onPointerUp: ({
+    ctx,
+    scratchCtx,
+    scratch,
+    fg,
+    bg,
+    pointerEvent,
+    updateHistory,
+  }) => {
     if (scratch.typing) return;
 
     const color = pointerEvent.buttons === 2 ? bg : fg;
@@ -83,6 +91,7 @@ export const text: PaintBrush = {
         }
 
         ctx.putImageData(imageData, scratch.x, scratch.y - 8);
+        updateHistory();
       }
       clear(scratchCtx);
 

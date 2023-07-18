@@ -17,4 +17,7 @@ export const pencil: PaintBrush = {
     ctx.fillStyle = color;
     drawLine(ctx, fromX, fromY, x, y);
   },
+  onPointerUp: ({ updateHistory }) => {
+    updateHistory();
+  },
 };

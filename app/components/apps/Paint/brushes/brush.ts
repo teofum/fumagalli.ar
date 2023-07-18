@@ -71,4 +71,7 @@ export const brush: PaintBrush = {
     ctx.fillStyle = color;
     drawLine(ctx, fromX, fromY, x, y, brushFn, isFlatBrush);
   },
+  onPointerUp: ({ updateHistory }) => {
+    updateHistory();
+  },
 };

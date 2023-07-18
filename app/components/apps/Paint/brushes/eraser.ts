@@ -35,4 +35,7 @@ export const eraser: PaintBrush = {
     ctx.fillStyle = bg;
     drawLine(ctx, fromX, fromY, x, y, brushFn, isFlatBrush);
   },
+  onPointerUp: ({ updateHistory }) => {
+    updateHistory();
+  },
 };

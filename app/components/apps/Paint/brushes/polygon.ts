@@ -51,7 +51,15 @@ export const polygon: PaintBrush = {
       drawLineArray(scratchCtx, scratch.points);
     }
   },
-  onPointerUp: ({ ctx, x, y, scratch, scratchCtx, brushVariant }) => {
+  onPointerUp: ({
+    ctx,
+    x,
+    y,
+    scratch,
+    scratchCtx,
+    brushVariant,
+    updateHistory,
+  }) => {
     const { x: x0, y: y0 } = scratch.points[0];
 
     const dx = x - x0;
@@ -71,6 +79,8 @@ export const polygon: PaintBrush = {
         ctx.fillStyle = scratch.stroke;
         drawLineArray(ctx, scratch.points);
       }
+
+      updateHistory();
 
       // Clear scratch
       Object.keys(scratch).forEach((key) => delete scratch[key]);

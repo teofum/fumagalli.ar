@@ -109,7 +109,7 @@ export const curve: PaintBrush = {
       }
     }
   },
-  onPointerUp: ({ ctx, x, y, scratch, scratchCtx, brushVariant }) => {
+  onPointerUp: ({ ctx, scratch, scratchCtx, brushVariant, updateHistory }) => {
     switch (scratch.curveStage) {
       case 1: {
         scratch.curveStage = 2;
@@ -133,6 +133,8 @@ export const curve: PaintBrush = {
           scratch.y3,
           brushFn,
         );
+
+        updateHistory();
 
         // Clear scratch
         Object.keys(scratch).forEach((key) => delete scratch[key]);

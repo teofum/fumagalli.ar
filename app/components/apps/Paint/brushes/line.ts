@@ -43,13 +43,23 @@ export const line: PaintBrush = {
     scratchCtx.fillStyle = scratch.color;
     drawLine(scratchCtx, scratch.startX, scratch.startY, x, y, brushFn);
   },
-  onPointerUp: ({ ctx, x, y, scratch, scratchCtx, brushVariant }) => {
+  onPointerUp: ({
+    ctx,
+    x,
+    y,
+    scratch,
+    scratchCtx,
+    brushVariant,
+    updateHistory,
+  }) => {
     clear(scratchCtx);
 
     const brushFn = functions[brushVariant];
 
     ctx.fillStyle = scratch.color;
     drawLine(ctx, scratch.startX, scratch.startY, x, y, brushFn);
+
+    updateHistory();
 
     // Clear scratch
     Object.keys(scratch).forEach((key) => delete scratch[key]);

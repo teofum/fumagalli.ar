@@ -34,6 +34,8 @@ export interface PaintEvent {
   selectionCtx: CanvasRenderingContext2D;
   select: (selectionRect: Rect, mask?: boolean) => void;
   deselect: () => void;
+
+  updateHistory: () => void;
 }
 
 export interface PaintBrush {

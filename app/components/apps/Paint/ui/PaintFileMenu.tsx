@@ -18,7 +18,18 @@ export default function PaintFileMenu({ clear }: PaintFileMenuProps) {
 
   const newFile = () => {
     clear();
-    setState({ filename: 'untitled', selection: null });
+
+    const history: ImageData[] = [];
+    const ctx = canvas?.getContext('2d');
+    if (canvas && ctx)
+      history.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+
+    setState({
+      filename: 'untitled',
+      selection: null,
+      history,
+      undoCount: 0,
+    });
   };
 
   const openImage = (url: string, filename: string) => {
@@ -30,14 +41,22 @@ export default function PaintFileMenu({ clear }: PaintFileMenuProps) {
         if (canvas) {
           canvas.width = img.naturalWidth;
           canvas.height = img.naturalHeight;
+
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0);
+
+          const history: ImageData[] = [];
+          if (canvas && ctx)
+            history.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+
           setState({
             canvasWidth: canvas.width,
             canvasHeight: canvas.height,
             filename,
+            selection: null,
+            history,
+            undoCount: 0,
           });
-
-          const ctx = canvas.getContext('2d');
-          ctx?.drawImage(img, 0, 0);
         }
       },
       { once: true },

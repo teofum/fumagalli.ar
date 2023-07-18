@@ -9,6 +9,8 @@ import useMoveSelection from './useMoveSelection';
 import useResizeSelection from './useResizeSelection';
 import copyImageData from './utils/copyImageData';
 
+const MAX_HISTORY = 5;
+
 export default function usePaintCanvas(
   state: PaintState,
   setState: (value: Partial<PaintState>) => void,
@@ -63,7 +65,11 @@ export default function usePaintCanvas(
       if (data.data[3] !== 0) {
         ctx.putImageData(data, 0, 0);
       }
+
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      setState({ history: [imageData], undoCount: 0, selection: null });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvas, state.canvasWidth, state.canvasHeight]);
 
   /**
@@ -140,7 +146,24 @@ export default function usePaintCanvas(
       });
     }
 
-    setState({ selection: null });
+    updateHistory();
+  }
+
+  /**
+   * History
+   */
+  function updateHistory() {
+    // Save current canvas state to history
+    const ctx = canvas?.getContext('2d');
+    if (canvas && ctx) {
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const history = [
+        imageData,
+        ...state.history.slice(state.undoCount), // Drop anything newer than the last undo
+      ].slice(0, MAX_HISTORY); // Limit # of history items
+
+      setState({ history, undoCount: 0, selection: null });
+    }
   }
 
   /**
@@ -194,6 +217,8 @@ export default function usePaintCanvas(
         selectionCtx,
         select,
         deselect,
+
+        updateHistory,
       };
 
       return event;
