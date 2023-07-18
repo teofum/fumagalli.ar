@@ -2,15 +2,13 @@ import { useWindow } from '~/components/desktop/Window/context';
 import Menu from '~/components/ui/Menu';
 import ScrollContainer from '~/components/ui/ScrollContainer';
 import usePaintCanvas from './usePaintCanvas';
-import getPaletteColors from '~/dither/utils/paletteColors';
-import PaintColors from '~/dither/palettes/Paint';
 import PaintToolbox from './ui/PaintToolbox';
 import { paint_imageSize } from './modals/ImageSize';
 import { useState } from 'react';
 import { type PaintState, defaultPaintState } from './types';
 import { PaintProvider } from './context';
+import PaintColor from './ui/PaintColor';
 
-const PAINT_COLORS = getPaletteColors(PaintColors);
 // const resources = '/fs/system/Applications/paint/resources';
 
 export default function Paint() {
@@ -20,13 +18,14 @@ export default function Paint() {
   const setState = (value: Partial<PaintState>) =>
     _setState({ ...state, ...value });
 
-  const { clear, canvasProps, scratchCanvasProps } = usePaintCanvas(
-    state,
-    setState,
-  );
-
-  const [fr, fg, fb] = state.fgColor;
-  const [br, bg, bb] = state.bgColor;
+  const {
+    clear,
+    containerProps,
+    canvasProps,
+    scratchCanvasProps,
+    selectionContainerProps,
+    selectionCanvasProps,
+  } = usePaintCanvas(state, setState);
 
   return (
     <PaintProvider state={state} setState={setState}>
@@ -65,63 +64,27 @@ export default function Paint() {
           <PaintToolbox />
 
           <ScrollContainer className="flex-1 !bg-[#808080]">
-            <div className="m-1 relative touch-none">
-              <canvas
-                className="[image-rendering:pixelated]"
-                style={{
-                  width: state.canvasWidth * state.zoom,
-                  height: state.canvasHeight * state.zoom,
-                }}
-                {...canvasProps}
-              />
-              <canvas
-                className="absolute inset-0 [image-rendering:pixelated] pointer-events-none"
-                style={{
-                  width: state.canvasWidth * state.zoom,
-                  height: state.canvasHeight * state.zoom,
-                }}
-                {...scratchCanvasProps}
-              />
+            <div
+              className="m-1 relative touch-none overflow-hidden w-min"
+              {...containerProps}
+            >
+              {/* Drawing canvas */}
+              <canvas {...canvasProps} />
+
+              {/* Selection canvas */}
+              <div {...selectionContainerProps}>
+                <canvas {...selectionCanvasProps} />
+
+                <div className="absolute -inset-0.5 mix-blend-difference pointer-events-none border border-dashed border-white" />
+              </div>
+
+              {/* Scratch canvas */}
+              <canvas {...scratchCanvasProps} />
             </div>
           </ScrollContainer>
         </div>
 
-        <div className="flex flex-row py-3">
-          <button
-            className="button bg-checkered bevel-content w-8 h-8 relative"
-            onClick={() =>
-              setState({ fgColor: state.bgColor, bgColor: state.fgColor })
-            }
-          >
-            <div className="absolute bottom-1 right-1 bg-surface bevel-light p-0.5">
-              <div
-                className="w-3 h-3"
-                style={{ backgroundColor: `rgb(${br} ${bg} ${bb})` }}
-              />
-            </div>
-            <div className="absolute top-1 left-1 bg-surface bevel-light p-0.5">
-              <div
-                className="w-3 h-3"
-                style={{ backgroundColor: `rgb(${fr} ${fg} ${fb})` }}
-              />
-            </div>
-          </button>
-
-          <div className="grid grid-rows-2 grid-flow-col">
-            {PAINT_COLORS.map(([r, g, b]) => (
-              <button
-                className="button bevel-content w-4 h-4"
-                style={{ backgroundColor: `rgb(${r} ${g} ${b})` }}
-                key={`${r}-${g}-${b}`}
-                onClick={() => setState({ fgColor: [r, g, b] })}
-                onContextMenu={(ev) => {
-                  ev.preventDefault();
-                  setState({ bgColor: [r, g, b] });
-                }}
-              />
-            ))}
-          </div>
-        </div>
+        <PaintColor />
       </div>
     </PaintProvider>
   );

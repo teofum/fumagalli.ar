@@ -1,3 +1,4 @@
+import { select } from './select';
 import { eraser } from './eraser';
 import { bucket } from './bucket';
 import { dropper } from './dropper';
@@ -12,6 +13,7 @@ import { ellipse, rectangle, roundedrect } from './shapes';
 import { polygon } from './polygon';
 
 export const brushes = {
+  select,
   eraser,
   bucket,
   dropper,

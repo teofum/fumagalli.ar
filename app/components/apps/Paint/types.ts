@@ -1,5 +1,7 @@
 import type { brushes } from './brushes';
 
+export interface Rect { x: number; y: number; w: number; h: number }
+
 export interface PaintEvent {
   pointerEvent: PointerEvent;
 
@@ -21,6 +23,12 @@ export interface PaintEvent {
   scratch: any;
   scratchCanvas: HTMLCanvasElement;
   scratchCtx: CanvasRenderingContext2D;
+
+  selection: Rect | null;
+  selectionCanvas: HTMLCanvasElement;
+  selectionCtx: CanvasRenderingContext2D;
+  select: (selectionRect: Rect) => void;
+  deselect: () => void;
 }
 
 export interface PaintBrush {
@@ -56,6 +64,8 @@ export interface PaintState {
   zoom: number;
   canvasWidth: number;
   canvasHeight: number;
+
+  selection: Rect | null;
 }
 
 export const defaultPaintState: PaintState = {
@@ -68,4 +78,6 @@ export const defaultPaintState: PaintState = {
   zoom: 1,
   canvasWidth: 600,
   canvasHeight: 400,
+
+  selection: null,
 };
