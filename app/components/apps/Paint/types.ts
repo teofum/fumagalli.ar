@@ -66,6 +66,8 @@ export interface PaintState {
   canvasHeight: number;
 
   selection: Rect | null;
+
+  filename: string;
 }
 
 export const defaultPaintState: PaintState = {
@@ -80,4 +82,6 @@ export const defaultPaintState: PaintState = {
   canvasHeight: 400,
 
   selection: null,
+
+  filename: 'untitled',
 };

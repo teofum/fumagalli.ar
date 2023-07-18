@@ -1,25 +1,34 @@
+import { useEffect, useRef, useState } from 'react';
+
 import { useWindow } from '~/components/desktop/Window/context';
 import Menu from '~/components/ui/Menu';
 import ScrollContainer from '~/components/ui/ScrollContainer';
 import usePaintCanvas from './usePaintCanvas';
 import PaintToolbox from './ui/PaintToolbox';
 import { paint_imageSize } from './modals/ImageSize';
-import { useState } from 'react';
 import { type PaintState, defaultPaintState } from './types';
 import { PaintProvider } from './context';
 import PaintColor from './ui/PaintColor';
+import { files } from '../Files';
+import useDesktopStore from '~/stores/desktop';
 
 // const resources = '/fs/system/Applications/paint/resources';
 
 export default function Paint() {
-  const { close, modal } = useWindow();
+  const { id, close, modal } = useWindow();
+  const { setTitle } = useDesktopStore();
 
   const [state, _setState] = useState<PaintState>(defaultPaintState);
   const setState = (value: Partial<PaintState>) =>
     _setState({ ...state, ...value });
 
+  useEffect(() => {
+    setTitle(id, `${state.filename} - Paint`);
+  }, [id, setTitle, state.filename]);
+
   const {
     clear,
+    canvas,
     containerProps,
     canvasProps,
     scratchCanvasProps,
@@ -28,12 +37,92 @@ export default function Paint() {
     resizeHandles,
   } = usePaintCanvas(state, setState);
 
+  const newFile = () => {
+    clear();
+    setState({ filename: 'untitled', selection: null });
+  };
+
+  const openImage = (url: string, filename: string) => {
+    const img = new Image();
+
+    img.addEventListener(
+      'load',
+      () => {
+        if (canvas) {
+          canvas.width = img.naturalWidth;
+          canvas.height = img.naturalHeight;
+          setState({
+            canvasWidth: canvas.width,
+            canvasHeight: canvas.height,
+            filename,
+          });
+
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0);
+        }
+      },
+      { once: true },
+    );
+
+    img.src = url;
+  };
+
+  const uploadImage = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    const input = ev.target;
+    if (input?.files) {
+      const file = input.files[0];
+      openImage(
+        URL.createObjectURL(file),
+        file.name.split('.').slice(0, -1).join('.'),
+      );
+    }
+  };
+
+  const hiddenInputRef = useRef<HTMLInputElement>(null);
+  const upload = () => hiddenInputRef.current?.click();
+
+  const open = () => {
+    modal(
+      files({
+        path: '/Documents',
+        typeFilter: ['image'],
+        modalCallback: (file, path) => {
+          openImage(`/fs${path}`, file.name.split('.').slice(0, -1).join('.'));
+        },
+      }),
+    );
+  };
+
+  const download = () => {
+    if (!canvas) return;
+    const dataUrl = canvas
+      .toDataURL('image/png')
+      .replace('image/png', 'image/octet-stream');
+
+    const filename = `${state.filename}.png`;
+
+    const link = document.createElement('a');
+    link.setAttribute('download', filename);
+    link.setAttribute('href', dataUrl);
+    link.click();
+  };
+
   return (
     <PaintProvider state={state} setState={setState}>
+      <input
+        type="file"
+        className="hidden"
+        ref={hiddenInputRef}
+        onChange={uploadImage}
+      />
+
       <div className="flex flex-col gap-0.5 min-w-0 select-none">
         <div className="flex flex-row gap-1">
           <Menu.Root trigger={<Menu.Trigger>File</Menu.Trigger>}>
-            <Menu.Item label="New" onSelect={clear} />
+            <Menu.Item label="New" onSelect={newFile} />
+            <Menu.Item label="Upload..." onSelect={upload} />
+            <Menu.Item label="Open..." onSelect={open} />
+            <Menu.Item label="Save" onSelect={download} />
 
             <Menu.Separator />
 

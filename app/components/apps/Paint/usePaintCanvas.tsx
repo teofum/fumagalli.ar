@@ -97,8 +97,6 @@ export default function usePaintCanvas(
     const scratchCanvas = scratchCanvasRef.current;
     const scratchCtx = scratchCanvas?.getContext('2d');
     if (scratchCanvas && scratchCtx) clear(scratchCtx);
-
-    setState({ selection: null });
   };
 
   /**
@@ -331,5 +329,6 @@ export default function usePaintCanvas(
     },
     clear: clearMainCanvas,
     resizeHandles,
+    canvas,
   };
 }

@@ -270,9 +270,6 @@ export default function DitherLab() {
         <Menu.Root trigger={<Menu.Trigger>File</Menu.Trigger>}>
           <Menu.Item label="Upload..." onSelect={upload} />
           <Menu.Item label="Open..." onSelect={open} />
-
-          <Menu.Separator />
-
           <Menu.Item label="Save" onSelect={download} />
 
           <Menu.Separator />
