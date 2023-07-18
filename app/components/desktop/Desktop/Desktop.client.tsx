@@ -142,7 +142,7 @@ export default function Desktop() {
               iconUrl="/fs/system/Applications/paint/icon_32.png"
               title="Paint"
               y={2}
-              open={() => launch(paint())}
+              open={() => launch(paint)}
             />
             <DesktopIcon
               iconUrl="/fs/system/Applications/mine/icon_32.png"

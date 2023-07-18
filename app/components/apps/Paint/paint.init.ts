@@ -1,9 +1,8 @@
 import type { WindowInit } from '~/components/desktop/Window';
-import { defaultPaintState, type PaintState } from './types';
 
-export const paint = (initialState?: PaintState): WindowInit<'paint'> => ({
+export const paint: WindowInit<'paint'> = ({
   appType: 'paint',
-  appState: initialState ?? defaultPaintState,
+  appState: undefined,
 
   title: 'Paint',
 

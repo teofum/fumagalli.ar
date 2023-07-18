@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 
-import type { PaintEvent } from './types';
-import { useAppState } from '~/components/desktop/Window/context';
+import type { PaintEvent, PaintState } from './types';
 import { brushes } from './brushes';
 import usePaint from './usePaint';
 import clear from './utils/clear';
 
-export default function usePaintCanvas() {
-  const [state, setState] = useAppState('paint');
+export default function usePaintCanvas(
+  state: PaintState,
+  setState: (value: Partial<PaintState>) => void,
+) {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
   const scratchRef = useRef<any>({});

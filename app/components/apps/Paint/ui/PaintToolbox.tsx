@@ -1,4 +1,3 @@
-import { useAppState } from '~/components/desktop/Window/context';
 import Divider from '~/components/ui/Divider';
 import { ToggleButton, ToggleGroup } from '~/components/ui/ToggleGroup';
 import { brushes } from '../brushes';
@@ -6,11 +5,12 @@ import BrushIcons from '../icons/Brush';
 import { ZOOM_STOPS } from '../brushes/zoom';
 import cn from 'classnames';
 import AirbrushIcons from '../icons/Airbrush';
+import { usePaintState } from '../context';
 
 const resources = '/fs/system/Applications/paint/resources';
 
 export default function PaintToolbox() {
-  const [state, setState] = useAppState('paint');
+  const [state, setState] = usePaintState();
 
   const setBrush = (brush: keyof typeof brushes) => {
     setState({ brush, brushVariant: 0 });

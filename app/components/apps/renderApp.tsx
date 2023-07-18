@@ -24,7 +24,6 @@ import type { DitherLabState } from './DitherLab/types';
 import MessageBox, { messageBox } from './MessageBox';
 import type { MessageBoxState } from './MessageBox/types';
 import Paint, { paint } from './Paint';
-import type { PaintState } from './Paint/types';
 import PaintImageSize, { paint_imageSize } from './Paint/modals/ImageSize';
 
 const applications = [
@@ -41,7 +40,7 @@ const applications = [
   { Component: ThemeSettings, meta: themeSettings },
   { Component: DOSEmu, meta: dosEmu() },
   { Component: DitherLab, meta: ditherLab() },
-  { Component: Paint, meta: paint() },
+  { Component: Paint, meta: paint },
   { Component: PaintImageSize, meta: paint_imageSize },
   { Component: MessageBox, meta: messageBox() },
 ];
@@ -53,7 +52,6 @@ export interface AppStateTypes {
   dos: DOSEmuState;
   dither: DitherLabState;
   messageBox: MessageBoxState;
-  paint: PaintState;
   mine_difficulty: MinesweeperCustomDifficultyState;
 }
 
