@@ -7,6 +7,7 @@ import usePaint from './usePaint';
 import clear from './utils/clear';
 import useMoveSelection from './useMoveSelection';
 import useResizeSelection from './useResizeSelection';
+import copyImageData from './utils/copyImageData';
 
 export default function usePaintCanvas(
   state: PaintState,
@@ -103,25 +104,24 @@ export default function usePaintCanvas(
   /**
    * Selection
    */
-  function select({ x, y, w, h }: Rect) {
+  function select({ x, y, w, h }: Rect, mask?: boolean) {
     deselect(); // Remove previous selection
-    console.log('select');
 
     const ctx = canvas?.getContext('2d');
     const selectionCanvas = selectionCanvasRef.current;
     const selectionCtx = selectionCanvas?.getContext('2d');
-    if (canvas && ctx && selectionCanvas && selectionCtx) {
+    const scratchCanvas = scratchCanvasRef.current;
+    const scratchCtx = scratchCanvas?.getContext('2d');
+    if (canvas && ctx && selectionCanvas && selectionCtx && scratchCtx) {
       // Resize selection canvas
       selectionCanvas.width = w;
       selectionCanvas.height = h;
 
       // Copy from drawing canvas to selection
-      const data = ctx.getImageData(x, y, w, h);
-      selectionCtx.putImageData(data, 0, 0);
-
-      // Fill selection rect in drawing canvas with bg color
-      ctx.fillStyle = bgColor;
-      ctx.fillRect(x, y, w, h);
+      copyImageData(ctx, x, y, w, h, selectionCtx, 0, 0, w, h, {
+        mask: mask ? scratchCtx : null,
+      });
+      if (mask) clear(scratchCtx);
 
       setState({ selection: { x, y, w, h } });
     }
@@ -129,7 +129,6 @@ export default function usePaintCanvas(
 
   function deselect() {
     if (!state.selection) return;
-    console.log('deselect');
 
     const ctx = canvas?.getContext('2d');
     const selectionCanvas = selectionCanvasRef.current;
@@ -138,8 +137,9 @@ export default function usePaintCanvas(
       const { x, y, w, h } = state.selection;
 
       // Copy from selection to drawing canvas
-      const data = selectionCtx.getImageData(0, 0, w, h);
-      ctx.putImageData(data, x, y);
+      copyImageData(selectionCtx, 0, 0, w, h, ctx, x, y, w, h, {
+        mask: selectionCtx,
+      })
     }
 
     setState({ selection: null });

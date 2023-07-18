@@ -2,6 +2,7 @@ import type { PaintBrush } from '../types';
 import clear from '../utils/clear';
 import drawRect from '../utils/drawRect';
 import drawText from '../utils/drawText';
+import getPixelData from '../utils/getPixelData';
 
 export const text: PaintBrush = {
   name: 'text',
@@ -65,22 +66,15 @@ export const text: PaintBrush = {
           scratch.w,
           scratch.h + 16,
         );
-        const pixelScratchData = {
-          width: scratchData.width,
-          height: scratchData.height,
-          data: new Uint32Array(scratchData.data.buffer),
-        };
         const imageData = ctx.getImageData(
           scratch.x,
           scratch.y - 8,
           scratch.w,
           scratch.h + 16,
         );
-        const pixelData = {
-          width: imageData.width,
-          height: imageData.height,
-          data: new Uint32Array(imageData.data.buffer),
-        };
+
+        const pixelScratchData = getPixelData(scratchData);
+        const pixelData = getPixelData(imageData);
 
         for (let i = 0; i < pixelData.data.length; i++) {
           const scratchAlpha = scratchData.data[i * 4 + 3];

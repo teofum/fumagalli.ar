@@ -1,11 +1,7 @@
 // Flood fill
 // Based on https://stackoverflow.com/a/56221940
 
-interface PixelData {
-  width: number;
-  height: number;
-  data: Uint32Array;
-}
+import getPixelData, { type PixelData } from './getPixelData';
 
 type Dir = -1 | 0 | 1;
 
@@ -32,14 +28,7 @@ export default function floodFill(
 ) {
   // read the pixels in the canvas
   const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-  // make a Uint32Array view on the pixels so we can manipulate pixels
-  // one 32bit value at a time instead of as 4 bytes per pixel
-  const pixelData = {
-    width: imageData.width,
-    height: imageData.height,
-    data: new Uint32Array(imageData.data.buffer),
-  };
+  const pixelData = getPixelData(imageData);
 
   // get the color we're filling
   const targetColor = getPixel(pixelData, x, y);

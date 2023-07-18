@@ -136,7 +136,7 @@ export default function PaintToolbox() {
         </div>
       ) : null}
 
-      {['rectangle', 'ellipse', 'polygon', 'roundedrect'].includes(
+      {['rectangle', 'ellipse', 'polygon', 'roundedrect', 'freehand'].includes(
         state.brush,
       ) ? (
         <div className="mx-1 bevel-light-inset self-center p-1">

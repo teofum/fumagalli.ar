@@ -1,6 +1,7 @@
 import useDrag from '~/hooks/useDrag';
 import clamp from '~/utils/clamp';
 import type { PaintState } from './types';
+import getPixelData from './utils/getPixelData';
 
 export default function useResizeSelection(
   containerRef: React.RefObject<HTMLDivElement>,
@@ -93,18 +94,10 @@ export default function useResizeSelection(
         selectionCanvas.width,
         selectionCanvas.height,
       );
-      const pixelData = {
-        width: imageData.width,
-        height: imageData.height,
-        data: new Uint32Array(imageData.data.buffer),
-      };
+      const pixelData = getPixelData(imageData);
 
       const newImageData = selectionCtx.createImageData(w, h);
-      const newPixelData = {
-        width: newImageData.width,
-        height: newImageData.height,
-        data: new Uint32Array(newImageData.data.buffer),
-      };
+      const newPixelData = getPixelData(newImageData);
 
       // Copy image data using nearest-neighbor sampling
       // for squishy, pixelated goodness
@@ -112,8 +105,8 @@ export default function useResizeSelection(
         const x = i % newPixelData.width;
         const y = ~~(i / newPixelData.width);
 
-        const oldX = ~~(x * pixelData.width / newPixelData.width);
-        const oldY = ~~(y * pixelData.height / newPixelData.height);
+        const oldX = ~~((x * pixelData.width) / newPixelData.width);
+        const oldY = ~~((y * pixelData.height) / newPixelData.height);
         const oldI = oldY * pixelData.width + oldX;
 
         newPixelData.data[i] = pixelData.data[oldI];

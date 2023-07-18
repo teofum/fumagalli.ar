@@ -5,23 +5,10 @@ import drawRect from '../utils/drawRect';
 
 export const select: PaintBrush = {
   name: 'select',
-  onPointerDown: ({
-    x,
-    y,
-    fg,
-    bg,
-    pointerEvent,
-    scratch,
-    scratchCtx,
-    scratchCanvas,
-  }) => {
-    const color = pointerEvent.buttons === 2 ? bg : fg;
-
+  onPointerDown: ({ x, y, scratch, scratchCtx, scratchCanvas }) => {
     clear(scratchCtx);
     scratchCanvas.style.setProperty('mix-blend-mode', 'difference');
 
-    // Set up line data
-    scratch.color = color;
     scratch.x0 = x;
     scratch.y0 = y;
   },
@@ -36,9 +23,11 @@ export const select: PaintBrush = {
     drawRect(scratchCtx, x0, y0, w, h, 'stroke');
   },
   onPointerUp: ({
+    canvas,
+    ctx,
     x,
     y,
-    canvas,
+    bg,
     scratch,
     scratchCtx,
     scratchCanvas,
@@ -66,6 +55,10 @@ export const select: PaintBrush = {
       }
 
       select({ x: x0, y: y0, w, h });
+
+      // Fill selection rect in drawing canvas with bg color
+      ctx.fillStyle = bg;
+      ctx.fillRect(x0, y0, w, h);
     } else deselect();
 
     // Clear scratch

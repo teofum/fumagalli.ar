@@ -1,3 +1,4 @@
+import { selectfree } from './selectfree';
 import { select } from './select';
 import { eraser } from './eraser';
 import { bucket } from './bucket';
@@ -11,8 +12,10 @@ import { line } from './line';
 import { curve } from './curve';
 import { ellipse, rectangle, roundedrect } from './shapes';
 import { polygon } from './polygon';
+import { freehand } from './freehand';
 
 export const brushes = {
+  selectfree,
   select,
   eraser,
   bucket,
@@ -28,4 +31,5 @@ export const brushes = {
   polygon,
   ellipse,
   roundedrect,
+  freehand,
 };

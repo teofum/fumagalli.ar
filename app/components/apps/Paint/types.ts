@@ -27,7 +27,7 @@ export interface PaintEvent {
   selection: Rect | null;
   selectionCanvas: HTMLCanvasElement;
   selectionCtx: CanvasRenderingContext2D;
-  select: (selectionRect: Rect) => void;
+  select: (selectionRect: Rect, mask?: boolean) => void;
   deselect: () => void;
 }
 
