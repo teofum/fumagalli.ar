@@ -149,6 +149,22 @@ export default function usePaintCanvas(
     updateHistory();
   }
 
+  function pasteIntoSelection(data: ImageData) {
+    deselect(); // Remove previous selection
+
+    const selectionCanvas = selectionCanvasRef.current;
+    const selectionCtx = selectionCanvas?.getContext('2d');
+    if (selectionCanvas && selectionCtx) {
+      // Resize selection canvas
+      selectionCanvas.width = data.width;
+      selectionCanvas.height = data.height;
+
+      selectionCtx.putImageData(data, 0, 0);
+
+      setState({ selection: { x: 0, y: 0, w: data.width, h: data.height } });
+    }
+  }
+
   /**
    * History
    */
@@ -229,6 +245,8 @@ export default function usePaintCanvas(
    * Paint event handlers
    */
   const onPaintStart = (ev: PointerEvent) => {
+    if (state.selection !== null && !state.brush.includes('select')) deselect();
+    
     const event = getPaintEvent(ev);
     if (event) brush.onPointerDown?.(event);
   };
@@ -272,42 +290,42 @@ export default function usePaintCanvas(
   const resizeHandles = [
     <div
       key="nw"
-      className="absolute w-1 h-1 bg-white cursor-nwse-resize bottom-full right-full"
+      className="absolute w-1 h-1 bg-white border border-black cursor-nwse-resize bottom-full right-full"
       onPointerDown={resizeHandlerNW}
     />,
     <div
       key="n"
-      className="absolute w-1 h-1 bg-white cursor-ns-resize bottom-full left-1/2 -translate-x-1/2"
+      className="absolute w-1 h-1 bg-white border border-black cursor-ns-resize bottom-full left-1/2 -translate-x-1/2"
       onPointerDown={resizeHandlerN}
     />,
     <div
       key="ne"
-      className="absolute w-1 h-1 bg-white cursor-nesw-resize bottom-full left-full"
+      className="absolute w-1 h-1 bg-white border border-black cursor-nesw-resize bottom-full left-full"
       onPointerDown={resizeHandlerNE}
     />,
     <div
       key="e"
-      className="absolute w-1 h-1 bg-white cursor-ew-resize left-full top-1/2 -translate-y-1/2"
+      className="absolute w-1 h-1 bg-white border border-black cursor-ew-resize left-full top-1/2 -translate-y-1/2"
       onPointerDown={resizeHandlerE}
     />,
     <div
       key="se"
-      className="absolute w-1 h-1 bg-white cursor-nwse-resize top-full left-full"
+      className="absolute w-1 h-1 bg-white border border-black cursor-nwse-resize top-full left-full"
       onPointerDown={resizeHandlerSE}
     />,
     <div
       key="s"
-      className="absolute w-1 h-1 bg-white cursor-ns-resize top-full left-1/2 -translate-x-1/2"
+      className="absolute w-1 h-1 bg-white border border-black cursor-ns-resize top-full left-1/2 -translate-x-1/2"
       onPointerDown={resizeHandlerS}
     />,
     <div
       key="sw"
-      className="absolute w-1 h-1 bg-white cursor-nesw-resize top-full right-full"
+      className="absolute w-1 h-1 bg-white border border-black cursor-nesw-resize top-full right-full"
       onPointerDown={resizeHandlerSW}
     />,
     <div
       key="w"
-      className="absolute w-1 h-1 bg-white cursor-ew-resize right-full top-1/2 -translate-y-1/2"
+      className="absolute w-1 h-1 bg-white border border-black cursor-ew-resize right-full top-1/2 -translate-y-1/2"
       onPointerDown={resizeHandlerW}
     />,
   ];
@@ -353,6 +371,10 @@ export default function usePaintCanvas(
       className: 'absolute inset-0 w-full h-full [image-rendering:pixelated]',
     },
     clear: clearMainCanvas,
+    select,
+    deselect,
+    pasteIntoSelection,
+    selectionCanvas: selectionCanvasRef.current,
     resizeHandles,
   };
 }

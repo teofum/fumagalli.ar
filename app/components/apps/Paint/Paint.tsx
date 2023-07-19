@@ -29,6 +29,10 @@ export default function Paint() {
 
   const {
     clear,
+    select,
+    deselect,
+    pasteIntoSelection,
+    selectionCanvas,
     containerProps,
     canvasProps,
     scratchCanvasProps,
@@ -38,7 +42,15 @@ export default function Paint() {
   } = usePaintCanvas(state, setState);
 
   return (
-    <PaintProvider state={state} setState={setState}>
+    <PaintProvider
+      state={state}
+      setState={setState}
+      clear={clear}
+      select={select}
+      deselect={deselect}
+      pasteIntoSelection={pasteIntoSelection}
+      selectionCanvas={selectionCanvas}
+    >
       <div className="flex flex-col gap-0.5 min-w-0 select-none">
         <div className="flex flex-row gap-1">
           <PaintFileMenu clear={clear} />
@@ -64,18 +76,16 @@ export default function Paint() {
           <PaintToolbox />
 
           <ScrollContainer className="flex-1 !bg-[#808080]">
-            <div
-              className="m-1 relative touch-none overflow-hidden w-min"
-              {...containerProps}
-            >
+            <div className="m-1 relative touch-none w-min" {...containerProps}>
               {/* Drawing canvas */}
               <canvas {...canvasProps} />
 
               {/* Selection canvas */}
               <div {...selectionContainerProps}>
-                <div className="absolute -inset-px mix-blend-difference border border-dashed border-white">
-                  {resizeHandles}
-                </div>
+                <div className="absolute -inset-px border border-white" />
+                <div className="absolute -inset-px mix-blend-difference border border-dashed border-white" />
+
+                {resizeHandles}
 
                 <canvas {...selectionCanvasProps} />
               </div>
@@ -87,6 +97,12 @@ export default function Paint() {
         </div>
 
         <PaintColor />
+
+        <div className="flex flex-row gap-0.5">
+          <div className="py-0.5 px-1 bevel-light-inset flex-[4]">.</div>
+          <div className="py-0.5 px-1 bevel-light-inset flex-1">.</div>
+          <div className="py-0.5 px-1 bevel-light-inset flex-1">.</div>
+        </div>
       </div>
     </PaintProvider>
   );

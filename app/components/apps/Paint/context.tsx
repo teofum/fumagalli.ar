@@ -1,21 +1,30 @@
 import { type PropsWithChildren, createContext, useContext } from 'react';
-import type { PaintState } from './types';
+import type { PaintState, Rect } from './types';
 
 interface PaintContextType {
   state: PaintState;
   setState: (value: Partial<PaintState>) => void;
+  clear: () => void;
+  select: (selectionRect: Rect, mask?: boolean) => void;
+  deselect: () => void;
+  pasteIntoSelection: (data: ImageData) => void;
+  selectionCanvas: HTMLCanvasElement | null;
 }
 
 const PaintContext = createContext<PaintContextType>({} as PaintContextType);
 
 type ProviderProps = PropsWithChildren<PaintContextType>;
 
-export function PaintProvider({ state, setState, children }: ProviderProps) {
+export function PaintProvider({ children, ...props }: ProviderProps) {
   return (
-    <PaintContext.Provider value={{ state, setState }}>
+    <PaintContext.Provider value={props}>
       {children}
     </PaintContext.Provider>
   );
+}
+
+export function usePaintContext() {
+  return useContext(PaintContext);
 }
 
 export function usePaintState() {
