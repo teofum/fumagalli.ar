@@ -5,6 +5,7 @@ import fillPolygon from '../utils/fillPolygon';
 
 const CLOSE_DISTANCE = 4;
 const CLOSE_DISTANCE_SQUARED = CLOSE_DISTANCE * CLOSE_DISTANCE;
+const DBL_CLICK = 300;
 
 export const polygon: PaintBrush = {
   name: 'polygon',
@@ -66,7 +67,18 @@ export const polygon: PaintBrush = {
     const dy = y - y0;
     const dSquared = dx * dx + dy * dy;
 
-    if (dSquared <= CLOSE_DISTANCE_SQUARED) {
+    const { x: lastX, y: lastY } = scratch.points.at(-1);
+
+    // Detect double click
+    const now = ~~performance.now();
+    const timeSinceLastClick = now - scratch.lastClick;
+    const isDoubleClick =
+      !isNaN(timeSinceLastClick) &&
+      timeSinceLastClick < DBL_CLICK &&
+      x === lastX &&
+      y === lastY;
+
+    if (dSquared <= CLOSE_DISTANCE_SQUARED || isDoubleClick) {
       clear(scratchCtx);
 
       if (dx !== 0 || dy !== 0) scratch.points.push({ x: x0, y: y0 }); // Close polygon
@@ -84,6 +96,6 @@ export const polygon: PaintBrush = {
 
       // Clear scratch
       Object.keys(scratch).forEach((key) => delete scratch[key]);
-    }
+    } else if (!isDoubleClick) scratch.lastClick = now;
   },
 };
