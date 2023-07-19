@@ -61,6 +61,20 @@ export type PaintShapeFn = (
   mode: 'fill' | 'stroke',
 ) => void;
 
+export interface PaintSettings {
+  statusBar: boolean;
+  toolBar: boolean;
+  colorBox: boolean;
+  grid: boolean;
+}
+
+export const defaultPaintSettings: PaintSettings = {
+  statusBar: true,
+  toolBar: true,
+  colorBox: true,
+  grid: false,
+};
+
 export interface PaintState {
   canvas: HTMLCanvasElement | null;
 

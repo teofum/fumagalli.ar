@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { useAppSettings } from '~/stores/system';
 import { useWindow } from '~/components/desktop/Window/context';
-import Menu from '~/components/ui/Menu';
 import ScrollContainer from '~/components/ui/ScrollContainer';
 import usePaintCanvas from './usePaintCanvas';
 import PaintToolbox from './ui/PaintToolbox';
@@ -12,12 +12,15 @@ import useDesktopStore from '~/stores/desktop';
 import PaintFileMenu from './ui/PaintFileMenu';
 import PaintEditMenu from './ui/PaintEditMenu';
 import PaintImageMenu from './ui/PaintImageMenu';
+import PaintViewMenu from './ui/PaintViewMenu';
 
 // const resources = '/fs/system/Applications/paint/resources';
 
 export default function Paint() {
   const { id } = useWindow();
   const { setTitle } = useDesktopStore();
+
+  const [settings, set] = useAppSettings('paint');
 
   const [state, _setState] = useState<PaintState>(defaultPaintState);
   const setState = (value: Partial<PaintState>) =>
@@ -50,25 +53,14 @@ export default function Paint() {
       deselect={deselect}
       pasteIntoSelection={pasteIntoSelection}
       selectionCanvas={selectionCanvas}
+      settings={settings}
+      set={set}
     >
       <div className="flex flex-col gap-0.5 min-w-0 select-none">
         <div className="flex flex-row gap-1">
           <PaintFileMenu clear={clear} />
           <PaintEditMenu />
-
-          <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>
-            <Menu.RadioGroup
-              value={state.zoom.toString()}
-              onValueChange={(value) => setState({ zoom: Number(value) })}
-            >
-              <Menu.RadioItem label="100%" value="1" />
-              <Menu.RadioItem label="200%" value="2" />
-              <Menu.RadioItem label="400%" value="4" />
-              <Menu.RadioItem label="600%" value="6" />
-              <Menu.RadioItem label="800%" value="8" />
-            </Menu.RadioGroup>
-          </Menu.Root>
-
+          <PaintViewMenu />
           <PaintImageMenu />
         </div>
 
@@ -92,17 +84,47 @@ export default function Paint() {
 
               {/* Scratch canvas */}
               <canvas {...scratchCanvasProps} />
+
+              {settings.grid && state.zoom >= 4 ? (
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={
+                    {
+                      backgroundColor: '#C0C0C0',
+                      backgroundImage: `linear-gradient(
+                        45deg,#808080 25%, transparent 25%
+                      ),
+                      linear-gradient(
+                        -45deg,#808080 25%, transparent 25%
+                      ),
+                      linear-gradient(
+                        45deg, transparent 75%,#808080 75%
+                      ),
+                      linear-gradient(
+                        -45deg, transparent 75%,#808080 75%
+                      )`,
+                      backgroundSize: '2px 2px',
+                      backgroundPosition: '0 0, 0 1px, 1px -1px, -1px 0',
+                      WebkitMaskImage:
+                        'linear-gradient(white 1px, transparent 1px), linear-gradient(to right, white 1px, transparent 1px)',
+                      WebkitMaskSize: `${state.zoom}px ${state.zoom}px`,
+                    } as any
+                  }
+                />
+              ) : null}
             </div>
           </ScrollContainer>
         </div>
 
         <PaintColor />
 
-        <div className="flex flex-row gap-0.5">
-          <div className="py-0.5 px-1 bevel-light-inset flex-[4]">.</div>
-          <div className="py-0.5 px-1 bevel-light-inset flex-1">.</div>
-          <div className="py-0.5 px-1 bevel-light-inset flex-1">.</div>
-        </div>
+        {settings.statusBar ? (
+          <div className="flex flex-row gap-0.5">
+            <div className="py-0.5 px-1 bevel-light-inset flex-[4]">.</div>
+            <div className="py-0.5 px-1 bevel-light-inset flex-1">.</div>
+            <div className="py-0.5 px-1 bevel-light-inset flex-1">.</div>
+          </div>
+        ) : null}
       </div>
     </PaintProvider>
   );

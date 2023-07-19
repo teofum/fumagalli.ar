@@ -1,5 +1,5 @@
 import { type PropsWithChildren, createContext, useContext } from 'react';
-import type { PaintState, Rect } from './types';
+import type { PaintSettings, PaintState, Rect } from './types';
 
 interface PaintContextType {
   state: PaintState;
@@ -9,6 +9,8 @@ interface PaintContextType {
   deselect: () => void;
   pasteIntoSelection: (data: ImageData) => void;
   selectionCanvas: HTMLCanvasElement | null;
+  settings: PaintSettings;
+  set: (settings: Partial<PaintSettings>) => void;
 }
 
 const PaintContext = createContext<PaintContextType>({} as PaintContextType);

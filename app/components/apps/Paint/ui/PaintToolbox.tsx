@@ -5,19 +5,19 @@ import BrushIcons from '../icons/Brush';
 import { ZOOM_STOPS } from '../brushes/zoom';
 import cn from 'classnames';
 import AirbrushIcons from '../icons/Airbrush';
-import { usePaintState } from '../context';
+import { usePaintContext } from '../context';
 
 const resources = '/fs/system/Applications/paint/resources';
 
 export default function PaintToolbox() {
-  const [state, setState] = usePaintState();
+  const { state, setState, settings } = usePaintContext();
 
   const setBrush = (brush: keyof typeof brushes) => {
     setState({ brush, brushVariant: 0 });
   };
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className={cn('flex flex-col gap-1', { hidden: !settings.toolBar })}>
       <Divider />
       <ToggleGroup
         type="single"

@@ -50,21 +50,9 @@
         theme('colors.black') 25%,
         transparent 25%
       ),
-      linear-gradient(
-        -45deg,
-        theme('colors.black') 25%,
-        transparent 25%
-      ),
-      linear-gradient(
-        45deg,
-        transparent 75%,
-        theme('colors.black') 75%
-      ),
-      linear-gradient(
-        -45deg,
-        transparent 75%,
-        theme('colors.black') 75%
-      );
+      linear-gradient(-45deg, theme('colors.black') 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, theme('colors.black') 75%),
+      linear-gradient(-45deg, transparent 75%, theme('colors.black') 75%);
   }
 
   .bg-checkered-lg {
