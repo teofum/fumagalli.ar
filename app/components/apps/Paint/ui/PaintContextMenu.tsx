@@ -46,14 +46,18 @@ export default function PaintContextMenu() {
    * Clipboard
    */
   const copy = () => {
-    selectionCanvas?.toBlob((blob) => {
-      if (!blob) return;
-
-      const clip = new ClipboardItem({
-        'image/png': blob,
+    const makeImagePromise = async () => {
+      return new Promise<Blob>((resolve) => {
+        selectionCanvas?.toBlob((blob) => {
+          if (blob) resolve(blob);
+        }, 'image/png');
       });
-      navigator.clipboard.write([clip]);
-    }, 'image/png');
+    };
+
+    const clip = new ClipboardItem({
+      'image/png': makeImagePromise(),
+    });
+    navigator.clipboard.write([clip]);
   };
 
   const cut = () => {
@@ -93,6 +97,30 @@ export default function PaintContextMenu() {
 
   return (
     <>
+      <ContextMenu.Item
+        label="Cut"
+        onSelect={cut}
+        disabled={state.selection === null || !navigator.clipboard}
+      />
+      <ContextMenu.Item
+        label="Copy"
+        onSelect={copy}
+        disabled={state.selection === null || !navigator.clipboard}
+      />
+      <ContextMenu.Item
+        label="Paste"
+        onSelect={paste}
+        disabled={!navigator.clipboard}
+      />
+      <ContextMenu.Item
+        label="Clear Selection"
+        onSelect={clearSelection}
+        disabled={state.selection === null}
+      />
+      <ContextMenu.Item label="Select All" onSelect={selectAll} />
+
+      <ContextMenu.Separator />
+
       <ContextMenu.Sub label="Flip/Rotate">
         <ContextMenu.Item
           label="Flip Horizontal"
@@ -120,26 +148,6 @@ export default function PaintContextMenu() {
         }
       />
       <ContextMenu.Item label="Invert Colors" onSelect={invert} />
-
-      <ContextMenu.Separator />
-
-      <ContextMenu.Item
-        label="Cut"
-        onSelect={cut}
-        disabled={state.selection === null}
-      />
-      <ContextMenu.Item
-        label="Copy"
-        onSelect={copy}
-        disabled={state.selection === null}
-      />
-      <ContextMenu.Item label="Paste" onSelect={paste} />
-      <ContextMenu.Item
-        label="Clear Selection"
-        onSelect={clearSelection}
-        disabled={state.selection === null}
-      />
-      <ContextMenu.Item label="Select All" onSelect={selectAll} />
     </>
   );
 }

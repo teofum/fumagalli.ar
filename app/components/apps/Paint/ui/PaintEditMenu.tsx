@@ -116,14 +116,18 @@ export default function PaintEditMenu() {
       <Menu.Item
         label="Cut"
         onSelect={cut}
-        disabled={state.selection === null}
+        disabled={state.selection === null || !navigator.clipboard}
       />
       <Menu.Item
         label="Copy"
         onSelect={copy}
-        disabled={state.selection === null}
+        disabled={state.selection === null || !navigator.clipboard}
       />
-      <Menu.Item label="Paste" onSelect={paste} />
+      <Menu.Item
+        label="Paste"
+        onSelect={paste}
+        disabled={!navigator.clipboard}
+      />
       <Menu.Item
         label="Clear Selection"
         onSelect={clearSelection}
