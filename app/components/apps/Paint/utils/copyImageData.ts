@@ -1,12 +1,11 @@
 import getPixelData from './getPixelData';
 
 interface CopyImageDataOptions {
-  mask: CanvasRenderingContext2D | null,
+  mask?: CanvasRenderingContext2D;
+  flip?: 'horizontal' | 'vertical' | 'both';
 }
 
-const defaultCopyImageDataOptions: CopyImageDataOptions = {
-  mask: null,
-}
+const defaultCopyImageDataOptions: CopyImageDataOptions = {};
 
 export default function copyImageData(
   src: CanvasRenderingContext2D,
@@ -24,7 +23,7 @@ export default function copyImageData(
   const srcImageData = src.getImageData(sx, sy, sw, sh);
   const srcData = getPixelData(srcImageData);
 
-  if (dw === sw && dy === sy && !options.mask) {
+  if (dw === sw && dy === sy && !options.mask && !options.flip) {
     // If there's no scaling or masking, we can copy source data directly
     // and avoid the overhead of pixel manipulation
     dst.putImageData(srcImageData, dx, dy);
@@ -41,13 +40,19 @@ export default function copyImageData(
     const x = i % dstData.width;
     const y = ~~(i / dstData.width);
 
-    const oldX = ~~((x * srcData.width) / dstData.width);
-    const oldY = ~~((y * srcData.height) / dstData.height);
+    let oldX = ~~((x * srcData.width) / dstData.width);
+    let oldY = ~~((y * srcData.height) / dstData.height);
+
+    if (options.flip === 'horizontal' || options.flip === 'both')
+      oldX = srcData.width - oldX - 1;
+    if (options.flip === 'vertical' || options.flip === 'both')
+      oldY = srcData.height - oldY - 1;
+
     const oldI = oldY * srcData.width + oldX;
 
     if (maskImageData) {
       const maskAlpha = maskImageData.data[oldI * 4 + 3];
-      
+
       // Copy src pixel only if mask has alpha > 0
       // We don't need proper alpha blending, at least not yet
       if (maskAlpha > 0) dstData.data[i] = srcData.data[oldI];

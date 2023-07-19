@@ -35,7 +35,18 @@ export default function PaintEditMenu() {
   /**
    * Selection
    */
-  const clearSelection = () => setState({ selection: null });
+  const clearSelection = () => {
+    const ctx = state.canvas?.getContext('2d');
+    if (ctx && state.selection) {
+      const { x, y, w, h } = state.selection;
+      const [br, bg, bb] = state.bgColor;
+      ctx.fillStyle = `rgb(${br} ${bg} ${bb})`;
+      ctx.fillRect(x, y, w, h);
+
+      setState({ selection: null });
+    }
+  };
+
   const selectAll = () => {
     select({ x: 0, y: 0, w: state.canvasWidth, h: state.canvasHeight });
     const ctx = state.canvas?.getContext('2d');

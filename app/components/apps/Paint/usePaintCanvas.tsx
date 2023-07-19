@@ -8,6 +8,8 @@ import clear from './utils/clear';
 import useMoveSelection from './useMoveSelection';
 import useResizeSelection from './useResizeSelection';
 import copyImageData from './utils/copyImageData';
+import invertColors from './utils/invertColors';
+import rotateInPlace from './utils/rotateInPlace';
 
 const MAX_HISTORY = 5;
 
@@ -123,7 +125,7 @@ export default function usePaintCanvas(
 
       // Copy from drawing canvas to selection
       copyImageData(ctx, x, y, w, h, selectionCtx, 0, 0, w, h, {
-        mask: mask ? scratchCtx : null,
+        mask: mask ? scratchCtx : undefined,
       });
       if (mask) clear(scratchCtx);
 
@@ -179,6 +181,56 @@ export default function usePaintCanvas(
       ].slice(0, MAX_HISTORY); // Limit # of history items
 
       setState({ history, undoCount: 0, selection: null });
+    }
+  }
+
+  /**
+   * Image methods
+   */
+  function invert() {
+    const ctx = canvas?.getContext('2d');
+    const selectionCtx = selectionCanvasRef.current?.getContext('2d');
+
+    if (state.selection && selectionCtx) invertColors(selectionCtx);
+    else if (ctx) invertColors(ctx);
+  }
+
+  function flip(mode: 'horizontal' | 'vertical' | 'both') {
+    const ctx = canvas?.getContext('2d');
+    const selectionCtx = selectionCanvasRef.current?.getContext('2d');
+
+    if (state.selection && selectionCtx) {
+      const { w, h } = state.selection;
+      copyImageData(selectionCtx, 0, 0, w, h, selectionCtx, 0, 0, w, h, {
+        flip: mode,
+      });
+    } else if (canvas && ctx) {
+      const { width, height } = canvas;
+      copyImageData(ctx, 0, 0, width, height, ctx, 0, 0, width, height, {
+        flip: mode,
+      });
+    }
+  }
+
+  function rotate(mode: 'cw' | 'ccw') {
+    const ctx = canvas?.getContext('2d');
+    const selectionCtx = selectionCanvasRef.current?.getContext('2d');
+
+    if (state.selection && selectionCtx) {
+      const { x, y, w, h } = state.selection;
+      const halfW = Math.floor(w / 2);
+      const halfH = Math.floor(h / 2);
+      const cx = x + halfW;
+      const cy = y + halfH;
+      rotateInPlace(selectionCtx, mode);
+      setState({ selection: { x: cx - halfH, y: cy - halfW, w: h, h: w } });
+    } else if (ctx) {
+      const rotated = rotateInPlace(ctx, mode);
+      setState({
+        canvasWidth: state.canvasHeight,
+        canvasHeight: state.canvasWidth,
+      });
+      setTimeout(() => ctx.putImageData(rotated, 0, 0), 0);
     }
   }
 
@@ -246,7 +298,7 @@ export default function usePaintCanvas(
    */
   const onPaintStart = (ev: PointerEvent) => {
     if (state.selection !== null && !state.brush.includes('select')) deselect();
-    
+
     const event = getPaintEvent(ev);
     if (event) brush.onPointerDown?.(event);
   };
@@ -374,6 +426,9 @@ export default function usePaintCanvas(
     select,
     deselect,
     pasteIntoSelection,
+    invert,
+    flip,
+    rotate,
     selectionCanvas: selectionCanvasRef.current,
     resizeHandles,
   };

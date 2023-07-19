@@ -8,6 +8,9 @@ interface PaintContextType {
   select: (selectionRect: Rect, mask?: boolean) => void;
   deselect: () => void;
   pasteIntoSelection: (data: ImageData) => void;
+  invert: () => void;
+  flip: (mode: 'horizontal' | 'vertical' | 'both') => void;
+  rotate: (mode: 'cw' | 'ccw') => void;
   selectionCanvas: HTMLCanvasElement | null;
   settings: PaintSettings;
   set: (settings: Partial<PaintSettings>) => void;

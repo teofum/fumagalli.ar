@@ -35,6 +35,9 @@ export default function Paint() {
     select,
     deselect,
     pasteIntoSelection,
+    invert,
+    flip,
+    rotate,
     selectionCanvas,
     containerProps,
     canvasProps,
@@ -52,6 +55,9 @@ export default function Paint() {
       select={select}
       deselect={deselect}
       pasteIntoSelection={pasteIntoSelection}
+      invert={invert}
+      flip={flip}
+      rotate={rotate}
       selectionCanvas={selectionCanvas}
       settings={settings}
       set={set}
