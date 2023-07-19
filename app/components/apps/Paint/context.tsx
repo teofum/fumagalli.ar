@@ -11,6 +11,13 @@ interface PaintContextType {
   invert: () => void;
   flip: (mode: 'horizontal' | 'vertical' | 'both') => void;
   rotate: (mode: 'cw' | 'ccw') => void;
+  stretchAndSkew: (
+    width: number,
+    height: number,
+    stretchMode: 'percent' | 'pixels',
+    skewX: number,
+    skewY: number,
+  ) => void;
   selectionCanvas: HTMLCanvasElement | null;
   settings: PaintSettings;
   set: (settings: Partial<PaintSettings>) => void;
@@ -22,9 +29,7 @@ type ProviderProps = PropsWithChildren<PaintContextType>;
 
 export function PaintProvider({ children, ...props }: ProviderProps) {
   return (
-    <PaintContext.Provider value={props}>
-      {children}
-    </PaintContext.Provider>
+    <PaintContext.Provider value={props}>{children}</PaintContext.Provider>
   );
 }
 

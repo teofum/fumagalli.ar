@@ -38,6 +38,7 @@ export default function Paint() {
     invert,
     flip,
     rotate,
+    stretchAndSkew,
     selectionCanvas,
     containerProps,
     canvasProps,
@@ -58,6 +59,7 @@ export default function Paint() {
       invert={invert}
       flip={flip}
       rotate={rotate}
+      stretchAndSkew={stretchAndSkew}
       selectionCanvas={selectionCanvas}
       settings={settings}
       set={set}

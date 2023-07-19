@@ -234,6 +234,52 @@ export default function usePaintCanvas(
     }
   }
 
+  function stretchAndSkew(
+    width: number,
+    height: number,
+    stretchMode: 'percent' | 'pixels',
+    skewX: number,
+    skewY: number,
+  ) {
+    console.log('stretchAndSkew', width, height);
+
+    const ctx = canvas?.getContext('2d');
+    const sctx = selectionCanvasRef.current?.getContext('2d');
+    if (state.selection && sctx) {
+      const { x, y, w, h } = state.selection;
+      const nw = (w * width) / 100;
+      const nh = (h * height) / 100;
+
+      const transformed = copyImageData(sctx, 0, 0, w, h, sctx, 0, 0, nw, nh, {
+        skewX,
+        skewY,
+        dstAutoSize: 'always',
+      });
+
+      setState({
+        selection: { x, y, w: transformed.width, h: transformed.height },
+      });
+    } else if (canvas && ctx) {
+      const { width: w, height: h } = canvas;
+      const nw = (w * width) / 100;
+      const nh = (h * height) / 100;
+
+      const [r, g, b] = state.bgColor;
+      const bgColor = 255 * 16777216 + b * 65536 + g * 256 + r;
+      const transformed = copyImageData(ctx, 0, 0, w, h, ctx, 0, 0, nw, nh, {
+        skewX,
+        skewY,
+        bgColor,
+      });
+
+      setState({
+        canvasWidth: transformed.width,
+        canvasHeight: transformed.height,
+      });
+      setTimeout(() => ctx.putImageData(transformed, 0, 0), 0);
+    }
+  }
+
   /**
    * Build a paint event from pointer ev
    */
@@ -429,6 +475,7 @@ export default function usePaintCanvas(
     invert,
     flip,
     rotate,
+    stretchAndSkew,
     selectionCanvas: selectionCanvasRef.current,
     resizeHandles,
   };

@@ -2,10 +2,12 @@ import { useWindow } from '~/components/desktop/Window/context';
 import Menu from '~/components/ui/Menu';
 import { paint_imageSize } from '../modals/ImageSize';
 import { usePaintContext } from '../context';
+import { paint_stretchAndSkew } from '../modals/StretchAndSkew';
 
 export default function PaintImageMenu() {
   const { modal } = useWindow();
-  const { state, setState, invert, flip, rotate } = usePaintContext();
+  const { state, setState, invert, flip, rotate, stretchAndSkew } =
+    usePaintContext();
 
   const clearImage = () => {
     const ctx = state.canvas?.getContext('2d');
@@ -31,7 +33,16 @@ export default function PaintImageMenu() {
         <Menu.Item label="Rotate 180°" onSelect={() => flip('both')} />
         <Menu.Item label="Rotate 270°" onSelect={() => rotate('ccw')} />
       </Menu.Sub>
-      <Menu.Item label="Stretch/Skew..." />
+      <Menu.Item
+        label="Stretch/Skew..."
+        onSelect={() =>
+          modal(
+            paint_stretchAndSkew({
+              commit: (...args) => stretchAndSkew(...args),
+            }),
+          )
+        }
+      />
       <Menu.Item label="Invert Colors" onSelect={invert} />
       <Menu.Item
         label="Clear Image"

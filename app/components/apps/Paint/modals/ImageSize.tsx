@@ -27,28 +27,32 @@ export default function PaintImageSize() {
   };
 
   return (
-    <div className="flex flex-col gap-3 p-2">
-      <div className="flex flex-row items-center justify-end gap-2">
-        <div className="w-12">Width</div>
-        <Input
-          className="w-20"
-          numeric="integer"
-          value={state.width}
-          onChange={(ev) => setState({ width: Number(ev.target.value) })}
-        />
+    <div className="flex flex-row gap-3 p-3">
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-row items-center gap-2">
+          <div className="w-12">Width:</div>
+          <Input
+            className="w-12"
+            numeric="integer"
+            value={state.width}
+            onChange={(ev) => setState({ width: Number(ev.target.value) })}
+          />
+          <div>Pixels</div>
+        </div>
+
+        <div className="flex flex-row items-center gap-2">
+          <div className="w-12">Height:</div>
+          <Input
+            className="w-12"
+            numeric="integer"
+            value={state.height}
+            onChange={(ev) => setState({ height: Number(ev.target.value) })}
+          />
+          <div>Pixels</div>
+        </div>
       </div>
 
-      <div className="flex flex-row items-center justify-end gap-2">
-        <div className="w-12">Height</div>
-        <Input
-          className="w-20"
-          numeric="integer"
-          value={state.height}
-          onChange={(ev) => setState({ height: Number(ev.target.value) })}
-        />
-      </div>
-
-      <div className="flex flex-row justify-end gap-1">
+      <div className="flex flex-col gap-1">
         <Button className="py-1 px-2 w-20" onClick={commit}>
           OK
         </Button>
