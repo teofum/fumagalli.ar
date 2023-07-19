@@ -10,5 +10,5 @@ export const paint: WindowInit<'paint'> = ({
   minHeight: 400,
 
   width: 700,
-  height: 540,
+  height: 560,
 });

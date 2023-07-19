@@ -34,32 +34,50 @@ export default function useResizeSelection(
 
     // Horizontal resizing
     if (direction.includes('e')) {
-      const newWidth = clamp(w + deltaX, 1);
+      const newWidth = clamp(w * state.zoom + deltaX, 1);
 
-      el.style.setProperty('width', `${~~newWidth}px`);
+      el.style.setProperty(
+        'width',
+        `${Math.round(newWidth / state.zoom) * state.zoom}px`,
+      );
     } else if (direction.includes('w')) {
-      const newWidth = clamp(w - deltaX, 1);
+      const newWidth = clamp(w * state.zoom - deltaX, 1);
 
-      const maxDeltaX = w - 1;
-      const newX = x + clamp(deltaX, -Number.MAX_VALUE, maxDeltaX);
+      const maxDeltaX = (w - 1) * state.zoom;
+      const newX = x * state.zoom + clamp(deltaX, -Number.MAX_VALUE, maxDeltaX);
 
-      el.style.setProperty('width', `${~~newWidth}px`);
-      el.style.setProperty('left', `${~~newX}px`);
+      el.style.setProperty(
+        'width',
+        `${Math.round(newWidth / state.zoom) * state.zoom}px`,
+      );
+      el.style.setProperty(
+        'left',
+        `${Math.round(newX / state.zoom) * state.zoom}px`,
+      );
     }
 
     // Vertical resizing
     if (direction.includes('s')) {
-      const newHeight = clamp(h + deltaY, 1);
+      const newHeight = clamp(h * state.zoom + deltaY, 1);
 
-      el.style.setProperty('height', `${~~newHeight}px`);
+      el.style.setProperty(
+        'height',
+        `${Math.round(newHeight / state.zoom) * state.zoom}px`,
+      );
     } else if (direction.includes('n')) {
-      const newHeight = clamp(h - deltaY, 1);
+      const newHeight = clamp(h * state.zoom - deltaY, 1);
 
-      const maxDeltaY = h - 1;
-      const newY = y + clamp(deltaY, -Number.MAX_VALUE, maxDeltaY);
+      const maxDeltaY = (h - 1) * state.zoom;
+      const newY = y * state.zoom + clamp(deltaY, -Number.MAX_VALUE, maxDeltaY);
 
-      el.style.setProperty('height', `${~~newHeight}px`);
-      el.style.setProperty('top', `${~~newY}px`);
+      el.style.setProperty(
+        'height',
+        `${Math.round(newHeight / state.zoom) * state.zoom}px`,
+      );
+      el.style.setProperty(
+        'top',
+        `${Math.round(newY / state.zoom) * state.zoom}px`,
+      );
     }
   };
 
@@ -77,12 +95,15 @@ export default function useResizeSelection(
     delete el.dataset.windowHeight;
 
     // Commit changes to selection state
-    const { x, y, width: w, height: h } = el.getBoundingClientRect();
+    const rect = el.getBoundingClientRect();
     const { x: cx, y: cy } = container.getBoundingClientRect();
 
-    setState({
-      selection: { x: ~~(x - cx), y: ~~(y - cy), w, h },
-    });
+    const x = ~~((rect.x - cx) / state.zoom);
+    const y = ~~((rect.y - cy) / state.zoom);
+    const w = ~~(rect.width / state.zoom);
+    const h = ~~(rect.height / state.zoom);
+
+    setState({ selection: { x, y, w, h } });
 
     // Resize selection
     const selectionCanvas = selectionCanvasRef.current;

@@ -34,8 +34,14 @@ export default function useMoveSelection(
 
     const { x: cx, y: cy } = container.getBoundingClientRect();
 
-    el.style.setProperty('top', `${~~(newY - cy)}px`);
-    el.style.setProperty('left', `${~~(newX - cx)}px`);
+    el.style.setProperty(
+      'top',
+      `${~~((newY - cy) / state.zoom) * state.zoom}px`,
+    );
+    el.style.setProperty(
+      'left',
+      `${~~((newX - cx) / state.zoom) * state.zoom}px`,
+    );
   };
 
   const onDragEnd = () => {
@@ -53,7 +59,11 @@ export default function useMoveSelection(
 
     if (state.selection !== null) {
       setState({
-        selection: { ...state.selection, x: ~~(x - cx), y: ~~(y - cy) },
+        selection: {
+          ...state.selection,
+          x: ~~((x - cx) / state.zoom),
+          y: ~~((y - cy) / state.zoom),
+        },
       });
     }
   };
