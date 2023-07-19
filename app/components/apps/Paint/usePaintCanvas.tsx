@@ -365,7 +365,10 @@ export default function usePaintCanvas(
     onPaintEnd,
   });
 
-  const onContextMenu = (ev: React.MouseEvent) => ev.preventDefault();
+  const onContextMenu = (ev: React.MouseEvent) => {
+    // Allow context menu only when using selection tools
+    if (!state.brush.includes('select')) ev.preventDefault();
+  };
 
   /**
    * Selection event handlers

@@ -13,8 +13,40 @@ import PaintFileMenu from './ui/PaintFileMenu';
 import PaintEditMenu from './ui/PaintEditMenu';
 import PaintImageMenu from './ui/PaintImageMenu';
 import PaintViewMenu from './ui/PaintViewMenu';
+import ContextMenu from '~/components/ui/ContextMenu';
+import PaintContextMenu from './ui/PaintContextMenu';
 
 // const resources = '/fs/system/Applications/paint/resources';
+
+function PaintGrid({ zoom }: { zoom: number }) {
+  return (
+    <div
+      className="absolute inset-0 pointer-events-none"
+      style={
+        {
+          backgroundColor: '#C0C0C0',
+          backgroundImage: `linear-gradient(
+              45deg,#808080 25%, transparent 25%
+            ),
+            linear-gradient(
+              -45deg,#808080 25%, transparent 25%
+            ),
+            linear-gradient(
+              45deg, transparent 75%,#808080 75%
+            ),
+            linear-gradient(
+              -45deg, transparent 75%,#808080 75%
+            )`,
+          backgroundSize: '2px 2px',
+          backgroundPosition: '0 0, 0 1px, 1px -1px, -1px 0',
+          WebkitMaskImage:
+            'linear-gradient(white 1px, transparent 1px), linear-gradient(to right, white 1px, transparent 1px)',
+          WebkitMaskSize: `${zoom}px ${zoom}px`,
+        } as any
+      }
+    />
+  );
+}
 
 export default function Paint() {
   const { id } = useWindow();
@@ -75,53 +107,34 @@ export default function Paint() {
         <div className="flex-1 flex flex-row gap-0.5 min-h-0">
           <PaintToolbox />
 
-          <ScrollContainer className="flex-1 !bg-[#808080]">
-            <div className="m-1 relative touch-none w-min" {...containerProps}>
-              {/* Drawing canvas */}
-              <canvas {...canvasProps} />
+          <ContextMenu.Root content={<PaintContextMenu />}>
+            <ScrollContainer className="flex-1 !bg-[#808080]">
+              <div
+                className="m-1 relative touch-none w-min"
+                {...containerProps}
+              >
+                {/* Drawing canvas */}
+                <canvas {...canvasProps} />
 
-              {/* Selection canvas */}
-              <div {...selectionContainerProps}>
-                <div className="absolute -inset-px border border-white" />
-                <div className="absolute -inset-px mix-blend-difference border border-dashed border-white" />
+                {/* Selection canvas */}
+                <div {...selectionContainerProps}>
+                  <div className="absolute -inset-px border border-white" />
+                  <div className="absolute -inset-px mix-blend-difference border border-dashed border-white" />
 
-                {resizeHandles}
+                  {resizeHandles}
 
-                <canvas {...selectionCanvasProps} />
+                  <canvas {...selectionCanvasProps} />
+                </div>
+
+                {/* Scratch canvas */}
+                <canvas {...scratchCanvasProps} />
+
+                {settings.grid && state.zoom >= 4 ? (
+                  <PaintGrid zoom={state.zoom} />
+                ) : null}
               </div>
-
-              {/* Scratch canvas */}
-              <canvas {...scratchCanvasProps} />
-
-              {settings.grid && state.zoom >= 4 ? (
-                <div
-                  className="absolute inset-0 pointer-events-none"
-                  style={
-                    {
-                      backgroundColor: '#C0C0C0',
-                      backgroundImage: `linear-gradient(
-                        45deg,#808080 25%, transparent 25%
-                      ),
-                      linear-gradient(
-                        -45deg,#808080 25%, transparent 25%
-                      ),
-                      linear-gradient(
-                        45deg, transparent 75%,#808080 75%
-                      ),
-                      linear-gradient(
-                        -45deg, transparent 75%,#808080 75%
-                      )`,
-                      backgroundSize: '2px 2px',
-                      backgroundPosition: '0 0, 0 1px, 1px -1px, -1px 0',
-                      WebkitMaskImage:
-                        'linear-gradient(white 1px, transparent 1px), linear-gradient(to right, white 1px, transparent 1px)',
-                      WebkitMaskSize: `${state.zoom}px ${state.zoom}px`,
-                    } as any
-                  }
-                />
-              ) : null}
-            </div>
-          </ScrollContainer>
+            </ScrollContainer>
+          </ContextMenu.Root>
         </div>
 
         <PaintColor />

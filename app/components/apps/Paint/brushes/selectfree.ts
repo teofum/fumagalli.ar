@@ -9,7 +9,16 @@ const MIN_DISTANCE_SQUARED = MIN_DISTANCE * MIN_DISTANCE;
 
 export const selectfree: PaintBrush = {
   name: 'selectfree',
-  onPointerDown: ({ x, y, scratch, scratchCtx, scratchCanvas }) => {
+  onPointerDown: ({
+    x,
+    y,
+    scratch,
+    scratchCtx,
+    scratchCanvas,
+    pointerEvent,
+  }) => {
+    if (pointerEvent.buttons === 2) return;
+
     clear(scratchCtx);
     scratchCanvas.style.setProperty('mix-blend-mode', 'difference');
 

@@ -73,6 +73,9 @@
   .menu-content[data-side='right'] {
     animation: menu-slide-right 150ms steps(6) 0ms 1 normal both;
   }
+  .menu-content.menu-context[data-side] {
+    animation: menu-slide-corner 150ms steps(6) 0ms 1 normal both;
+  }
 
   [data-state='inactive'] .menu-trigger {
     @apply text-disabled hover:shadow-none;
@@ -141,6 +144,16 @@
     0% {
       transform: translateX(-100%);
       clip-path: inset(0 0 0 100%);
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes menu-slide-corner {
+    0% {
+      transform: translate(-100%, -100%);
+      clip-path: inset(100% 0 0 100%);
     }
     100% {
       clip-path: inset(0 0 0 0);
