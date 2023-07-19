@@ -61,6 +61,19 @@
     @apply bg-surface bevel-window p-[0.1875rem] z-2000;
   }
 
+  .menu-content[data-side='top'] {
+    animation: menu-slide-up 150ms steps(6) 0ms 1 normal both;
+  }
+  .menu-content[data-side='bottom'] {
+    animation: menu-slide-down 150ms steps(6) 0ms 1 normal both;
+  }
+  .menu-content[data-side='left'] {
+    animation: menu-slide-left 150ms steps(6) 0ms 1 normal both;
+  }
+  .menu-content[data-side='right'] {
+    animation: menu-slide-right 150ms steps(6) 0ms 1 normal both;
+  }
+
   [data-state='inactive'] .menu-trigger {
     @apply text-disabled hover:shadow-none;
   }
@@ -92,6 +105,46 @@
 
   .menu-item.menu-sub {
     grid-template-columns: minmax(1rem, auto) 1fr minmax(0.75rem, auto);
+  }
+
+  @keyframes menu-slide-down {
+    0% {
+      transform: translateY(-100%);
+      clip-path: inset(100% 0 0 0);
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes menu-slide-up {
+    0% {
+      transform: translateY(100%);
+      clip-path: inset(0 0 100% 0);
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes menu-slide-left {
+    0% {
+      transform: translateX(100%);
+      clip-path: inset(0 100% 0 0);
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes menu-slide-right {
+    0% {
+      transform: translateX(-100%);
+      clip-path: inset(0 0 0 100%);
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+    }
   }
 
   /* Article components */
