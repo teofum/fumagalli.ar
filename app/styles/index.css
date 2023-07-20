@@ -7,10 +7,14 @@
 @import './js-dos.css';
 
 @layer base {
+  @media (prefers-color-scheme: dark) {
+    :root {
+      @apply theme-dark;
+    }
+  }
+
   body {
     @apply text-base text-default selection:bg-selection selection:text-selection;
-
-    overflow: hidden;
   }
 
   img,
