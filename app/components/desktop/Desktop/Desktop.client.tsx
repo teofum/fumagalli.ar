@@ -17,6 +17,8 @@ import { dosEmu } from '~/components/apps/DOSEmu';
 import { ditherLab } from '~/components/apps/DitherLab';
 import { DOS_GAMES } from '~/components/apps/DOSEmu/types';
 import { paint } from '~/components/apps/Paint';
+import ContextMenu from '~/components/ui/ContextMenu';
+import { themeSettings } from '~/components/apps/ThemeSettings';
 
 type ComputerState = 'on' | 'off' | 'shutting-down';
 
@@ -132,62 +134,72 @@ export default function Desktop() {
                 : 'auto auto',
           }}
         >
-          <div className="w-full h-full grid grid-cols-[repeat(auto-fill,4rem)] auto-cols-[4rem] auto-rows-[4.5rem] content-start gap-2 p-2">
-            <DesktopIcon
-              iconUrl="/fs/system/Resources/Icons/computer.png"
-              title="My Computer"
-              open={() => launch(files({ path: '/' }))}
-            />
-            <DesktopIcon
-              iconUrl="/fs/system/Resources/Icons/documents.png"
-              title="My Documents"
-              open={() => launch(files({ path: '/Documents' }))}
-            />
-            <DesktopIcon
-              iconUrl="/fs/system/Applications/intro/icon_32.png"
-              title="About me"
-              open={() => launch(intro)}
-            />
-            <DesktopIcon
-              iconUrl="/fs/system/Applications/dither/icon_32.png"
-              title="DitherLab 2"
-              y={2}
-              open={() => launch(ditherLab())}
-            />
-            <DesktopIcon
-              iconUrl="/fs/system/Applications/paint/icon_32.png"
-              title="Paint"
-              y={2}
-              open={() => launch(paint)}
-            />
-            <DesktopIcon
-              iconUrl="/fs/system/Applications/mine/icon_32.png"
-              title="Minesweeper"
-              y={3}
-              open={() => launch(minesweeper)}
-            />
-            <DesktopIcon
-              iconUrl="/fs/system/Applications/sudoku/icon_32.png"
-              title="Sudoku"
-              y={3}
-              open={() => launch(sudoku)}
-            />
-            <DesktopIcon
-              iconUrl="/fs/system/Applications/solitaire/icon_32.png"
-              title="Solitaire"
-              y={3}
-              open={() => launch(solitaire)}
-            />
-            {DOS_GAMES.map((game) => (
-              <DesktopIcon
-                key={game.title}
-                title={game.title}
-                iconUrl="/fs/system/Applications/dos/icon_32.png"
-                y={3}
-                open={() => launch(dosEmu(game))}
+          <ContextMenu.Root
+            content={
+              <ContextMenu.Item
+                label="System Theme..."
+                icon="/fs/system/Applications/theme/icon_16.png"
+                onSelect={() => launch(themeSettings)}
               />
-            ))}
-          </div>
+            }
+          >
+            <div className="w-full h-full grid grid-cols-[repeat(auto-fill,4rem)] auto-cols-[4rem] auto-rows-[4.5rem] content-start gap-2 p-2">
+              <DesktopIcon
+                iconUrl="/fs/system/Resources/Icons/computer.png"
+                title="My Computer"
+                open={() => launch(files({ path: '/' }))}
+              />
+              <DesktopIcon
+                iconUrl="/fs/system/Resources/Icons/documents.png"
+                title="My Documents"
+                open={() => launch(files({ path: '/Documents' }))}
+              />
+              <DesktopIcon
+                iconUrl="/fs/system/Applications/intro/icon_32.png"
+                title="About me"
+                open={() => launch(intro)}
+              />
+              <DesktopIcon
+                iconUrl="/fs/system/Applications/dither/icon_32.png"
+                title="DitherLab 2"
+                y={2}
+                open={() => launch(ditherLab())}
+              />
+              <DesktopIcon
+                iconUrl="/fs/system/Applications/paint/icon_32.png"
+                title="Paint"
+                y={2}
+                open={() => launch(paint)}
+              />
+              <DesktopIcon
+                iconUrl="/fs/system/Applications/mine/icon_32.png"
+                title="Minesweeper"
+                y={3}
+                open={() => launch(minesweeper)}
+              />
+              <DesktopIcon
+                iconUrl="/fs/system/Applications/sudoku/icon_32.png"
+                title="Sudoku"
+                y={3}
+                open={() => launch(sudoku)}
+              />
+              <DesktopIcon
+                iconUrl="/fs/system/Applications/solitaire/icon_32.png"
+                title="Solitaire"
+                y={3}
+                open={() => launch(solitaire)}
+              />
+              {DOS_GAMES.map((game) => (
+                <DesktopIcon
+                  key={game.title}
+                  title={game.title}
+                  iconUrl="/fs/system/Applications/dos/icon_32.png"
+                  y={3}
+                  open={() => launch(dosEmu(game))}
+                />
+              ))}
+            </div>
+          </ContextMenu.Root>
 
           {windows.map((window) => (
             <Window key={window.id} {...window} />
