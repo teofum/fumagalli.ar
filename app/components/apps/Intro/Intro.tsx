@@ -93,16 +93,36 @@ export default function Intro() {
       <TabContent value="links" className="p-4 min-h-48">
         <ul className="flex flex-col gap-1.5">
           <li>
-            <a href="https://github.com/teofum">GitHub</a> — My GitHub profile
+            <a
+              href="https://github.com/teofum"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>{' '}
+            — My GitHub profile
           </li>
           <li>
-            <a href="https://lab.fumagalli.ar">UI Lab</a> — Digital scratchpad
-            where I test ideas for UI and React components. Expect rough POCs.
+            <a
+              href="https://lab.fumagalli.ar"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              UI Lab
+            </a>{' '}
+            — Digital scratchpad where I test ideas for UI and React components.
+            Expect rough POCs.
           </li>
           <li>
-            <a href="https://codepen.io/teofum">CodePen</a> — Quick demos,
-            mostly written on the spot to share on a chat. Even rougher than the
-            stuff in UI lab.
+            <a
+              href="https://codepen.io/teofum"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              CodePen
+            </a>{' '}
+            — Quick demos, mostly written on the spot to share on a chat. Even
+            rougher than the stuff in UI lab.
           </li>
         </ul>
       </TabContent>
