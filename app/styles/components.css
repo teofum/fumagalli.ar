@@ -160,6 +160,63 @@
     }
   }
 
+  /* Tabs components */
+  .tabs {
+    @apply flex flex-col;
+  }
+
+  .tabs-list {
+    @apply flex flex-row px-0.5 pt-2 items-start;
+  }
+
+  .tab {
+    @apply bg-surface px-1.5 min-w-10 m-0.5 mb-0 text-start;
+
+    box-shadow:
+    0 -1px theme('colors.surface-light'),
+    -1px 0 theme('colors.surface-light'),
+    -1px -1px theme('colors.surface-lighter'),
+    0 -2px theme('colors.surface-lighter'),
+    -2px 0 theme('colors.surface-lighter'),
+    1px 0 theme('colors.surface-dark'),
+    1px -1px theme('colors.surface-darker'),
+    2px 0 theme('colors.surface-darker');
+  }
+
+  .tab[data-state='active'] {
+    @apply z-[1] m-0 -mb-px px-2 pb-[3px];
+
+    box-shadow:
+    0 1px theme('colors.surface'),
+    0 -1px theme('colors.surface-light'),
+    -1px 0 theme('colors.surface-light'),
+    -1px -1px theme('colors.surface-lighter'),
+    0 -2px theme('colors.surface-lighter'),
+    -2px 0 theme('colors.surface-lighter'),
+    1px 0 theme('colors.surface-dark'),
+    1px -1px theme('colors.surface-darker'),
+    2px 0 theme('colors.surface-darker'),
+    0 0 0 2px theme('colors.surface');
+  }
+
+  .tab[data-state='active']:first-child {
+    box-shadow:
+    0 1px theme('colors.surface'),
+    0 -1px theme('colors.surface-light'),
+    -1px 0 theme('colors.surface-light'),
+    -1px -1px theme('colors.surface-lighter'),
+    0 -2px theme('colors.surface-lighter'),
+    -2px 0 theme('colors.surface-lighter'),
+    1px 0 theme('colors.surface-dark'),
+    1px -1px theme('colors.surface-darker'),
+    2px 0 theme('colors.surface-darker'),
+    1px 0 0 1px theme('colors.surface');
+  }
+
+  .tab-content {
+    @apply bg-surface bevel p-0.5;
+  }
+
   /* Article components */
   .demo {
     @apply flex flex-row items-center gap-4 my-6 bevel bg-surface mx-auto w-min p-2 pr-4 font-sans text-base;
