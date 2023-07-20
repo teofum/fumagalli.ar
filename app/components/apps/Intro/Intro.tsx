@@ -14,7 +14,7 @@ export default function Intro() {
   };
 
   return (
-    <Tabs defaultValue="about">
+    <Tabs defaultValue="about" className="p-1.5 pt-0.5">
       <TabsList>
         <Tab value="about">About</Tab>
         <Tab value="links">Links</Tab>
