@@ -25,6 +25,7 @@ const functions: PaintBrushFn[] = [
 
 export const line: PaintBrush = {
   name: 'line',
+  hint: 'Click and drag to draw a straight line.',
   onPointerDown: ({ x, y, fg, bg, pointerEvent, scratch, scratchCtx }) => {
     const color = pointerEvent.buttons === 2 ? bg : fg;
 

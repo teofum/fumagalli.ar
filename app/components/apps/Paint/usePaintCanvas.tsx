@@ -352,6 +352,8 @@ export default function usePaintCanvas(
   const onPaintMove = (ev: PointerEvent) => {
     const event = getPaintEvent(ev);
     if (event) brush.onPointerMove?.(event);
+
+    onPointerMove(ev);
   };
 
   const onPaintEnd = (ev: PointerEvent) => {
@@ -369,6 +371,17 @@ export default function usePaintCanvas(
     // Allow context menu only when using selection tools
     if (!state.brush.includes('select')) ev.preventDefault();
   };
+
+  const onPointerMove = (ev: React.PointerEvent | PointerEvent) => {
+    if (!canvas) return;
+
+    const { top, left } = canvas.getBoundingClientRect();
+    const x = Math.floor((ev.clientX - left) / state.zoom);
+    const y = Math.floor((ev.clientY - top) / state.zoom);
+    setState({ cursorPos: { x, y } });
+  };
+
+  const onPointerLeave = () => setState({ cursorPos: null });
 
   /**
    * Selection event handlers
@@ -438,8 +451,10 @@ export default function usePaintCanvas(
     canvasProps: {
       ref: canvasRef,
       onPointerDown,
+      onPointerMove,
+      onPointerLeave,
       onContextMenu,
-      className: '[image-rendering:pixelated]',
+      className: '[image-rendering:pixelated] cursor-crosshair',
       style: {
         width: state.canvasWidth * state.zoom,
         height: state.canvasHeight * state.zoom,

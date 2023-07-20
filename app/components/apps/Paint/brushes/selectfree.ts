@@ -8,7 +8,8 @@ const MIN_DISTANCE = 4;
 const MIN_DISTANCE_SQUARED = MIN_DISTANCE * MIN_DISTANCE;
 
 export const selectfree: PaintBrush = {
-  name: 'selectfree',
+  name: 'Freehand Selection',
+  hint: 'Draw any shape to select an area of the picture in that shape.',
   onPointerDown: ({
     x,
     y,

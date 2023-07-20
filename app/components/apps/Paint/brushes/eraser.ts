@@ -11,7 +11,8 @@ const square = (size: number): PaintBrushFn => {
 const functions: PaintBrushFn[] = [square(4), square(6), square(8), square(10)];
 
 export const eraser: PaintBrush = {
-  name: 'eraser',
+  name: 'Eraser',
+  hint: 'Erase using the selected shape.',
   onPointerDown: ({ ctx, x, y, bg, brushVariant }) => {
     const brushFn = functions[brushVariant];
 

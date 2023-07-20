@@ -7,7 +7,8 @@ const MIN_DISTANCE = 4;
 const MIN_DISTANCE_SQUARED = MIN_DISTANCE * MIN_DISTANCE;
 
 export const freehand: PaintBrush = {
-  name: 'freehand',
+  name: 'Free-form shape',
+  hint: 'Draw a closed free-form shape.',
   onPointerDown: ({
     x,
     y,

@@ -15,6 +15,7 @@ import PaintImageMenu from './ui/PaintImageMenu';
 import PaintViewMenu from './ui/PaintViewMenu';
 import ContextMenu from '~/components/ui/ContextMenu';
 import PaintContextMenu from './ui/PaintContextMenu';
+import { brushes } from './brushes';
 
 // const resources = '/fs/system/Applications/paint/resources';
 
@@ -80,6 +81,8 @@ export default function Paint() {
     resizeHandles,
   } = usePaintCanvas(state, setState);
 
+  const brush = brushes[state.brush];
+
   return (
     <PaintProvider
       state={state}
@@ -141,9 +144,20 @@ export default function Paint() {
 
         {settings.statusBar ? (
           <div className="flex flex-row gap-0.5">
-            <div className="py-0.5 px-1 bevel-light-inset flex-[4]">.</div>
-            <div className="py-0.5 px-1 bevel-light-inset flex-1">.</div>
-            <div className="py-0.5 px-1 bevel-light-inset flex-1">.</div>
+            <div className="py-0.5 px-1 bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden flex-[4]">
+              <span className="bold">{brush.name}:</span>{' '}
+              <span>{brush.hint}</span>
+            </div>
+            <div className="py-0.5 px-1 bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden flex-1">
+              {state.cursorPos
+                ? `${state.cursorPos.x}, ${state.cursorPos.y}`
+                : null}
+            </div>
+            <div className="py-0.5 px-1 bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden flex-1">
+              {state.selection
+                ? `${state.selection.w}x${state.selection.h}`
+                : null}
+            </div>
           </div>
         ) : null}
       </div>

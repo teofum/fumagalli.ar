@@ -4,9 +4,10 @@ import drawEllipse from '../utils/drawEllipse';
 import drawRect from '../utils/drawRect';
 import drawRoundedRect from '../utils/drawRoundedRect';
 
-function shape(name: string, drawFn: PaintShapeFn): PaintBrush {
+function shape(name: string, hint: string, drawFn: PaintShapeFn): PaintBrush {
   return {
     name,
+    hint,
     onPointerDown: ({
       x,
       y,
@@ -110,6 +111,18 @@ function shape(name: string, drawFn: PaintShapeFn): PaintBrush {
   };
 }
 
-export const rectangle = shape('rectangle', drawRect);
-export const ellipse = shape('ellipse', drawEllipse);
-export const roundedrect = shape('roundedrect', drawRoundedRect);
+export const rectangle = shape(
+  'Rectangle',
+  'Click and drag to draw a rectangle. Hold shift to draw a square.',
+  drawRect,
+);
+export const ellipse = shape(
+  'Ellipse',
+  'Click and drag to draw an ellipse. Hold shift to draw a circle.',
+  drawEllipse,
+);
+export const roundedrect = shape(
+  'Rounded Rectangle',
+  'Click and drag to draw a rectangle with rounded corners.',
+  drawRoundedRect,
+);

@@ -1,7 +1,8 @@
 import type { PaintBrush } from '../types';
 
 export const dropper: PaintBrush = {
-  name: 'dropper',
+  name: 'Eyedropper',
+  hint: 'Click on the picture to pick up a color for drawing.',
   onPointerDown: ({ ctx, x, y, setState, pointerEvent }) => {
     const bg = pointerEvent.buttons === 2;
 

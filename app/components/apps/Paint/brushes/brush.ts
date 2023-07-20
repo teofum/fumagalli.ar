@@ -44,7 +44,8 @@ const functions: PaintBrushFn[] = [
 ];
 
 export const brush: PaintBrush = {
-  name: 'brush',
+  name: 'Brush',
+  hint: 'Draw using a brush with the selected shape and size.',
   onPointerDown: ({ ctx, x, y, fg, bg, brushVariant, pointerEvent }) => {
     const color = pointerEvent.buttons === 2 ? bg : fg;
     const brushFn = functions[brushVariant];

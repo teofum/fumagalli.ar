@@ -4,7 +4,8 @@ import clear from '../utils/clear';
 import drawRect from '../utils/drawRect';
 
 export const select: PaintBrush = {
-  name: 'select',
+  name: 'Selection',
+  hint: 'Click and drag to select a rectangular area of the picture.',
   onPointerDown: ({
     x,
     y,

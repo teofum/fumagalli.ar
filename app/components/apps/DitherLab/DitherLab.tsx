@@ -377,20 +377,20 @@ export default function DitherLab() {
 
       {settings.showStatusBar ? (
         <div className="flex flex-row gap-0.5">
-          <div className="py-0.5 px-2 bevel-light-inset flex-[3]">
+          <div className="py-0.5 px-2 bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden flex-[3]">
             {status === 'done'
               ? `Done (${renderTime.toFixed(0)}ms)`
               : status === 'ready'
               ? 'Ready'
               : 'Rendering...'}
           </div>
-          <div className="py-0.5 px-2 bevel-light-inset flex-1">
+          <div className="py-0.5 px-2 bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden flex-1">
             {state.image?.filename}
           </div>
-          <div className="py-0.5 px-2 bevel-light-inset flex-1">
+          <div className="py-0.5 px-2 bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden flex-1">
             {state.renderWidth}x{state.renderHeight}
           </div>
-          <div className="py-0.5 px-2 bevel-light-inset flex-1">
+          <div className="py-0.5 px-2 bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden flex-1">
             {state.palette.name}
           </div>
         </div>

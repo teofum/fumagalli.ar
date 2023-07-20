@@ -3,7 +3,8 @@ import drawLine from '../utils/drawLine';
 import setPixel from '../utils/setPixel';
 
 export const pencil: PaintBrush = {
-  name: 'pencil',
+  name: 'Pencil',
+  hint: 'Draw a free-form line one pixel wide.',
   onPointerDown: ({ ctx, x, y, fg, bg, pointerEvent }) => {
     const color = pointerEvent.buttons === 2 ? bg : fg;
 

@@ -24,7 +24,8 @@ function spray(
 }
 
 export const airbrush: PaintBrush = {
-  name: 'airbrush',
+  name: 'Airbrush',
+  hint: 'Draw using an airbrush of the selected size.',
   onPointerDown: ({
     ctx,
     x,

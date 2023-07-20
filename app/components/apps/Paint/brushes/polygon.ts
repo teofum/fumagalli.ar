@@ -8,7 +8,8 @@ const CLOSE_DISTANCE_SQUARED = CLOSE_DISTANCE * CLOSE_DISTANCE;
 const DBL_CLICK = 300;
 
 export const polygon: PaintBrush = {
-  name: 'polygon',
+  name: 'Polygon',
+  hint: 'Click and drag to add points. Double click to close the shape.',
   onPointerDown: ({
     x,
     y,

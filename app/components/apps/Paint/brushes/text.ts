@@ -5,7 +5,8 @@ import drawText from '../utils/drawText';
 import getPixelData from '../utils/getPixelData';
 
 export const text: PaintBrush = {
-  name: 'text',
+  name: 'Text',
+  hint: 'Click and type to add text. Click again to confirm.',
   onPointerDown: ({ x, y, scratch }) => {
     if (scratch.typing) return;
 

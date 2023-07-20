@@ -40,6 +40,7 @@ export interface PaintEvent {
 
 export interface PaintBrush {
   name: string;
+  hint: string;
 
   onPointerDown?: (ev: PaintEvent) => void;
   onPointerMove?: (ev: PaintEvent) => void;
@@ -87,6 +88,7 @@ export interface PaintState {
   zoom: number;
   canvasWidth: number;
   canvasHeight: number;
+  cursorPos: { x: number, y: number } | null;
 
   selection: Rect | null;
   history: ImageData[];
@@ -107,6 +109,7 @@ export const defaultPaintState: PaintState = {
   zoom: 1,
   canvasWidth: 600,
   canvasHeight: 400,
+  cursorPos: null,
 
   selection: null,
   history: [],

@@ -25,7 +25,8 @@ const functions: PaintBrushFn[] = [
 ];
 
 export const curve: PaintBrush = {
-  name: 'curve',
+  name: 'Curve',
+  hint: 'Click and drag to set the start and end of a bezier curve. Click and drag twice again to set control points.',
   onPointerDown: ({ x, y, fg, bg, pointerEvent, scratch, scratchCtx }) => {
     switch (scratch.curveStage) {
       case 1: {

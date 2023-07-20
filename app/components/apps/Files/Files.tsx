@@ -190,12 +190,12 @@ export default function Files() {
 
       {settings.statusBar && !isModal ? (
         <div className="flex flex-row gap-0.5">
-          <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
+          <div className="flex-1 bg-surface bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden py-0.5 px-1">
             {dir?.items.length || 'No'} object
             {dir?.items.length === 1 ? '' : 's'}
           </div>
 
-          <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
+          <div className="flex-1 bg-surface bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden py-0.5 px-1">
             {selected ? (
               <span>
                 {selected.name}:{' '}
