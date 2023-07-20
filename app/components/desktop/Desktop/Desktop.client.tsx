@@ -82,6 +82,9 @@ export default function Desktop() {
     useDesktopStore();
   const [computerState, setComputerState] = useState<ComputerState>('on');
 
+  const { backgroundColor, backgroundUrl, backgroundImageMode } =
+    themeCustomizations;
+
   useEffect(() => {
     const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
     const desktop = desktopEl.getBoundingClientRect();
@@ -113,8 +116,21 @@ export default function Desktop() {
       <div className={cn('w-screen h-screen flex flex-col overflow-hidden')}>
         <div
           id="desktop"
-          className="relative flex-1 bg-desktop"
-          style={{ backgroundColor: themeCustomizations.backgroundColor }}
+          className="relative flex-1 bg-desktop [image-rendering:pixelated]"
+          style={{
+            backgroundColor: backgroundColor,
+            backgroundImage: `url('${backgroundUrl}')`,
+            backgroundRepeat:
+              backgroundImageMode === 'tile' ? 'repeat' : 'no-repeat',
+            backgroundPosition:
+              backgroundImageMode === 'tile' ? 'top left' : 'center center',
+            backgroundSize:
+              backgroundImageMode === 'fill'
+                ? 'cover'
+                : backgroundImageMode === 'stretch'
+                ? '100% 100%'
+                : 'auto auto',
+          }}
         >
           <div className="w-full h-full grid grid-cols-[repeat(auto-fill,4rem)] auto-cols-[4rem] auto-rows-[4.5rem] content-start gap-2 p-2">
             <DesktopIcon

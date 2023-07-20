@@ -5,6 +5,8 @@ export interface SystemTheme {
 
 export interface ThemeCustomization {
   backgroundColor?: string;
+  backgroundUrl?: string;
+  backgroundImageMode: 'center' | 'tile' | 'stretch' | 'fill';
 }
 
 export const themes: SystemTheme[] = [

@@ -114,7 +114,9 @@ const useSystemStore = create<SystemState & SystemActions>()(
       fileHistory: [],
       dirHistory: [],
       theme: defaultTheme,
-      themeCustomizations: {},
+      themeCustomizations: {
+        backgroundImageMode: 'fill',
+      },
 
       _schema: SCHEMA_VERSION,
 
