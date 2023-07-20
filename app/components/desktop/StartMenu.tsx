@@ -1,5 +1,3 @@
-import { version } from 'package.json';
-
 import Button from '../ui/Button';
 import Menu from '../ui/Menu';
 import useDesktopStore from '~/stores/desktop';
