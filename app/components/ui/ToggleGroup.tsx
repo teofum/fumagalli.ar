@@ -30,24 +30,33 @@ export const ToggleGroup = forwardRef<HTMLDivElement, ToggleGroupProps>(
   },
 );
 
-type ToggleItemProps = React.ComponentProps<typeof ToggleGroupPrimitive.Item>;
+type ToggleItemProps = { noInset?: boolean } & React.ComponentProps<
+  typeof ToggleGroupPrimitive.Item
+>;
 
 export const ToggleButton = forwardRef<HTMLButtonElement, ToggleItemProps>(
-  function ToggleGroupItem({ children, className, ...props }, ref) {
+  function ToggleGroupItem(
+    { children, className, noInset = false, ...props },
+    ref,
+  ) {
     return (
       <ToggleGroupPrimitive.Item
-        className={cn('button px-2 button-normal toggle-button group', className)}
+        className={cn('button button-normal toggle-button group', className)}
         ref={ref}
         {...props}
       >
-        <div
-          className="
+        {noInset ? (
+          children
+        ) : (
+          <div
+            className="
             group-active:translate-x-px group-active:translate-y-px
             group-data-[state=on]:translate-x-px group-data-[state=on]:translate-y-px
           "
-        >
-          {children}
-        </div>
+          >
+            {children}
+          </div>
+        )}
       </ToggleGroupPrimitive.Item>
     );
   },

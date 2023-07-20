@@ -80,13 +80,13 @@ export function useParentState<P extends keyof AppStateTypes>(parentType: P) {
 
   if (!parent)
     throw new Error(`useParentState() must be used within modal window.`);
+  const { appState, id, parentId } = parent;
 
-  const setState = (state: Partial<AppState<P>>) =>
-    setWindowProps<P>(
-      parent.id,
-      { appState: { ...parent.appState, ...state } },
-      parent.parentId,
-    );
+  const setState = useCallback(
+    (state: Partial<AppState<P>>) =>
+      setWindowProps<P>(id, { appState: { ...appState, ...state } }, parentId),
+    [id, parentId, appState, setWindowProps],
+  );
 
   return [parent.appState, setState] as const;
 }

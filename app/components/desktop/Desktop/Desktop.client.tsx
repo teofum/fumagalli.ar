@@ -16,6 +16,7 @@ import { solitaire } from '~/components/apps/Solitaire';
 import { dosEmu } from '~/components/apps/DOSEmu';
 import { ditherLab } from '~/components/apps/DitherLab';
 import { DOS_GAMES } from '~/components/apps/DOSEmu/types';
+import { paint } from '~/components/apps/Paint';
 
 type ComputerState = 'on' | 'off' | 'shutting-down';
 
@@ -81,11 +82,10 @@ export default function Desktop() {
     useDesktopStore();
   const [computerState, setComputerState] = useState<ComputerState>('on');
 
-  
   useEffect(() => {
     const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
     const desktop = desktopEl.getBoundingClientRect();
-    
+
     if (windows.length === 0) {
       launch({ ...about, top: 50, left: 50 });
       launch({
@@ -97,17 +97,17 @@ export default function Desktop() {
     // This is only meant to run once on startup
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   const shutdown = () => {
     setComputerState('shutting-down');
-    
+
     windows.forEach(({ id }, i) => setTimeout(() => close(id), i * 150));
     setTimeout(() => {
       setComputerState('off');
       openShutdown(false);
     }, windows.length * 150);
   };
-  
+
   return (
     <>
       <div className={cn('w-screen h-screen flex flex-col overflow-hidden')}>
@@ -137,6 +137,12 @@ export default function Desktop() {
               title="DitherLab 2"
               y={2}
               open={() => launch(ditherLab())}
+            />
+            <DesktopIcon
+              iconUrl="/fs/system/Applications/paint/icon_32.png"
+              title="Paint"
+              y={2}
+              open={() => launch(paint)}
             />
             <DesktopIcon
               iconUrl="/fs/system/Applications/mine/icon_32.png"

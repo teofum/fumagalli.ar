@@ -23,6 +23,13 @@ import DitherLab, { ditherLab } from './DitherLab';
 import type { DitherLabState } from './DitherLab/types';
 import MessageBox, { messageBox } from './MessageBox';
 import type { MessageBoxState } from './MessageBox/types';
+import Paint, { paint } from './Paint';
+import PaintImageSize, { paint_imageSize } from './Paint/modals/ImageSize';
+import type { PaintImageSizeState } from './Paint/modals/ImageSize';
+import PaintStretchAndSkew, {
+  paint_stretchAndSkew,
+} from './Paint/modals/StretchAndSkew';
+import type { PaintStretchAndSkewState } from './Paint/modals/StretchAndSkew';
 
 const applications = [
   { Component: About, meta: about },
@@ -38,6 +45,9 @@ const applications = [
   { Component: ThemeSettings, meta: themeSettings },
   { Component: DOSEmu, meta: dosEmu() },
   { Component: DitherLab, meta: ditherLab() },
+  { Component: Paint, meta: paint },
+  { Component: PaintImageSize, meta: paint_imageSize() },
+  { Component: PaintStretchAndSkew, meta: paint_stretchAndSkew() },
   { Component: MessageBox, meta: messageBox() },
 ];
 
@@ -49,6 +59,8 @@ export interface AppStateTypes {
   dither: DitherLabState;
   messageBox: MessageBoxState;
   mine_difficulty: MinesweeperCustomDifficultyState;
+  paint_imageSize: PaintImageSizeState;
+  paint_stretchAndSkew: PaintStretchAndSkewState;
 }
 
 export type AppState<AppType extends string> =

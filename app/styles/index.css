@@ -30,4 +30,13 @@
   a:focus-visible {
     outline: 1px dotted theme('colors.black');
   }
+
+  #desktop {
+    user-select: none;
+  }
+  @media (pointer: fine) {
+    #desktop {
+      user-select: auto;
+    }
+  }
 }

@@ -30,6 +30,10 @@ import {
   defaultDitherLabSettings,
   type DitherLabSettings,
 } from '~/components/apps/DitherLab/types';
+import {
+  defaultPaintSettings,
+  type PaintSettings,
+} from '~/components/apps/Paint/types';
 
 const MAX_FILE_HISTORY = 10; // Number of last accessed files to keep
 const MAX_DIR_HISTORY = 10; // Number of last accessed directories to keep
@@ -58,6 +62,7 @@ interface SystemState {
     sudoku: SudokuSettings;
     minesweeper: MinesweeperSettings;
     dither: DitherLabSettings;
+    paint: PaintSettings;
   };
   fileHistory: FileAccess[];
   dirHistory: DirectoryAccess[];
@@ -104,6 +109,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
         sudoku: defaultSudokuSettings,
         minesweeper: defaultMinesweeperSettings,
         dither: defaultDitherLabSettings,
+        paint: defaultPaintSettings,
       },
       fileHistory: [],
       dirHistory: [],

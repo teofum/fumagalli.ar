@@ -17,6 +17,7 @@ import { dosEmu } from '../apps/DOSEmu';
 import { ditherLab } from '../apps/DitherLab';
 import { DOS_GAMES } from '../apps/DOSEmu/types';
 import { help } from '../apps/Help';
+import { paint } from '../apps/Paint';
 
 const ICON_PATH = '/fs/system/Resources/Icons/Start';
 
@@ -67,16 +68,20 @@ export default function StartMenu() {
                 />
               ))}
             </Menu.Sub>
-            {[files({ path: '/Documents' }), ditherLab(), about, intro].map(
-              (app) => (
-                <Menu.Item
-                  key={app.appType}
-                  label={app.title ?? ''}
-                  icon={`/fs/system/Applications/${app.appType}/icon_16.png`}
-                  onSelect={() => launch(app)}
-                />
-              ),
-            )}
+            {[
+              files({ path: '/Documents' }),
+              paint,
+              ditherLab(),
+              about,
+              intro,
+            ].map((app) => (
+              <Menu.Item
+                key={app.appType}
+                label={app.title ?? ''}
+                icon={`/fs/system/Applications/${app.appType}/icon_16.png`}
+                onSelect={() => launch(app)}
+              />
+            ))}
           </Menu.Sub>
 
           <Menu.Sub
