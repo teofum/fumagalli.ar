@@ -37,10 +37,11 @@ export default function StartMenu() {
       contentProps={{ side: 'top' }}
     >
       <div className="flex flex-row">
-        <div className="bg-selection text-selection w-6 flex flex-row p-2">
-          <span className="[writing-mode:vertical-rl] rotate-180 self-end bold">
-            TeOS {version}
-          </span>
+        <div className="w-8 flex flex-row py-2 pl-1 pr-0 bevel-light-inset overflow-hidden">
+          <h1 className="[writing-mode:vertical-rl] rotate-180 self-end font-display text-4xl text-inset">
+            <span className="mr-1">Te</span>
+            <span className="tracking-[2px]">OS</span>
+          </h1>
         </div>
         <div>
           <Menu.Sub
