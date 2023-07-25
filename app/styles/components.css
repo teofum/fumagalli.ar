@@ -232,7 +232,7 @@
   }
 
   .demo-controls {
-    @apply flex flex-col gap-2 min-w-48 pb-2 sm:pb-0 sm:pr-2;
+    @apply flex flex-col gap-2 min-w-48 w-full pb-2 sm:pb-0 sm:pr-2;
   }
 
   .demo-label {
