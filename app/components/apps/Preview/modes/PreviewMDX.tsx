@@ -9,7 +9,7 @@ export default function PreviewMDX({ commonMenu }: PreviewModeProps) {
   if (state.file?.type !== 'mdx') throw new Error('Wrong file type');
 
   const name = state.file.name.split('.').slice(0, -1).join('.');
-  const Component = mdx[name as keyof typeof mdx];
+  const Component = mdx.find((article) => article.filename === name)?.Component;
   if (!Component) return null;
 
   return (

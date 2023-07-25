@@ -1,5 +1,9 @@
 import dither from './dither/dither.mdx';
 
-export default {
-  'Dithering: a visual introduction': dither
-};
+export default [
+  {
+    filename: 'A Visual Introduction to Dithering',
+    slug: 'introduction-to-dithering',
+    Component: dither,
+  },
+];
