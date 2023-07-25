@@ -3,6 +3,7 @@ import Button from '~/components/ui/Button';
 import { Tab, TabContent, Tabs, TabsList } from '~/components/ui/Tabs';
 import { files } from '../Files';
 import { help } from '../Help';
+import RetroLink from '~/components/ui/Link';
 
 const resources = '/fs/system/Applications/intro/resources';
 
@@ -82,7 +83,9 @@ export default function Intro() {
 
             <p className="font-display-text text-xl mt-auto pt-8">
               Let's build awesome things together!{' '}
-              <a href="mailto:teo.fum@outlook.com">Get in touch</a>
+              <RetroLink href="mailto:teo.fum@outlook.com">
+                Get in touch
+              </RetroLink>
             </p>
           </div>
 
