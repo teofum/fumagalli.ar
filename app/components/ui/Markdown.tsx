@@ -17,7 +17,7 @@ export const baseComponents = {
   ),
   pre: (props) => (
     <pre
-      className="paragraph text-content-xs bevel-content py-2 px-3"
+      className="paragraph text-content-xs bevel-content py-2 px-3 overflow-auto"
       {...props}
     />
   ),

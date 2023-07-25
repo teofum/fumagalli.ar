@@ -223,11 +223,16 @@
   }
 
   .demo {
-    @apply flex flex-row items-center gap-4 my-6 bevel bg-surface mx-auto w-min p-2 pr-4 font-sans text-base;
+    /* Layout classes */
+    @apply flex flex-col items-center gap-4 my-6 mx-auto w-min;
+    @apply sm:flex-row;
+
+    /* Style classes */
+    @apply bevel bg-surface p-2 font-sans text-base;
   }
 
   .demo-controls {
-    @apply flex flex-col gap-2 min-w-48;
+    @apply flex flex-col gap-2 min-w-48 pb-2 sm:pb-0 sm:pr-2;
   }
 
   .demo-label {
