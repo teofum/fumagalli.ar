@@ -13,8 +13,8 @@ export const NULL_PALETTE: Palette = {
 };
 
 interface DemoImageBaseProps {
-  canvasRef: React.RefObject<HTMLCanvasElement>;
-  imgRef: React.RefObject<HTMLImageElement>;
+  canvasRef: React.Ref<HTMLCanvasElement>;
+  imgRef: React.Ref<HTMLImageElement>;
   hideCanvas?: boolean;
   imageUrl?: string;
   children: React.ReactNode;

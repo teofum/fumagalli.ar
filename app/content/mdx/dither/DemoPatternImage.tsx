@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import DemoImageBase, { NULL_PALETTE } from './DemoImageBase';
 import useGlRenderer from '~/dither/renderers/useGlRenderer';
 import { ToggleButton, ToggleGroup } from '~/components/ui/ToggleGroup';
@@ -53,12 +53,12 @@ export default function DemoPatternImage({
   const [size, setSize] = useState('4');
   const [pattern, setPattern] = useState(false);
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+  const [img, setImg] = useState<HTMLImageElement | null>(null);
 
   const { render } = useGlRenderer(
-    canvasRef.current,
-    imgRef.current,
+    canvas,
+    img,
     shader,
     NULL_PALETTE,
     {},
@@ -69,18 +69,19 @@ export default function DemoPatternImage({
     },
   );
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const img = imgRef.current;
     if (canvas && img) {
       canvas.width = img.offsetWidth;
       canvas.height = img.offsetHeight;
     }
 
     render();
-  }, [render]);
+  }, [render, canvas, img]);
 
   return (
-    <DemoImageBase canvasRef={canvasRef} imgRef={imgRef}>
+    <DemoImageBase
+      canvasRef={(el) => setCanvas(el)}
+      imgRef={(el) => setImg(el)}
+    >
       {showSizeRadio ? (
         <label className="demo-label">
           <span className="w-16">Tile size</span>
