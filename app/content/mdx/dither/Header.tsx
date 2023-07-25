@@ -1,17 +1,26 @@
 export default function Header() {
   return (
-    <div className="-m-4 mb-8">
+    <div className="-m-4 mb-8 max-w-none">
       <div
         className="
-          w-full h-96 grid grid-cols-5
+          w-full h-[calc(0.8*var(--scroll-viewport-height,100vh))] min-h-96
           bg-[url('/fs/Documents/Articles/assets/dither/header.png')]
           bg-cover [image-rendering:pixelated]
         "
       >
-        <div className="col-start-3 col-span-3 bg-black bg-opacity-25 p-4 pb-8 backdrop-blur flex flex-col justify-end">
-          <h1 className="text-white font-title text-content-6xl">
-            A Visual Introduction to Dithering
-          </h1>
+        <div className="max-w-3xl mx-auto px-4 flex flex-row justify-end">
+          <div className="bg-default bg-opacity-70 p-8 backdrop-blur-md">
+            <h1 className="font-title text-content-4xl">
+              A Visual Introduction to
+              <div
+                className="
+                  w-full aspect-[188/41] bg-current my-4
+                  [mask-image:url('/fs/Documents/Articles/assets/dither/title.png')]
+                  [mask-size:cover] [mask-repeat:no-repeat]
+                "
+              />
+            </h1>
+          </div>
         </div>
       </div>
     </div>
