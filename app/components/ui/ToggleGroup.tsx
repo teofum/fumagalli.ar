@@ -7,11 +7,21 @@ type ToggleGroupProps = React.ComponentProps<typeof ToggleGroupPrimitive.Root>;
 
 export const ToggleGroup = forwardRef<HTMLDivElement, ToggleGroupProps>(
   function ToggleGroup(
-    { children, orientation = 'horizontal', className, ...props },
+    {
+      children,
+      orientation = 'horizontal',
+      className,
+      onValueChange,
+      ...props
+    },
     ref,
   ) {
     return (
       <ToggleGroupPrimitive.Root
+        onValueChange={(value: string & string[]) => {
+          if (props.type === 'single' && !value) return;
+          onValueChange?.(value);
+        }}
         className={cn(
           'flex',
           {
@@ -50,9 +60,9 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleItemProps>(
         ) : (
           <div
             className="
-            group-active:translate-x-px group-active:translate-y-px
-            group-data-[state=on]:translate-x-px group-data-[state=on]:translate-y-px
-          "
+              group-active:translate-x-px group-active:translate-y-px
+              group-data-[state=on]:translate-x-px group-data-[state=on]:translate-y-px
+            "
           >
             {children}
           </div>
