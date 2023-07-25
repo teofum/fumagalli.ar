@@ -74,9 +74,9 @@ export default function Intro() {
             <p className="font-display-text text-xl">
               You can take a look at the{' '}
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a href="" onClick={() => launch(help())}>
+              <button className="link" onClick={() => launch(help())}>
                 help pages
-              </a>{' '}
+              </button>{' '}
               to learn more about the different features of this site.
             </p>
 
