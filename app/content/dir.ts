@@ -16,7 +16,7 @@ const FS_ROOT: Directory = {
           class: 'dir',
           name: 'Articles',
           created: 1689030374,
-          modified: 1689030374,
+          modified: 1690328026,
           items: [
             {
               class: 'dir',
@@ -28,7 +28,7 @@ const FS_ROOT: Directory = {
                   class: 'dir',
                   name: 'dither',
                   created: 1689030374,
-                  modified: 1689030374,
+                  modified: 1690316002,
                   items: [
                     {
                       class: 'file',
@@ -93,6 +93,22 @@ const FS_ROOT: Directory = {
                       created: 1689030374,
                       modified: 1689030374,
                       size: 28916,
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'header.png',
+                      created: 1689896962,
+                      modified: 1689896962,
+                      size: 19394,
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'title.png',
+                      created: 1690315557,
+                      modified: 1690316002,
+                      size: 2450,
                     },
                     {
                       class: 'file',
@@ -293,10 +309,10 @@ const FS_ROOT: Directory = {
             {
               class: 'file',
               type: 'mdx',
-              name: 'Dithering: a visual introduction.mdx',
+              name: 'A Visual Introduction to Dithering.mdx',
               created: 1689030374,
-              modified: 1689030374,
-              size: 19137,
+              modified: 1690328088,
+              size: 94,
             },
           ],
         },

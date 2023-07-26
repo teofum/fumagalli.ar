@@ -1,4 +1,18 @@
 @layer components {
+  /* Links */
+  .link {
+    color: theme('textColor.link');
+    text-decoration: underline 1px solid;
+  }
+
+  .link:visited {
+    color: theme('textColor.visited');
+  }
+
+  .link:focus-visible {
+    outline: 1px dotted theme('colors.black');
+  }
+
   /* Buttons */
   .button {
     @apply bg-surface cursor-default select-none;
@@ -218,12 +232,21 @@
   }
 
   /* Article components */
+  .article > * {
+    @apply max-w-3xl mx-auto;
+  }
+
   .demo {
-    @apply flex flex-row items-center gap-4 my-6 bevel bg-surface mx-auto w-min p-2 pr-4 font-sans text-base;
+    /* Layout classes */
+    @apply flex flex-col items-center gap-4 my-6 mx-auto w-min;
+    @apply sm:flex-row;
+
+    /* Style classes */
+    @apply bevel bg-surface p-2 font-sans text-base;
   }
 
   .demo-controls {
-    @apply flex flex-col gap-2 min-w-48;
+    @apply flex flex-col gap-2 min-w-48 w-full pb-2 sm:pb-0 sm:pr-2;
   }
 
   .demo-label {

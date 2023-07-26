@@ -20,6 +20,8 @@ import { paint } from '~/components/apps/Paint';
 import ContextMenu from '~/components/ui/ContextMenu';
 import { themeSettings } from '~/components/apps/ThemeSettings';
 
+let initialized = false;
+
 type ComputerState = 'on' | 'off' | 'shutting-down';
 
 interface DesktopIconProps {
@@ -79,7 +81,7 @@ function DesktopIcon({ iconUrl, title, x, y, open }: DesktopIconProps) {
 }
 
 export default function Desktop() {
-  const { themeCustomizations } = useSystemStore();
+  const { theme, themeCustomizations } = useSystemStore();
   const { windows, launch, close, shutdownDialog, openShutdown } =
     useDesktopStore();
   const [computerState, setComputerState] = useState<ComputerState>('on');
@@ -87,11 +89,27 @@ export default function Desktop() {
   const { backgroundColor, backgroundUrl, backgroundImageMode } =
     themeCustomizations;
 
+  /**
+   * We want to apply themes to the html element rather than the desktop because
+   * Radix UI elements (menus, popovers etc) are portaled out of it.
+   * However, we don't want to add classes to the desktop on routes other than
+   * index, as those routes are server-rendered and that would result in theme
+   * flashing
+   */
   useEffect(() => {
-    const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
-    const desktop = desktopEl.getBoundingClientRect();
+    document.documentElement.className = theme.cssClass;
+  }, [theme.cssClass]);
+
+  /**
+   * Init effect: open info windows on startup if no windows are open
+   */
+  useEffect(() => {
+    if (initialized) return;
 
     if (windows.length === 0) {
+      const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
+      const desktop = desktopEl.getBoundingClientRect();
+
       launch({ ...about, top: 50, left: 50 });
       launch({
         ...intro,
@@ -99,10 +117,13 @@ export default function Desktop() {
         left: desktop.width / 2 - 320,
       });
     }
-    // This is only meant to run once on startup
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
+    initialized = true;
+  }, [launch, windows.length]);
+
+  /**
+   * Shut down
+   */
   const shutdown = () => {
     setComputerState('shutting-down');
 

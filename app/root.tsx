@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import type { LinksFunction } from '@remix-run/node';
 import {
   Links,
@@ -11,30 +10,11 @@ import {
 
 import styles from './styles/index.css';
 
-import useSystemStore from './stores/system';
-
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
-// For persisted Zustand store with SSR
-const useStore = <T, F>(
-  store: (callback: (state: T) => unknown) => unknown,
-  callback: (state: T) => F,
-) => {
-  const result = store(callback) as F;
-  const [data, setData] = useState<F>();
-
-  useEffect(() => {
-    setData(result);
-  }, [result]);
-
-  return data;
-};
-
 export default function App() {
-  const theme = useStore(useSystemStore, (store) => store.theme);
-
   return (
-    <html lang="en" className={theme?.cssClass}>
+    <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -43,7 +23,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="bg-default">
         <Outlet />
         <ScrollRestoration />
         <Scripts />

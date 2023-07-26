@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
 import { useAppState } from '~/components/desktop/Window/context';
+import RetroLink from '~/components/ui/Link';
 import Markdown from '~/components/ui/Markdown';
 import ScrollContainer from '~/components/ui/ScrollContainer';
 
@@ -48,9 +49,9 @@ export default function HelpContent() {
             {children}
           </a>
         ) : (
-          <a href={href} {...props}>
+          <RetroLink href={href} {...props}>
             {children}
-          </a>
+          </RetroLink>
         ),
     }),
     [setState],

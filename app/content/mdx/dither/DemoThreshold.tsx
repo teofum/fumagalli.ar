@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import DemoImageBase, { NULL_PALETTE } from './DemoImageBase';
 import useGlRenderer from '~/dither/renderers/useGlRenderer';
 import Slider from '~/components/ui/Slider';
@@ -25,48 +25,41 @@ export default function DemoThreshold() {
   const [t, setT] = useState(0.5);
   const [original, setOriginal] = useState(false);
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+  const [img, setImg] = useState<HTMLImageElement | null>(null);
 
   const { render } = useGlRenderer(
-    canvasRef.current,
-    imgRef.current,
+    canvas,
+    img,
     shader,
     NULL_PALETTE,
     {},
     { u_threshold_fixed: t },
   );
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const img = imgRef.current;
     if (canvas && img) {
-      canvas.width = img.offsetWidth;
-      canvas.height = img.offsetHeight;
+      canvas.width = img.offsetWidth / window.devicePixelRatio;
+      canvas.height = img.offsetHeight / window.devicePixelRatio;
     }
 
     render();
-  }, [render, t])
+  }, [render, canvas, img, t]);
 
   return (
-    <DemoImageBase canvasRef={canvasRef} imgRef={imgRef} hideCanvas={original}>
+    <DemoImageBase
+      canvasRef={(el) => setCanvas(el)}
+      imgRef={(el) => setImg(el)}
+      hideCanvas={original}
+    >
       <label className="demo-label">
         <span className="w-12">t={t.toFixed(2)}</span>
-        <Slider
-          min={0}
-          max={1}
-          step={0.01}
-          value={t}
-          onValueChange={setT}
-        />
+        <Slider min={0} max={1} step={0.01} value={t} onValueChange={setT} />
       </label>
 
       <label className="demo-label">
         <span className="mr-2">Show original</span>
-        <Switch
-          checked={original}
-          onCheckedChange={setOriginal}
-        />
+        <Switch checked={original} onCheckedChange={setOriginal} />
       </label>
     </DemoImageBase>
   );
-};
+}

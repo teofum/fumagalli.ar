@@ -3,6 +3,7 @@ import Button from '~/components/ui/Button';
 import { Tab, TabContent, Tabs, TabsList } from '~/components/ui/Tabs';
 import { files } from '../Files';
 import { help } from '../Help';
+import RetroLink from '~/components/ui/Link';
 
 const resources = '/fs/system/Applications/intro/resources';
 
@@ -74,15 +75,17 @@ export default function Intro() {
             <p className="font-display-text text-xl">
               You can take a look at the{' '}
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a href="" onClick={() => launch(help())}>
+              <button className="link" onClick={() => launch(help())}>
                 help pages
-              </a>{' '}
+              </button>{' '}
               to learn more about the different features of this site.
             </p>
 
             <p className="font-display-text text-xl mt-auto pt-8">
               Let's build awesome things together!{' '}
-              <a href="mailto:teo.fum@outlook.com">Get in touch</a>
+              <RetroLink href="mailto:teo.fum@outlook.com">
+                Get in touch
+              </RetroLink>
             </p>
           </div>
 

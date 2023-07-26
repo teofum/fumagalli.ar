@@ -7,28 +7,19 @@
 @import './js-dos.css';
 
 @layer base {
+  @media (prefers-color-scheme: dark) {
+    :root {
+      @apply theme-dark;
+    }
+  }
+
   body {
     @apply text-base text-default selection:bg-selection selection:text-selection;
-
-    overflow: hidden;
   }
 
   img,
   canvas {
     image-rendering: pixelated;
-  }
-
-  a {
-    color: theme('textColor.link');
-    text-decoration: underline 1px solid;
-  }
-
-  a:visited {
-    color: theme('textColor.visited');
-  }
-
-  a:focus-visible {
-    outline: 1px dotted theme('colors.black');
   }
 
   #desktop {

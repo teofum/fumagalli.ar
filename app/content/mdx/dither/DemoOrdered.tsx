@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useGlRenderer from '~/dither/renderers/useGlRenderer';
 import DemoImageBase, { NULL_PALETTE } from './DemoImageBase';
 import { ToggleGroup, ToggleButton } from '~/components/ui/ToggleGroup';
@@ -53,30 +53,32 @@ const DemoOrdered = ({
   const [original, setOriginal] = useState(false);
   const [gamma, setGamma] = useState(2.2);
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+  const [img, setImg] = useState<HTMLImageElement | null>(null);
 
   const { render } = useGlRenderer(
-    canvasRef.current,
-    imgRef.current,
+    canvas,
+    img,
     shader,
     NULL_PALETTE,
     { threshold: `${type}${size}` as any },
     { u_gamma: gamma },
   );
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const img = imgRef.current;
     if (canvas && img) {
-      canvas.width = img.offsetWidth;
-      canvas.height = img.offsetHeight;
+      canvas.width = img.offsetWidth / window.devicePixelRatio;
+      canvas.height = img.offsetHeight / window.devicePixelRatio;
     }
 
     render();
-  }, [render]);
+  }, [render, canvas, img]);
 
   return (
-    <DemoImageBase canvasRef={canvasRef} imgRef={imgRef} hideCanvas={original}>
+    <DemoImageBase
+      canvasRef={(el) => setCanvas(el)}
+      imgRef={(el) => setImg(el)}
+      hideCanvas={original}
+    >
       {sizes && (
         <label className="demo-label">
           <span className="w-16">Map size</span>

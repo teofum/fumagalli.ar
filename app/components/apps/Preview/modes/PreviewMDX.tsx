@@ -9,7 +9,7 @@ export default function PreviewMDX({ commonMenu }: PreviewModeProps) {
   if (state.file?.type !== 'mdx') throw new Error('Wrong file type');
 
   const name = state.file.name.split('.').slice(0, -1).join('.');
-  const Component = mdx[name as keyof typeof mdx];
+  const Component = mdx.find((article) => article.filename === name)?.Component;
   if (!Component) return null;
 
   return (
@@ -17,7 +17,7 @@ export default function PreviewMDX({ commonMenu }: PreviewModeProps) {
       <div className="flex flex-row gap-1">{commonMenu}</div>
 
       <ScrollContainer className="flex-1">
-        <article className="p-4 max-w-3xl mx-auto font-text text-content-sm">
+        <article className="p-4 article font-text text-content-sm">
           <Component components={baseComponents as any} />
         </article>
       </ScrollContainer>

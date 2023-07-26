@@ -11,4 +11,5 @@ export const preview = (
   icon: 'preview',
 
   minWidth: 320,
+  width: 720,
 });
