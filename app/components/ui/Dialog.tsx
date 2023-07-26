@@ -2,6 +2,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import cn from 'classnames';
 
 import Button from './Button';
+import Close from './icons/Close';
 
 type DialogProps = {
   trigger?: React.ReactNode;
@@ -57,7 +58,7 @@ export default function Dialog({
             <div className="flex flex-row">
               <DialogPrimitive.Close asChild>
                 <Button>
-                  <img src="/fs/system/Resources/UI/close.png" alt="Close" />
+                  <Close />
                 </Button>
               </DialogPrimitive.Close>
             </div>
