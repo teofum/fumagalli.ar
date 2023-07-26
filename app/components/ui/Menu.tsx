@@ -56,7 +56,16 @@ type ItemProps = {
 
 function Item({ label, icon, className, ...props }: ItemProps) {
   return (
-    <DropdownMenu.Item className={cn('menu-item', className)} {...props}>
+    <DropdownMenu.Item
+      className={cn('menu-item', className)}
+      {...props}
+      onPointerUp={(ev) => {
+        // Workaround for apple pencil
+        // See https://github.com/radix-ui/primitives/issues/1027
+        props.onPointerUp?.(ev);
+        if (ev.pointerType === 'pen') (ev.target as HTMLElement).click();
+      }}
+    >
       {icon ? <img className="col-start-1" src={icon} alt="" /> : null}
       <span className="col-start-2">{label}</span>
     </DropdownMenu.Item>
