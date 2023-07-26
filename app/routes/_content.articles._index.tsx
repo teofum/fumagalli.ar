@@ -1,4 +1,5 @@
-import { Link } from "@remix-run/react";
+import { Link } from '@remix-run/react';
+import DitherCard from '~/content/mdx/dither/dither.card';
 
 export default function PostsIndexRoute() {
   return (
@@ -7,7 +8,23 @@ export default function PostsIndexRoute() {
         Articles
       </h1>
 
-      <Link to="introduction-to-dithering">A Visual Introduction to Dithering</Link>
+      <h2 className="heading2">Featured articles</h2>
+      <p className="mb-4">
+        These are detailed, interactive deep-dives into a topic I find
+        interesting. They take a long time to write and code, so don't expect a
+        lot of them.
+      </p>
+
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-2">
+        <Link to="introduction-to-dithering">
+          <DitherCard />
+        </Link>
+      </div>
+
+      <h2 className="heading2">Other articles</h2>
+      <p className="mb-4"></p>
+
+      <p>Nothing here yet!</p>
     </div>
   );
 }
