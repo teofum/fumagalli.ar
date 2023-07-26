@@ -1,6 +1,18 @@
-import { fetch, json, type LoaderArgs } from '@remix-run/node';
+import {
+  fetch,
+  json,
+  type V2_MetaFunction,
+  type LoaderArgs,
+} from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import Markdown from '~/components/ui/Markdown';
+
+export const meta: V2_MetaFunction = ({ params }) => {
+  return [
+    { title: `${params.slug} — Teo Fumagalli` },
+    { name: 'description', content: 'A thing I made' },
+  ];
+};
 
 export async function loader({ request, params }: LoaderArgs) {
   const url = new URL(request.url);

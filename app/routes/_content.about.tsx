@@ -1,4 +1,11 @@
-import { Link } from '@remix-run/react';
+import { Link, type V2_MetaFunction } from '@remix-run/react';
+
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: 'Teo Fumagalli' },
+    { name: 'description', content: 'Welcome to my site!' },
+  ];
+};
 
 export default function AboutRoute() {
   return (

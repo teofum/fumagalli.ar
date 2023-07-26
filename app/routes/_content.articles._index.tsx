@@ -1,5 +1,12 @@
-import { Link } from '@remix-run/react';
+import { Link, type V2_MetaFunction } from '@remix-run/react';
 import DitherCard from '~/content/mdx/dither/dither.card';
+
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: 'Articles — Teo Fumagalli' },
+    { name: 'description', content: 'I write stuff sometimes' },
+  ];
+};
 
 export default function PostsIndexRoute() {
   return (
