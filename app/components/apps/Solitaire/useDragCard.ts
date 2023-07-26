@@ -93,7 +93,7 @@ export default function useDragCard(
 
     // Now apply the actual game logic
     // First, find out where the card was dropped
-    const dropTarget = ev.target as HTMLElement | null;
+    const dropTarget = document.elementFromPoint(ev.clientX, ev.clientY);
     const dropId = dropTarget?.id;
     const parentId = dropTarget?.parentElement?.id;
 
