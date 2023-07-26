@@ -4,7 +4,7 @@ import DitherCard from '~/content/mdx/dither/dither.card';
 export default function PostsIndexRoute() {
   return (
     <div className="max-w-3xl mx-auto">
-      <h1 className="font-title text-content-4xl sm:text-content-6xl">
+      <h1 className="font-title text-content-4xl sm:text-content-6xl mb-8">
         Articles
       </h1>
 

@@ -7,9 +7,14 @@ export default function AboutRoute() {
         Teo Fumagalli
       </h1>
 
-      <Link to="/articles">
-        Articles
-      </Link>
+      <ul>
+        <li>
+          <Link to="/articles">Articles</Link>
+        </li>
+        <li>
+          <Link to="/projects">Projects</Link>
+        </li>
+      </ul>
     </div>
   );
 }
