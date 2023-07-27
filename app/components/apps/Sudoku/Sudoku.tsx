@@ -9,6 +9,13 @@ import { useFetcher } from '@remix-run/react';
 import Markdown from '~/components/ui/Markdown';
 import Toolbar from '~/components/ui/Toolbar';
 import { useAppSettings } from '~/stores/system';
+import type { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
+
+export const sudokuComponents = {
+  h1: (props) => <h1 className="font-display text-2xl text-h1" {...props} />,
+  h2: (props) => <h2 className="bold text-h2 mt-4" {...props} />,
+  em: (props) => <span className="not-italic text-accent" {...props} />,
+} satisfies ReactMarkdownOptions['components'];
 
 interface CellProps {
   index: number;
@@ -170,7 +177,7 @@ export default function Sudoku() {
   const newGame = (difficulty = settings.difficulty) => {
     load(`/api/sudoku?difficulty=${difficulty}`);
     startTimer();
-    
+
     if (difficulty !== settings.difficulty) set({ difficulty });
   };
 
@@ -259,7 +266,7 @@ export default function Sudoku() {
 
           {game.board === null ? (
             <div className="col-span-9 w-[360px] h-[360px] p-4">
-              <Markdown>{helpContent}</Markdown>
+              <Markdown components={sudokuComponents}>{helpContent}</Markdown>
 
               <Button className="py-1 px-4 mt-6" onClick={() => newGame()}>
                 Start game
