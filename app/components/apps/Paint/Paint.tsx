@@ -16,6 +16,7 @@ import PaintViewMenu from './ui/PaintViewMenu';
 import ContextMenu from '~/components/ui/ContextMenu';
 import PaintContextMenu from './ui/PaintContextMenu';
 import { brushes } from './brushes';
+import Menu from '~/components/ui/Menu';
 
 // const resources = '/fs/system/Applications/paint/resources';
 
@@ -100,12 +101,12 @@ export default function Paint() {
       set={set}
     >
       <div className="flex flex-col gap-0.5 min-w-0 select-none">
-        <div className="flex flex-row gap-1">
+        <Menu.Bar>
           <PaintFileMenu clear={clear} />
           <PaintEditMenu />
           <PaintViewMenu />
           <PaintImageMenu />
-        </div>
+        </Menu.Bar>
 
         <div className="flex-1 flex flex-row gap-0.5 min-h-0">
           <PaintToolbox />

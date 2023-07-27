@@ -5,7 +5,7 @@ export default function PaintViewMenu() {
   const { state, setState, settings, set } = usePaintContext();
 
   return (
-    <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>
+    <Menu.Menu trigger={<Menu.Trigger>View</Menu.Trigger>}>
       <Menu.CheckboxItem
         label="Tool Box"
         checked={settings.toolBar}
@@ -42,6 +42,6 @@ export default function PaintViewMenu() {
         checked={settings.grid}
         onCheckedChange={(checked) => set({ grid: checked })}
       />
-    </Menu.Root>
+    </Menu.Menu>
   );
 }

@@ -3,6 +3,7 @@ import { useAppState } from '~/components/desktop/Window/context';
 import type { PreviewModeProps } from '../types';
 import mdx from '~/content/mdx';
 import { baseComponents } from '~/components/ui/Markdown';
+import Menu from '~/components/ui/Menu';
 
 export default function PreviewMDX({ commonMenu }: PreviewModeProps) {
   const [state] = useAppState('preview');
@@ -14,7 +15,7 @@ export default function PreviewMDX({ commonMenu }: PreviewModeProps) {
 
   return (
     <>
-      <div className="flex flex-row gap-1">{commonMenu}</div>
+      <Menu.Bar>{commonMenu}</Menu.Bar>
 
       <ScrollContainer className="flex-1">
         <article className="p-4 article font-text text-content-sm">

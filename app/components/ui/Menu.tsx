@@ -1,16 +1,48 @@
 import React from 'react';
 import cn from 'classnames';
+import * as MenuBar from '@radix-ui/react-menubar';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import Check from './icons/Check';
 import Dot from './icons/Dot';
 import ArrowLeft from './icons/ArrowLeft';
 
+type MenubarProps = React.ComponentProps<typeof MenuBar.Root>;
+
+const Bar = React.forwardRef<HTMLDivElement, MenubarProps>(function Bar(
+  { children, className, ...props },
+  ref,
+) {
+  return (
+    <MenuBar.Root ref={ref} className={cn('menu-bar', className)} {...props}>
+      {children}
+    </MenuBar.Root>
+  );
+});
+
 type MenuProps = React.PropsWithChildren<
   {
     trigger: React.ReactNode;
-    contentProps?: React.ComponentProps<typeof DropdownMenu.Content>;
-  } & React.ComponentProps<typeof DropdownMenu.Root>
+    contentProps?: React.ComponentProps<typeof MenuBar.Content>;
+  } & React.ComponentProps<typeof MenuBar.Menu>
 >;
+
+function Menu({ children, trigger, contentProps, ...props }: MenuProps) {
+  return (
+    <MenuBar.Menu {...props}>
+      <MenuBar.Trigger asChild>{trigger}</MenuBar.Trigger>
+
+      <MenuBar.Portal>
+        <MenuBar.Content
+          align="start"
+          {...contentProps}
+          className={cn('menu-content', contentProps?.className)}
+        >
+          {children}
+        </MenuBar.Content>
+      </MenuBar.Portal>
+    </MenuBar.Menu>
+  );
+}
 
 function Root({ children, trigger, contentProps, ...props }: MenuProps) {
   return (
@@ -38,7 +70,7 @@ const Trigger = React.forwardRef<
     <button
       className={cn(
         'button bg-transparent shadow-none hover:bevel-light px-1.5 py-0.5 menu-trigger',
-        'active:bevel-light-inset data-[state=open]:bevel-light-inset',
+        'active:bevel-light-inset data-[state=open]:!bevel-light-inset',
         className,
       )}
       {...props}
@@ -52,11 +84,11 @@ const Trigger = React.forwardRef<
 type ItemProps = {
   label: string;
   icon?: string;
-} & React.ComponentProps<typeof DropdownMenu.Item>;
+} & React.ComponentProps<typeof MenuBar.Item>;
 
 function Item({ label, icon, className, ...props }: ItemProps) {
   return (
-    <DropdownMenu.Item
+    <MenuBar.Item
       className={cn('menu-item', className)}
       {...props}
       onPointerUp={(ev) => {
@@ -68,60 +100,55 @@ function Item({ label, icon, className, ...props }: ItemProps) {
     >
       {icon ? <img className="col-start-1" src={icon} alt="" /> : null}
       <span className="col-start-2">{label}</span>
-    </DropdownMenu.Item>
+    </MenuBar.Item>
   );
 }
 
 type CheckboxItemProps = {
   label: string;
-} & React.ComponentProps<typeof DropdownMenu.CheckboxItem>;
+} & React.ComponentProps<typeof MenuBar.CheckboxItem>;
 
 function CheckboxItem({ label, className, ...props }: CheckboxItemProps) {
   return (
-    <DropdownMenu.CheckboxItem
-      className={cn('menu-item', className)}
-      {...props}
-    >
-      <DropdownMenu.ItemIndicator className="col-start-1">
+    <MenuBar.CheckboxItem className={cn('menu-item', className)} {...props}>
+      <MenuBar.ItemIndicator className="col-start-1">
         <Check />
-      </DropdownMenu.ItemIndicator>
+      </MenuBar.ItemIndicator>
       <span className="col-start-2">{label}</span>
-    </DropdownMenu.CheckboxItem>
+    </MenuBar.CheckboxItem>
   );
 }
 
-type RadioGroupProps = React.ComponentProps<typeof DropdownMenu.RadioGroup>;
+type RadioGroupProps = React.ComponentProps<typeof MenuBar.RadioGroup>;
 
 function RadioGroup({ children, ...props }: RadioGroupProps) {
-  return (
-    <DropdownMenu.RadioGroup {...props}>{children}</DropdownMenu.RadioGroup>
-  );
+  return <MenuBar.RadioGroup {...props}>{children}</MenuBar.RadioGroup>;
 }
 
 type RadioItemProps = {
   label: string;
-} & React.ComponentProps<typeof DropdownMenu.RadioItem>;
+} & React.ComponentProps<typeof MenuBar.RadioItem>;
 
 function RadioItem({ label, className, ...props }: RadioItemProps) {
   return (
-    <DropdownMenu.RadioItem className={cn('menu-item', className)} {...props}>
-      <DropdownMenu.ItemIndicator className="col-start-1">
+    <MenuBar.RadioItem className={cn('menu-item', className)} {...props}>
+      <MenuBar.ItemIndicator className="col-start-1">
         <Dot />
-      </DropdownMenu.ItemIndicator>
+      </MenuBar.ItemIndicator>
       <span className="col-start-2">{label}</span>
-    </DropdownMenu.RadioItem>
+    </MenuBar.RadioItem>
   );
 }
 
 function Separator() {
-  return <DropdownMenu.Separator className="h-0.5 m-1 bevel-light-inset" />;
+  return <MenuBar.Separator className="h-0.5 m-1 bevel-light-inset" />;
 }
 
 type SubProps = {
   label: string;
   icon?: string;
-  contentProps?: React.ComponentProps<typeof DropdownMenu.SubContent>;
-} & React.ComponentProps<typeof DropdownMenu.SubTrigger>;
+  contentProps?: React.ComponentProps<typeof MenuBar.SubContent>;
+} & React.ComponentProps<typeof MenuBar.SubTrigger>;
 
 function Sub({
   label,
@@ -132,8 +159,8 @@ function Sub({
   ...props
 }: SubProps) {
   return (
-    <DropdownMenu.Sub>
-      <DropdownMenu.SubTrigger
+    <MenuBar.Sub>
+      <MenuBar.SubTrigger
         className={cn('menu-item menu-sub', className)}
         {...props}
       >
@@ -142,23 +169,25 @@ function Sub({
         <div className="w-3 h-3">
           <ArrowLeft />
         </div>
-      </DropdownMenu.SubTrigger>
+      </MenuBar.SubTrigger>
 
-      <DropdownMenu.Portal>
-        <DropdownMenu.SubContent
+      <MenuBar.Portal>
+        <MenuBar.SubContent
           sideOffset={-4}
           alignOffset={-2}
           {...contentProps}
           className={cn('menu-content', contentProps?.className)}
         >
           {children}
-        </DropdownMenu.SubContent>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Sub>
+        </MenuBar.SubContent>
+      </MenuBar.Portal>
+    </MenuBar.Sub>
   );
 }
 
 export default {
+  Bar,
+  Menu,
   Root,
   Trigger,
   Item,

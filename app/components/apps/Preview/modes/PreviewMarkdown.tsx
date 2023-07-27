@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Markdown from '~/components/ui/Markdown';
 import { useAppState } from '~/components/desktop/Window/context';
 import type { PreviewModeProps } from '../types';
+import Menu from '~/components/ui/Menu';
 
 export default function PreviewMarkdown({ commonMenu }: PreviewModeProps) {
   const [state] = useAppState('preview');
@@ -25,7 +26,7 @@ export default function PreviewMarkdown({ commonMenu }: PreviewModeProps) {
 
   return (
     <>
-      <div className="flex flex-row gap-1">{commonMenu}</div>
+      <Menu.Bar>{commonMenu}</Menu.Bar>
 
       <ScrollContainer className="flex-1">
         <article className="p-4 max-w-3xl mx-auto font-text text-content-sm">

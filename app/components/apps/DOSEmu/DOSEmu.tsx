@@ -27,8 +27,8 @@ export default function DOSEmu() {
 
   return (
     <div className="flex flex-col gap-0.5">
-      <div className="flex flex-row gap-1">
-        <Menu.Root trigger={<Menu.Trigger>Emulation</Menu.Trigger>}>
+      <Menu.Bar>
+        <Menu.Menu trigger={<Menu.Trigger>Emulation</Menu.Trigger>}>
           <Menu.Item label="Open..." onSelect={open} />
 
           <Menu.Separator />
@@ -42,16 +42,16 @@ export default function DOSEmu() {
           <Menu.Separator />
 
           <Menu.Item label="Quit" onSelect={close} />
-        </Menu.Root>
+        </Menu.Menu>
 
-        <Menu.Root trigger={<Menu.Trigger>Sound</Menu.Trigger>}>
+        <Menu.Menu trigger={<Menu.Trigger>Sound</Menu.Trigger>}>
           <Menu.CheckboxItem
             label="Mute"
             checked={dos?.volume === 0}
             onCheckedChange={(value) => dos?.setVolume(value ? 0 : 1)}
           />
-        </Menu.Root>
-      </div>
+        </Menu.Menu>
+      </Menu.Bar>
 
       <div className="grow bevel-content p-0.5 overflow-hidden">
         <DosPlayer bundleUrl={state.bundleUrl} dos={dos} setDos={setDos} />

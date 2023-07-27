@@ -186,8 +186,8 @@ export default function Sudoku() {
    */
   return (
     <div className="flex flex-col gap-0.5">
-      <div className="flex flex-row">
-        <Menu.Root trigger={<Menu.Trigger>Game</Menu.Trigger>}>
+      <Menu.Bar>
+        <Menu.Menu trigger={<Menu.Trigger>Game</Menu.Trigger>}>
           <Menu.Item label="New" onSelect={() => newGame()} />
 
           <Menu.Separator />
@@ -217,8 +217,8 @@ export default function Sudoku() {
           <Menu.Separator />
 
           <Menu.Item label="Exit" onSelect={close} />
-        </Menu.Root>
-      </div>
+        </Menu.Menu>
+      </Menu.Bar>
 
       <Toolbar>
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((value) => (

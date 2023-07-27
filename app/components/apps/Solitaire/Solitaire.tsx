@@ -120,8 +120,8 @@ export default function Solitaire() {
   return (
     <div className="flex flex-col gap-0.5">
       {/* Menu bar */}
-      <div className="flex flex-row gap-0.5">
-        <Menu.Root trigger={<Menu.Trigger>Game</Menu.Trigger>}>
+      <Menu.Bar>
+        <Menu.Menu trigger={<Menu.Trigger>Game</Menu.Trigger>}>
           <Menu.Item label="Deal" onSelect={() => newGame()} />
 
           <Menu.Separator />
@@ -159,8 +159,8 @@ export default function Solitaire() {
           <Menu.Separator />
 
           <Menu.Item label="Exit" onSelect={close} />
-        </Menu.Root>
-      </div>
+        </Menu.Menu>
+      </Menu.Bar>
 
       {/* Game board */}
       <div

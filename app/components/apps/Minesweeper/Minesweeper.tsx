@@ -95,8 +95,8 @@ export default function Minesweeper() {
    */
   return (
     <div className="select-none">
-      <div className="flex flex-row gap-1 mb-0.5">
-        <Menu.Root trigger={<Menu.Trigger>Game</Menu.Trigger>}>
+      <Menu.Bar className="mb-0.5">
+        <Menu.Menu trigger={<Menu.Trigger>Game</Menu.Trigger>}>
           <Menu.Item label="New" onSelect={() => reset()} />
 
           <Menu.Separator />
@@ -125,8 +125,8 @@ export default function Minesweeper() {
           <Menu.Separator />
 
           <Menu.Item label="Exit" onSelect={close} />
-        </Menu.Root>
-      </div>
+        </Menu.Menu>
+      </Menu.Bar>
 
       <div className="bg-surface bevel flex flex-col p-2 gap-2 m-0.5 group/game">
         <MinesweeperStatus
