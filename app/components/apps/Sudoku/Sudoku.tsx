@@ -1,5 +1,5 @@
 import type { Dispatch, ReducerAction, ReducerState } from 'react';
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import sudokuReducer from './reducer';
 import Menu from '~/components/ui/Menu';
 import cn from 'classnames';
@@ -149,8 +149,10 @@ export default function Sudoku() {
   const [time, setTime] = useState(0);
   const [timer, setTimer] = useState<NodeJS.Timeout>();
 
+  const lastStateRef = useRef(game.won);
   useEffect(() => {
-    if (game.won && timer) clearInterval(timer);
+    if (!lastStateRef.current && game.won && timer) clearInterval(timer);
+    lastStateRef.current = game.won;
   }, [game.won, timer]);
 
   const stopTimer = () => {
