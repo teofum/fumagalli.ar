@@ -71,6 +71,10 @@
   }
 
   /* Menus */
+  .menu-bar {
+    @apply flex flex-row;
+  }
+
   .menu-content {
     @apply bg-surface bevel-window p-[0.1875rem] z-2000;
   }

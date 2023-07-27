@@ -107,7 +107,7 @@ export default function PaintEditMenu() {
   };
 
   return (
-    <Menu.Root trigger={<Menu.Trigger>Edit</Menu.Trigger>}>
+    <Menu.Menu trigger={<Menu.Trigger>Edit</Menu.Trigger>}>
       <Menu.Item label="Undo" onSelect={undo} disabled={!canUndo} />
       <Menu.Item label="Redo" onSelect={redo} disabled={!canRedo} />
 
@@ -134,6 +134,6 @@ export default function PaintEditMenu() {
         disabled={state.selection === null}
       />
       <Menu.Item label="Select All" onSelect={selectAll} />
-    </Menu.Root>
+    </Menu.Menu>
   );
 }

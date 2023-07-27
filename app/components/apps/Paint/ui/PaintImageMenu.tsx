@@ -19,7 +19,7 @@ export default function PaintImageMenu() {
   };
 
   return (
-    <Menu.Root trigger={<Menu.Trigger>Image</Menu.Trigger>}>
+    <Menu.Menu trigger={<Menu.Trigger>Image</Menu.Trigger>}>
       <Menu.Sub label="Flip/Rotate">
         <Menu.Item
           label="Flip Horizontal"
@@ -64,6 +64,6 @@ export default function PaintImageMenu() {
           )
         }
       />
-    </Menu.Root>
+    </Menu.Menu>
   );
 }

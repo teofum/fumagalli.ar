@@ -106,10 +106,10 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
 
   return (
     <>
-      <div className="flex flex-row gap-1">
+      <Menu.Bar>
         {commonMenu}
 
-        <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>
+        <Menu.Menu trigger={<Menu.Trigger>View</Menu.Trigger>}>
           <Menu.RadioGroup
             value={zoom.toString()}
             onValueChange={(value) => setZoom(Number(value))}
@@ -124,8 +124,8 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
 
           <Menu.Item label="Zoom to fit" onSelect={() => zoomTo('fit')} />
           <Menu.Item label="Zoom to fill" onSelect={() => zoomTo('fill')} />
-        </Menu.Root>
-      </div>
+        </Menu.Menu>
+      </Menu.Bar>
 
       <Toolbar>
         <span className="px-2">Zoom</span>

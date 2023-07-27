@@ -266,8 +266,8 @@ export default function DitherLab() {
         />
       ) : null}
 
-      <div className="flex flex-row gap-1">
-        <Menu.Root trigger={<Menu.Trigger>File</Menu.Trigger>}>
+      <Menu.Bar>
+        <Menu.Menu trigger={<Menu.Trigger>File</Menu.Trigger>}>
           <Menu.Item label="Upload..." onSelect={upload} />
           <Menu.Item label="Open..." onSelect={open} />
           <Menu.Item label="Save" onSelect={download} />
@@ -275,9 +275,9 @@ export default function DitherLab() {
           <Menu.Separator />
 
           <Menu.Item label="Exit" onSelect={close} />
-        </Menu.Root>
+        </Menu.Menu>
 
-        <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>
+        <Menu.Menu trigger={<Menu.Trigger>View</Menu.Trigger>}>
           <Menu.Sub label="Zoom">
             <Menu.RadioGroup
               value={zoom.toString()}
@@ -318,8 +318,8 @@ export default function DitherLab() {
               <Menu.RadioItem label="Right" value="right" />
             </Menu.RadioGroup>
           </Menu.Sub>
-        </Menu.Root>
-      </div>
+        </Menu.Menu>
+      </Menu.Bar>
 
       <div
         className={cn('grow flex gap-0.5 min-h-0', {

@@ -65,14 +65,14 @@ export default function Preview() {
     <div className="flex flex-col gap-0.5 min-w-0">
       <Component
         commonMenu={
-          <Menu.Root trigger={<Menu.Trigger>File</Menu.Trigger>}>
+          <Menu.Menu trigger={<Menu.Trigger>File</Menu.Trigger>}>
             <Menu.Item label="Open..." onSelect={open} />
             <Menu.Item label="Download" onSelect={download} />
 
             <Menu.Separator />
 
             <Menu.Item label="Close" onSelect={close} />
-          </Menu.Root>
+          </Menu.Menu>
         }
       />
     </div>

@@ -26,39 +26,55 @@ export default function StartMenu() {
   const fileHandler = useFileHandler();
 
   return (
-    <Menu.Root
-      trigger={
-        <Button className="py-1 px-2 bold data-[state=open]:bevel-inset w-16">
-          Start
-        </Button>
-      }
-      contentProps={{ side: 'top' }}
-    >
-      <div className="flex flex-row">
-        <div className="w-8 flex flex-row py-2 pl-1 pr-0 bevel-light-inset overflow-hidden">
-          <h1 className="[writing-mode:vertical-rl] rotate-180 self-end font-display text-4xl text-inset">
-            <span className="mr-1">Te</span>
-            <span className="tracking-[2px]">OS</span>
-          </h1>
-        </div>
-        <div>
-          <Menu.Sub
-            className="gap-2 w-44"
-            label="Applications"
-            icon={`${ICON_PATH}/applications.png`}
-          >
-            <Menu.Sub label="Games">
-              <Menu.Sub label="DOS">
-                {DOS_GAMES.map((game) => (
+    <Menu.Bar>
+      <Menu.Menu
+        trigger={
+          <Button className="py-1 px-2 bold data-[state=open]:bevel-inset w-16">
+            Start
+          </Button>
+        }
+        contentProps={{ side: 'top' }}
+      >
+        <div className="flex flex-row">
+          <div className="w-8 flex flex-row py-2 pl-1 pr-0 bevel-light-inset overflow-hidden">
+            <h1 className="[writing-mode:vertical-rl] rotate-180 self-end font-display text-4xl text-inset">
+              <span className="mr-1">Te</span>
+              <span className="tracking-[2px]">OS</span>
+            </h1>
+          </div>
+          <div>
+            <Menu.Sub
+              className="gap-2 w-44"
+              label="Applications"
+              icon={`${ICON_PATH}/applications.png`}
+            >
+              <Menu.Sub label="Games">
+                <Menu.Sub label="DOS">
+                  {DOS_GAMES.map((game) => (
+                    <Menu.Item
+                      key={game.title}
+                      label={game.title}
+                      icon={`/fs/system/Applications/dos/icon_16.png`}
+                      onSelect={() => launch(dosEmu(game))}
+                    />
+                  ))}
+                </Menu.Sub>
+                {[minesweeper, solitaire, sudoku].map((app) => (
                   <Menu.Item
-                    key={game.title}
-                    label={game.title}
-                    icon={`/fs/system/Applications/dos/icon_16.png`}
-                    onSelect={() => launch(dosEmu(game))}
+                    key={app.appType}
+                    label={app.title ?? ''}
+                    icon={`/fs/system/Applications/${app.appType}/icon_16.png`}
+                    onSelect={() => launch(app)}
                   />
                 ))}
               </Menu.Sub>
-              {[minesweeper, solitaire, sudoku].map((app) => (
+              {[
+                files({ path: '/Documents' }),
+                paint,
+                ditherLab(),
+                about,
+                intro,
+              ].map((app) => (
                 <Menu.Item
                   key={app.appType}
                   label={app.title ?? ''}
@@ -67,103 +83,89 @@ export default function StartMenu() {
                 />
               ))}
             </Menu.Sub>
-            {[
-              files({ path: '/Documents' }),
-              paint,
-              ditherLab(),
-              about,
-              intro,
-            ].map((app) => (
+
+            <Menu.Sub
+              className="gap-2 w-44"
+              label="Favorites"
+              icon={`${ICON_PATH}/favorites.png`}
+            >
               <Menu.Item
-                key={app.appType}
-                label={app.title ?? ''}
-                icon={`/fs/system/Applications/${app.appType}/icon_16.png`}
-                onSelect={() => launch(app)}
+                label="Articles"
+                icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+                onSelect={() => launch(files({ path: '/Documents/Articles' }))}
               />
-            ))}
-          </Menu.Sub>
+              <Menu.Item
+                label="Photos"
+                icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+                onSelect={() => launch(files({ path: '/Documents/Photos' }))}
+              />
+              <Menu.Item
+                label="Projects"
+                icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+                onSelect={() => launch(files({ path: '/Documents/Projects' }))}
+              />
+            </Menu.Sub>
 
-          <Menu.Sub
-            className="gap-2 w-44"
-            label="Favorites"
-            icon={`${ICON_PATH}/favorites.png`}
-          >
-            <Menu.Item
-              label="Articles"
-              icon="/fs/system/Resources/Icons/FileType/dir_16.png"
-              onSelect={() => launch(files({ path: '/Documents/Articles' }))}
-            />
-            <Menu.Item
-              label="Photos"
-              icon="/fs/system/Resources/Icons/FileType/dir_16.png"
-              onSelect={() => launch(files({ path: '/Documents/Photos' }))}
-            />
-            <Menu.Item
-              label="Projects"
-              icon="/fs/system/Resources/Icons/FileType/dir_16.png"
-              onSelect={() => launch(files({ path: '/Documents/Projects' }))}
-            />
-          </Menu.Sub>
+            <Menu.Sub
+              className="gap-2 w-44"
+              label="Documents"
+              icon={`${ICON_PATH}/documents.png`}
+            >
+              <Menu.Item
+                label="My Documents"
+                icon="/fs/system/Applications/files/icon_16.png"
+                onSelect={() => launch(files({ path: '/Documents' }))}
+              />
 
-          <Menu.Sub
-            className="gap-2 w-44"
-            label="Documents"
-            icon={`${ICON_PATH}/documents.png`}
-          >
+              <Menu.Separator />
+
+              {fileHistory.map(({ time, item, path }) => (
+                <Menu.Item
+                  key={`${time}_${item.name}`}
+                  label={item.name}
+                  icon={`/fs/system/Resources/Icons/FileType/${item.type}_16.png`}
+                  onSelect={() => fileHandler.open(item, path)}
+                />
+              ))}
+
+              {fileHistory.length === 0 ? (
+                <Menu.Item label="[EMPTY]" disabled />
+              ) : null}
+            </Menu.Sub>
+
+            <Menu.Sub
+              className="gap-2 w-44"
+              label="Settings"
+              icon={`${ICON_PATH}/settings.png`}
+            >
+              {[themeSettings].map((app) => (
+                <Menu.Item
+                  key={app.appType}
+                  label={app.title ?? ''}
+                  icon={`/fs/system/Applications/${app.appType}/icon_16.png`}
+                  onSelect={() => launch(app)}
+                />
+              ))}
+            </Menu.Sub>
+
             <Menu.Item
-              label="My Documents"
-              icon="/fs/system/Applications/files/icon_16.png"
-              onSelect={() => launch(files({ path: '/Documents' }))}
+              className="gap-2 w-44"
+              label="Help"
+              icon={`${ICON_PATH}/help.png`}
+              onSelect={() => launch(help())}
             />
 
             <Menu.Separator />
 
-            {fileHistory.map(({ time, item, path }) => (
-              <Menu.Item
-                key={`${time}_${item.name}`}
-                label={item.name}
-                icon={`/fs/system/Resources/Icons/FileType/${item.type}_16.png`}
-                onSelect={() => fileHandler.open(item, path)}
-              />
-            ))}
-
-            {fileHistory.length === 0 ? (
-              <Menu.Item label="[EMPTY]" disabled />
-            ) : null}
-          </Menu.Sub>
-
-          <Menu.Sub
-            className="gap-2 w-44"
-            label="Settings"
-            icon={`${ICON_PATH}/settings.png`}
-          >
-            {[themeSettings].map((app) => (
-              <Menu.Item
-                key={app.appType}
-                label={app.title ?? ''}
-                icon={`/fs/system/Applications/${app.appType}/icon_16.png`}
-                onSelect={() => launch(app)}
-              />
-            ))}
-          </Menu.Sub>
-
-          <Menu.Item
-            className="gap-2 w-44"
-            label="Help"
-            icon={`${ICON_PATH}/help.png`}
-            onSelect={() => launch(help())}
-          />
-
-          <Menu.Separator />
-
-          <Menu.Item
-            className="gap-2 w-44"
-            label="Shut down..."
-            icon={`${ICON_PATH}/shutdown.png`}
-            onSelect={() => shutdown()}
-          />
+            <Menu.Item
+              className="gap-2 w-44"
+              label="Shut down..."
+              icon={`${ICON_PATH}/shutdown.png`}
+              onSelect={() => shutdown()}
+            />
+          </div>
         </div>
-      </div>
-    </Menu.Root>
+      </Menu.Menu>
+    </Menu.Bar>
   );
 }

@@ -107,7 +107,7 @@ export default function PaintFileMenu({ clear }: PaintFileMenuProps) {
 
   return (
     <>
-      <Menu.Root trigger={<Menu.Trigger>File</Menu.Trigger>}>
+      <Menu.Menu trigger={<Menu.Trigger>File</Menu.Trigger>}>
         <Menu.Item label="New" onSelect={newFile} />
         <Menu.Item label="Upload..." onSelect={upload} />
         <Menu.Item label="Open..." onSelect={open} />
@@ -116,7 +116,7 @@ export default function PaintFileMenu({ clear }: PaintFileMenuProps) {
         <Menu.Separator />
 
         <Menu.Item label="Exit" onSelect={close} />
-      </Menu.Root>
+      </Menu.Menu>
 
       <input
         type="file"

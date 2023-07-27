@@ -28,17 +28,19 @@ export default function DitherLabImageInfo({
             <Button className="py-1 px-2 grow" onClick={upload}>
               <span>Upload...</span>
             </Button>
-            <Menu.Root
-              trigger={
-                <Button className="p-1 data-[state=open]:bevel-inset">
-                  <ArrowDown />
-                </Button>
-              }
-              contentProps={{ align: 'end', className: 'min-w-20' }}
-            >
-              <Menu.Item label="Upload from computer" onSelect={upload} />
-              <Menu.Item label="Browse files" onSelect={open} />
-            </Menu.Root>
+            <Menu.Bar>
+              <Menu.Menu
+                trigger={
+                  <Button className="p-1 data-[state=open]:bevel-inset">
+                    <ArrowDown />
+                  </Button>
+                }
+                contentProps={{ align: 'end', className: 'min-w-20' }}
+              >
+                <Menu.Item label="Upload from computer" onSelect={upload} />
+                <Menu.Item label="Browse files" onSelect={open} />
+              </Menu.Menu>
+            </Menu.Bar>
           </div>
         </div>
 

@@ -102,8 +102,8 @@ export default function Files() {
 
   return (
     <div className="flex flex-col gap-0.5 min-w-0">
-      <div className="flex flex-row gap-1">
-        <Menu.Root trigger={<Menu.Trigger>File</Menu.Trigger>}>
+      <Menu.Bar>
+        <Menu.Menu trigger={<Menu.Trigger>File</Menu.Trigger>}>
           <Menu.Sub label="Recent">
             {dirHistory.map(({ time, item, path }) => (
               <Menu.Item
@@ -118,9 +118,9 @@ export default function Files() {
           <Menu.Separator />
 
           <Menu.Item label="Close" onSelect={close} />
-        </Menu.Root>
+        </Menu.Menu>
 
-        <Menu.Root trigger={<Menu.Trigger>View</Menu.Trigger>}>
+        <Menu.Menu trigger={<Menu.Trigger>View</Menu.Trigger>}>
           {!isModal ? (
             <Menu.CheckboxItem
               label="Status Bar"
@@ -147,8 +147,8 @@ export default function Files() {
             <Menu.RadioItem value="details" label="Details" />
             <Menu.RadioItem value="tree" label="Tree" />
           </Menu.RadioGroup>
-        </Menu.Root>
-      </div>
+        </Menu.Menu>
+      </Menu.Bar>
 
       <Toolbar>
         <Button
