@@ -34,6 +34,10 @@ import {
   defaultPaintSettings,
   type PaintSettings,
 } from '~/components/apps/Paint/types';
+import {
+  defaultHelpSettings,
+  type HelpSettings,
+} from '~/components/apps/Help/types';
 
 const MAX_FILE_HISTORY = 10; // Number of last accessed files to keep
 const MAX_DIR_HISTORY = 10; // Number of last accessed directories to keep
@@ -63,6 +67,7 @@ interface SystemState {
     minesweeper: MinesweeperSettings;
     dither: DitherLabSettings;
     paint: PaintSettings;
+    help: HelpSettings;
   };
   fileHistory: FileAccess[];
   dirHistory: DirectoryAccess[];
@@ -110,6 +115,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
         minesweeper: defaultMinesweeperSettings,
         dither: defaultDitherLabSettings,
         paint: defaultPaintSettings,
+        help: defaultHelpSettings,
       },
       fileHistory: [],
       dirHistory: [],
@@ -164,8 +170,13 @@ const useSystemStore = create<SystemState & SystemActions>()(
         // Ugly hack so I don't have to change the schema version and wipe data
         // Reset desktop background because its location changed
         // TODO remove this after a while (let's say, 2024?)
-        if ((persisted as typeof current).themeCustomizations.backgroundUrl?.includes('/system/'))
-          (persisted as typeof current).themeCustomizations.backgroundUrl = '/fs/System Files/Backgrounds/Chess.png';
+        if (
+          (
+            persisted as typeof current
+          ).themeCustomizations.backgroundUrl?.includes('/system/')
+        )
+          (persisted as typeof current).themeCustomizations.backgroundUrl =
+            '/fs/System Files/Backgrounds/Chess.png';
 
         // Wipe persisted state on schema version change
         // This will allow me to safely introduce breaking schema changes

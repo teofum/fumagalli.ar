@@ -15,8 +15,12 @@ export const helpComponents = {
   ),
 } satisfies ReactMarkdownOptions['components'];
 
-export default function HelpContent() {
-  const [state, setState] = useAppState('help');
+interface HelpContentProps {
+  setPath: (path: string) => void;
+}
+
+export default function HelpContent({ setPath }: HelpContentProps) {
+  const [state] = useAppState('help');
   const resourceUrl = '/fs/Applications/help/content' + state.path;
 
   const [content, setContent] = useState('No content available');
@@ -41,9 +45,7 @@ export default function HelpContent() {
           // eslint-disable-next-line jsx-a11y/anchor-is-valid
           <button
             className="link"
-            onClick={() =>
-              setState({ path: href.slice(1).replace('%20', ' ') })
-            }
+            onClick={() => setPath(href.slice(1).replace('%20', ' '))}
           >
             {children}
           </button>
@@ -53,7 +55,7 @@ export default function HelpContent() {
           </RetroLink>
         ),
     }),
-    [setState],
+    [setPath],
   );
 
   return (

@@ -187,12 +187,12 @@ function Leaf({ item, path, root = false, open, openPath }: LeafProps) {
   );
 }
 
-export default function HelpTreeView() {
-  const [state, setState] = useAppState('help');
+interface HelpTreeViewProps {
+  setPath: (path: string) => void;
+}
 
-  const open = (path: string) => {
-    setState({ path });
-  };
+export default function HelpTreeView({ setPath }: HelpTreeViewProps) {
+  const [state] = useAppState('help');
 
   return (
     <ScrollContainer className="flex-1">
@@ -203,7 +203,7 @@ export default function HelpTreeView() {
             key={child.name}
             item={child as AnyFile}
             path={`/${child.name}`}
-            open={() => open(`/${child.name}`)}
+            open={() => setPath(`/${child.name}`)}
             openPath={state.path}
             root
           />
@@ -215,7 +215,7 @@ export default function HelpTreeView() {
             key={child.name}
             item={child as Directory}
             path={`/${child.name}`}
-            open={open}
+            open={setPath}
             openPath={state.path}
             root
           />
