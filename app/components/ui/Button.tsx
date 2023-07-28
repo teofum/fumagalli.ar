@@ -89,7 +89,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
           <span
             className="absolute inset-0 bg-disabled hidden group-disabled:inline"
             style={{
-              WebkitMaskImage: `url(${imageUrl})`,
+              WebkitMaskImage: `url('${imageUrl}')`,
             }}
           />
         </div>
