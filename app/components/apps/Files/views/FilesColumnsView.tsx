@@ -32,7 +32,6 @@ export default function FilesColumnsView({
     if (!viewport) return;
 
     const maxScroll = content.offsetWidth - viewport.offsetWidth;
-    console.log(maxScroll);
     viewport.scrollTo({ left: maxScroll, behavior: 'instant' });
   };
 

@@ -1,6 +1,6 @@
 import ScrollContainer from '~/components/ui/ScrollContainer';
 import type { AnyFile, Directory, FSObject } from '~/content/types';
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import TreeLess from '~/components/ui/icons/TreeLess';
 import TreeMore from '~/components/ui/icons/TreeMore';
 import resolvePath from '~/utils/resolvePath';
@@ -9,18 +9,27 @@ import { useAppState } from '~/components/desktop/Window/context';
 
 const HELP_ROOT = resolvePath(['Applications', 'help', 'content']) as Directory;
 
+function parsePath(path: string) {
+  if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
+  return path.split('/').filter((segment) => segment !== '');
+}
+
 interface HelpItemProps {
   item: FSObject;
+  path: string;
   expanded?: boolean;
   open: () => void;
   className?: string;
+  openPath?: string;
 }
 
 function HelpListItem({
   item,
   expanded = false,
+  path,
   open,
   className,
+  openPath,
 }: HelpItemProps) {
   const type =
     item.class === 'file'
@@ -57,6 +66,7 @@ function HelpListItem({
         className={cn(
           'px-0.5 whitespace-nowrap overflow-hidden text-ellipsis',
           'group-focus:bg-selection group-focus:text-selection',
+          { 'outline-dotted outline-current outline-1': path === openPath }
         )}
       >
         {name}
@@ -70,10 +80,20 @@ interface BranchProps {
   path: string;
   root?: boolean;
   open: (path: string) => void;
+  openPath?: string;
 }
 
-function Branch({ item, path, root = false, open }: BranchProps) {
+function Branch({ item, path, root = false, open, openPath }: BranchProps) {
   const [expanded, setExpanded] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!openPath) return;
+
+    const segments = parsePath(path);
+    const openSegments = parsePath(openPath);
+    if (segments.every((segment, i) => segment === openSegments.at(i)))
+      setExpanded(true);
+  }, [path, openPath]);
 
   return (
     <div className="relative group tree-branch">
@@ -96,6 +116,7 @@ function Branch({ item, path, root = false, open }: BranchProps) {
         <div className="flex flex-col w-full">
           <HelpListItem
             item={item}
+            path={path}
             expanded={expanded}
             open={() => setExpanded(!expanded)}
             className="relative z-[1]"
@@ -108,7 +129,9 @@ function Branch({ item, path, root = false, open }: BranchProps) {
                   <Leaf
                     key={child.name}
                     item={child as AnyFile}
+                    path={`${path}/${child.name}`}
                     open={() => open(`${path}/${child.name}`)}
+                    openPath={openPath}
                   />
                 ))}
               {item.items
@@ -119,6 +142,7 @@ function Branch({ item, path, root = false, open }: BranchProps) {
                     item={child as Directory}
                     path={`${path}/${child.name}`}
                     open={open}
+                    openPath={openPath}
                   />
                 ))}
             </div>
@@ -131,11 +155,13 @@ function Branch({ item, path, root = false, open }: BranchProps) {
 
 interface LeafProps {
   item: AnyFile;
+  path: string;
   root?: boolean;
   open: () => void;
+  openPath?: string;
 }
 
-function Leaf({ item, root = false, open }: LeafProps) {
+function Leaf({ item, path, root = false, open, openPath }: LeafProps) {
   return (
     <div className="relative group tree-branch">
       {!root ? (
@@ -149,18 +175,24 @@ function Leaf({ item, root = false, open }: LeafProps) {
           <div className="mt-[9px] w-[13px] border-t border-dotted border-light ml-[7px] -mr-[2px]" />
         ) : null}
 
-        <HelpListItem item={item} open={open} className="relative z-[1]" />
+        <HelpListItem
+          item={item}
+          open={open}
+          path={path}
+          className="relative z-[1]"
+          openPath={openPath}
+        />
       </div>
     </div>
   );
 }
 
-export default function HelpTreeView() {
-  const [, setState] = useAppState('help');
+interface HelpTreeViewProps {
+  setPath: (path: string) => void;
+}
 
-  const open = (path: string) => {
-    setState({ path });
-  };
+export default function HelpTreeView({ setPath }: HelpTreeViewProps) {
+  const [state] = useAppState('help');
 
   return (
     <ScrollContainer className="flex-1">
@@ -170,7 +202,9 @@ export default function HelpTreeView() {
           <Leaf
             key={child.name}
             item={child as AnyFile}
-            open={() => open(`/${child.name}`)}
+            path={`/${child.name}`}
+            open={() => setPath(`/${child.name}`)}
+            openPath={state.path}
             root
           />
         ))}
@@ -181,7 +215,8 @@ export default function HelpTreeView() {
             key={child.name}
             item={child as Directory}
             path={`/${child.name}`}
-            open={open}
+            open={setPath}
+            openPath={state.path}
             root
           />
         ))}

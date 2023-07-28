@@ -144,7 +144,7 @@ export default function Files() {
 
           <Menu.Separator />
 
-          <Menu.Item label="Close" onSelect={close} />
+          <Menu.Item label="Exit" onSelect={close} />
         </Menu.Menu>
 
         <Menu.Menu trigger={<Menu.Trigger>View</Menu.Trigger>}>
