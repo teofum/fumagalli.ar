@@ -16,7 +16,7 @@ import FilesDetailsView from './views/FilesDetailsView';
 import getReadableSize from './utils/getReadableSize';
 import useDirectory from './useDirectory';
 import AddressBar from './AddressBar';
-import Toolbar from '~/components/ui/Toolbar';
+import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 import FilesTreeView from './views/FilesTreeView';
 import FS_ROOT from '~/content/dir';
 import useDesktopStore from '~/stores/desktop';
@@ -35,10 +35,7 @@ export default function Files() {
   const { dirHistory, saveDirToHistory } = useSystemStore();
 
   const [state, setState] = useAppState('files');
-
   const [settings, set] = useAppSettings('files');
-  const fileHandler = useFileHandler();
-
   const [selected, setSelected] = useState<FSObject | null>(null);
 
   const path = useMemo(() => parsePath(state.path), [state.path]);
@@ -47,6 +44,7 @@ export default function Files() {
 
   const pwd = useMemo(() => `/${path.join('/')}`, [path]);
   const dir = useDirectory(path);
+  const fileHandler = useFileHandler();
 
   const isModal = state.modalCallback !== undefined;
 
@@ -150,18 +148,22 @@ export default function Files() {
         </Menu.Menu>
       </Menu.Bar>
 
-      <Toolbar>
-        <Button
-          variant="light"
-          className="p-0.5 min-w-7"
-          onClick={() => navigate('..')}
-          disabled={path.length === 0}
-        >
-          <img src={`${resources}/go-up.png`} alt="" />
-        </Button>
+      <ToolbarGroup>
+        <Toolbar>
+          <Button
+            variant="light"
+            className="p-0.5 min-w-7"
+            onClick={() => navigate('..')}
+            disabled={path.length === 0}
+          >
+            <img src={`${resources}/go-up.png`} alt="" />
+          </Button>
+        </Toolbar>
 
-        <AddressBar path={path} navigate={navigate} />
-      </Toolbar>
+        <Toolbar>
+          <AddressBar path={path} navigate={navigate} />
+        </Toolbar>
+      </ToolbarGroup>
 
       <div className="flex-1 min-h-0 flex flex-row gap-0.5">
         {settings.sideBar === 'tree' ? (

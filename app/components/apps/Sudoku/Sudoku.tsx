@@ -7,7 +7,7 @@ import Button from '~/components/ui/Button';
 import { useWindow } from '~/components/desktop/Window/context';
 import { useFetcher } from '@remix-run/react';
 import Markdown from '~/components/ui/Markdown';
-import Toolbar from '~/components/ui/Toolbar';
+import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 import { useAppSettings } from '~/stores/system';
 import type { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
 
@@ -229,28 +229,30 @@ export default function Sudoku() {
         </Menu.Menu>
       </Menu.Bar>
 
-      <Toolbar>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((value) => (
-          <Button
-            key={value}
-            variant="light"
-            className="w-8 h-8 text-center"
-            disabled={game.selected < 0}
-            onClick={() => dispatch({ type: 'set', value })}
-          >
-            <span className="font-display text-2xl leading-7">{value}</span>
-          </Button>
-        ))}
+      <ToolbarGroup>
+        <Toolbar>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((value) => (
+            <Button
+              key={value}
+              variant="light"
+              className="w-8 h-8 text-center"
+              disabled={game.selected < 0}
+              onClick={() => dispatch({ type: 'set', value })}
+            >
+              <span className="font-display text-2xl leading-7">{value}</span>
+            </Button>
+          ))}
 
-        <Button
-          variant="light"
-          className="py-2 px-4"
-          disabled={game.selected < 0}
-          onClick={() => dispatch({ type: 'set', value: 0 })}
-        >
-          <span>Clear</span>
-        </Button>
-      </Toolbar>
+          <Button
+            variant="light"
+            className="py-2 px-4"
+            disabled={game.selected < 0}
+            onClick={() => dispatch({ type: 'set', value: 0 })}
+          >
+            <span>Clear</span>
+          </Button>
+        </Toolbar>
+      </ToolbarGroup>
 
       <div className="bg-default bevel-content p-0.5">
         <div className="grid grid-cols-9 relative">

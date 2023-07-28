@@ -8,6 +8,7 @@ import type softwareRenderProcess from '~/dither/software';
 import Button from '~/components/ui/Button';
 import type { RendererProps } from './GlRenderer';
 import ScrollContainer from '~/components/ui/ScrollContainer';
+import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 
 export default function SoftwareRenderer({
   rt,
@@ -91,9 +92,9 @@ export default function SoftwareRenderer({
 
   return (
     <div className="grow flex flex-col gap-0.5 min-w-0">
-      <div className="flex flex-row bevel-light-inset p-px select-none">
+      <ToolbarGroup className="flex flex-row">
         {children}
-        <div className="flex flex-row items-center bevel-light p-px">
+        <Toolbar>
           <Button
             className="py-1 px-2 w-20"
             onClick={status === 'rendering' ? stop : render}
@@ -111,8 +112,8 @@ export default function SoftwareRenderer({
               )}
             </div>
           </Button>
-        </div>
-      </div>
+        </Toolbar>
+      </ToolbarGroup>
 
       <ScrollContainer className="grow min-w-0 min-h-0" ref={viewportRef}>
         <div className="scroll-center">

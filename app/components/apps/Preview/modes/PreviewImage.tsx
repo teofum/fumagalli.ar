@@ -2,7 +2,7 @@ import ScrollContainer from '~/components/ui/ScrollContainer';
 import { useAppState, useWindow } from '~/components/desktop/Window/context';
 import { useEffect, useRef } from 'react';
 import Button from '~/components/ui/Button';
-import Toolbar from '~/components/ui/Toolbar';
+import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 import useDesktopStore from '~/stores/desktop';
 import { MAX_INITIAL_SIZE, UI_SIZE, ZOOM_STOPS } from '../constants';
 import Menu from '~/components/ui/Menu';
@@ -127,47 +127,49 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
         </Menu.Menu>
       </Menu.Bar>
 
-      <Toolbar>
-        <span className="px-2">Zoom</span>
-        <div className="bg-default bevel-content p-0.5 flex flex-row">
+      <ToolbarGroup>
+        <Toolbar>
+          <span className="px-2">Zoom</span>
+          <div className="bg-default bevel-content p-0.5 flex flex-row">
+            <Button
+              className="py-0.5 px-1.5"
+              onClick={zoomOut}
+              disabled={zoom <= (ZOOM_STOPS.at(0) ?? 0)}
+            >
+              <span>-</span>
+            </Button>
+            <div className="py-0.5 px-2 w-12">{(zoom * 100).toFixed(0)}%</div>
+            <Button
+              className="py-0.5 px-1.5"
+              onClick={zoomIn}
+              disabled={zoom >= (ZOOM_STOPS.at(-1) ?? 0)}
+            >
+              <span>+</span>
+            </Button>
+          </div>
           <Button
-            className="py-0.5 px-1.5"
-            onClick={zoomOut}
-            disabled={zoom <= (ZOOM_STOPS.at(0) ?? 0)}
+            variant="light"
+            className="py-1 px-2"
+            onClick={() => setZoom(1)}
           >
-            <span>-</span>
+            Reset
           </Button>
-          <div className="py-0.5 px-2 w-12">{(zoom * 100).toFixed(0)}%</div>
           <Button
-            className="py-0.5 px-1.5"
-            onClick={zoomIn}
-            disabled={zoom >= (ZOOM_STOPS.at(-1) ?? 0)}
+            variant="light"
+            className="py-1 px-2"
+            onClick={() => zoomTo('fit')}
           >
-            <span>+</span>
+            Fit
           </Button>
-        </div>
-        <Button
-          variant="light"
-          className="py-1 px-2"
-          onClick={() => setZoom(1)}
-        >
-          Reset
-        </Button>
-        <Button
-          variant="light"
-          className="py-1 px-2"
-          onClick={() => zoomTo('fit')}
-        >
-          Fit
-        </Button>
-        <Button
-          variant="light"
-          className="py-1 px-2"
-          onClick={() => zoomTo('fill')}
-        >
-          Fill
-        </Button>
-      </Toolbar>
+          <Button
+            variant="light"
+            className="py-1 px-2"
+            onClick={() => zoomTo('fill')}
+          >
+            Fill
+          </Button>
+        </Toolbar>
+      </ToolbarGroup>
 
       <ScrollContainer className="flex-1" ref={viewportRef}>
         <div className="scroll-center">
