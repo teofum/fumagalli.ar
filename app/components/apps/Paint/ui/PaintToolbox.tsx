@@ -6,8 +6,9 @@ import { ZOOM_STOPS } from '../brushes/zoom';
 import cn from 'classnames';
 import AirbrushIcons from '../icons/Airbrush';
 import { usePaintContext } from '../context';
+import Brushes from '../icons/Brushes';
 
-const resources = '/fs/Applications/paint/resources';
+// const resources = '/fs/Applications/paint/resources';
 
 export default function PaintToolbox() {
   const { state, setState, settings } = usePaintContext();
@@ -15,6 +16,9 @@ export default function PaintToolbox() {
   const setBrush = (brush: keyof typeof brushes) => {
     setState({ brush, brushVariant: 0 });
   };
+
+  const [r, g, b] = state.fgColor;
+  const fgColor = `rgb(${r} ${g} ${b})`;
 
   return (
     <div className={cn('flex flex-col gap-1', { hidden: !settings.toolBar })}>
@@ -25,11 +29,14 @@ export default function PaintToolbox() {
         onValueChange={(value) => setBrush(value as any)}
         className="mx-1 w-12 flex-wrap"
       >
-        {Object.keys(brushes).map((brush) => (
-          <ToggleButton key={brush} className="w-6 h-6 !p-0.5" value={brush}>
-            <img src={`${resources}/brush_${brush}.png`} alt={brush} />
-          </ToggleButton>
-        ))}
+        {Object.keys(brushes).map((brush) => {
+          const Icon = Brushes[brush as keyof typeof Brushes] ?? Brushes.select;
+          return (
+            <ToggleButton key={brush} className="w-6 h-6 !p-0.5" value={brush}>
+              <Icon style={{ '--paint-color': fgColor } as any} />
+            </ToggleButton>
+          );
+        })}
       </ToggleGroup>
 
       {state.brush === 'brush' ? (
