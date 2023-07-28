@@ -16,7 +16,7 @@ const FS_ROOT: Directory = {
           class: 'dir',
           name: 'Articles',
           created: 1689030374,
-          modified: 1690328026,
+          modified: 1690332033,
           items: [
             {
               class: 'dir',
@@ -28,7 +28,7 @@ const FS_ROOT: Directory = {
                   class: 'dir',
                   name: 'dither',
                   created: 1689030374,
-                  modified: 1690316002,
+                  modified: 1690332033,
                   items: [
                     {
                       class: 'file',
@@ -98,16 +98,16 @@ const FS_ROOT: Directory = {
                       class: 'file',
                       type: 'image',
                       name: 'header.png',
-                      created: 1689896962,
-                      modified: 1689896962,
+                      created: 1690332033,
+                      modified: 1690332033,
                       size: 19394,
                     },
                     {
                       class: 'file',
                       type: 'image',
                       name: 'title.png',
-                      created: 1690315557,
-                      modified: 1690316002,
+                      created: 1690332033,
+                      modified: 1690332033,
                       size: 2450,
                     },
                     {
@@ -310,8 +310,8 @@ const FS_ROOT: Directory = {
               class: 'file',
               type: 'mdx',
               name: 'A Visual Introduction to Dithering.mdx',
-              created: 1689030374,
-              modified: 1690328088,
+              created: 1690332033,
+              modified: 1690332033,
               size: 94,
             },
           ],
@@ -1428,8 +1428,24 @@ const FS_ROOT: Directory = {
                   class: 'dir',
                   name: 'resources',
                   created: 1687639488,
-                  modified: 1687639666,
+                  modified: 1690506628,
                   items: [
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'back.png',
+                      created: 1690506618,
+                      modified: 1690506618,
+                      size: 245,
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'forward.png',
+                      created: 1690506628,
+                      modified: 1690506628,
+                      size: 250,
+                    },
                     {
                       class: 'file',
                       type: 'image',

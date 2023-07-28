@@ -21,6 +21,7 @@ import FilesTreeView from './views/FilesTreeView';
 import FS_ROOT from '~/content/dir';
 import useDesktopStore from '~/stores/desktop';
 import resolvePath from '~/utils/resolvePath';
+import cn from 'classnames';
 
 const resources = getAppResourcesUrl('files');
 
@@ -134,6 +135,26 @@ export default function Files() {
             }
           />
 
+          <Menu.Sub label="Toolbar">
+            <Menu.RadioGroup
+              value={settings.toolbar}
+              onValueChange={(value) => set({ toolbar: value as any })}
+            >
+              <Menu.RadioItem value="stacked" label="Normal" />
+              <Menu.RadioItem value="compact" label="Compact" />
+            </Menu.RadioGroup>
+
+            <Menu.Separator />
+
+            <Menu.CheckboxItem
+              label="Large Buttons"
+              checked={settings.buttons === 'large'}
+              onCheckedChange={(checked) =>
+                set({ buttons: checked ? 'large' : 'icon' })
+              }
+            />
+          </Menu.Sub>
+
           <Menu.Separator />
 
           <Menu.RadioGroup
@@ -148,19 +169,49 @@ export default function Files() {
         </Menu.Menu>
       </Menu.Bar>
 
-      <ToolbarGroup>
+      <ToolbarGroup
+        className={cn({ 'flex flex-row': settings.toolbar === 'compact' })}
+      >
         <Toolbar>
           <Button
             variant="light"
-            className="p-0.5 min-w-7"
+            className={cn('p-0.5 min-w-7', {
+              'w-14': settings.buttons === 'large',
+            })}
             onClick={() => navigate('..')}
             disabled={path.length === 0}
           >
-            <img src={`${resources}/go-up.png`} alt="" />
+            <img className="mx-auto" src={`${resources}/back.png`} alt="" />
+            {settings.buttons === 'large' ? <span>Back</span> : null}
+          </Button>
+
+          <Button
+            variant="light"
+            className={cn('p-0.5 min-w-7', {
+              'w-14': settings.buttons === 'large',
+            })}
+            onClick={() => navigate('..')}
+            disabled={path.length === 0}
+          >
+            <img className="mx-auto" src={`${resources}/forward.png`} alt="" />
+            {settings.buttons === 'large' ? <span>Forward</span> : null}
+          </Button>
+
+          <Button
+            variant="light"
+            className={cn('p-0.5 min-w-7', {
+              'w-14': settings.buttons === 'large',
+            })}
+            onClick={() => navigate('..')}
+            disabled={path.length === 0}
+          >
+            <img className="mx-auto" src={`${resources}/go-up.png`} alt="" />
+            {settings.buttons === 'large' ? <span>Up</span> : null}
           </Button>
         </Toolbar>
 
-        <Toolbar>
+        <Toolbar className="grow">
+          <div className="mr-1 ml-1.5">Address</div>
           <AddressBar path={path} navigate={navigate} />
         </Toolbar>
       </ToolbarGroup>

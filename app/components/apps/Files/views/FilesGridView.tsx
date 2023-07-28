@@ -31,7 +31,7 @@ export default function FilesGridView({ dir, open, select }: FilesViewProps) {
               onBlur={() => select(null)}
             >
               <span className="relative">
-                <img src={iconUrl} alt={type} />
+                <img width={32} height={32} src={iconUrl} alt={type} />
                 <span
                   className={cn(
                     'absolute inset-0 bg-selection bg-opacity-50',

@@ -98,7 +98,7 @@ export default function AddressBar({ path, navigate }: AddressBarProps) {
   return (
     <DropdownMenu.Root open={open} onOpenChange={setOpen}>
       <DropdownMenu.Trigger asChild onClick={() => setOpen(true)}>
-        <div className="flex-1 mr-0.5 bg-default bevel-inset flex flex-row min-w-0 p-0.5">
+        <div className="flex-1 m-0.5 bg-default bevel-inset flex flex-row min-w-0 p-0.5">
           <div className="py-0.5 px-1.5 flex flex-row items-center justify-end gap-0.5 whitespace-nowrap overflow-hidden">
             <button
               className="outline-none decoration-1 hover:underline focus-visible:underline"
