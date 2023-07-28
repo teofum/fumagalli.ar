@@ -1,6 +1,6 @@
 import ScrollContainer from '~/components/ui/ScrollContainer';
 import type { AnyFile, Directory, FSObject } from '~/content/types';
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import TreeLess from '~/components/ui/icons/TreeLess';
 import TreeMore from '~/components/ui/icons/TreeMore';
 import resolvePath from '~/utils/resolvePath';
@@ -8,6 +8,11 @@ import cn from 'classnames';
 import { useAppState } from '~/components/desktop/Window/context';
 
 const HELP_ROOT = resolvePath(['Applications', 'help', 'content']) as Directory;
+
+function parsePath(path: string) {
+  if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
+  return path.split('/').filter((segment) => segment !== '');
+}
 
 interface HelpItemProps {
   item: FSObject;
@@ -70,10 +75,20 @@ interface BranchProps {
   path: string;
   root?: boolean;
   open: (path: string) => void;
+  openPath?: string;
 }
 
-function Branch({ item, path, root = false, open }: BranchProps) {
+function Branch({ item, path, root = false, open, openPath }: BranchProps) {
   const [expanded, setExpanded] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!openPath) return;
+    
+    const segments = parsePath(path);
+    const openSegments = parsePath(openPath);
+    if (segments.every((segment, i) => segment === openSegments.at(i)))
+      setExpanded(true);
+  }, [path, openPath]);
 
   return (
     <div className="relative group tree-branch">
@@ -119,6 +134,7 @@ function Branch({ item, path, root = false, open }: BranchProps) {
                     item={child as Directory}
                     path={`${path}/${child.name}`}
                     open={open}
+                    openPath={openPath}
                   />
                 ))}
             </div>
@@ -156,7 +172,7 @@ function Leaf({ item, root = false, open }: LeafProps) {
 }
 
 export default function HelpTreeView() {
-  const [, setState] = useAppState('help');
+  const [state, setState] = useAppState('help');
 
   const open = (path: string) => {
     setState({ path });
@@ -182,6 +198,7 @@ export default function HelpTreeView() {
             item={child as Directory}
             path={`/${child.name}`}
             open={open}
+            openPath={state.path}
             root
           />
         ))}
