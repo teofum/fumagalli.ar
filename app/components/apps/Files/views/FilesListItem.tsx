@@ -6,6 +6,7 @@ interface DetailsItemProps {
   item: FSObject;
   open: (item: FSObject) => void;
   select: React.Dispatch<React.SetStateAction<FSObject | null>>;
+  onClick?: (ev: React.MouseEvent) => void;
   className?: string;
 }
 
@@ -13,6 +14,7 @@ export default function FilesListItem({
   item,
   open,
   select,
+  onClick,
   className,
 }: DetailsItemProps) {
   const iconUrl = getIconUrl(item, 16);
@@ -24,6 +26,7 @@ export default function FilesListItem({
         'max-w-full group outline-none',
         className,
       )}
+      onClick={onClick}
       onDoubleClick={() => open(item)}
       onKeyDown={(ev) => {
         if (ev.key === 'Enter') open(item);

@@ -22,14 +22,11 @@ import FS_ROOT from '~/content/dir';
 import useDesktopStore from '~/stores/desktop';
 import resolvePath from '~/utils/resolvePath';
 import cn from 'classnames';
+import FilesColumnsView from './views/FilesColumnsView';
+import parsePath from './utils/parsePath';
 
 const MAX_HISTORY = 1000;
 const resources = getAppResourcesUrl('files');
-
-function parsePath(path: string) {
-  if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
-  return path.split('/').filter((segment) => segment !== '');
-}
 
 export default function Files() {
   const { id, parentId, close } = useWindow();
@@ -86,7 +83,11 @@ export default function Files() {
   /**
    * File/directory open handler
    */
-  const navigate = (to: string, absolute = false) => {
+  const navigate = (
+    to: string,
+    absolute = false,
+    preserveSelection = false,
+  ) => {
     let nextPath = [];
     if (to === '..') nextPath = path.slice(0, -1);
     else if (absolute) nextPath = parsePath(to);
@@ -102,7 +103,7 @@ export default function Files() {
     }
 
     // Navigate
-    setSelected(null);
+    if (!preserveSelection) setSelected(null);
     setPath(nextPwd);
   };
 
@@ -124,6 +125,7 @@ export default function Files() {
   if (settings.view === 'list') ViewComponent = FilesListView;
   else if (settings.view === 'details') ViewComponent = FilesDetailsView;
   else if (settings.view === 'tree') ViewComponent = FilesTreeView;
+  else if (settings.view === 'columns') ViewComponent = FilesColumnsView;
 
   return (
     <div className="flex flex-col gap-0.5 min-w-0">
@@ -191,6 +193,7 @@ export default function Files() {
             <Menu.RadioItem value="list" label="List" />
             <Menu.RadioItem value="details" label="Details" />
             <Menu.RadioItem value="tree" label="Tree" />
+            <Menu.RadioItem value="columns" label="Columns" />
           </Menu.RadioGroup>
         </Menu.Menu>
       </Menu.Bar>

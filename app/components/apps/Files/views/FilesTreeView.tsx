@@ -7,11 +7,7 @@ import TreeMore from '~/components/ui/icons/TreeMore';
 import type FilesViewProps from './FilesViewProps';
 import filterByType from '../utils/filterByType';
 import { useAppState } from '~/components/desktop/Window/context';
-
-function parsePath(path: string) {
-  if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
-  return path.split('/').filter((segment) => segment !== '');
-}
+import parsePath from '../utils/parsePath';
 
 interface BranchProps {
   item: Directory;
@@ -40,7 +36,6 @@ function Branch({
     if (!openPath) return;
     
     const segments = parsePath(path);
-    console.log(openPath, path, segments);
     if (segments.every((segment, i) => segment === openPath.at(i)))
       setExpanded(true);
   }, [path, openPath]);

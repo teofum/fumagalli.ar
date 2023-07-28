@@ -1,6 +1,6 @@
 import type { AnyFile } from '~/content/types';
 
-export type FilesView = 'grid' | 'list' | 'details' | 'tree';
+export type FilesView = 'grid' | 'list' | 'details' | 'tree' | 'columns';
 
 export interface FilesSettings {
   view: FilesView;

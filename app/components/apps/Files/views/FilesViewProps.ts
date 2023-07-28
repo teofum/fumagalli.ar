@@ -4,6 +4,10 @@ export default interface FilesViewProps {
   dir: Directory;
   path: string;
   open: (item: FSObject, path?: string) => void;
-  navigate: (to: string, absolute?: boolean) => void;
+  navigate: (
+    to: string,
+    absolute?: boolean,
+    preserveSelection?: boolean,
+  ) => void;
   select: React.Dispatch<React.SetStateAction<FSObject | null>>;
 }

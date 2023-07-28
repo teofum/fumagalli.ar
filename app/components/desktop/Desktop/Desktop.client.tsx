@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import Window from '../Window';
 import Taskbar from '../Taskbar';
 import useDesktopStore from '~/stores/desktop';
@@ -92,11 +92,13 @@ export default function Desktop() {
    * index, as those routes are server-rendered and that would result in theme
    * flashing
    */
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.className = theme.cssClass;
+    document.documentElement.style.setProperty('overflow', 'hidden');
 
     return () => {
       document.documentElement.className = '';
+      document.documentElement.style.removeProperty('overflow');
     };
   }, [theme.cssClass]);
 

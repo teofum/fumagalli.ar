@@ -26,7 +26,7 @@ export default function FilesListView({ dir, open, select }: FilesViewProps) {
   useLayoutEffect(onViewportResize, []);
 
   return (
-    <ScrollContainer className="flex-1">
+    <ScrollContainer className="flex-1" hide="y">
       <div className="h-[var(--scroll-viewport-height)]" ref={viewportRef}>
         <div
           className="p-1 select-none grid grid-flow-col auto-cols-max"
