@@ -20,6 +20,7 @@ import Toolbar from '~/components/ui/Toolbar';
 import FilesTreeView from './views/FilesTreeView';
 import FS_ROOT from '~/content/dir';
 import useDesktopStore from '~/stores/desktop';
+import resolvePath from '~/utils/resolvePath';
 
 const resources = getAppResourcesUrl('files');
 
@@ -58,27 +59,26 @@ export default function Files() {
   }, [setTitle, id, parentId, dir]);
 
   /**
-   * Add dir to history on path change, if not already in history
-   */
-  useEffect(() => {
-    if (dir && dirHistory[0]?.path !== pwd) {
-      saveDirToHistory({ time: Date.now(), item: dir, path: pwd });
-    }
-    // Calling this effect on global state update causes a render loop if there
-    // are multiple windows, and because we're dealing with global state there's
-    // no risk of getting stale state, anyway.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dir, pwd]);
-
-  /**
    * File/directory open handler
    */
   const navigate = (to: string, absolute = false) => {
-    setSelected(null);
+    let nextPath = [];
+    if (to === '..') nextPath = path.slice(0, -1);
+    else if (absolute) nextPath = parsePath(to);
+    else nextPath = [...path, to];
 
-    if (to === '..') setPath(path.slice(0, -1));
-    else if (absolute) setPath(parsePath(to));
-    else setPath([...path, to]);
+    const nextDir = resolvePath(nextPath);
+    const nextPwd = `/${nextPath.join('/')}`;
+    if (!nextDir) return;
+
+    // Save next folder to recent
+    if (dirHistory[0]?.path !== nextPwd) {
+      saveDirToHistory({ time: Date.now(), item: nextDir, path: nextPwd });
+    }
+
+    // Navigate
+    setSelected(null);
+    setPath(nextPath);
   };
 
   const open = (item: FSObject, path = pwd) => {
