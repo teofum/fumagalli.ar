@@ -12,7 +12,7 @@ export default function MobileDialog() {
       <div className="flex flex-col gap-4 px-3 py-2 w-[calc(100vw-2rem)] max-w-full">
         <img
           className="w-8 h-8 self-center"
-          src="/fs/system/Resources/Icons/warning.png"
+          src="/fs/System Files/Icons/warning.png"
           alt=""
         />
 

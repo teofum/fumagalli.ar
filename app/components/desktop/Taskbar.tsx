@@ -30,7 +30,7 @@ export default function Taskbar() {
             >
               <div className="flex flex-row gap-1.5">
                 <img
-                  src={`/fs/system/Applications/${window.appType}/icon_16.png`}
+                  src={`/fs/Applications/${window.appType}/icon_16.png`}
                   alt=""
                 />
                 <span

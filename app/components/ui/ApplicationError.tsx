@@ -27,7 +27,7 @@ export default function ApplicationError({ error }: { error: unknown }) {
     <div className="flex flex-row items-start gap-4 p-2 min-w-0">
       <img
         className="min-w-8"
-        src="/fs/system/Resources/Icons/error.png"
+        src="/fs/System Files/Icons/error.png"
         alt=""
       />
       <div className="grow flex flex-col gap-2 min-w-0">

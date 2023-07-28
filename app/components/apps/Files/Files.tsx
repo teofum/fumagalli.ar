@@ -134,7 +134,7 @@ export default function Files() {
               <Menu.Item
                 key={`${time}_${item.name}`}
                 label={item.name}
-                icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+                icon="/fs/System Files/Icons/FileType/dir_16.png"
                 onSelect={() => navigate(path, true)}
               />
             ))}

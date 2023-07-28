@@ -339,7 +339,7 @@ export default function DitherLab() {
         >
           <Toolbar className="grow">
             <Button variant="light" className="p-1" onClick={download}>
-              <img src="fs/system/Resources/UI/save2.png" alt="Save" />
+              <img src="fs/System Files/UI/save2.png" alt="Save" />
             </Button>
           </Toolbar>
           <Toolbar>

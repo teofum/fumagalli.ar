@@ -17,7 +17,7 @@ import { DOS_GAMES } from '../apps/DOSEmu/types';
 import { help } from '../apps/Help';
 import { paint } from '../apps/Paint';
 
-const ICON_PATH = '/fs/system/Resources/Icons/Start';
+const ICON_PATH = '/fs/System Files/Icons/Start';
 
 export default function StartMenu() {
   const { launch, openShutdown: shutdown } = useDesktopStore();
@@ -54,7 +54,7 @@ export default function StartMenu() {
                     <Menu.Item
                       key={game.title}
                       label={game.title}
-                      icon={`/fs/system/Applications/dos/icon_16.png`}
+                      icon={`/fs/Applications/dos/icon_16.png`}
                       onSelect={() => launch(dosEmu(game))}
                     />
                   ))}
@@ -63,7 +63,7 @@ export default function StartMenu() {
                   <Menu.Item
                     key={app.appType}
                     label={app.title ?? ''}
-                    icon={`/fs/system/Applications/${app.appType}/icon_16.png`}
+                    icon={`/fs/Applications/${app.appType}/icon_16.png`}
                     onSelect={() => launch(app)}
                   />
                 ))}
@@ -78,7 +78,7 @@ export default function StartMenu() {
                 <Menu.Item
                   key={app.appType}
                   label={app.title ?? ''}
-                  icon={`/fs/system/Applications/${app.appType}/icon_16.png`}
+                  icon={`/fs/Applications/${app.appType}/icon_16.png`}
                   onSelect={() => launch(app)}
                 />
               ))}
@@ -91,17 +91,17 @@ export default function StartMenu() {
             >
               <Menu.Item
                 label="Articles"
-                icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+                icon="/fs/System Files/Icons/FileType/dir_16.png"
                 onSelect={() => launch(files({ path: '/Documents/Articles' }))}
               />
               <Menu.Item
                 label="Photos"
-                icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+                icon="/fs/System Files/Icons/FileType/dir_16.png"
                 onSelect={() => launch(files({ path: '/Documents/Photos' }))}
               />
               <Menu.Item
                 label="Projects"
-                icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+                icon="/fs/System Files/Icons/FileType/dir_16.png"
                 onSelect={() => launch(files({ path: '/Documents/Projects' }))}
               />
             </Menu.Sub>
@@ -113,7 +113,7 @@ export default function StartMenu() {
             >
               <Menu.Item
                 label="My Documents"
-                icon="/fs/system/Applications/files/icon_16.png"
+                icon="/fs/Applications/files/icon_16.png"
                 onSelect={() => launch(files({ path: '/Documents' }))}
               />
 
@@ -123,7 +123,7 @@ export default function StartMenu() {
                 <Menu.Item
                   key={`${time}_${item.name}`}
                   label={item.name}
-                  icon={`/fs/system/Resources/Icons/FileType/${item.type}_16.png`}
+                  icon={`/fs/System Files/Icons/FileType/${item.type}_16.png`}
                   onSelect={() => fileHandler.open(item, path)}
                 />
               ))}
@@ -142,7 +142,7 @@ export default function StartMenu() {
                 <Menu.Item
                   key={app.appType}
                   label={app.title ?? ''}
-                  icon={`/fs/system/Applications/${app.appType}/icon_16.png`}
+                  icon={`/fs/Applications/${app.appType}/icon_16.png`}
                   onSelect={() => launch(app)}
                 />
               ))}

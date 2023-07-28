@@ -117,7 +117,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
       themeCustomizations: {
         backgroundImageMode: 'fill',
         backgroundColor: 'rgb(0 0 0)',
-        backgroundUrl: '/fs/system/Resources/Backgrounds/Chess.png',
+        backgroundUrl: '/fs/System Files/Backgrounds/Chess.png',
       },
 
       _schema: SCHEMA_VERSION,
@@ -161,6 +161,12 @@ const useSystemStore = create<SystemState & SystemActions>()(
     {
       name: 'system-storage',
       merge: (persisted, current) => {
+        // Ugly hack so I don't have to change the schema version and wipe data
+        // Reset desktop background because its location changed
+        // TODO remove this after a while (let's say, 2024?)
+        if ((persisted as typeof current).themeCustomizations.backgroundUrl?.includes('/system/'))
+          (persisted as typeof current).themeCustomizations.backgroundUrl = '/fs/System Files/Backgrounds/Chess.png';
+
         // Wipe persisted state on schema version change
         // This will allow me to safely introduce breaking schema changes
         // without causing the app to crash for existing users

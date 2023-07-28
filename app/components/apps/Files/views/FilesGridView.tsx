@@ -13,10 +13,10 @@ export default function FilesGridView({ dir, open, select }: FilesViewProps) {
         {filterByType(dir.items, state.typeFilter).map((item) => {
           const type = item.class === 'file' ? item.type : item.class;
 
-          let iconUrl = `/fs/system/Resources/Icons/FileType/${type}_32.png`;
+          let iconUrl = `/fs/System Files/Icons/FileType/${type}_32.png`;
           if (type === 'app') {
             const appName = item.name.split('.')[0];
-            iconUrl = `/fs/system/Applications/${appName}/icon_32.png`;
+            iconUrl = `/fs/Applications/${appName}/icon_32.png`;
           }
 
           return (

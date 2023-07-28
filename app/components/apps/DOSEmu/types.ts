@@ -9,9 +9,9 @@ export const defaultDOSEmuState: DOSEmuState = {
 };
 
 export const DOS_GAMES: DOSEmuState[] = [
-  { title: 'DOOM', bundleUrl: '/fs/system/Applications/dos/games/doom.jsdos' },
+  { title: 'DOOM', bundleUrl: '/fs/Applications/dos/games/doom.jsdos' },
   {
     title: 'Stunts',
-    bundleUrl: '/fs/system/Applications/dos/games/stunts.jsdos',
+    bundleUrl: '/fs/Applications/dos/games/stunts.jsdos',
   },
 ];

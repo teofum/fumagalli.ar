@@ -104,7 +104,7 @@ export default function SoftwareRenderer({
               <span>{status === 'rendering' ? 'Stop' : 'Render'}</span>
               {status === 'rendering' ? null : (
                 <img
-                  src={`/fs/system/Resources/UI/light_${
+                  src={`/fs/System Files/UI/light_${
                     status === 'ready' ? 'on' : 'off'
                   }.png`}
                   alt=""

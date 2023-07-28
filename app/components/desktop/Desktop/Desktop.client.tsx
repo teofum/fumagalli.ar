@@ -142,53 +142,53 @@ export default function Desktop() {
             content={
               <ContextMenu.Item
                 label="System Theme..."
-                icon="/fs/system/Applications/theme/icon_16.png"
+                icon="/fs/Applications/theme/icon_16.png"
                 onSelect={() => launch(themeSettings)}
               />
             }
           >
             <div className="w-full h-full grid grid-cols-[repeat(auto-fill,4rem)] auto-cols-[4rem] auto-rows-[4.5rem] content-start gap-2 p-2">
               <DesktopIcon
-                iconUrl="/fs/system/Resources/Icons/computer.png"
+                iconUrl="/fs/System Files/Icons/computer.png"
                 title="My Computer"
                 open={() => launch(files({ path: '/' }))}
               />
               <DesktopIcon
-                iconUrl="/fs/system/Resources/Icons/documents.png"
+                iconUrl="/fs/System Files/Icons/documents.png"
                 title="My Documents"
                 open={() => launch(files({ path: '/Documents' }))}
               />
               <DesktopIcon
-                iconUrl="/fs/system/Applications/intro/icon_32.png"
+                iconUrl="/fs/Applications/intro/icon_32.png"
                 title="About me"
                 open={() => launch(intro)}
               />
               <DesktopIcon
-                iconUrl="/fs/system/Applications/dither/icon_32.png"
+                iconUrl="/fs/Applications/dither/icon_32.png"
                 title="DitherLab 2"
                 y={2}
                 open={() => launch(ditherLab())}
               />
               <DesktopIcon
-                iconUrl="/fs/system/Applications/paint/icon_32.png"
+                iconUrl="/fs/Applications/paint/icon_32.png"
                 title="Paint"
                 y={2}
                 open={() => launch(paint)}
               />
               <DesktopIcon
-                iconUrl="/fs/system/Applications/mine/icon_32.png"
+                iconUrl="/fs/Applications/mine/icon_32.png"
                 title="Minesweeper"
                 y={3}
                 open={() => launch(minesweeper)}
               />
               <DesktopIcon
-                iconUrl="/fs/system/Applications/sudoku/icon_32.png"
+                iconUrl="/fs/Applications/sudoku/icon_32.png"
                 title="Sudoku"
                 y={3}
                 open={() => launch(sudoku)}
               />
               <DesktopIcon
-                iconUrl="/fs/system/Applications/solitaire/icon_32.png"
+                iconUrl="/fs/Applications/solitaire/icon_32.png"
                 title="Solitaire"
                 y={3}
                 open={() => launch(solitaire)}
@@ -197,7 +197,7 @@ export default function Desktop() {
                 <DesktopIcon
                   key={game.title}
                   title={game.title}
-                  iconUrl="/fs/system/Applications/dos/icon_32.png"
+                  iconUrl="/fs/Applications/dos/icon_32.png"
                   y={3}
                   open={() => launch(dosEmu(game))}
                 />

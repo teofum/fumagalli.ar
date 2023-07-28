@@ -24,10 +24,10 @@ interface IconProps {
 
 function Icon({ item }: IconProps) {
   const type = item.class === 'file' ? item.type : item.class;
-  let iconUrl = `/fs/system/Resources/Icons/FileType/${type}_16.png`;
+  let iconUrl = `/fs/System Files/Icons/FileType/${type}_16.png`;
   if (type === 'app') {
     const appName = item.name.split('.')[0];
-    iconUrl = `/fs/system/Applications/${appName}/icon_16.png`;
+    iconUrl = `/fs/Applications/${appName}/icon_16.png`;
   }
 
   return (

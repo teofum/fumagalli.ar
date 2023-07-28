@@ -4,7 +4,7 @@ import Button from '~/components/ui/Button';
 import GroupBox from '~/components/ui/GroupBox';
 import Input from '~/components/ui/Input';
 
-const resources = '/fs/system/Applications/paint/resources';
+const resources = '/fs/Applications/paint/resources';
 
 export interface PaintStretchAndSkewState {
   width: number;

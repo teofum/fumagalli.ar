@@ -15,7 +15,7 @@ export default function DOSEmu() {
   const open = () => {
     modal(
       files({
-        path: '/system/Applications/dos/games',
+        path: '/Applications/dos/games',
         typeFilter: ['dos'],
         modalCallback: (file, filePath) => {
           if (file.type === 'dos')

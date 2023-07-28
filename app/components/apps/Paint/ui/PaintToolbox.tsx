@@ -7,7 +7,7 @@ import cn from 'classnames';
 import AirbrushIcons from '../icons/Airbrush';
 import { usePaintContext } from '../context';
 
-const resources = '/fs/system/Applications/paint/resources';
+const resources = '/fs/Applications/paint/resources';
 
 export default function PaintToolbox() {
   const { state, setState, settings } = usePaintContext();

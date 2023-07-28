@@ -124,7 +124,7 @@ export default function Sudoku() {
   useEffect(() => {
     const fetchMarkdown = async () => {
       const res = await fetch(
-        '/fs/system/Applications/sudoku/resources/help.md',
+        '/fs/Applications/sudoku/resources/help.md',
       );
       if (res.ok) {
         setHelpContent(await res.text());
