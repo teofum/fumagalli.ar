@@ -23,6 +23,7 @@ import useDesktopStore from '~/stores/desktop';
 import resolvePath from '~/utils/resolvePath';
 import cn from 'classnames';
 
+const MAX_HISTORY = 1000;
 const resources = getAppResourcesUrl('files');
 
 function parsePath(path: string) {
@@ -40,8 +41,15 @@ export default function Files() {
   const [selected, setSelected] = useState<FSObject | null>(null);
 
   const path = useMemo(() => parsePath(state.path), [state.path]);
-  const setPath = (path: string[]) =>
-    setState({ ...state, path: `/${path.join('/')}` });
+  const setPath = (nextPwd: string) => {
+    const history = [
+      nextPwd,
+      ...state.history.slice(state.backCount), // Drop anything newer than the last undo
+    ].slice(0, MAX_HISTORY); // Limit # of history items
+    console.log(path, state.history, history);
+
+    setState({ path: nextPwd, history, backCount: 0 });
+  };
 
   const pwd = useMemo(() => `/${path.join('/')}`, [path]);
   const dir = useDirectory(path);
@@ -56,6 +64,25 @@ export default function Files() {
     if (parentId) setTitle(id, 'Open File', parentId);
     else if (dir) setTitle(id, dir.name);
   }, [setTitle, id, parentId, dir]);
+
+  /**
+   * History
+   */
+  const canGoBack = state.history.length > state.backCount + 1;
+  const goBack = () => {
+    const restored = state.history.at(state.backCount + 1);
+    if (canGoBack && restored) {
+      setState({ backCount: state.backCount + 1, path: restored });
+    }
+  };
+
+  const canGoForward = state.backCount > 0;
+  const goForward = () => {
+    const restored = state.history.at(state.backCount - 1);
+    if (canGoForward && restored) {
+      setState({ backCount: state.backCount - 1, path: restored });
+    }
+  };
 
   /**
    * File/directory open handler
@@ -77,7 +104,7 @@ export default function Files() {
 
     // Navigate
     setSelected(null);
-    setPath(nextPath);
+    setPath(nextPwd);
   };
 
   const open = (item: FSObject, path = pwd) => {
@@ -178,8 +205,8 @@ export default function Files() {
             className={cn('p-0.5 min-w-7', {
               'w-14': settings.buttons === 'large',
             })}
-            onClick={() => navigate('..')}
-            disabled={path.length === 0}
+            onClick={goBack}
+            disabled={!canGoBack}
           >
             <img className="mx-auto" src={`${resources}/back.png`} alt="" />
             {settings.buttons === 'large' ? <span>Back</span> : null}
@@ -190,8 +217,8 @@ export default function Files() {
             className={cn('p-0.5 min-w-7', {
               'w-14': settings.buttons === 'large',
             })}
-            onClick={() => navigate('..')}
-            disabled={path.length === 0}
+            onClick={goForward}
+            disabled={!canGoForward}
           >
             <img className="mx-auto" src={`${resources}/forward.png`} alt="" />
             {settings.buttons === 'large' ? <span>Forward</span> : null}

@@ -20,10 +20,15 @@ export const defaultFilesSettings: FilesSettings = {
 
 export interface FilesState {
   path: string;
+  history: string[];
+  backCount: number;
+
   typeFilter?: AnyFile['type'][];
   modalCallback?: (file: AnyFile, path: string) => void;
 }
 
 export const defaultFilesState: FilesState = {
   path: '/',
+  history: [],
+  backCount: 0,
 };
