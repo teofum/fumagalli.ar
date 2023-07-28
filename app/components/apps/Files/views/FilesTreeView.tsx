@@ -1,12 +1,17 @@
 import ScrollContainer from '~/components/ui/ScrollContainer';
 import type { AnyFile, Directory, FSObject } from '~/content/types';
 import FilesListItem from './FilesListItem';
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import TreeLess from '~/components/ui/icons/TreeLess';
 import TreeMore from '~/components/ui/icons/TreeMore';
 import type FilesViewProps from './FilesViewProps';
 import filterByType from '../utils/filterByType';
 import { useAppState } from '~/components/desktop/Window/context';
+
+function parsePath(path: string) {
+  if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
+  return path.split('/').filter((segment) => segment !== '');
+}
 
 interface BranchProps {
   item: Directory;
@@ -15,6 +20,8 @@ interface BranchProps {
   open: (item: FSObject, path?: string) => void;
   navigate: (path: string, absolute?: boolean) => void;
   select: React.Dispatch<React.SetStateAction<FSObject | null>>;
+
+  openPath?: string[];
 }
 
 function Branch({
@@ -24,9 +31,19 @@ function Branch({
   open,
   navigate,
   select,
+  openPath,
 }: BranchProps) {
   const [expanded, setExpanded] = useState(root);
   const [state] = useAppState('files');
+
+  useLayoutEffect(() => {
+    if (!openPath) return;
+    
+    const segments = parsePath(path);
+    console.log(openPath, path, segments);
+    if (segments.every((segment, i) => segment === openPath.at(i)))
+      setExpanded(true);
+  }, [path, openPath]);
 
   return (
     <div className="relative group tree-branch">
@@ -64,6 +81,7 @@ function Branch({
                     open={open}
                     navigate={navigate}
                     select={select}
+                    openPath={openPath}
                   />
                 ) : (
                   <Leaf
@@ -118,7 +136,8 @@ export default function FilesTreeView({
   open,
   navigate,
   select,
-}: FilesViewProps) {
+  openPath,
+}: FilesViewProps & { openPath?: string[] }) {
   return (
     <ScrollContainer className="flex-1">
       <Branch
@@ -127,6 +146,7 @@ export default function FilesTreeView({
         open={open}
         navigate={navigate}
         select={select}
+        openPath={openPath}
         root
       />
     </ScrollContainer>

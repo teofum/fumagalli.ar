@@ -239,6 +239,7 @@ export default function Files() {
               open={open}
               navigate={navigate}
               select={setSelected}
+              openPath={path.slice(0, -1)}
             />
           </div>
         ) : null}
