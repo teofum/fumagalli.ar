@@ -196,6 +196,20 @@ export default function Files() {
             <Menu.RadioItem value="columns" label="Columns" />
           </Menu.RadioGroup>
         </Menu.Menu>
+
+        <Menu.Menu trigger={<Menu.Trigger>Go</Menu.Trigger>}>
+          <Menu.Item label="Back" onSelect={goBack} disabled={!canGoBack} />
+          <Menu.Item
+            label="Forward"
+            onSelect={goForward}
+            disabled={!canGoForward}
+          />
+          <Menu.Item
+            label="Up one level"
+            onSelect={() => navigate('..')}
+            disabled={path.length === 0}
+          />
+        </Menu.Menu>
       </Menu.Bar>
 
       <ToolbarGroup
