@@ -94,6 +94,10 @@ export default function Desktop() {
    */
   useEffect(() => {
     document.documentElement.className = theme.cssClass;
+
+    return () => {
+      document.documentElement.className = '';
+    };
   }, [theme.cssClass]);
 
   /**

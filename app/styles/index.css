@@ -8,7 +8,7 @@
 
 @layer base {
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([class]) {
       @apply theme-dark;
     }
   }
