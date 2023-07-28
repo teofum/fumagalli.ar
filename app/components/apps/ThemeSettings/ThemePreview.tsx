@@ -8,7 +8,9 @@ export default function ThemePreview() {
   return (
     <div
       className="w-96 h-60 bevel-content bg-desktop relative pointer-events-none"
-      style={{ backgroundColor: themeCustomizations.backgroundColor }}
+      style={{
+        backgroundColor: themeCustomizations.backgroundColor ?? undefined,
+      }}
     >
       <div className="bg-surface bevel-window absolute top-4 left-8 w-64 h-40 p-1 flex flex-col gap-0.5">
         <div className="flex flex-row items-center gap-2 px-0.5 py-px">

@@ -130,7 +130,7 @@ export default function Desktop() {
           id="desktop"
           className="relative flex-1 bg-desktop [image-rendering:pixelated]"
           style={{
-            backgroundColor: backgroundColor,
+            backgroundColor: backgroundColor ?? undefined,
             backgroundImage: `url('${backgroundUrl}')`,
             backgroundRepeat:
               backgroundImageMode === 'tile' ? 'repeat' : 'no-repeat',

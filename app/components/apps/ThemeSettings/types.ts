@@ -4,7 +4,7 @@ export interface SystemTheme {
 }
 
 export interface ThemeCustomization {
-  backgroundColor?: string;
+  backgroundColor?: string | null;
   backgroundUrl?: string;
   backgroundImageMode: 'center' | 'tile' | 'stretch' | 'fill';
 }

@@ -46,7 +46,7 @@ export default function ThemeSettings() {
     if (value) {
       const [r, g, b] = value;
       updateThemeCustomizations({ backgroundColor: `rgb(${r} ${g} ${b})` });
-    } else updateThemeCustomizations({ backgroundColor: undefined });
+    } else updateThemeCustomizations({ backgroundColor: null });
   };
 
   return (
@@ -54,9 +54,9 @@ export default function ThemeSettings() {
       <div className="w-auto mx-auto relative">
         <Monitor />
         <div
-          className="absolute top-[17px] left-[16px] w-[1216px] h-[896px] scale-[0.125] origin-top-left"
+          className="absolute bg-desktop top-[17px] left-[16px] w-[1216px] h-[896px] scale-[0.125] origin-top-left"
           style={{
-            backgroundColor: backgroundColor,
+            backgroundColor: backgroundColor ?? undefined,
             backgroundImage: `url('${backgroundUrl}')`,
             backgroundRepeat:
               backgroundImageMode === 'tile' ? 'repeat' : 'no-repeat',
