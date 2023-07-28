@@ -84,7 +84,7 @@ function bucket(props: React.ComponentProps<'svg'>) {
         d="M6 9V8H5v2h2V9H6Zm0-1h1V7H6v1Zm2-1V6H7v1h1Zm1-2H8v1h1V5Zm1-1H9v1h1V4Zm1 1h1V3h-2v1h1v1Zm3 1V5h-2v1h2Zm-3 1h1V6h-1v1Zm6 2v2h1V9h-1Zm-1 3h1v-1h-1v1Zm-1 1h1v-1h-1v1Zm-1 1h1v-1h-1v1Zm-1 1h1v-1h-1v1Zm-2 1h2v-1h-2v1Zm-4-6v2h1v-2H7Zm2-1H8v1h1V9Zm3 5v-1h1v-1h1v-1h1v-1h1V9h1V8h-1V7h-1V6h-1v1h-1v1h-1v1h-1v1h-1v1H9v1H8v1h1v1h1v1h1v-1h1Z"
       />
       <path
-        fill="#00c0c0"
+        fill="var(--paint-color)"
         d="M11 10h-1v1H9v1H8v-2h1V9H8v1H7V9H6V8h1V7h6v1h-1v1h-1v1Zm5-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h2v-1h1v-1h1v-1h1v-1h1V9h-1ZM4 10h1v7H4v-1H3v-2H2V7h1V6h1V5h3v1H6v1H5v1H4v2Z"
       />
     </svg>
@@ -105,7 +105,7 @@ function dropper(props: React.ComponentProps<'svg'>) {
         d="M19 4h-1V3h-1V2h-3v1h-1v1h-1v1h-2v1H9v1h1v1H9v1H8v1H7v1H6v1H5v1H4v1H3v1H2v1H1v1h1v1h1v1h7v-1h2v-1h1v-1h-1v-1h-1v-2h1v-1h1v-1h1v1h1v-1h1V9h1V8h1V7h1V4z"
       />
       <path
-        fill="#00c0c0"
+        fill="var(--paint-color)"
         d="M12 16v1h-2v1H3v-1H2v-1h1v-1h1v2h3v-1h1v-1h3v1h1Zm-7-1v1h2v-1H5Zm3-1H7v1h1v-1Zm1-1H8v1h1v-1Zm1-1H9v1h1v-1Z"
       />
       <path
@@ -132,24 +132,24 @@ function zoom(props: React.ComponentProps<'svg'>) {
         d="M17 15v-1h-1v-1h-1v-2h-1v-1h1V6h-1V4h-1V3h-1V2h-2V1H6v1H4v1H3v1H2v2H1v4h1v2h1v1h1v1h2v1h5v1h1v1h1v1h1v1h2v-1h1v-1h1v-2h-1z"
       />
       <path
-        d="M13 6v4h-2v1h-1v1H9v1H6v-1H5v-1H4v-1H3V6h1v2h1V6h1V5h2V4H6V3h4v1h1v1h1v1h1Zm-2 7v1h1v-1h-1Zm1 1v1h1v-1h-1Zm1 1v1h1v-1h-1Zm1 1v1h1v-1h-1Z"
         fill="#c0c0c0"
+        d="M13 6v4h-2v1h-1v1H9v1H6v-1H5v-1H4v-1H3V6h1v2h1V6h1V5h2V4H6V3h4v1h1v1h1v1h1Zm-2 7v1h1v-1h-1Zm1 1v1h1v-1h-1Zm1 1v1h1v-1h-1Zm1 1v1h1v-1h-1Z"
       />
       <path
-        d="M10 12h1v1h-1v-1Zm1 0h1v-1h-1v1Zm2-1v1h1v-1h-1Zm-2-6h1V4h-1v1ZM4 5h1V4H4v1Zm0 7h1v-1H4v1Z"
         fill="#808080"
+        d="M10 12h1v1h-1v-1Zm1 0h1v-1h-1v1Zm2-1v1h1v-1h-1Zm-2-6h1V4h-1v1ZM4 5h1V4H4v1Zm0 7h1v-1H4v1Z"
       />
       <path
-        d="M9 12h1v1H9v-1Zm1 0h1v-1h-1v1Zm1-2v1h1v-1h-1ZM5 5H4v3h1V6h1V5h2V4H5v1Z"
         fill="#fff"
+        d="M9 12h1v1H9v-1Zm1 0h1v-1h-1v1Zm1-2v1h1v-1h-1ZM5 5H4v3h1V6h1V5h2V4H5v1Z"
       />
       <path
-        d="M6 2h4v1H6zM10 3h2v1h-2zM12 4h1v2h-1zM13 6h1v4h-1zM12 10h1v2h-1zM6 13h4v1H6zM4 12h2v1H4zM3 10h1v2H3zM2 6h1v4H2zM3 4h1v2H3zM4 3h2v1H4z"
         fill="#000"
+        d="M6 2h4v1H6zM10 3h2v1h-2zM12 4h1v2h-1zM13 6h1v4h-1zM12 10h1v2h-1zM6 13h4v1H6zM4 12h2v1H4zM3 10h1v2H3zM2 6h1v4H2zM3 4h1v2H3zM4 3h2v1H4z"
       />
       <path
-        d="M11 13v1h-1v-1h1Zm5 2v-1h-1v-1h-1v-1h-3v1h1v1h1v1h1v1h1v1h-1v1h2v-1h1v-2h-1Zm-5-1v1h1v-1h-1Zm1 1v1h1v-1h-1Zm1 1v1h1v-1h-1Z"
         fill="#0000c0"
+        d="M11 13v1h-1v-1h1Zm5 2v-1h-1v-1h-1v-1h-3v1h1v1h1v1h1v1h1v1h-1v1h2v-1h1v-2h-1Zm-5-1v1h1v-1h-1Zm1 1v1h1v-1h-1Zm1 1v1h1v-1h-1Z"
       />
     </svg>
   );
@@ -175,9 +175,15 @@ function pencil(props: React.ComponentProps<'svg'>) {
       <path d="M9 11h1v1H9v-1Zm1-1h1V9h-1v1Zm1-3v1h1V7h-1Z" fill="#808080" />
       <path fill="#c00000" d="M12 3h-1v3h1V4h2V3h-2z" />
       <path
-        d="M11 7h-1V6h1v1Zm0 2V8h-1v1h1ZM9 7v1h1V7H9Zm0 3h1V9H9v1Zm-1 1h1v-1H8v1Zm-1 1h1v-1H7v1Zm2 1v-1H8v1h1Zm-2 2h1v-2H7v2Z"
-        fill="#ff0"
+        fill="var(--paint-color)"
+        d="M11 7V6h-1v1H9v2H8v2H7v1h1v1h1v-1h1v-2h1V8h1V7h-1zM7 13h1v2H7z"
       />
+      <path
+        fill="#000"
+        opacity={0.5}
+        d="M9 11h1v1H9v-1Zm1-1h1V9h-1v1Zm1-3v1h1V7h-1Z"
+      />
+      <path fill="#fff" opacity={0.5} d="M8 9h1v1H8V9Zm1-2v1h1V7H9Z" />
     </svg>
   );
 }
@@ -200,7 +206,8 @@ function brush(props: React.ComponentProps<'svg'>) {
         d="M11 3H9V2h2v1Zm1 6V3h-1v6h1Zm1 1V9h-1v1h1ZM9 3H8v6h1V3ZM8 9H7v1h1V9Zm6 1v8H5v-1h1v-7h1v1h6v-1h1Zm-1 3H7v4h6v-4Z"
       />
       <path fill="#c0c000" d="M12 10V9h-1V3H9v6H8v1H7v1h6v-1h-1z" />
-      <path d="M8 14h1v3H8v-3Zm2 0v3h1v-3h-1Z" fill="#808080" />
+      <path fill="var(--paint-color)" d="M12 15v-1h-1v1H7v2h6v-2h-1z" />
+      <path d="M8 14h1v3H8v-3Zm2 0v3h1v-3h-1Z" fill="#000" opacity={0.5} />
     </svg>
   );
 }
@@ -215,16 +222,16 @@ function airbrush(props: React.ComponentProps<'svg'>) {
       {...props}
     >
       <path
-        fill="#00f"
+        fill="#fff"
+        d="M19 9h-1V8h-1V7h-1V6h-1V5h-1V4h-1V3h-3V2H9v1H7V2H6v1H5V2H4v1H3v1H2v1H1v1h1v1H1v1h1v1H1v1h1v1H1v1h1v1H1v1h1v1H1v1h1v1h1v-1h1v-1h1v-1H4v-1h1v-1h1v-1H5v-1h1V9h2v1h1v1h1v1h1v1h1v1h1v1h2v-1h1v-1h1v-1h1v-1h1V9ZM6 8V7h1v1H6Z"
+      />
+      <path
+        fill="var(--paint-color)"
         d="M3 5v1H2V5h1ZM2 7v1h1V7H2Zm0 2v1h1V9H2Zm0 2v1h1v-1H2Zm0 3h1v-1H2v1Zm0 2h1v-1H2v1ZM4 4H3v1h1V4Zm0 2H3v1h1V6Zm0 2H3v1h1V8Zm-1 3h1v-1H3v1Zm0 2h1v-1H3v1Zm1 2v-1H3v1h1ZM5 3H4v1h1V3ZM4 6h1V5H4v1Zm0 2h1V7H4v1Zm2-3V4H5v1h1ZM5 7h1V6H5v1Zm2-4H6v1h1V3ZM6 6h1V5H6v1Zm0 3V8H5v1h1Zm-2 1h1V9H4v1Zm1 2v-1H4v1h1Zm4-8H7v1h3V3H9v1Zm7 5V8h-1V6h-2v1h-1v1h1v1h1v1h1v1h2V9h-1Zm-5-1v1h1V8h-1Zm1 1v1h1V9h-1Zm1 1v1h1v-1h-1Zm1 2h1v-1h-1v1Z"
       />
       <path
-        fill="currentcolor"
+        fill="#000"
         d="M12 9V8h1v1h-1Zm2 1V9h-1v1h1Zm1 1v-1h-1v1h1Zm0 0v1h-1v-1h-1v-1h-1V9h-1V8h1V7h1V6h1V5h-1V4h-3v1h2v1h-1v1h-1v1H9V6h1V5H8v4h1v1h1v1h1v1h1v1h1v1h2v-1h1v-1h1v-1h-2Zm2-2v2h1V9h-1Zm-1-1v1h1V8h-1Zm-1-1v1h1V7h-1Z"
-      />
-      <path
-        fill="rgb(var(--color-surface))"
-        d="M11 5h-1v1H9v2h1V7h1V6h1V5h-1z"
       />
     </svg>
   );

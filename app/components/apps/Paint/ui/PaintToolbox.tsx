@@ -17,6 +17,9 @@ export default function PaintToolbox() {
     setState({ brush, brushVariant: 0 });
   };
 
+  const [r, g, b] = state.fgColor;
+  const fgColor = `rgb(${r} ${g} ${b})`;
+
   return (
     <div className={cn('flex flex-col gap-1', { hidden: !settings.toolBar })}>
       <Divider />
@@ -30,7 +33,7 @@ export default function PaintToolbox() {
           const Icon = Brushes[brush as keyof typeof Brushes] ?? Brushes.select;
           return (
             <ToggleButton key={brush} className="w-6 h-6 !p-0.5" value={brush}>
-              <Icon />
+              <Icon style={{ '--paint-color': fgColor } as any} />
             </ToggleButton>
           );
         })}
