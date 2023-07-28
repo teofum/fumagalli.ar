@@ -41,7 +41,9 @@ export default function HelpContent() {
           // eslint-disable-next-line jsx-a11y/anchor-is-valid
           <button
             className="link"
-            onClick={() => setState({ path: href.slice(1) })}
+            onClick={() =>
+              setState({ path: href.slice(1).replace('%20', ' ') })
+            }
           >
             {children}
           </button>

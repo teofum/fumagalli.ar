@@ -16,16 +16,20 @@ function parsePath(path: string) {
 
 interface HelpItemProps {
   item: FSObject;
+  path: string;
   expanded?: boolean;
   open: () => void;
   className?: string;
+  openPath?: string;
 }
 
 function HelpListItem({
   item,
   expanded = false,
+  path,
   open,
   className,
+  openPath,
 }: HelpItemProps) {
   const type =
     item.class === 'file'
@@ -62,6 +66,7 @@ function HelpListItem({
         className={cn(
           'px-0.5 whitespace-nowrap overflow-hidden text-ellipsis',
           'group-focus:bg-selection group-focus:text-selection',
+          { 'outline-dotted outline-current outline-1': path === openPath }
         )}
       >
         {name}
@@ -83,7 +88,7 @@ function Branch({ item, path, root = false, open, openPath }: BranchProps) {
 
   useLayoutEffect(() => {
     if (!openPath) return;
-    
+
     const segments = parsePath(path);
     const openSegments = parsePath(openPath);
     if (segments.every((segment, i) => segment === openSegments.at(i)))
@@ -111,6 +116,7 @@ function Branch({ item, path, root = false, open, openPath }: BranchProps) {
         <div className="flex flex-col w-full">
           <HelpListItem
             item={item}
+            path={path}
             expanded={expanded}
             open={() => setExpanded(!expanded)}
             className="relative z-[1]"
@@ -123,7 +129,9 @@ function Branch({ item, path, root = false, open, openPath }: BranchProps) {
                   <Leaf
                     key={child.name}
                     item={child as AnyFile}
+                    path={`${path}/${child.name}`}
                     open={() => open(`${path}/${child.name}`)}
+                    openPath={openPath}
                   />
                 ))}
               {item.items
@@ -147,11 +155,13 @@ function Branch({ item, path, root = false, open, openPath }: BranchProps) {
 
 interface LeafProps {
   item: AnyFile;
+  path: string;
   root?: boolean;
   open: () => void;
+  openPath?: string;
 }
 
-function Leaf({ item, root = false, open }: LeafProps) {
+function Leaf({ item, path, root = false, open, openPath }: LeafProps) {
   return (
     <div className="relative group tree-branch">
       {!root ? (
@@ -165,7 +175,13 @@ function Leaf({ item, root = false, open }: LeafProps) {
           <div className="mt-[9px] w-[13px] border-t border-dotted border-light ml-[7px] -mr-[2px]" />
         ) : null}
 
-        <HelpListItem item={item} open={open} className="relative z-[1]" />
+        <HelpListItem
+          item={item}
+          open={open}
+          path={path}
+          className="relative z-[1]"
+          openPath={openPath}
+        />
       </div>
     </div>
   );
@@ -186,7 +202,9 @@ export default function HelpTreeView() {
           <Leaf
             key={child.name}
             item={child as AnyFile}
+            path={`/${child.name}`}
             open={() => open(`/${child.name}`)}
+            openPath={state.path}
             root
           />
         ))}
