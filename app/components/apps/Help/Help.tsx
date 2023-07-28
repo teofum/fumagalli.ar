@@ -6,6 +6,7 @@ import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 import { useAppSettings } from '~/stores/system';
 import { IconButton } from '~/components/ui/Button';
 import { useCallback } from 'react';
+import { defaultHelpState } from './types';
 
 const MAX_HISTORY = 1000;
 const resources = '/fs/Applications/help/resources';
@@ -15,14 +16,17 @@ export default function Help() {
   const [state, setState] = useAppState('help');
   const [settings, set] = useAppSettings('help');
 
-  const setPath = useCallback((nextPath: string) => {
-    const history = [
-      nextPath,
-      ...state.history.slice(state.backCount), // Drop anything newer than the last undo
-    ].slice(0, MAX_HISTORY); // Limit # of history items
+  const setPath = useCallback(
+    (nextPath: string) => {
+      const history = [
+        nextPath,
+        ...state.history.slice(state.backCount), // Drop anything newer than the last undo
+      ].slice(0, MAX_HISTORY); // Limit # of history items
 
-    setState({ path: nextPath, history, backCount: 0 });
-  }, [setState, state.backCount, state.history]);
+      setState({ path: nextPath, history, backCount: 0 });
+    },
+    [setState, state.backCount, state.history],
+  );
 
   /**
    * History
@@ -70,8 +74,15 @@ export default function Help() {
 
         <Menu.Menu trigger={<Menu.Trigger>Go</Menu.Trigger>}>
           <Menu.Item label="Back" onSelect={goBack} disabled={!canGoBack} />
-          <Menu.Item label="Forward" onSelect={goForward} disabled={!canGoForward} />
-          <Menu.Item label="Home" onSelect={() => setPath('/')} />
+          <Menu.Item
+            label="Forward"
+            onSelect={goForward}
+            disabled={!canGoForward}
+          />
+          <Menu.Item
+            label="Home"
+            onSelect={() => setPath(defaultHelpState.path)}
+          />
         </Menu.Menu>
       </Menu.Bar>
 
