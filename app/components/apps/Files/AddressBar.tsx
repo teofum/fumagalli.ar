@@ -39,7 +39,7 @@ function Icon({ item }: IconProps) {
           'hidden group-aria-selected:inline',
         )}
         style={{
-          WebkitMaskImage: `url(${iconUrl})`,
+          WebkitMaskImage: `url($'{iconUrl}')`,
         }}
       />
     </span>

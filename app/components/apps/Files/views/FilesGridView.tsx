@@ -38,7 +38,7 @@ export default function FilesGridView({ dir, open, select }: FilesViewProps) {
                     'hidden group-focus:inline',
                   )}
                   style={{
-                    WebkitMaskImage: `url(${iconUrl})`,
+                    WebkitMaskImage: `url('${iconUrl}')`,
                   }}
                 />
               </span>

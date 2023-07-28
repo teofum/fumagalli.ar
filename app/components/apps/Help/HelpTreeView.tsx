@@ -49,7 +49,7 @@ function HelpListItem({
         <span
           className="absolute inset-0 bg-selection bg-opacity-50 hidden group-focus:inline"
           style={{
-            WebkitMaskImage: `url(${iconUrl})`,
+            WebkitMaskImage: `url('${iconUrl}')`,
           }}
         />
       </span>

@@ -58,7 +58,7 @@ function DesktopIcon({ iconUrl, title, x, y, open }: DesktopIconProps) {
             'hidden group-focus:inline',
           )}
           style={{
-            WebkitMaskImage: `url(${iconUrl})`,
+            WebkitMaskImage: `url('${iconUrl}')`,
           }}
         />
       </span>
