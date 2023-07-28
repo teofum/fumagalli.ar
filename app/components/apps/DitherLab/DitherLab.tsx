@@ -20,6 +20,7 @@ import palettes from '~/dither/palettes';
 import { PaletteType } from '~/dither/palettes/types';
 import { generatePalette } from '~/dither/paletteGen/PaletteGenerator';
 import { messageBox } from '../MessageBox';
+import { Toolbar } from '~/components/ui/Toolbar';
 
 export const ZOOM_STOPS = [1, 1.5, 2, 3, 4, 6, 8, 16, 32, 64];
 
@@ -336,12 +337,12 @@ export default function DitherLab() {
           setRenderTime={setRenderTime}
           viewportRef={viewportRef}
         >
-          <div className="grow flex flex-row items-center bevel-light p-px">
+          <Toolbar className="grow">
             <Button variant="light" className="p-1" onClick={download}>
-              <img src="fs/system/Resources/UI/save2.png" alt="Save" />
+              <img src="fs/System Files/UI/save2.png" alt="Save" />
             </Button>
-          </div>
-          <div className="flex flex-row items-center bevel-light p-px">
+          </Toolbar>
+          <Toolbar>
             <ZoomControls
               zoom={zoom}
               setZoom={setZoom}
@@ -349,7 +350,7 @@ export default function DitherLab() {
               zoomIn={zoomIn}
               zoomTo={zoomTo}
             />
-          </div>
+          </Toolbar>
         </Renderer>
 
         <div className="flex flex-row gap-0.5">

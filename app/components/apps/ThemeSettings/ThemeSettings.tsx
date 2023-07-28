@@ -12,12 +12,12 @@ import type { Directory } from '~/content/types';
 import Monitor from './Monitor';
 
 const DEFAULT_BACKGROUNDS = (
-  resolvePath(['system', 'Resources', 'Backgrounds']) as Directory
+  resolvePath(['System Files', 'Backgrounds']) as Directory
 ).items
   .filter((item) => item.class === 'file' && item.type === 'image')
   .map((item) => ({
     name: item.name.split('.').slice(0, -1).join('.'),
-    url: `/fs/system/Resources/Backgrounds/${item.name}`,
+    url: `/fs/System Files/Backgrounds/${item.name}`,
   }));
 
 export default function ThemeSettings() {

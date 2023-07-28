@@ -3,6 +3,7 @@ import ScrollContainer from '~/components/ui/ScrollContainer';
 import type FilesViewProps from './FilesViewProps';
 import filterByType from '../utils/filterByType';
 import { useAppState } from '~/components/desktop/Window/context';
+import getIconUrl from '../utils/getIconUrl';
 
 export default function FilesGridView({ dir, open, select }: FilesViewProps) {
   const [state] = useAppState('files');
@@ -11,13 +12,7 @@ export default function FilesGridView({ dir, open, select }: FilesViewProps) {
     <ScrollContainer className="flex-1">
       <div className="p-1 select-none grid grid-cols-[repeat(auto-fill,4rem)] gap-2">
         {filterByType(dir.items, state.typeFilter).map((item) => {
-          const type = item.class === 'file' ? item.type : item.class;
-
-          let iconUrl = `/fs/system/Resources/Icons/FileType/${type}_32.png`;
-          if (type === 'app') {
-            const appName = item.name.split('.')[0];
-            iconUrl = `/fs/system/Applications/${appName}/icon_32.png`;
-          }
+          const iconUrl = getIconUrl(item, 32);
 
           return (
             <button
@@ -31,14 +26,14 @@ export default function FilesGridView({ dir, open, select }: FilesViewProps) {
               onBlur={() => select(null)}
             >
               <span className="relative">
-                <img src={iconUrl} alt={type} />
+                <img width={32} height={32} src={iconUrl} alt="" />
                 <span
                   className={cn(
                     'absolute inset-0 bg-selection bg-opacity-50',
                     'hidden group-focus:inline',
                   )}
                   style={{
-                    WebkitMaskImage: `url(${iconUrl})`,
+                    WebkitMaskImage: `url('${iconUrl}')`,
                   }}
                 />
               </span>

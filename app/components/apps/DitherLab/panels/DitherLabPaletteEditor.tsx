@@ -142,7 +142,7 @@ function PaletteEditor() {
             className="p-1"
             onClick={() => removeColor(i)}
           >
-            <img src="/fs/system/Resources/UI/remove.png" alt="Remove" />
+            <img src="/fs/System Files/UI/remove.png" alt="Remove" />
           </Button>
         </div>
       ))}

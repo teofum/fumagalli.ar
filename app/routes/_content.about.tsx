@@ -11,7 +11,7 @@ export const meta: V2_MetaFunction = () => {
   ];
 };
 
-const resources = '/fs/system/Applications/intro/resources';
+const resources = '/fs/Applications/intro/resources';
 
 export default function AboutRoute() {
   return (
@@ -19,7 +19,7 @@ export default function AboutRoute() {
       <div className="max-w-3xl mx-auto">
         <div className="bg-surface bevel-window p-1 flex flex-col font-sans text-base">
           <div className="select-none flex flex-row items-center gap-2 px-0.5 py-px mb-0.5">
-            <img src={`/fs/system/Applications/intro/icon_16.png`} alt="" />
+            <img src={`/fs/Applications/intro/icon_16.png`} alt="" />
 
             <div className="flex-1 h-1.5 border-t border-b border-light" />
 

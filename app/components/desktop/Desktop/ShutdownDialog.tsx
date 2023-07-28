@@ -29,7 +29,7 @@ export default function ShutdownDialog() {
       >
         <div className="flex flex-col gap-4 px-3 py-2">
           <div className="flex flex-row gap-4">
-            <img src="/fs/system/Resources/Icons/shutdown.png" alt="" />
+            <img src="/fs/System Files/Icons/shutdown.png" alt="" />
             <div>
               {computerState === 'on'
                 ? 'Are you sure you want to shut down the system?'
@@ -58,7 +58,7 @@ export default function ShutdownDialog() {
       {computerState === 'off' ? (
         <div className="fixed inset-0 z-6000 bg-black flex flex-row items-center justify-center">
           <img
-            src="/fs/system/Resources/shutdown.png"
+            src="/fs/System Files/shutdown.png"
             alt="It's now safe to turn off your computer."
             className="w-full"
           />

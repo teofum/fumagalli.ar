@@ -7,12 +7,7 @@ import resolvePath from '~/utils/resolvePath';
 import cn from 'classnames';
 import { useAppState } from '~/components/desktop/Window/context';
 
-const HELP_ROOT = resolvePath([
-  'system',
-  'Applications',
-  'help',
-  'content',
-]) as Directory;
+const HELP_ROOT = resolvePath(['Applications', 'help', 'content']) as Directory;
 
 interface HelpItemProps {
   item: FSObject;
@@ -34,7 +29,7 @@ function HelpListItem({
       ? 'help_book_open'
       : 'help_book_closed';
 
-  const iconUrl = `/fs/system/Applications/help/resources/${type}.png`;
+  const iconUrl = `/fs/Applications/help/resources/${type}.png`;
   const name = item.name.split('.')[1];
 
   return (
@@ -54,7 +49,7 @@ function HelpListItem({
         <span
           className="absolute inset-0 bg-selection bg-opacity-50 hidden group-focus:inline"
           style={{
-            WebkitMaskImage: `url(${iconUrl})`,
+            WebkitMaskImage: `url('${iconUrl}')`,
           }}
         />
       </span>

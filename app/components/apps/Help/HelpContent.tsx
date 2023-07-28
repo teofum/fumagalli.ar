@@ -17,7 +17,7 @@ export const helpComponents = {
 
 export default function HelpContent() {
   const [state, setState] = useAppState('help');
-  const resourceUrl = '/fs/system/Applications/help/content' + state.path;
+  const resourceUrl = '/fs/Applications/help/content' + state.path;
 
   const [content, setContent] = useState('No content available');
   useEffect(() => {

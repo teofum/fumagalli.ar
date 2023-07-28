@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { FSObject } from '~/content/types';
 import { getAppResourcesUrl } from '~/content/utils';
 
-import Button from '~/components/ui/Button';
+import Button, { IconButton } from '~/components/ui/Button';
 import Menu from '~/components/ui/Menu';
 import { useAppState, useWindow } from '~/components/desktop/Window/context';
 import useFileHandler from '~/hooks/useFileHandler';
@@ -16,17 +16,17 @@ import FilesDetailsView from './views/FilesDetailsView';
 import getReadableSize from './utils/getReadableSize';
 import useDirectory from './useDirectory';
 import AddressBar from './AddressBar';
-import Toolbar from '~/components/ui/Toolbar';
+import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 import FilesTreeView from './views/FilesTreeView';
 import FS_ROOT from '~/content/dir';
 import useDesktopStore from '~/stores/desktop';
+import resolvePath from '~/utils/resolvePath';
+import cn from 'classnames';
+import FilesColumnsView from './views/FilesColumnsView';
+import parsePath from './utils/parsePath';
 
+const MAX_HISTORY = 1000;
 const resources = getAppResourcesUrl('files');
-
-function parsePath(path: string) {
-  if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
-  return path.split('/').filter((segment) => segment !== '');
-}
 
 export default function Files() {
   const { id, parentId, close } = useWindow();
@@ -34,18 +34,22 @@ export default function Files() {
   const { dirHistory, saveDirToHistory } = useSystemStore();
 
   const [state, setState] = useAppState('files');
-
   const [settings, set] = useAppSettings('files');
-  const fileHandler = useFileHandler();
-
   const [selected, setSelected] = useState<FSObject | null>(null);
 
   const path = useMemo(() => parsePath(state.path), [state.path]);
-  const setPath = (path: string[]) =>
-    setState({ ...state, path: `/${path.join('/')}` });
+  const setPath = (nextPwd: string) => {
+    const history = [
+      nextPwd,
+      ...state.history.slice(state.backCount), // Drop anything newer than the last undo
+    ].slice(0, MAX_HISTORY); // Limit # of history items
+
+    setState({ path: nextPwd, history, backCount: 0 });
+  };
 
   const pwd = useMemo(() => `/${path.join('/')}`, [path]);
   const dir = useDirectory(path);
+  const fileHandler = useFileHandler();
 
   const isModal = state.modalCallback !== undefined;
 
@@ -58,27 +62,49 @@ export default function Files() {
   }, [setTitle, id, parentId, dir]);
 
   /**
-   * Add dir to history on path change, if not already in history
+   * History
    */
-  useEffect(() => {
-    if (dir && dirHistory[0]?.path !== pwd) {
-      saveDirToHistory({ time: Date.now(), item: dir, path: pwd });
+  const canGoBack = state.history.length > state.backCount + 1;
+  const goBack = () => {
+    const restored = state.history.at(state.backCount + 1);
+    if (canGoBack && restored) {
+      setState({ backCount: state.backCount + 1, path: restored });
     }
-    // Calling this effect on global state update causes a render loop if there
-    // are multiple windows, and because we're dealing with global state there's
-    // no risk of getting stale state, anyway.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dir, pwd]);
+  };
+
+  const canGoForward = state.backCount > 0;
+  const goForward = () => {
+    const restored = state.history.at(state.backCount - 1);
+    if (canGoForward && restored) {
+      setState({ backCount: state.backCount - 1, path: restored });
+    }
+  };
 
   /**
    * File/directory open handler
    */
-  const navigate = (to: string, absolute = false) => {
-    setSelected(null);
+  const navigate = (
+    to: string,
+    absolute = false,
+    preserveSelection = false,
+  ) => {
+    let nextPath = [];
+    if (to === '..') nextPath = path.slice(0, -1);
+    else if (absolute) nextPath = parsePath(to);
+    else nextPath = [...path, to];
 
-    if (to === '..') setPath(path.slice(0, -1));
-    else if (absolute) setPath(parsePath(to));
-    else setPath([...path, to]);
+    const nextDir = resolvePath(nextPath);
+    const nextPwd = `/${nextPath.join('/')}`;
+    if (!nextDir) return;
+
+    // Save next folder to recent
+    if (dirHistory[0]?.path !== nextPwd) {
+      saveDirToHistory({ time: Date.now(), item: nextDir, path: nextPwd });
+    }
+
+    // Navigate
+    if (!preserveSelection) setSelected(null);
+    setPath(nextPwd);
   };
 
   const open = (item: FSObject, path = pwd) => {
@@ -99,6 +125,7 @@ export default function Files() {
   if (settings.view === 'list') ViewComponent = FilesListView;
   else if (settings.view === 'details') ViewComponent = FilesDetailsView;
   else if (settings.view === 'tree') ViewComponent = FilesTreeView;
+  else if (settings.view === 'columns') ViewComponent = FilesColumnsView;
 
   return (
     <div className="flex flex-col gap-0.5 min-w-0">
@@ -109,7 +136,7 @@ export default function Files() {
               <Menu.Item
                 key={`${time}_${item.name}`}
                 label={item.name}
-                icon="/fs/system/Resources/Icons/FileType/dir_16.png"
+                icon="/fs/System Files/Icons/FileType/dir_16.png"
                 onSelect={() => navigate(path, true)}
               />
             ))}
@@ -136,6 +163,26 @@ export default function Files() {
             }
           />
 
+          <Menu.Sub label="Toolbar">
+            <Menu.RadioGroup
+              value={settings.toolbar}
+              onValueChange={(value) => set({ toolbar: value as any })}
+            >
+              <Menu.RadioItem value="stacked" label="Normal" />
+              <Menu.RadioItem value="compact" label="Compact" />
+            </Menu.RadioGroup>
+
+            <Menu.Separator />
+
+            <Menu.CheckboxItem
+              label="Large Buttons"
+              checked={settings.buttons === 'large'}
+              onCheckedChange={(checked) =>
+                set({ buttons: checked ? 'large' : 'icon' })
+              }
+            />
+          </Menu.Sub>
+
           <Menu.Separator />
 
           <Menu.RadioGroup
@@ -146,22 +193,59 @@ export default function Files() {
             <Menu.RadioItem value="list" label="List" />
             <Menu.RadioItem value="details" label="Details" />
             <Menu.RadioItem value="tree" label="Tree" />
+            <Menu.RadioItem value="columns" label="Columns" />
           </Menu.RadioGroup>
+        </Menu.Menu>
+
+        <Menu.Menu trigger={<Menu.Trigger>Go</Menu.Trigger>}>
+          <Menu.Item label="Back" onSelect={goBack} disabled={!canGoBack} />
+          <Menu.Item
+            label="Forward"
+            onSelect={goForward}
+            disabled={!canGoForward}
+          />
+          <Menu.Item
+            label="Up one level"
+            onSelect={() => navigate('..')}
+            disabled={path.length === 0}
+          />
         </Menu.Menu>
       </Menu.Bar>
 
-      <Toolbar>
-        <Button
-          variant="light"
-          className="p-0.5 min-w-7"
-          onClick={() => navigate('..')}
-          disabled={path.length === 0}
-        >
-          <img src={`${resources}/go-up.png`} alt="" />
-        </Button>
+      <ToolbarGroup
+        className={cn({ 'flex flex-row': settings.toolbar === 'compact' })}
+      >
+        <Toolbar>
+          <IconButton
+            variant="light"
+            onClick={goBack}
+            disabled={!canGoBack}
+            imageUrl={`${resources}/back.png`}
+            label={settings.buttons === 'large' ? 'Back' : null}
+          />
 
-        <AddressBar path={path} navigate={navigate} />
-      </Toolbar>
+          <IconButton
+            variant="light"
+            onClick={goForward}
+            disabled={!canGoForward}
+            imageUrl={`${resources}/forward.png`}
+            label={settings.buttons === 'large' ? 'Forward' : null}
+          />
+
+          <IconButton
+            variant="light"
+            onClick={() => navigate('..')}
+            disabled={path.length === 0}
+            imageUrl={`${resources}/go-up.png`}
+            label={settings.buttons === 'large' ? 'Up' : null}
+          />
+        </Toolbar>
+
+        <Toolbar className="grow">
+          <div className="mr-1 ml-1.5">Address</div>
+          <AddressBar path={path} navigate={navigate} />
+        </Toolbar>
+      </ToolbarGroup>
 
       <div className="flex-1 min-h-0 flex flex-row gap-0.5">
         {settings.sideBar === 'tree' ? (
@@ -172,6 +256,7 @@ export default function Files() {
               open={open}
               navigate={navigate}
               select={setSelected}
+              openPath={path.slice(0, -1)}
             />
           </div>
         ) : null}

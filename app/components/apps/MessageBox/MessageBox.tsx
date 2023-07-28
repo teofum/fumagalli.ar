@@ -10,7 +10,7 @@ export default function MessageBox() {
       <div className="flex flex-row items-start gap-4">
         <img
           className="min-w-8"
-          src={`/fs/system/Resources/Icons/${state.type}.png`}
+          src={`/fs/System Files/Icons/${state.type}.png`}
           alt={state.type}
         />
 

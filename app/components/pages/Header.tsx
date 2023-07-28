@@ -34,7 +34,7 @@ export default function Header() {
 
         <LinkButton to="/" className="px-2 py-1 min-w-20 text-base font-sans">
           <div className="flex flex-row items-center gap-2">
-            <img src="/fs/system/Resources/Icons/shutdown.png" alt="" />
+            <img src="/fs/System Files/Icons/shutdown.png" alt="" />
             <span>Boot TeOS</span>
           </div>
         </LinkButton>

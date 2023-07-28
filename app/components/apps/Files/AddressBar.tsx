@@ -24,10 +24,10 @@ interface IconProps {
 
 function Icon({ item }: IconProps) {
   const type = item.class === 'file' ? item.type : item.class;
-  let iconUrl = `/fs/system/Resources/Icons/FileType/${type}_16.png`;
+  let iconUrl = `/fs/System Files/Icons/FileType/${type}_16.png`;
   if (type === 'app') {
     const appName = item.name.split('.')[0];
-    iconUrl = `/fs/system/Applications/${appName}/icon_16.png`;
+    iconUrl = `/fs/Applications/${appName}/icon_16.png`;
   }
 
   return (
@@ -39,7 +39,7 @@ function Icon({ item }: IconProps) {
           'hidden group-aria-selected:inline',
         )}
         style={{
-          WebkitMaskImage: `url(${iconUrl})`,
+          WebkitMaskImage: `url('${iconUrl}')`,
         }}
       />
     </span>
@@ -98,7 +98,7 @@ export default function AddressBar({ path, navigate }: AddressBarProps) {
   return (
     <DropdownMenu.Root open={open} onOpenChange={setOpen}>
       <DropdownMenu.Trigger asChild onClick={() => setOpen(true)}>
-        <div className="flex-1 mr-0.5 bg-default bevel-inset flex flex-row min-w-0 p-0.5">
+        <div className="flex-1 m-0.5 bg-default bevel-inset flex flex-row min-w-0 p-0.5">
           <div className="py-0.5 px-1.5 flex flex-row items-center justify-end gap-0.5 whitespace-nowrap overflow-hidden">
             <button
               className="outline-none decoration-1 hover:underline focus-visible:underline"

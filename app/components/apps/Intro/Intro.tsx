@@ -5,7 +5,7 @@ import { files } from '../Files';
 import { help } from '../Help';
 import RetroLink from '~/components/ui/Link';
 
-const resources = '/fs/system/Applications/intro/resources';
+const resources = '/fs/Applications/intro/resources';
 
 export default function Intro() {
   const { launch } = useDesktopStore();

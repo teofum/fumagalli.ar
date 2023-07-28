@@ -225,7 +225,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
           onPointerDown={maximized ? undefined : moveHandler}
           onDoubleClick={() => toggleMaximized(id, parentId)}
         >
-          <img src={`/fs/system/Applications/${icon}/icon_16.png`} alt="" />
+          <img src={`/fs/Applications/${icon}/icon_16.png`} alt="" />
 
           <div className={titlebarSpacerClass} />
 

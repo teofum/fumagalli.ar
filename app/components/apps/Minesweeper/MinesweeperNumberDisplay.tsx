@@ -14,7 +14,7 @@ export default function MinesweeperNumberDisplay({ value }: Props) {
       {digits.map((d, i) => (
         <img
           key={i}
-          src={`/fs/system/Applications/mine/resources/num${d}.png`}
+          src={`/fs/Applications/mine/resources/num${d}.png`}
           alt={d.toString()}
         />
       ))}

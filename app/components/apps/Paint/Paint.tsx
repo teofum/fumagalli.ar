@@ -18,7 +18,7 @@ import PaintContextMenu from './ui/PaintContextMenu';
 import { brushes } from './brushes';
 import Menu from '~/components/ui/Menu';
 
-// const resources = '/fs/system/Applications/paint/resources';
+// const resources = '/fs/Applications/paint/resources';
 
 function PaintGrid({ zoom }: { zoom: number }) {
   return (

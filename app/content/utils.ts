@@ -1,3 +1,3 @@
 export function getAppResourcesUrl(app: string) {
-  return `/fs/system/Applications/${app}/resources`;
+  return `/fs/Applications/${app}/resources`;
 }
