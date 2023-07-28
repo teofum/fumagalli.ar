@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { FSObject } from '~/content/types';
 import { getAppResourcesUrl } from '~/content/utils';
 
-import Button from '~/components/ui/Button';
+import Button, { IconButton } from '~/components/ui/Button';
 import Menu from '~/components/ui/Menu';
 import { useAppState, useWindow } from '~/components/desktop/Window/context';
 import useFileHandler from '~/hooks/useFileHandler';
@@ -200,41 +200,29 @@ export default function Files() {
         className={cn({ 'flex flex-row': settings.toolbar === 'compact' })}
       >
         <Toolbar>
-          <Button
+          <IconButton
             variant="light"
-            className={cn('p-0.5 min-w-7', {
-              'w-14': settings.buttons === 'large',
-            })}
             onClick={goBack}
             disabled={!canGoBack}
-          >
-            <img className="mx-auto" src={`${resources}/back.png`} alt="" />
-            {settings.buttons === 'large' ? <span>Back</span> : null}
-          </Button>
+            imageUrl={`${resources}/back.png`}
+            label={settings.buttons === 'large' ? 'Back' : null}
+          />
 
-          <Button
+          <IconButton
             variant="light"
-            className={cn('p-0.5 min-w-7', {
-              'w-14': settings.buttons === 'large',
-            })}
             onClick={goForward}
             disabled={!canGoForward}
-          >
-            <img className="mx-auto" src={`${resources}/forward.png`} alt="" />
-            {settings.buttons === 'large' ? <span>Forward</span> : null}
-          </Button>
+            imageUrl={`${resources}/forward.png`}
+            label={settings.buttons === 'large' ? 'Forward' : null}
+          />
 
-          <Button
+          <IconButton
             variant="light"
-            className={cn('p-0.5 min-w-7', {
-              'w-14': settings.buttons === 'large',
-            })}
             onClick={() => navigate('..')}
             disabled={path.length === 0}
-          >
-            <img className="mx-auto" src={`${resources}/go-up.png`} alt="" />
-            {settings.buttons === 'large' ? <span>Up</span> : null}
-          </Button>
+            imageUrl={`${resources}/go-up.png`}
+            label={settings.buttons === 'large' ? 'Up' : null}
+          />
         </Toolbar>
 
         <Toolbar className="grow">
