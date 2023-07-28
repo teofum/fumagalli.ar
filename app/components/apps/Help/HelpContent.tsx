@@ -39,15 +39,12 @@ export default function HelpContent() {
       a: ({ href, children, ...props }) =>
         href?.startsWith('?') ? (
           // eslint-disable-next-line jsx-a11y/anchor-is-valid
-          <a
-            href=""
-            onClick={(ev) => {
-              ev.preventDefault();
-              setState({ path: href.slice(1) });
-            }}
+          <button
+            className="link"
+            onClick={() => setState({ path: href.slice(1) })}
           >
             {children}
-          </a>
+          </button>
         ) : (
           <RetroLink href={href} {...props}>
             {children}
