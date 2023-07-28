@@ -46,7 +46,6 @@ export default function Files() {
       nextPwd,
       ...state.history.slice(state.backCount), // Drop anything newer than the last undo
     ].slice(0, MAX_HISTORY); // Limit # of history items
-    console.log(path, state.history, history);
 
     setState({ path: nextPwd, history, backCount: 0 });
   };
