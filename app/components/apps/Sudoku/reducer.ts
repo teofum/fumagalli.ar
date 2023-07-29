@@ -1,14 +1,17 @@
+import type { SudokuPuzzle } from '~/routes/api.sudoku';
 import type { SudokuBoard } from './types';
 
 interface GameState {
   board: SudokuBoard | null;
+  difficulty: SudokuPuzzle['difficulty'];
+  puzzleNumber: number;
   selected: number;
   won: boolean;
 }
 
 interface NewGameAction {
   type: 'newGame';
-  board: SudokuBoard;
+  puzzle: SudokuPuzzle;
 }
 
 interface SelectCellAction {
@@ -29,7 +32,16 @@ export default function sudokuReducer(
 ): GameState {
   switch (action.type) {
     case 'newGame': {
-      return { ...state, board: action.board, won: false };
+      return {
+        ...state,
+        board: action.puzzle.data.map((value) => ({
+          value,
+          fixed: value !== 0,
+        })),
+        difficulty: action.puzzle.difficulty,
+        puzzleNumber: action.puzzle.number,
+        won: false,
+      };
     }
     case 'select': {
       if (state.won) return state;

@@ -10,6 +10,8 @@ import Markdown from '~/components/ui/Markdown';
 import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 import { useAppSettings } from '~/stores/system';
 import type { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
+import type { SudokuPuzzle } from '~/routes/api.sudoku';
+import type { SudokuSettings } from './types';
 
 export const sudokuComponents = {
   h1: (props) => <h1 className="font-display text-2xl text-h1" {...props} />,
@@ -23,10 +25,20 @@ interface CellProps {
   fixed: boolean;
   game: ReducerState<typeof sudokuReducer>;
   dispatch: Dispatch<ReducerAction<typeof sudokuReducer>>;
+  settings: SudokuSettings;
+  boardRef: React.RefObject<HTMLDivElement>;
 }
 
-function SudokuCell({ index: i, value, fixed, game, dispatch }: CellProps) {
-  const [settings] = useAppSettings('sudoku');
+function SudokuCell({
+  index: i,
+  value,
+  fixed,
+  game,
+  dispatch,
+  settings,
+  boardRef,
+}: CellProps) {
+  const { id } = useWindow();
 
   const x = i % 9;
   const y = Math.floor(i / 9);
@@ -45,12 +57,18 @@ function SudokuCell({ index: i, value, fixed, game, dispatch }: CellProps) {
     value !== 0 &&
     value === game.board?.[game.selected]?.value;
 
+  const allPlaced = (number: number) => {
+    if (!game.board) return false;
+    return game.board.filter((cell) => cell.value === number).length === 9;
+  };
+
   const select = () => dispatch({ type: 'select', index: i });
   const keyHandler = (ev: React.KeyboardEvent) => {
     if (ev.key === 'Backspace') {
       dispatch({ type: 'set', value: 0 });
     } else if (ev.key.match(/^[0-9]$/)) {
-      dispatch({ type: 'set', value: Number(ev.key) });
+      const value = Number(ev.key);
+      if (!allPlaced(value)) dispatch({ type: 'set', value });
     } else if (ev.key.includes('Arrow')) {
       let x = game.selected % 9;
       let y = Math.floor(game.selected / 9);
@@ -76,19 +94,21 @@ function SudokuCell({ index: i, value, fixed, game, dispatch }: CellProps) {
         }
       }
 
-      dispatch({ type: 'select', index: x + 9 * y });
+      const next = boardRef.current?.querySelector(`#${id}_cell_${x + 9 * y}`);
+      (next as HTMLElement | null)?.focus();
     }
   };
 
   return (
-    <button
+    <div
+      id={`${id}_cell_${i}`}
       className={cn('w-10 h-10 border-r border-b border-surface-dark button', {
         'border-r-surface-darker': i % 9 === 2 || i % 9 === 5,
         'border-b-surface-darker': ~~(i / 9) % 9 === 2 || ~~(i / 9) % 9 === 5,
         'border-r-transparent': i % 9 === 8,
         'border-b-transparent': ~~(i / 9) % 9 === 8,
       })}
-      onClick={select}
+      tabIndex={0}
       onFocus={select}
       onKeyDown={keyHandler}
     >
@@ -102,20 +122,21 @@ function SudokuCell({ index: i, value, fixed, game, dispatch }: CellProps) {
         <span
           className={cn('font-display text-2xl select-none', {
             'text-[#ff2020]': hasConflict && settings.showConflict,
-            'text-light': fixed,
+            'text-light': fixed && !hasConflict,
           })}
         >
           {value || ''}
         </span>
       </div>
-    </button>
+    </div>
   );
 }
 
 export default function Sudoku() {
   const { close } = useWindow();
-
   const [settings, set] = useAppSettings('sudoku');
+
+  const boardRef = useRef<HTMLDivElement>(null);
 
   /**
    * Fetch help MD
@@ -123,9 +144,7 @@ export default function Sudoku() {
   const [helpContent, setHelpContent] = useState('');
   useEffect(() => {
     const fetchMarkdown = async () => {
-      const res = await fetch(
-        '/fs/Applications/sudoku/resources/help.md',
-      );
+      const res = await fetch('/fs/Applications/sudoku/resources/help.md');
       if (res.ok) {
         setHelpContent(await res.text());
       }
@@ -139,6 +158,8 @@ export default function Sudoku() {
    */
   const [game, dispatch] = useReducer(sudokuReducer, {
     board: null,
+    difficulty: 'easy',
+    puzzleNumber: -1,
     selected: -1,
     won: false,
   });
@@ -167,7 +188,7 @@ export default function Sudoku() {
   const startTimer = () => {
     resetTimer();
     const newTimer = setInterval(() => {
-      setTime((time) => Math.min(time + 1, 999));
+      setTime((time) => time + 1);
     }, 1000);
     setTimer(newTimer);
   };
@@ -175,7 +196,7 @@ export default function Sudoku() {
   /**
    * New game logic
    */
-  const { load, data } = useFetcher<number[]>();
+  const { load, data } = useFetcher<SudokuPuzzle>();
   const newGame = (difficulty = settings.difficulty) => {
     load(`/api/sudoku?difficulty=${difficulty}`);
     startTimer();
@@ -186,9 +207,16 @@ export default function Sudoku() {
   useEffect(() => {
     if (!data) return;
 
-    const board = data.map((value) => ({ value, fixed: value !== 0 }));
-    dispatch({ type: 'newGame', board });
+    dispatch({ type: 'newGame', puzzle: data });
   }, [data]);
+
+  /**
+   * Helpers
+   */
+  const allPlaced = (number: number) => {
+    if (!game.board) return false;
+    return game.board.filter((cell) => cell.value === number).length === 9;
+  };
 
   /**
    * Component UI
@@ -212,6 +240,20 @@ export default function Sudoku() {
 
           <Menu.Separator />
 
+          <Menu.Item label="Exit" onSelect={close} />
+        </Menu.Menu>
+
+        <Menu.Menu trigger={<Menu.Trigger>View</Menu.Trigger>}>
+          <Menu.Sub label="Toolbar">
+            <Menu.RadioGroup
+              value={settings.toolbarPosition}
+              onValueChange={(value) => set({ toolbarPosition: value as any })}
+            >
+              <Menu.RadioItem label="Top" value="top" />
+              <Menu.RadioItem label="Bottom" value="bottom" />
+            </Menu.RadioGroup>
+          </Menu.Sub>
+
           <Menu.CheckboxItem
             label="Highlight adjacent"
             checked={settings.highlightNeighbors}
@@ -222,21 +264,19 @@ export default function Sudoku() {
             checked={settings.showConflict}
             onCheckedChange={(checked) => set({ showConflict: checked })}
           />
-
-          <Menu.Separator />
-
-          <Menu.Item label="Exit" onSelect={close} />
         </Menu.Menu>
       </Menu.Bar>
 
-      <ToolbarGroup>
+      <ToolbarGroup
+        className={cn({ 'order-2': settings.toolbarPosition === 'bottom' })}
+      >
         <Toolbar>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((value) => (
             <Button
               key={value}
               variant="light"
               className="w-8 h-8 text-center"
-              disabled={game.selected < 0}
+              disabled={game.selected < 0 || allPlaced(value)}
               onClick={() => dispatch({ type: 'set', value })}
             >
               <span className="font-display text-2xl leading-7">{value}</span>
@@ -254,8 +294,8 @@ export default function Sudoku() {
         </Toolbar>
       </ToolbarGroup>
 
-      <div className="bg-default bevel-content p-0.5">
-        <div className="grid grid-cols-9 relative">
+      <div className="bg-default bevel-content p-0.5 order-1">
+        <div className="grid grid-cols-9 relative" ref={boardRef}>
           {game.board?.map((cell, i) => {
             return (
               <SudokuCell
@@ -264,6 +304,8 @@ export default function Sudoku() {
                 game={game}
                 {...cell}
                 dispatch={dispatch}
+                settings={settings}
+                boardRef={boardRef}
               />
             );
           })}
@@ -288,14 +330,20 @@ export default function Sudoku() {
         </div>
       </div>
 
-      <div className="flex flex-row gap-0.5">
+      <div className="flex flex-row gap-0.5 order-3">
         <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
           Time: {Math.floor(time / 60)}:
           {(time % 60).toString().padStart(2, '0')}
         </div>
-        <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
-          Difficulty: {settings.difficulty.toUpperCase()}
-        </div>
+        {game.puzzleNumber > 0 ? (
+          <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1 capitalize">
+            {game.difficulty} #{game.puzzleNumber}
+          </div>
+        ) : (
+          <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1 capitalize">
+            Difficulty: {settings.difficulty}
+          </div>
+        )}
         <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
           {game.won ? 'Solved!' : ''}
         </div>
