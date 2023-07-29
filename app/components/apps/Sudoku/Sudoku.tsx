@@ -103,7 +103,7 @@ function SudokuCell({ index: i, value, fixed, game, dispatch }: CellProps) {
         <span
           className={cn('font-display text-2xl select-none', {
             'text-[#ff2020]': hasConflict && settings.showConflict,
-            'text-light': fixed,
+            'text-light': fixed && !hasConflict,
           })}
         >
           {value || ''}
