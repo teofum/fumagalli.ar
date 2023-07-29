@@ -214,16 +214,20 @@ export default function solitaireReducer(
                 (card) => card.number !== number || card.suit !== suit,
               ),
             })),
-            score: score(state, 'standard', 10), // 10 points for move to stack
           };
 
           const fromDrawn = newState.drawn.length < state.drawn.length;
+          const fromStack = newState.stacks.some(
+            (stack, i) => stack.length < state.stacks[i].length,
+          );
+          const points = fromStack ? 0 : 10; // 10 points for move to stack
 
           return {
             ...newState,
             // Check for win condition
             state: isWin(newState) ? 'win_anim' : 'playing',
             drawnOffset: fromDrawn ? state.drawnOffset - 1 : state.drawnOffset,
+            score: score(state, 'standard', points),
           };
         }
         case 'row': {
