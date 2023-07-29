@@ -233,7 +233,7 @@ export default function DitherLabPaletteEditor({
       hide="x"
       className="bg-surface w-[14.5rem] min-w-[14.5rem]"
     >
-      <div className="bg-surface bevel sticky top-0">
+      <div className="bg-surface bevel sticky top-0 z-[1]">
         <div className="py-0.5 pl-2 pr-1 w-full flex flex-row items-center gap-2">
           <span>Palette Editor</span>
           <div className="grow h-1.5 border-t border-b border-light" />
