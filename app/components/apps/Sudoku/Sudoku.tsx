@@ -10,6 +10,7 @@ import Markdown from '~/components/ui/Markdown';
 import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 import { useAppSettings } from '~/stores/system';
 import type { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
+import type { SudokuPuzzle } from '~/routes/api.sudoku';
 
 export const sudokuComponents = {
   h1: (props) => <h1 className="font-display text-2xl text-h1" {...props} />,
@@ -123,9 +124,7 @@ export default function Sudoku() {
   const [helpContent, setHelpContent] = useState('');
   useEffect(() => {
     const fetchMarkdown = async () => {
-      const res = await fetch(
-        '/fs/Applications/sudoku/resources/help.md',
-      );
+      const res = await fetch('/fs/Applications/sudoku/resources/help.md');
       if (res.ok) {
         setHelpContent(await res.text());
       }
@@ -139,6 +138,8 @@ export default function Sudoku() {
    */
   const [game, dispatch] = useReducer(sudokuReducer, {
     board: null,
+    difficulty: 'easy',
+    puzzleNumber: -1,
     selected: -1,
     won: false,
   });
@@ -175,7 +176,7 @@ export default function Sudoku() {
   /**
    * New game logic
    */
-  const { load, data } = useFetcher<number[]>();
+  const { load, data } = useFetcher<SudokuPuzzle>();
   const newGame = (difficulty = settings.difficulty) => {
     load(`/api/sudoku?difficulty=${difficulty}`);
     startTimer();
@@ -186,8 +187,7 @@ export default function Sudoku() {
   useEffect(() => {
     if (!data) return;
 
-    const board = data.map((value) => ({ value, fixed: value !== 0 }));
-    dispatch({ type: 'newGame', board });
+    dispatch({ type: 'newGame', puzzle: data });
   }, [data]);
 
   /**
@@ -293,9 +293,15 @@ export default function Sudoku() {
           Time: {Math.floor(time / 60)}:
           {(time % 60).toString().padStart(2, '0')}
         </div>
-        <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
-          Difficulty: {settings.difficulty.toUpperCase()}
-        </div>
+        {game.puzzleNumber > 0 ? (
+          <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1 capitalize">
+            {game.difficulty} #{game.puzzleNumber}
+          </div>
+        ) : (
+          <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1 capitalize">
+            Difficulty: {settings.difficulty}
+          </div>
+        )}
         <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
           {game.won ? 'Solved!' : ''}
         </div>

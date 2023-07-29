@@ -1,4 +1,5 @@
 import { fetch, json, type LoaderArgs } from '@remix-run/node';
+import type { useLoaderData } from '@remix-run/react';
 
 export async function loader({ request }: LoaderArgs) {
   const url = new URL(request.url);
@@ -14,5 +15,7 @@ export async function loader({ request }: LoaderArgs) {
   const i = Math.floor(Math.random() * data.length);
   const sudoku = data[i];
 
-  return json(sudoku.data);
+  return json({ data: sudoku.data, difficulty, number: i + 1 });
 }
+
+export type SudokuPuzzle = ReturnType<typeof useLoaderData<typeof loader>>;
