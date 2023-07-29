@@ -181,7 +181,7 @@ export default function Sudoku() {
   const startTimer = () => {
     resetTimer();
     const newTimer = setInterval(() => {
-      setTime((time) => Math.min(time + 1, 999));
+      setTime((time) => time + 1);
     }, 1000);
     setTimer(newTimer);
   };
