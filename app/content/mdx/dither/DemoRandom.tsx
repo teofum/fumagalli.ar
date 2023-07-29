@@ -44,8 +44,8 @@ export default function DemoThreshold() {
   );
   useEffect(() => {
     if (canvas && img) {
-      canvas.width = img.offsetWidth / window.devicePixelRatio;
-      canvas.height = img.offsetHeight / window.devicePixelRatio;
+      canvas.width = img.offsetWidth;
+      canvas.height = img.offsetHeight;
     }
 
     render();

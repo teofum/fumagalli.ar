@@ -13,3 +13,5 @@ node_modules
 
 # Avoid uploading multiple GB of camera-sized, full-quality JPEGs to github
 .photos-original
+
+.DS_Store
