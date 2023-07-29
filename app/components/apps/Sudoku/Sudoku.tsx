@@ -11,6 +11,7 @@ import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 import { useAppSettings } from '~/stores/system';
 import type { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
 import type { SudokuPuzzle } from '~/routes/api.sudoku';
+import type { SudokuSettings } from './types';
 
 export const sudokuComponents = {
   h1: (props) => <h1 className="font-display text-2xl text-h1" {...props} />,
@@ -24,11 +25,17 @@ interface CellProps {
   fixed: boolean;
   game: ReducerState<typeof sudokuReducer>;
   dispatch: Dispatch<ReducerAction<typeof sudokuReducer>>;
+  settings: SudokuSettings;
 }
 
-function SudokuCell({ index: i, value, fixed, game, dispatch }: CellProps) {
-  const [settings] = useAppSettings('sudoku');
-
+function SudokuCell({
+  index: i,
+  value,
+  fixed,
+  game,
+  dispatch,
+  settings,
+}: CellProps) {
   const x = i % 9;
   const y = Math.floor(i / 9);
   const block = Math.floor(x / 3) + 3 * Math.floor(y / 3);
@@ -49,7 +56,7 @@ function SudokuCell({ index: i, value, fixed, game, dispatch }: CellProps) {
   const allPlaced = (number: number) => {
     if (!game.board) return false;
     return game.board.filter((cell) => cell.value === number).length === 9;
-  }
+  };
 
   const select = () => dispatch({ type: 'select', index: i });
   const keyHandler = (ev: React.KeyboardEvent) => {
@@ -202,7 +209,7 @@ export default function Sudoku() {
   const allPlaced = (number: number) => {
     if (!game.board) return false;
     return game.board.filter((cell) => cell.value === number).length === 9;
-  }
+  };
 
   /**
    * Component UI
@@ -278,6 +285,7 @@ export default function Sudoku() {
                 game={game}
                 {...cell}
                 dispatch={dispatch}
+                settings={settings}
               />
             );
           })}
