@@ -46,12 +46,18 @@ function SudokuCell({ index: i, value, fixed, game, dispatch }: CellProps) {
     value !== 0 &&
     value === game.board?.[game.selected]?.value;
 
+  const allPlaced = (number: number) => {
+    if (!game.board) return false;
+    return game.board.filter((cell) => cell.value === number).length === 9;
+  }
+
   const select = () => dispatch({ type: 'select', index: i });
   const keyHandler = (ev: React.KeyboardEvent) => {
     if (ev.key === 'Backspace') {
       dispatch({ type: 'set', value: 0 });
     } else if (ev.key.match(/^[0-9]$/)) {
-      dispatch({ type: 'set', value: Number(ev.key) });
+      const value = Number(ev.key);
+      if (!allPlaced(value)) dispatch({ type: 'set', value });
     } else if (ev.key.includes('Arrow')) {
       let x = game.selected % 9;
       let y = Math.floor(game.selected / 9);
@@ -191,6 +197,14 @@ export default function Sudoku() {
   }, [data]);
 
   /**
+   * Helpers
+   */
+  const allPlaced = (number: number) => {
+    if (!game.board) return false;
+    return game.board.filter((cell) => cell.value === number).length === 9;
+  }
+
+  /**
    * Component UI
    */
   return (
@@ -236,7 +250,7 @@ export default function Sudoku() {
               key={value}
               variant="light"
               className="w-8 h-8 text-center"
-              disabled={game.selected < 0}
+              disabled={game.selected < 0 || allPlaced(value)}
               onClick={() => dispatch({ type: 'set', value })}
             >
               <span className="font-display text-2xl leading-7">{value}</span>
