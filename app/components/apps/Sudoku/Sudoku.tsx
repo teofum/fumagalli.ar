@@ -233,6 +233,20 @@ export default function Sudoku() {
 
           <Menu.Separator />
 
+          <Menu.Item label="Exit" onSelect={close} />
+        </Menu.Menu>
+
+        <Menu.Menu trigger={<Menu.Trigger>View</Menu.Trigger>}>
+          <Menu.Sub label="Toolbar">
+            <Menu.RadioGroup
+              value={settings.toolbarPosition}
+              onValueChange={(value) => set({ toolbarPosition: value as any })}
+            >
+              <Menu.RadioItem label="Top" value="top" />
+              <Menu.RadioItem label="Bottom" value="bottom" />
+            </Menu.RadioGroup>
+          </Menu.Sub>
+
           <Menu.CheckboxItem
             label="Highlight adjacent"
             checked={settings.highlightNeighbors}
@@ -243,14 +257,12 @@ export default function Sudoku() {
             checked={settings.showConflict}
             onCheckedChange={(checked) => set({ showConflict: checked })}
           />
-
-          <Menu.Separator />
-
-          <Menu.Item label="Exit" onSelect={close} />
         </Menu.Menu>
       </Menu.Bar>
 
-      <ToolbarGroup>
+      <ToolbarGroup
+        className={cn({ 'order-2': settings.toolbarPosition === 'bottom' })}
+      >
         <Toolbar>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((value) => (
             <Button
@@ -275,7 +287,7 @@ export default function Sudoku() {
         </Toolbar>
       </ToolbarGroup>
 
-      <div className="bg-default bevel-content p-0.5">
+      <div className="bg-default bevel-content p-0.5 order-1">
         <div className="grid grid-cols-9 relative">
           {game.board?.map((cell, i) => {
             return (
@@ -310,7 +322,7 @@ export default function Sudoku() {
         </div>
       </div>
 
-      <div className="flex flex-row gap-0.5">
+      <div className="flex flex-row gap-0.5 order-3">
         <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
           Time: {Math.floor(time / 60)}:
           {(time % 60).toString().padStart(2, '0')}
