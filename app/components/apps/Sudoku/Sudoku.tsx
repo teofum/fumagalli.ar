@@ -26,6 +26,7 @@ interface CellProps {
   game: ReducerState<typeof sudokuReducer>;
   dispatch: Dispatch<ReducerAction<typeof sudokuReducer>>;
   settings: SudokuSettings;
+  boardRef: React.RefObject<HTMLDivElement>;
 }
 
 function SudokuCell({
@@ -35,7 +36,10 @@ function SudokuCell({
   game,
   dispatch,
   settings,
+  boardRef,
 }: CellProps) {
+  const { id } = useWindow();
+
   const x = i % 9;
   const y = Math.floor(i / 9);
   const block = Math.floor(x / 3) + 3 * Math.floor(y / 3);
@@ -90,19 +94,21 @@ function SudokuCell({
         }
       }
 
-      dispatch({ type: 'select', index: x + 9 * y });
+      const next = boardRef.current?.querySelector(`#${id}_cell_${x + 9 * y}`);
+      (next as HTMLElement | null)?.focus();
     }
   };
 
   return (
-    <button
+    <div
+      id={`${id}_cell_${i}`}
       className={cn('w-10 h-10 border-r border-b border-surface-dark button', {
         'border-r-surface-darker': i % 9 === 2 || i % 9 === 5,
         'border-b-surface-darker': ~~(i / 9) % 9 === 2 || ~~(i / 9) % 9 === 5,
         'border-r-transparent': i % 9 === 8,
         'border-b-transparent': ~~(i / 9) % 9 === 8,
       })}
-      onClick={select}
+      tabIndex={0}
       onFocus={select}
       onKeyDown={keyHandler}
     >
@@ -122,14 +128,15 @@ function SudokuCell({
           {value || ''}
         </span>
       </div>
-    </button>
+    </div>
   );
 }
 
 export default function Sudoku() {
   const { close } = useWindow();
-
   const [settings, set] = useAppSettings('sudoku');
+
+  const boardRef = useRef<HTMLDivElement>(null);
 
   /**
    * Fetch help MD
@@ -288,7 +295,7 @@ export default function Sudoku() {
       </ToolbarGroup>
 
       <div className="bg-default bevel-content p-0.5 order-1">
-        <div className="grid grid-cols-9 relative">
+        <div className="grid grid-cols-9 relative" ref={boardRef}>
           {game.board?.map((cell, i) => {
             return (
               <SudokuCell
@@ -298,6 +305,7 @@ export default function Sudoku() {
                 {...cell}
                 dispatch={dispatch}
                 settings={settings}
+                boardRef={boardRef}
               />
             );
           })}
