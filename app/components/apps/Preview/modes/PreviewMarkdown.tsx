@@ -29,7 +29,7 @@ export default function PreviewMarkdown({ commonMenu }: PreviewModeProps) {
       <Menu.Bar>{commonMenu}</Menu.Bar>
 
       <ScrollContainer className="flex-1">
-        <article className="p-4 max-w-3xl mx-auto font-text text-content-sm">
+        <article className="p-4 max-w-3xl mx-auto font-text text-content-sm pb-16">
           <Markdown>{content}</Markdown>
         </article>
       </ScrollContainer>

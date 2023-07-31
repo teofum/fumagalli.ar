@@ -18,7 +18,7 @@ export default function PreviewMDX({ commonMenu }: PreviewModeProps) {
       <Menu.Bar>{commonMenu}</Menu.Bar>
 
       <ScrollContainer className="flex-1">
-        <article className="p-4 article font-text text-content-sm">
+        <article className="p-4 article font-text text-content-sm pb-16">
           <Component components={baseComponents as any} />
         </article>
       </ScrollContainer>
