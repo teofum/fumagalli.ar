@@ -8,8 +8,7 @@
     "dev": "remix dev -p 3200",
     "typecheck": "tsc",
     "convert-images": "cd .photos-original && ./convert.sh",
-    "make-fs": "cd public && ./make_fs.sh fs > ../app/content/dir.ts",
-    "postinstall": "patch-package"
+    "make-fs": "cd public && ./make_fs.sh fs > ../app/content/dir.ts"
   },
   "dependencies": {
     "@radix-ui/react-collapsible": "^1.0.3",
