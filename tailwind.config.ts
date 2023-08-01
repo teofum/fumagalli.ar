@@ -89,6 +89,7 @@ export default {
       backgroundColor: {
         default: 'rgb(var(--color-background) / <alpha-value>)',
         selection: 'rgb(var(--color-selection-bg) / <alpha-value>)',
+        text: 'rgb(var(--color-text) / <alpha-value>)',
       },
       textColor: {
         default: 'rgb(var(--color-text) / <alpha-value>)',
@@ -103,6 +104,7 @@ export default {
         visited: 'rgb(var(--color-text-visited) / <alpha-value>)',
 
         selection: 'rgb(var(--color-selection-text) / <alpha-value>)',
+        background: 'rgb(var(--color-background) / <alpha-value>)',
       },
       borderColor: {
         default: 'rgb(var(--color-text) / <alpha-value>)',

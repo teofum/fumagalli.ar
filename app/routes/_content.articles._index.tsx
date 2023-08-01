@@ -1,4 +1,5 @@
 import { Link, type V2_MetaFunction } from '@remix-run/react';
+import md from '~/content/md';
 import DitherCard from '~/content/mdx/dither/dither.card';
 
 export const meta: V2_MetaFunction = () => {
@@ -6,6 +7,10 @@ export const meta: V2_MetaFunction = () => {
     { title: 'Articles — Teo Fumagalli' },
     { name: 'description', content: 'I write stuff sometimes' },
   ];
+};
+
+const dateCompareFn = (a: { date: Date }, b: { date: Date }) => {
+  return a.date.getTime() - b.date.getTime();
 };
 
 export default function PostsIndexRoute() {
@@ -29,9 +34,26 @@ export default function PostsIndexRoute() {
       </div>
 
       <h2 className="heading2">Other articles</h2>
-      <p className="mb-4"></p>
 
-      <p>Nothing here yet!</p>
+      <ul>
+        {md.sort(dateCompareFn).map((post) => (
+          <li key={post.slug}>
+            <Link
+              to={post.slug}
+              className="border-t last:border-b flex flex-row p-4 gap-4 hover:bg-text hover:bg-opacity-10 transition-colors"
+            >
+              <span className="w-20">
+                {post.date.toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                })}
+              </span>
+              <span className="grow">{post.title}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
