@@ -52,6 +52,7 @@ export default {
 
       desktop: 'rgb(var(--color-desktop) / <alpha-value>)',
       highlight: 'rgb(var(--color-highlight) / <alpha-value>)',
+      codeblock: 'rgb(var(--color-codeblock) / <alpha-value>)',
 
       surface: 'rgb(var(--color-surface) / <alpha-value>)',
       'surface-dark': 'rgb(var(--color-dark) / <alpha-value>)',
