@@ -2,10 +2,10 @@ import { json, type LoaderArgs } from '@remix-run/node';
 import { type V2_MetaFunction, useParams } from '@remix-run/react';
 
 import { baseComponents } from '~/components/ui/Markdown';
-import md from '~/content/md';
+import articles from '~/content/md/articles';
 import mdx from '~/content/mdx';
 
-const posts = [...mdx, ...md];
+const posts = [...mdx, ...articles];
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   return [

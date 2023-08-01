@@ -1,19 +1,6 @@
-import nextRouters, { attributes as nextRoutersMeta } from './next-routers.md';
+import articles from './articles';
+import projects from './projects';
 
-interface Post {
-  slug: string;
-  title: string;
-  date: Date;
-  Component: typeof nextRouters;
-}
-
-const md: Post[] = [
-  {
-    slug: nextRoutersMeta.slug,
-    title: nextRoutersMeta.title,
-    date: nextRoutersMeta.date,
-    Component: nextRouters,
-  },
-];
+const md = [...projects, ...articles];
 
 export default md;

@@ -1,36 +1,32 @@
-import {
-  fetch,
-  json,
-  type V2_MetaFunction,
-  type LoaderArgs,
-} from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
-import Markdown from '~/components/ui/Markdown';
+import { json, type V2_MetaFunction, type LoaderArgs } from '@remix-run/node';
+import { useParams } from '@remix-run/react';
+import { baseComponents } from '~/components/ui/Markdown';
+import projects from '~/content/md/projects';
 
-export const meta: V2_MetaFunction = ({ params }) => {
+export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   return [
-    { title: `${params.slug} — Teo Fumagalli` },
+    { title: `${data?.title} — Teo Fumagalli` },
     { name: 'description', content: 'A thing I made' },
   ];
 };
 
-export async function loader({ request, params }: LoaderArgs) {
-  const url = new URL(request.url);
+export async function loader({ params }: LoaderArgs) {
   const { slug } = params;
 
-  if (!slug) return json({ content: null });
-
-  const res = await fetch(`${url.origin}/fs/Documents/Projects/${slug}.md`);
-  if (res.ok) return json({ content: await res.text() });
-  else throw json({}, { status: 404, statusText: 'Not Found' });
+  const title =
+    projects.find((project) => project.slug === slug)?.title ?? '404 Not Found';
+  return json({ title });
 }
 
 export default function Project() {
-  const { content } = useLoaderData();
+  const { slug } = useParams();
+
+  const Component = projects.find((p) => p.slug === slug)?.Component;
+  if (!Component) return null;
 
   return (
     <article className="article pb-16">
-      <Markdown>{content}</Markdown>
+      <Component components={baseComponents as any} />
     </article>
   );
 }

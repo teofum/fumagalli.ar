@@ -1,5 +1,5 @@
 import { Link, type V2_MetaFunction } from '@remix-run/react';
-import md from '~/content/md';
+import articles from '~/content/md/articles';
 import DitherCard from '~/content/mdx/dither/dither.card';
 
 export const meta: V2_MetaFunction = () => {
@@ -36,11 +36,11 @@ export default function PostsIndexRoute() {
       <h2 className="heading2">Other articles</h2>
 
       <ul>
-        {md.sort(dateCompareFn).map((post) => (
-          <li key={post.slug}>
+        {articles.sort(dateCompareFn).map((post) => (
+          <li key={post.slug} className="border-t last:border-b">
             <Link
               to={post.slug}
-              className="border-t last:border-b flex flex-row p-4 gap-4 hover:bg-text hover:bg-opacity-10 transition-colors"
+              className="flex flex-row p-4 gap-4 hover:bg-text hover:bg-opacity-10 transition-colors"
             >
               <span className="w-20">
                 {post.date.toLocaleDateString('en-US', {
