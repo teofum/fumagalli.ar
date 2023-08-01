@@ -18,9 +18,12 @@ export const baseComponents = {
   ),
   pre: (props) => (
     <pre
-      className="paragraph text-content-xs bevel-content py-2 px-3 overflow-auto"
+      className="paragraph text-content-xs bg-codeblock rounded-md p-4 my-4 overflow-auto"
       {...props}
     />
+  ),
+  blockquote: (props) => (
+    <blockquote className="paragraph blockquote" {...props} />
   ),
 } satisfies ReactMarkdownOptions['components'];
 

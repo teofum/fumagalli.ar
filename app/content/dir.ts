@@ -800,7 +800,7 @@ const FS_ROOT: Directory = {
           class: 'dir',
           name: 'paint',
           created: 1690519802,
-          modified: 1690519802,
+          modified: 1690587363,
           items: [
             {
               class: 'dir',
@@ -1768,7 +1768,7 @@ const FS_ROOT: Directory = {
           class: 'dir',
           name: 'Articles',
           created: 1689030374,
-          modified: 1690332033,
+          modified: 1690761469,
           items: [
             {
               class: 'dir',
@@ -2065,6 +2065,14 @@ const FS_ROOT: Directory = {
               created: 1690332033,
               modified: 1690332033,
               size: 94,
+            },
+            {
+              class: 'file',
+              type: 'md',
+              name: 'Guide to Next.js routers.md',
+              created: 1690761469,
+              modified: 1690830329,
+              size: 17653,
             },
           ],
         },

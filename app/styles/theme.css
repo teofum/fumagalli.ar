@@ -7,6 +7,7 @@
     --color-desktop: 0 128 128;
     --color-background: 255 255 255;
     --color-highlight: 255 255 128;
+    --color-codeblock: 242 242 242;
   
     --color-surface: 192 192 192;
     --color-dark: 128 128 128;
@@ -38,6 +39,7 @@
     --color-desktop: 58 110 165;
     --color-background: 255 255 250;
     --color-highlight: 240 225 205;
+    --color-codeblock: 242 242 242;
   
     --color-surface: 212 205 195;
     --color-dark: 140 128 110;
@@ -69,6 +71,7 @@
     --color-desktop: 64 140 110;
     --color-background: 255 255 255;
     --color-highlight: 228 242 202;
+    --color-codeblock: 242 242 242;
   
     --color-surface: 192 210 192;
     --color-dark: 102 140 128;
@@ -103,6 +106,7 @@
     --color-desktop: 0 64 64;
     --color-background: 40 40 40;
     --color-highlight: 96 96 32;
+    --color-codeblock: 28 28 28;
   
     --color-surface: 64 64 64;
     --color-dark: 32 32 32;
@@ -134,6 +138,7 @@
     --color-desktop: 69 83 99;
     --color-background: 38 45 54;
     --color-highlight: 96 96 32;
+    --color-codeblock: 28 28 28;
   
     --color-surface: 52 62 76;
     --color-dark: 17 21 25;
@@ -165,6 +170,7 @@
     --color-desktop: 0 0 0;
     --color-background: 0 0 0;
     --color-highlight: 96 96 32;
+    --color-codeblock: 28 28 28;
   
     --color-surface: 16 16 24;
     --color-dark: 8 8 16;

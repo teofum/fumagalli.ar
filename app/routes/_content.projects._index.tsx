@@ -1,7 +1,5 @@
 import { Link, type V2_MetaFunction } from '@remix-run/react';
-
-// TODO: get this from FS, right now there's like three projects so no big deal
-const PROJECTS_LIST = ['DitherOS', 'Recipes App', 'UI Lab'];
+import projects from '~/content/md/projects';
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -17,14 +15,17 @@ export default function PostsIndexRoute() {
         Projects
       </h1>
 
-      <p className="mb-4">
-        Stuff I've worked on.
-      </p>
+      <p className="mb-4">Stuff I've worked on.</p>
 
       <ul>
-        {PROJECTS_LIST.map((project) => (
-          <li key={project}>
-            <Link to={project}>{project}</Link>
+        {projects.map((project) => (
+          <li key={project.slug} className="border-t last:border-b">
+            <Link
+              to={project.slug}
+              className="flex flex-row p-4 gap-4 hover:bg-text hover:bg-opacity-10 transition-colors"
+            >
+              {project.title}
+            </Link>
           </li>
         ))}
       </ul>
