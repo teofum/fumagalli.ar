@@ -24,7 +24,27 @@ interface SetCellAction {
   value: number;
 }
 
-type Action = NewGameAction | SelectCellAction | SetCellAction;
+interface SetAnnotationAction {
+  type: 'setAnnotation';
+  value: number;
+}
+
+interface ResetAnnotationAction {
+  type: 'resetAnnotation';
+  value: number;
+}
+
+interface ClearAnnotationAction {
+  type: 'clearAnnotation';
+}
+
+type Action =
+  | NewGameAction
+  | SelectCellAction
+  | SetCellAction
+  | SetAnnotationAction
+  | ResetAnnotationAction
+  | ClearAnnotationAction;
 
 export default function sudokuReducer(
   state: GameState,
@@ -37,6 +57,7 @@ export default function sudokuReducer(
         board: action.puzzle.data.map((value) => ({
           value,
           fixed: value !== 0,
+          annotations: new Set(),
         })),
         difficulty: action.puzzle.difficulty,
         puzzleNumber: action.puzzle.number,
@@ -57,6 +78,36 @@ export default function sudokuReducer(
       const board = [...state.board];
       if (state.selected >= 0 && !state.board[state.selected].fixed)
         board[state.selected].value = action.value;
+
+      return checkBoard({ ...state, board });
+    }
+    case 'setAnnotation': {
+      if (state.won || !state.board) return state;
+
+      const board = [...state.board];
+      if (state.selected >= 0 && !state.board[state.selected].fixed) {
+        board[state.selected].annotations.add(action.value);
+      }
+
+      return checkBoard({ ...state, board });
+    }
+    case 'resetAnnotation': {
+      if (state.won || !state.board) return state;
+
+      const board = [...state.board];
+      if (state.selected >= 0 && !state.board[state.selected].fixed) {
+        board[state.selected].annotations.delete(action.value);
+      }
+
+      return checkBoard({ ...state, board });
+    }
+    case 'clearAnnotation': {
+      if (state.won || !state.board) return state;
+
+      const board = [...state.board];
+      if (state.selected >= 0 && !state.board[state.selected].fixed) {
+        board[state.selected].annotations.clear();
+      }
 
       return checkBoard({ ...state, board });
     }

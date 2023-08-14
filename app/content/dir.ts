@@ -1662,8 +1662,16 @@ const FS_ROOT: Directory = {
               class: 'dir',
               name: 'resources',
               created: 1690519802,
-              modified: 1690519802,
+              modified: 1692013386,
               items: [
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'clear.png',
+                  created: 1692012948,
+                  modified: 1692012948,
+                  size: 271,
+                },
                 {
                   class: 'file',
                   type: 'md',
@@ -1671,6 +1679,14 @@ const FS_ROOT: Directory = {
                   created: 1690519802,
                   modified: 1690519802,
                   size: 370,
+                },
+                {
+                  class: 'file',
+                  type: 'image',
+                  name: 'pencil.png',
+                  created: 1692013386,
+                  modified: 1692013386,
+                  size: 274,
                 },
                 {
                   class: 'file',
@@ -1768,7 +1784,7 @@ const FS_ROOT: Directory = {
           class: 'dir',
           name: 'Articles',
           created: 1689030374,
-          modified: 1690761469,
+          modified: 1692009743,
           items: [
             {
               class: 'dir',
@@ -2070,9 +2086,9 @@ const FS_ROOT: Directory = {
               class: 'file',
               type: 'md',
               name: 'Guide to Next.js routers.md',
-              created: 1690761469,
-              modified: 1690830329,
-              size: 17653,
+              created: 1692009743,
+              modified: 1692009743,
+              size: 93,
             },
           ],
         },

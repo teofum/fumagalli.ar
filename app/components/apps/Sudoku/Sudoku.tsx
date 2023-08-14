@@ -3,7 +3,7 @@ import { useEffect, useReducer, useRef, useState } from 'react';
 import sudokuReducer from './reducer';
 import Menu from '~/components/ui/Menu';
 import cn from 'classnames';
-import Button from '~/components/ui/Button';
+import Button, { IconButton } from '~/components/ui/Button';
 import { useWindow } from '~/components/desktop/Window/context';
 import { useFetcher } from '@remix-run/react';
 import Markdown from '~/components/ui/Markdown';
@@ -12,6 +12,7 @@ import { useAppSettings } from '~/stores/system';
 import type { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
 import type { SudokuPuzzle } from '~/routes/api.sudoku';
 import type { SudokuSettings } from './types';
+import { ToggleIconButton } from '~/components/ui/ToggleButton';
 
 export const sudokuComponents = {
   h1: (props) => <h1 className="font-display text-2xl text-h1" {...props} />,
@@ -19,24 +20,30 @@ export const sudokuComponents = {
   em: (props) => <span className="not-italic text-accent" {...props} />,
 } satisfies ReactMarkdownOptions['components'];
 
+const resources = '/fs/Applications/sudoku/resources';
+
 interface CellProps {
   index: number;
   value: number;
   fixed: boolean;
+  annotations: Set<number>;
   game: ReducerState<typeof sudokuReducer>;
   dispatch: Dispatch<ReducerAction<typeof sudokuReducer>>;
   settings: SudokuSettings;
   boardRef: React.RefObject<HTMLDivElement>;
+  annotate: boolean;
 }
 
 function SudokuCell({
   index: i,
   value,
   fixed,
+  annotations,
   game,
   dispatch,
   settings,
   boardRef,
+  annotate,
 }: CellProps) {
   const { id } = useWindow();
 
@@ -66,9 +73,18 @@ function SudokuCell({
   const keyHandler = (ev: React.KeyboardEvent) => {
     if (ev.key === 'Backspace') {
       dispatch({ type: 'set', value: 0 });
-    } else if (ev.key.match(/^[0-9]$/)) {
-      const value = Number(ev.key);
-      if (!allPlaced(value)) dispatch({ type: 'set', value });
+      dispatch({ type: 'clearAnnotation' });
+    } else if (ev.code.match(/^Digit[0-9]$/)) {
+      const value = Number(ev.code.substring(5));
+      const annotation = ev.altKey ? !annotate : annotate;
+      if (!allPlaced(value)) {
+        const type = annotation
+          ? annotations.has(value)
+            ? 'resetAnnotation'
+            : 'setAnnotation'
+          : 'set';
+        dispatch({ type, value });
+      }
     } else if (ev.key.includes('Arrow')) {
       let x = game.selected % 9;
       let y = Math.floor(game.selected / 9);
@@ -113,20 +129,35 @@ function SudokuCell({
       onKeyDown={keyHandler}
     >
       <div
-        className={cn('h-full grid place-items-center', {
+        className={cn('h-full grid place-items-center relative select-none', {
           'bg-selection text-selection': isSelected,
           'bg-default': !isSelected,
           'bg-highlight': isNeighborOfSelected && settings.highlightNeighbors,
         })}
       >
         <span
-          className={cn('font-display text-2xl select-none', {
+          className={cn('font-display text-2xl', {
             'text-[#ff2020]': hasConflict && settings.showConflict,
             'text-light': fixed && !hasConflict,
           })}
         >
           {value || ''}
         </span>
+
+        <div
+          className={cn('absolute inset-0 grid grid-cols-3 text-light', {
+            hidden: value !== 0,
+          })}
+        >
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+            <span
+              key={n}
+              className="text-center leading-[13px] w-[13px] h-[13px]"
+            >
+              {annotations.has(n) ? n : ''}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -137,6 +168,7 @@ export default function Sudoku() {
   const [settings, set] = useAppSettings('sudoku');
 
   const boardRef = useRef<HTMLDivElement>(null);
+  const [annotate, setAnnotate] = useState(false);
 
   /**
    * Fetch help MD
@@ -218,6 +250,23 @@ export default function Sudoku() {
     return game.board.filter((cell) => cell.value === number).length === 9;
   };
 
+  const onNumberClick = (value: number) => {
+    if (!game.board) return;
+
+    const cell = game.board[game.selected];
+    const type = annotate
+      ? cell.annotations.has(value)
+        ? 'resetAnnotation'
+        : 'setAnnotation'
+      : 'set';
+    dispatch({ type, value });
+  };
+
+  const onResetClick = () => {
+    dispatch({ type: 'set', value: 0 });
+    dispatch({ type: 'clearAnnotation' });
+  };
+
   /**
    * Component UI
    */
@@ -277,20 +326,28 @@ export default function Sudoku() {
               variant="light"
               className="w-8 h-8 text-center"
               disabled={game.selected < 0 || allPlaced(value)}
-              onClick={() => dispatch({ type: 'set', value })}
+              onClick={() => onNumberClick(value)}
             >
               <span className="font-display text-2xl leading-7">{value}</span>
             </Button>
           ))}
 
-          <Button
+          <IconButton
             variant="light"
-            className="py-2 px-4"
+            className="w-8 h-8"
+            imageUrl={`${resources}/clear.png`}
             disabled={game.selected < 0}
-            onClick={() => dispatch({ type: 'set', value: 0 })}
-          >
-            <span>Clear</span>
-          </Button>
+            onClick={onResetClick}
+          />
+
+          <ToggleIconButton
+            variant="light"
+            className="w-8 h-8"
+            imageUrl={`${resources}/pencil.png`}
+            disabled={game.selected < 0}
+            pressed={annotate}
+            onPressedChange={setAnnotate}
+          />
         </Toolbar>
       </ToolbarGroup>
 
@@ -306,6 +363,7 @@ export default function Sudoku() {
                 dispatch={dispatch}
                 settings={settings}
                 boardRef={boardRef}
+                annotate={annotate}
               />
             );
           })}

@@ -55,6 +55,10 @@
     @apply bg-checkered bevel-inset;
   }
 
+  .toggle-button[data-state='on'].button-light {
+    @apply bevel-light-inset;
+  }
+
   /* Input */
   .input {
     @apply py-1 px-2 bg-default bevel-content outline-none min-w-0;
