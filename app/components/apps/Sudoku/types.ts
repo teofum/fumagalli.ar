@@ -1,6 +1,7 @@
 interface SudokuCell {
   value: number;
   fixed: boolean;
+  annotations: Set<number>;
 }
 
 export type SudokuBoard = SudokuCell[];
