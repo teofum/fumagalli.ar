@@ -194,6 +194,8 @@ export default function Sudoku() {
     puzzleNumber: -1,
     selected: -1,
     won: false,
+    history: [],
+    undoCount: 0,
   });
 
   /**
@@ -241,6 +243,15 @@ export default function Sudoku() {
 
     dispatch({ type: 'newGame', puzzle: data });
   }, [data]);
+
+  /**
+   * History
+   */
+  const canUndo = game.history.length > game.undoCount + 1;
+  const undo = () => dispatch({ type: 'undo' });
+
+  const canRedo = game.undoCount > 0;
+  const redo = () => dispatch({ type: 'redo' });
 
   /**
    * Helpers
@@ -313,6 +324,11 @@ export default function Sudoku() {
             checked={settings.showConflict}
             onCheckedChange={(checked) => set({ showConflict: checked })}
           />
+        </Menu.Menu>
+
+        <Menu.Menu trigger={<Menu.Trigger>Move</Menu.Trigger>}>
+          <Menu.Item label="Undo" disabled={!canUndo} onSelect={undo} />
+          <Menu.Item label="Redo" disabled={!canRedo} onSelect={redo} />
         </Menu.Menu>
       </Menu.Bar>
 
