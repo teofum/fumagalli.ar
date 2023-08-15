@@ -1,12 +1,17 @@
 import type { SudokuPuzzle } from '~/routes/api.sudoku';
 import type { SudokuBoard } from './types';
 
+const MAX_HISTORY = 10;
+
 interface GameState {
   board: SudokuBoard | null;
   difficulty: SudokuPuzzle['difficulty'];
   puzzleNumber: number;
   selected: number;
   won: boolean;
+
+  history: SudokuBoard[];
+  undoCount: number;
 }
 
 interface NewGameAction {
@@ -38,13 +43,45 @@ interface ClearAnnotationAction {
   type: 'clearAnnotation';
 }
 
+interface UndoAction {
+  type: 'undo';
+}
+
+interface RedoAction {
+  type: 'redo';
+}
+
 type Action =
   | NewGameAction
   | SelectCellAction
   | SetCellAction
   | SetAnnotationAction
   | ResetAnnotationAction
-  | ClearAnnotationAction;
+  | ClearAnnotationAction
+  | UndoAction
+  | RedoAction;
+
+function cloneBoard(board: SudokuBoard): SudokuBoard {
+  return board.map((cell) => ({
+    value: cell.value,
+    fixed: cell.fixed,
+    annotations: new Set(cell.annotations),
+  }));
+}
+
+function updateHistory(state: GameState): GameState {
+  if (!state.board) return state;
+
+  console.log('update history', history.length);
+  return {
+    ...state,
+    history: [
+      cloneBoard(state.board),
+      ...state.history.slice(state.undoCount),
+    ].slice(0, MAX_HISTORY),
+    undoCount: 0,
+  };
+}
 
 export default function sudokuReducer(
   state: GameState,
@@ -52,16 +89,20 @@ export default function sudokuReducer(
 ): GameState {
   switch (action.type) {
     case 'newGame': {
+      const board = action.puzzle.data.map((value) => ({
+        value,
+        fixed: value !== 0,
+        annotations: new Set<number>(),
+      }));
+
       return {
         ...state,
-        board: action.puzzle.data.map((value) => ({
-          value,
-          fixed: value !== 0,
-          annotations: new Set(),
-        })),
+        board,
         difficulty: action.puzzle.difficulty,
         puzzleNumber: action.puzzle.number,
         won: false,
+        history: [board],
+        undoCount: 0,
       };
     }
     case 'select': {
@@ -75,41 +116,65 @@ export default function sudokuReducer(
     case 'set': {
       if (state.won || !state.board) return state;
 
-      const board = [...state.board];
+      const board = cloneBoard(state.board);
       if (state.selected >= 0 && !state.board[state.selected].fixed)
         board[state.selected].value = action.value;
 
-      return checkBoard({ ...state, board });
+      return checkBoard(updateHistory({ ...state, board }));
     }
     case 'setAnnotation': {
       if (state.won || !state.board) return state;
 
-      const board = [...state.board];
+      const board = cloneBoard(state.board);
       if (state.selected >= 0 && !state.board[state.selected].fixed) {
         board[state.selected].annotations.add(action.value);
       }
 
-      return checkBoard({ ...state, board });
+      return checkBoard(updateHistory({ ...state, board }));
     }
     case 'resetAnnotation': {
       if (state.won || !state.board) return state;
 
-      const board = [...state.board];
+      const board = cloneBoard(state.board);
       if (state.selected >= 0 && !state.board[state.selected].fixed) {
         board[state.selected].annotations.delete(action.value);
       }
 
-      return checkBoard({ ...state, board });
+      return checkBoard(updateHistory({ ...state, board }));
     }
     case 'clearAnnotation': {
       if (state.won || !state.board) return state;
 
-      const board = [...state.board];
+      const board = cloneBoard(state.board);
       if (state.selected >= 0 && !state.board[state.selected].fixed) {
         board[state.selected].annotations.clear();
       }
 
-      return checkBoard({ ...state, board });
+      return checkBoard(updateHistory({ ...state, board }));
+    }
+    case 'undo': {
+      const canUndo = state.history.length > state.undoCount + 1;
+      if (!canUndo) return state;
+
+      const restored = state.history.at(state.undoCount + 1);
+      if (!restored) return state;
+      return {
+        ...state,
+        board: restored,
+        undoCount: state.undoCount + 1,
+      };
+    }
+    case 'redo': {
+      const canRedo = state.undoCount > 0;
+      if (!canRedo) return state;
+
+      const restored = state.history.at(state.undoCount - 1);
+      if (!restored) return state;
+      return {
+        ...state,
+        board: restored,
+        undoCount: state.undoCount - 1,
+      };
     }
     default:
       return state;
