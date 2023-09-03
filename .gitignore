@@ -10,6 +10,8 @@ node_modules
 /public/workers
 /api/index.js
 /api/index.js.map
+/api/metafile.js.json
+/api/metafile.server.json
 
 # Avoid uploading multiple GB of camera-sized, full-quality JPEGs to github
 .photos-original
