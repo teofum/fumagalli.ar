@@ -165,4 +165,4 @@ export default function DemoDitherRGB({ useWhite }: DemoDitherRGBProps) {
       </div>
     </div>
   );
-};
+}
