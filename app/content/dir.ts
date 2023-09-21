@@ -1662,14 +1662,14 @@ const FS_ROOT: Directory = {
               class: 'dir',
               name: 'resources',
               created: 1690519802,
-              modified: 1692013386,
+              modified: 1692014664,
               items: [
                 {
                   class: 'file',
                   type: 'image',
                   name: 'clear.png',
-                  created: 1692012948,
-                  modified: 1692012948,
+                  created: 1692014664,
+                  modified: 1692014664,
                   size: 271,
                 },
                 {
@@ -1684,8 +1684,8 @@ const FS_ROOT: Directory = {
                   class: 'file',
                   type: 'image',
                   name: 'pencil.png',
-                  created: 1692013386,
-                  modified: 1692013386,
+                  created: 1692014664,
+                  modified: 1692014664,
                   size: 274,
                 },
                 {
@@ -1784,19 +1784,19 @@ const FS_ROOT: Directory = {
           class: 'dir',
           name: 'Articles',
           created: 1689030374,
-          modified: 1692009743,
+          modified: 1695257791,
           items: [
             {
               class: 'dir',
               name: 'assets',
               created: 1689030374,
-              modified: 1689030374,
+              modified: 1695257494,
               items: [
                 {
                   class: 'dir',
                   name: 'dither',
                   created: 1689030374,
-                  modified: 1690332033,
+                  modified: 1695257494,
                   items: [
                     {
                       class: 'file',
@@ -2072,6 +2072,46 @@ const FS_ROOT: Directory = {
                     },
                   ],
                 },
+                {
+                  class: 'dir',
+                  name: 'nikon-d7000',
+                  created: 1695257492,
+                  modified: 1695257500,
+                  items: [
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'back.jpg',
+                      created: 1695257464,
+                      modified: 1695257464,
+                      size: 279829,
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'd7000.jpg',
+                      created: 1695257464,
+                      modified: 1695257464,
+                      size: 255170,
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'mount.jpg',
+                      created: 1695257464,
+                      modified: 1695257464,
+                      size: 562491,
+                    },
+                    {
+                      class: 'file',
+                      type: 'image',
+                      name: 'top.jpg',
+                      created: 1695257464,
+                      modified: 1695257464,
+                      size: 262269,
+                    },
+                  ],
+                },
               ],
             },
             {
@@ -2090,13 +2130,21 @@ const FS_ROOT: Directory = {
               modified: 1692009743,
               size: 93,
             },
+            {
+              class: 'file',
+              type: 'md',
+              name: 'Nikon D7000 Review.md',
+              created: 1695257751,
+              modified: 1695257760,
+              size: 93,
+            },
           ],
         },
         {
           class: 'dir',
           name: 'Photos',
           created: 1687555579,
-          modified: 1687666863,
+          modified: 1695257500,
           items: [
             {
               class: 'dir',
