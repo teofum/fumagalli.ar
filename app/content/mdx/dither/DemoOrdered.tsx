@@ -5,7 +5,7 @@ import { ToggleGroup, ToggleButton } from '~/components/ui/ToggleGroup';
 import Switch from '~/components/ui/Switch';
 import Slider from '~/components/ui/Slider';
 
-const shader = `
+const shaderMono = `
 precision mediump float;
 uniform sampler2D u_image;
 uniform sampler2D u_threshold;
@@ -36,11 +36,42 @@ void main() {
   gl_FragColor = vec4(color, 1.0);
 }`;
 
+const shaderColor = `
+precision mediump float;
+uniform sampler2D u_image;
+uniform sampler2D u_threshold;
+uniform float u_thres_size;
+uniform float u_gamma;
+uniform vec2 u_texSize;
+varying vec2 v_texCoord;
+
+vec3 gamma(vec3 color) {
+  return vec3(
+    pow(color.x, u_gamma),
+    pow(color.y, u_gamma),
+    pow(color.z, u_gamma)
+  );
+}
+
+void main() {
+  vec2 thresholdCoord = fract(v_texCoord * u_texSize / u_thres_size);
+  vec3 color = texture2D(u_image, v_texCoord).xyz;
+  color = gamma(color);
+
+  float t = texture2D(u_threshold, thresholdCoord).x;
+  float r = color.x < t ? 0.0 : 1.0;
+  float g = color.y < t ? 0.0 : 1.0;
+  float b = color.z < t ? 0.0 : 1.0;
+  gl_FragColor = vec4(r, g, b, 1.0);
+}`;
+
 interface DemoOrderedProps {
   type: 'bayer' | 'blueNoise' | 'halftone';
   sizes?: { name: string; value: string }[];
   initial?: string;
   gammaSlider?: boolean;
+  color?: boolean;
+  imageUrl?: string;
 }
 
 const DemoOrdered = ({
@@ -48,6 +79,8 @@ const DemoOrdered = ({
   sizes,
   initial,
   gammaSlider,
+  color,
+  imageUrl,
 }: DemoOrderedProps) => {
   const [size, setSize] = useState(initial ?? '8');
   const [original, setOriginal] = useState(false);
@@ -59,7 +92,7 @@ const DemoOrdered = ({
   const { render } = useGlRenderer(
     canvas,
     img,
-    shader,
+    color ? shaderColor : shaderMono,
     NULL_PALETTE,
     { threshold: `${type}${size}` as any },
     { u_gamma: gamma },
@@ -78,6 +111,7 @@ const DemoOrdered = ({
       canvasRef={(el) => setCanvas(el)}
       imgRef={(el) => setImg(el)}
       hideCanvas={original}
+      imageUrl={imageUrl}
     >
       {sizes && (
         <label className="demo-label">
