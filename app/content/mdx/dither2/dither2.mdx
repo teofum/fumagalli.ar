@@ -1,9 +1,16 @@
 import DemoPatternImage from '../dither/DemoPatternImage';
 import DemoOrdered from '../dither/DemoOrdered';
-// import DemoGammaGradient from './DemoGammaGradient';
-// import DemoOrderedPair from './DemoOrderedPair';
-// import PaletteSwatches from './PaletteSwatches';
+import DemoGammaCurve from './DemoGammaCurve';
+import DemoGammaGradient from './DemoGammaGradient';
+import PaletteSwatches from './PaletteSwatches';
+import NicePalette from '~/dither/palettes/NicePalette';
+import DemoOrderedPair from './DemoOrderedPair';
+import DemoOrderedPattern from './DemoOrderedPattern';
+import DemoCandidateList from './DemoCandidateList';
 import ImageGrid from '../dither/ImageGrid';
+import Header from './Header';
+
+<Header />
 
 In the [first part](/articles/dither) of this series, we learned what dithering is, why we might want to use it, and a few different ways to apply dithering to an image. So far we've only seen pure black and white implementations. In this article we'll dive deeper into proper implementation of dithering algorithms, taking a look at some issues we skipped over last time and the color versions of these algorithms.
 
@@ -31,7 +38,7 @@ Monitors benefit from encoding color in the same non-linear way: brightness beco
 
 This non-linear encoding is usually achieved by means of a power function, with brightness values between 0 and 1. This makes the midtones darker, while keeping black and white values the same:
 
-**gamma curve demo**
+<DemoGammaCurve />
 
 The exponent of this power function is called *gamma*. Most screens use a gamma value between 2.2 and 2.4, which gives an output of about 20% brightness for an input of 50%.
 
@@ -41,7 +48,7 @@ When dithering, we need to account for this curve: since we're telling the monit
 
 The demo below lets you adjust the gamma value used for dithering a simple black-to-white gradient:
 
-{/* <DemoGammaGradient /> */}
+<DemoGammaGradient />
 
 With a gamma of 1.0, or no gamma correction, the dithered gradient looks brighter than the original. Try adjusting gamma until both gradients look roughly the same. The value should be close to your display's gamma setting.
 
@@ -133,24 +140,7 @@ Once we have this, finding the closest color in a palette is as simple as compar
 
 Let's apply the color comparison technique to one of the dithering methods we learned in the last part. For the examples that follow, we'll be using this palette:
 
-{/* <PaletteSwatches palette={[
-  '#080000',
-  '#201A0B',
-  '#432817',
-  '#492910',
-  '#234309',
-  '#5D4F1E',
-  '#9C6B20',
-  '#A9220F',
-  '#2B347C',
-  '#2B7409',
-  '#D0CA40',
-  '#E8A077',
-  '#6A94AB',
-  '#D5C4B3',
-  '#FCE76E',
-  '#FCFAE2',
-]} /> */}
+<PaletteSwatches palette={NicePalette} />
 
 Error diffusion is the easiest algorithm to convert for arbitrary color palettes, since the way it does color comparisons and calculates error is very simple. We can esentially just "plug in" our `findClosestFromPalette` function and swap numeric brightness values for colors:
 ```
@@ -239,11 +229,11 @@ You may have taken a look at the code and immediately cringed at the triple-nest
 
 So, speed is not great, but how does it perform? This is what the process looks like when applied to an image:
 
-{/* <DemoOrderedPair type="bayer" imageUrl="/content/articles/dither2/car-original" /> */}
+<DemoOrderedPair type="bayer" imageUrl="/fs/Documents/Articles/assets/dither2/car-original" />
 
 Not great. It's mixing very different colors together and we're getting all kinds of weird patterns and artifacts. This happens because we told our program to find whichever mix is closest to the original color, but we didn't consider whether it would look good. One way to improve the result is by avoiding a mix of two very different colors. Without this restriction, the program might try, for example, to approximate a dark blue by mixing bright cyan and black, rather than using a slightly diffrent shade of blue already in the palette. The result will be, on average, mathematically correct, but it will look bad.
 
-What we can do to solve this issue is to change our mix comparison function to penalize a mix of colors very distant from each other. So our code becomes:
+One thing we can do to solve this issue is change our mix comparison function to penalize a mix of colors very distant from each other. So our code becomes:
 ```
 ...
 colorDistance = distance(color1, color2)
@@ -255,11 +245,7 @@ Here, we introduced a parameter `k` to control the weight of the color distance 
 
 In this example, we control `k` indirectly with a `variance` parameter in an exponential scale: an increase of 1 in the value halves the penalty for mixing distant colors. The ideal value is highly dependent on the image and the palette being used. In this case, the best results seem to be between `3.0` and `4.0`:
 
-{/* <DemoOrderedPair
-  type="bayer"
-  imageUrl="/content/articles/dither2/car-original"
-  useVariance
-/> */}
+<DemoOrderedPair type="bayer" imageUrl="/fs/Documents/Articles/assets/dither2/car-original" useVariance />
 
 This looks better, but the penalties are a bit too harsh and we're getting a lot of solid color "blobs". We can work around this by reducing the penalty for mixes closer to 50/50 (a ratio of 0.5), thus favoring them over solid colors:
 ```
@@ -272,12 +258,7 @@ mixDistance = distance(mixColor, targetColor) + k * colorDistance * (0.5 + rmh)
 
 The change is most noticeable with lower variance, where the result looks significantly better:
 
-{/* <DemoOrderedPair
-  type="bayer"
-  imageUrl="/content/articles/dither2/car-original"
-  useVariance
-  useRatio
-/> */}
+<DemoOrderedPair type="bayer" imageUrl="/fs/Documents/Articles/assets/dither2/car-original" useVariance useRatio />
 
 We're getting somewhere, but the image still isn't great. Low variance results in very obvious color banding and spots, and high variance produces a very noisy image. The colors aren't very accurate to the original image, either. That on top of the mix search being painfully slow with larger palettes makes this not a great option overall, and we can get much better results with error diffusion.
 
@@ -291,7 +272,7 @@ This is an expanded version of a dithering algorithm named *pattern dithering*, 
 
 Pattern dithering is by far the most powerful of the bunch. It consistently produces great looking images with any palette, and doesn't need any of the patchwork we had to do with our previous attempt. Let's see what it looks like:
 
-// demo
+<DemoOrderedPattern type="bayer" imageUrl="/fs/Documents/Articles/assets/dither2/car-original" gamma />
 
 It's also much faster than the two-color mix approach we talked about, scaling better with large palettes. It's not quite real-time fast on the GPU (optimizing it to run in real-time as a post processing effect is an interesting topic I might like to touch upon in the future), but it's still able to render fairly large images in a matter of milliseconds. So how does it work?
 
@@ -315,13 +296,11 @@ for (x, y) in input
 
 How this works is far from obvious, so let's break it apart. We'll get to how we build the candidate list in a second, but first, how do we actually use it? A 64-color list wouldn't seem to make sense with a 16-color palette.
 
-The key to this algorithm is to repeat colors within the candidate list. Because we're accessing the candidate list directly with the threshold map, it follows that the resulting mix is the average of all the colors in the list, repetitions included. Then, how many times a given color appears in the list is proportional to its "weight" in the mix.
+The key to this algorithm is to repeat colors within the candidate list. Because we're accessing the candidate list directly with the threshold map, it follows that the resulting mix is the average of all the colors in the list, repetitions included. Then, how many times a given color appears in the list is proportional to its "weight" in the mix. You can think of it like mixing paint: the more of a color you put in, the more the end result will look like that color.
 
-More precisely, for any given pixel, the probability it will take a color `c` is `#c / n`, where `#c` is the number of times the color appears in the list and `n` the size of the list.
+More precisely, for any given pixel, the probability it will take a color `c` is `#c/n`, where `#c` is the number of times the color appears in the list and `n` the size of the list. This may be difficult to get across in words, so here's a visual demonstration: try making changes to the color list and see how that affects the final color.
 
-This may be hard to understand in words, so here's a visual demonstration: try making changes to the color list and see how that affects the final color.
-
-// demo
+<DemoCandidateList />
 
 Now we know how indexing the candidate list with a threshold map gives us a (close to) uniform mix of the colors in it, let's take a closer look at how it's actually built. This is, essentially, the core of pattern dithering. Interestingly, it shares some similarities with error diffusion dithering.
 
@@ -344,13 +323,13 @@ Couple things to note about this implementation. First is that the candidate lis
 
 The other thing to note is the `errorCoeff` constant, which can be parametrized. This is a straight multiplier on the error, and we can use it to control the "intensity" of dithering. A value of 0 nullifies the error entirely and gives the same result as no dithering whatsoever, while a value of 1 takes the full error into account. It's an interesting parameter to play around with:
 
-// demo
+<DemoOrderedPattern type="bayer" imageUrl="/fs/Documents/Articles/assets/dither2/car-original" errorSlider />
 
 Also interesting is that it seems to have a non-linear response, being rather closer to a logarithmic scale. With the right palette, very low values can give some aesthetically pleasing results, with plenty of solid colors and nice dithered gradients where those colors meet. For most images I find a value of around 0.10 to 0.20 looks best.
 
-Finally, this isn't actually the full algorithm, as the real version has gamma correction built in. The way it does this is by gamma-correcting the palette colors as well as the pixel, and calculating distance between the gamma-corrected colors instead. This makes gamma curves look much better:
+Finally, this isn't actually the full algorithm, as the real version has gamma correction built in. The way it does this is by gamma-correcting the palette colors as well as the pixel, and calculating distance between the gamma-corrected colors instead. This makes the colors look much better:
 
-// demo
+<DemoOrderedPattern type="bayer" imageUrl="/fs/Documents/Articles/assets/dither2/car-original" errorSlider gamma />
 
 And here's the pseudocode modified to account for gamma correction:
 ```
@@ -370,9 +349,19 @@ function makeCandidateList(palette, pixel, listSize)
   return candidates.map(color -> ungamma(color))
 ```
 
-And that's it! The actual code is a bit different, moving as much as possible outside of the per-pixel calculations for performance reasons, but functionality is the same. The results are great:
+And that's it! The actual code is a bit different, moving as much as possible outside of the per-pixel calculations for performance reasons, but functionality is the same. The results are great, and just like black-and-white ordered dithering, it works with any kind of threshold map:
 
-// demo
+<DemoOrderedPattern
+  type="blueNoise"
+  sizes={[
+    { value: '16', name: '16×16' },
+    { value: '64', name: '64×64' },
+  ]}
+  initial="64"
+  imageUrl="/fs/Documents/Articles/assets/dither2/car-original"
+  errorSlider
+  gamma
+/>
 
 ## Conclusion
 

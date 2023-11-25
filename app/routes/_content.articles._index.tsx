@@ -1,6 +1,7 @@
 import { Link, type V2_MetaFunction } from '@remix-run/react';
 import articles from '~/content/md/articles';
 import DitherCard from '~/content/mdx/dither/dither.card';
+import Dither2Card from '~/content/mdx/dither2/dither2.card';
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -30,6 +31,9 @@ export default function PostsIndexRoute() {
       <div className="grid grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-2">
         <Link to="introduction-to-dithering">
           <DitherCard />
+        </Link>
+        <Link to="dithering-color">
+          <Dither2Card />
         </Link>
       </div>
 

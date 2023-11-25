@@ -36,7 +36,7 @@ void main() {
   if (u_useThreshold > 0.0) {  
     if (u_gamma > 0.0) color = gamma(color);
     float t = texture2D(u_threshold, thresholdCoord).x;
-    color = luma(color) < t ? vec3(0.0) : vec3(1.0);
+    color = luma(color) < (t + 1.0 / (u_thres_size * u_thres_size * 2.0)) ? vec3(0.0) : vec3(1.0);
   }
   gl_FragColor = vec4(color, 1.0);
 }`;
