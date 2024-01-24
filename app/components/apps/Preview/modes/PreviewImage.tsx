@@ -7,15 +7,17 @@ import useDesktopStore from '~/stores/desktop';
 import { MAX_INITIAL_SIZE, UI_SIZE, ZOOM_STOPS } from '../constants';
 import Menu from '~/components/ui/Menu';
 import type { PreviewModeProps } from '../types';
+import { sanityImage } from '~/utils/sanity.image';
+import type { ImageFile } from '~/content/types';
 
 export default function PreviewImage({ commonMenu }: PreviewModeProps) {
   const { id, minWidth, minHeight } = useWindow();
   const { moveAndResize } = useDesktopStore();
 
   const [state, setState] = useAppState('preview');
-  const resourceUrl = '/fs' + state.filePath;
 
-  if (state.file?.type !== 'image') throw new Error('Wrong file type');
+  if (state.file?._type !== 'fileImage') throw new Error('Wrong file type');
+  const image = sanityImage((state.file as ImageFile).content);
 
   const viewportRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -176,8 +178,8 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
           <div className="flex w-min border border-default bg-surface-light bg-checkered-lg select-none">
             <img
               ref={imageRef}
-              src={resourceUrl}
-              alt={state.file?.altText}
+              src={image.width(2000).quality(100).url()} // TODO: allow adjusting this somewhere?
+              alt={state.file.name}
               style={{ width, minWidth: width }}
             />
           </div>

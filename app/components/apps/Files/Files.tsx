@@ -14,7 +14,7 @@ import FilesGridView from './views/FilesGridView';
 import FilesListView from './views/FilesListView';
 import FilesDetailsView from './views/FilesDetailsView';
 // import getReadableSize from './utils/getReadableSize';
-import AddressBar from './AddressBar';
+// import AddressBar from './AddressBar';
 import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 import FilesTreeView from './views/FilesTreeView';
 import FS_ROOT from '~/content/dir';

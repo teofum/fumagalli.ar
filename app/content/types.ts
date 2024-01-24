@@ -1,3 +1,5 @@
+import type { Image } from '~/schemas/image';
+
 /**
  * Filesystem object types
  */
@@ -16,6 +18,8 @@ export interface Directory extends FSObjectBase {
 
 export interface ImageFile extends FSObjectBase {
   _type: 'fileImage';
+
+  content: Image;
 }
 
 export interface MarkdownFile extends FSObjectBase {
@@ -34,11 +38,6 @@ export interface AppFile extends FSObjectBase {
   _type: 'app';
 }
 
-export type AnyFile =
-  | ImageFile
-  | MarkdownFile
-  | MDXFile
-  | DosRomFile
-  | AppFile;
+export type AnyFile = ImageFile | MarkdownFile | MDXFile | DosRomFile | AppFile;
 
 export type FSObject = Directory | AnyFile;

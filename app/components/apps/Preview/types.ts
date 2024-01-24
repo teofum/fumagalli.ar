@@ -19,7 +19,6 @@ export function isPreviewable(file: AnyFile): file is PreviewSupportedFile {
 export interface PreviewState {
   // General
   file?: PreviewSupportedFile;
-  filePath?: string;
 
   // Image preview
   zoom?: number;
