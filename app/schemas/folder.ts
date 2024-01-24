@@ -3,7 +3,7 @@ import imageSchema from './image';
 
 const itemStubSchema = z.object({
   _id: z.string(),
-  _type: z.enum(['folder', 'fileImage', 'fileRichText']),
+  _type: z.enum(['folder', 'fileImage', 'fileRichText', 'fileApp']),
   _createdAt: z.string(),
   _updatedAt: z.string(),
   name: z.string(),

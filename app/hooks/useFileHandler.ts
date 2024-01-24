@@ -1,7 +1,7 @@
 // import { dosEmu } from '~/components/apps/DOSEmu';
 import { preview } from '~/components/apps/Preview';
 import { previewSupportedFileTypes } from '~/components/apps/Preview/types';
-// import { getApp } from '~/components/apps/renderApp';
+import { getApp } from '~/components/apps/renderApp';
 import type { ItemStub } from '~/schemas/folder';
 import useDesktopStore from '~/stores/desktop';
 import useSystemStore from '~/stores/system';
@@ -20,14 +20,14 @@ export default function useFileHandler() {
     if (isPreviewable(stub)) {
       launch(preview({ fileStub: stub }));
       handled = true;
+    } else if (stub._type === 'fileApp') {
+      const app = getApp(stub.name.split('.')[0]);
+      if (app) {
+        launch(app);
+        handled = true;
+      }
     }
-    // else if (file._type === 'app') {
-    //   const app = getApp(file.name.split('.')[0]);
-    //   if (app) {
-    //     launch(app);
-    //     handled = true;
-    //   }
-    // } else if (file._type === 'dos') {
+    // else if (file._type === 'dos') {
     //   // TODO restore DOS ROM files
     //   // launch(dosEmu({ bundleUrl: `/fs${path}` }));
     // }
