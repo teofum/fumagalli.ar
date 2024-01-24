@@ -6,6 +6,8 @@ import type { Image } from '~/schemas/image';
  */
 interface FSObjectBase {
   _id: string;
+  _createdAt: string;
+  _updatedAt: string;
   name: string;
 }
 

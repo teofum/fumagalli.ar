@@ -7,8 +7,8 @@ import type FilesViewProps from './FilesViewProps';
 import filterByType from '../utils/filterByType';
 import { useAppState } from '~/components/desktop/Window/context';
 
-function formatDate(seconds: number) {
-  return new Date(seconds * 1000).toLocaleString('en-US', {
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleString('en-US', {
     month: 'numeric',
     day: 'numeric',
     year: 'numeric',
@@ -62,22 +62,22 @@ export default function FilesDetailsView({
           </tr>
         </thead>
         <tbody>
-          {filterByType(dir.items, state.typeFilter).map((item) => (
+          {filterByType(dir.items ?? [], state.typeFilter).map((item) => (
             <tr key={item.name}>
               <td className="min-w-32 w-32 max-w-32 py-0 px-0.5">
                 <FilesListItem item={item} open={open} select={select} />
               </td>
               <td className="text-right py-0 px-1 min-w-16 w-16 max-w-16">
-                {item.class === 'file' ? getReadableSize(item.size) : null}
+                {item._type !== 'folder' ? getReadableSize(0) : null}
               </td>
               <td className="py-0 px-1 min-w-32 w-32 max-w-32">
                 {getReadableFileType(item)}
               </td>
               <td className="py-0 px-1 min-w-32 w-32 max-w-32">
-                {formatDate(item.createdAt)}
+                {formatDate(item._createdAt)}
               </td>
               <td className="py-0 px-1 min-w-32 w-32 max-w-32">
-                {formatDate(item.updatedAt)}
+                {formatDate(item._updatedAt)}
               </td>
               <td />
             </tr>
