@@ -7,8 +7,8 @@ export const previewSupportedFileTypes: AnyFile['_type'][] = [
   'fileRichText',
 ];
 
-export function isPreviewable(file: AnyFile): file is PreviewSupportedFile {
-  return previewSupportedFileTypes.includes(file._type);
+export function isPreviewable(file: ItemStub) {
+  return previewSupportedFileTypes.includes(file._type as any);
 }
 
 export interface PreviewState {

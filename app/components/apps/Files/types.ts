@@ -1,4 +1,5 @@
 import type { AnyFile } from '~/schemas/file';
+import type { ItemStub } from '~/schemas/folder';
 
 export type FilesView = 'grid' | 'list' | 'details' | 'tree' | 'columns';
 
@@ -24,7 +25,7 @@ export interface FilesState {
   backCount: number;
 
   typeFilter?: AnyFile['_type'][];
-  modalCallback?: (file: AnyFile) => void;
+  modalCallback?: (file: ItemStub) => void;
 }
 
 export const defaultFilesState: FilesState = {

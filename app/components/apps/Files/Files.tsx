@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import type { Folder } from '~/schemas/folder';
-import type { FSObject } from '~/content/types';
+import type { Folder, ItemStub } from '~/schemas/folder';
 import { getAppResourcesUrl } from '~/content/utils';
 
 import Button, { IconButton } from '~/components/ui/Button';
@@ -33,7 +32,7 @@ export default function Files() {
 
   const [state, setState] = useAppState('files');
   const [settings, set] = useAppSettings('files');
-  const [selected, setSelected] = useState<FSObject | null>(null);
+  const [selected, setSelected] = useState<ItemStub | null>(null);
 
   const { load: loadRoot, data: rootDir } = useFetcher<Folder>();
   const { load, data: dir } = useFetcher<Folder>();
@@ -112,7 +111,7 @@ export default function Files() {
     setSelected(null);
   };
 
-  const open = (item: FSObject) => {
+  const open = (item: ItemStub) => {
     if (item._type === 'folder') {
       navigate(item._id);
     } else if (state.modalCallback) {
@@ -288,9 +287,7 @@ export default function Files() {
             {selected ? (
               <span>
                 {selected.name}:{' '}
-                {selected._type === 'folder'
-                  ? `Folder (${selected.items?.length ?? 0} objects)`
-                  : `File`}
+                {selected._type === 'folder' ? `Folder` : `File`}
               </span>
             ) : null}
           </div>
@@ -309,7 +306,7 @@ export default function Files() {
             className="py-1 px-2 w-20"
             onMouseDown={(ev) => ev.preventDefault()}
             onClick={() => selected && open(selected)}
-            disabled={selected?._type === 'folder'}
+            disabled={!selected || selected._type === 'folder'}
           >
             <span>Choose file</span>
           </Button>

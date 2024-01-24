@@ -57,8 +57,8 @@ export default function Preview() {
     modal(
       files({
         typeFilter: previewSupportedFileTypes,
-        modalCallback: (file) => {
-          if (isPreviewable(file)) setState({ file });
+        modalCallback: (stub) => {
+          if (isPreviewable(stub)) setState({ fileStub: stub });
         },
       }),
     );
