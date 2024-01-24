@@ -15,8 +15,6 @@ interface BranchProps {
   open: (item: FSObject, path?: string) => void;
   navigate: (path: string, absolute?: boolean) => void;
   select: React.Dispatch<React.SetStateAction<FSObject | null>>;
-
-  openId?: string;
 }
 
 function Branch({
@@ -25,7 +23,6 @@ function Branch({
   open,
   navigate,
   select,
-  openId,
 }: BranchProps) {
   const [expanded, setExpanded] = useState(root);
   const [state] = useAppState('files');
@@ -98,7 +95,6 @@ function Branch({
                     open={open}
                     navigate={navigate}
                     select={select}
-                    openId={openId}
                   />
                 ) : (
                   <Leaf
@@ -155,8 +151,7 @@ export default function FilesTreeView({
   open,
   navigate,
   select,
-  openId,
-}: FilesViewProps & { openId?: string }) {
+}: FilesViewProps) {
   return (
     <ScrollContainer className="flex-1">
       <Branch
@@ -165,7 +160,6 @@ export default function FilesTreeView({
         open={open}
         navigate={navigate}
         select={select}
-        openId={openId}
         root
       />
     </ScrollContainer>

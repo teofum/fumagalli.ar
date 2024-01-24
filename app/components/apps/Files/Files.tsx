@@ -17,7 +17,6 @@ import FilesDetailsView from './views/FilesDetailsView';
 import AddressBar from './AddressBar';
 import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 import FilesTreeView from './views/FilesTreeView';
-import FS_ROOT from '~/content/dir';
 import useDesktopStore from '~/stores/desktop';
 import cn from 'classnames';
 import FilesColumnsView from './views/FilesColumnsView';
@@ -35,6 +34,7 @@ export default function Files() {
   const [settings, set] = useAppSettings('files');
   const [selected, setSelected] = useState<FSObject | null>(null);
 
+  const { load: loadRoot, data: rootDir } = useFetcher<Directory>();
   const { load, data: dir } = useFetcher<Directory>();
 
   const fileHandler = useFileHandler();
@@ -42,11 +42,15 @@ export default function Files() {
   const isModal = state.modalCallback !== undefined;
 
   /**
-   * Initial load
+   * Data fetching
    */
   useEffect(() => {
     load(`/api/filesystem?id=${state.folderId}`);
   }, [state.folderId, load]);
+
+  useEffect(() => {
+    loadRoot(`/api/filesystem?id=root`);
+  }, [loadRoot]);
 
   /**
    * Set window title on dir change
@@ -110,13 +114,11 @@ export default function Files() {
   const open = (item: FSObject) => {
     if (item._type === 'folder') {
       navigate(item._id);
-    }
-    else if (state.modalCallback) {
+    } else if (state.modalCallback) {
       // Modal file handling
       state.modalCallback(item);
       close();
-    }
-    else {
+    } else {
       // Regular file handling
       if (!fileHandler.open(item))
         console.log('Unhandled file, possibly unknown type');
@@ -252,13 +254,14 @@ export default function Files() {
       <div className="flex-1 min-h-0 flex flex-row gap-0.5">
         {settings.sideBar === 'tree' ? (
           <div className="w-40 min-w-40 flex flex-col">
-            {/* <FilesTreeView
-              dir={FS_ROOT}
-              open={open}
-              navigate={navigate}
-              select={setSelected}
-              openId="root"
-            /> */}
+            {rootDir ? (
+              <FilesTreeView
+                dir={rootDir}
+                open={open}
+                navigate={navigate}
+                select={setSelected}
+              />
+            ) : null}
           </div>
         ) : null}
         {dir ? (
@@ -296,14 +299,16 @@ export default function Files() {
       {isModal ? (
         <div className="flex flex-row gap-1 p-2 items-center">
           <span className="mr-auto">
-            {/* {selected?.class === 'file' ? selected.name : 'No file selected'} */}
+            {selected && selected._type !== 'folder'
+              ? selected.name
+              : 'No file selected'}
           </span>
 
           <Button
             className="py-1 px-2 w-20"
             onMouseDown={(ev) => ev.preventDefault()}
             onClick={() => selected && open(selected)}
-            // disabled={selected?.class !== 'file'}
+            disabled={selected?._type === 'folder'}
           >
             <span>Choose file</span>
           </Button>
