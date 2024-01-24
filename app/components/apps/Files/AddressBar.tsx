@@ -92,10 +92,11 @@ export default function AddressBar({ dir, navigate }: AddressBarProps) {
   //   }
   // };
 
-  const path: Directory[] = [];
+  let path: Directory[] = [];
   if (dir?.parent) path.unshift(dir.parent);
   if (dir?.parent?.parent) path.unshift(dir.parent.parent);
   if (dir?.parent?.parent?.parent) path.unshift(dir.parent.parent.parent);
+  path = path.filter(p => p._id !== 'root');
 
   return (
     <DropdownMenu.Root open={open} onOpenChange={setOpen}>

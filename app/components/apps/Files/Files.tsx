@@ -254,7 +254,6 @@ export default function Files() {
           <div className="w-40 min-w-40 flex flex-col">
             <FilesTreeView
               dir={FS_ROOT}
-              path="/"
               open={open}
               navigate={navigate}
               select={setSelected}
@@ -266,7 +265,6 @@ export default function Files() {
           <div className="flex-1 min-w-0 flex flex-col">
             <ViewComponent
               dir={dir}
-              path={''}
               open={open}
               navigate={navigate}
               select={setSelected}

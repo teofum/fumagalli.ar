@@ -133,6 +133,7 @@ export default function FilesTreeView({
   select,
   openPath,
 }: FilesViewProps & { openPath?: string[] }) {
+  return null;
   return (
     <ScrollContainer className="flex-1">
       <Branch
