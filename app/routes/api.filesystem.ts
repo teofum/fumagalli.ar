@@ -20,6 +20,7 @@ const folderQuery = (id: string = 'root') => `
     _updatedAt,
     name,
     icon,
+    'size': content.asset->size,
   }
 }`;
 

@@ -68,8 +68,9 @@ export default function FilesDetailsView({
                 <FilesListItem item={item} open={open} select={select} />
               </td>
               <td className="text-right py-0 px-1 min-w-16 w-16 max-w-16">
-                {item._type !== 'folder' ? getReadableSize(0) : null}
-                {/* TODO file sizes, can we even do this with sanity? */}
+                {item._type !== 'folder'
+                  ? getReadableSize(item.size ?? 0)
+                  : null}
               </td>
               <td className="py-0 px-1 min-w-32 w-32 max-w-32">
                 {getReadableFileType(item)}

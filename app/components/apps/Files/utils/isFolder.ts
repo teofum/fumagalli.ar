@@ -1,8 +1,5 @@
-import type { FSObject } from '~/content/types';
-import type { Folder } from '~/schemas/folder';
+import type { ItemStub } from '~/schemas/folder';
 
-export default function isFolder(
-  fileOrFolder: FSObject,
-): fileOrFolder is Folder {
+export default function isFolder(fileOrFolder: ItemStub) {
   return fileOrFolder._type === 'folder';
 }

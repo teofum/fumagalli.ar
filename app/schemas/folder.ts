@@ -13,6 +13,7 @@ const itemStubSchema = z.object({
       icon32: imageSchema,
     })
     .optional(),
+  size: z.number().optional(),
 });
 
 export type ItemStub = z.infer<typeof itemStubSchema>;

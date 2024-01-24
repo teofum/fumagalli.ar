@@ -7,6 +7,9 @@ import { sanityClient } from '~/utils/sanity.server';
 const fileQuery = (id: string) => `
 *[_type == "fileImage" && _id == "${id}"][0] {
   ...,
+  content {
+    ...,
+  },
 }`;
 
 // Loads an image file through the server, preventing canvases from becoming tainted

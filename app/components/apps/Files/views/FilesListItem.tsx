@@ -1,11 +1,11 @@
 import cn from 'classnames';
-import type { FSObject } from '~/content/types';
 import getIconUrl from '../utils/getIconUrl';
+import type { ItemStub } from '~/schemas/folder';
 
 interface DetailsItemProps {
-  item: FSObject;
-  open: (item: FSObject) => void;
-  select: React.Dispatch<React.SetStateAction<FSObject | null>>;
+  item: ItemStub;
+  open: (item: ItemStub) => void;
+  select: React.Dispatch<React.SetStateAction<ItemStub | null>>;
   onClick?: (ev: React.MouseEvent) => void;
   className?: string;
 }
