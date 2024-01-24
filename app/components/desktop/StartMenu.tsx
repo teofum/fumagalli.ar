@@ -110,7 +110,11 @@ export default function StartMenu() {
               <Menu.Item
                 label="Projects"
                 icon="/fs/System Files/Icons/FileType/folder_16.png"
-                onSelect={() => launch(files({ folderId: 'root' }))}
+                onSelect={() =>
+                  launch(
+                    files({ folderId: '2d282fb9-580f-47c1-a419-1db426c6a2c9' }),
+                  )
+                }
               />
             </Menu.Sub>
 

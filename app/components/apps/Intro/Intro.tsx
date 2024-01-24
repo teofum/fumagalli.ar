@@ -10,8 +10,8 @@ const resources = '/fs/Applications/intro/resources';
 export default function Intro() {
   const { launch } = useDesktopStore();
 
-  const openFolder = (path: string) => {
-    launch(files({ path }));
+  const openFolder = (folderId: string) => {
+    launch(files({ folderId }));
   };
 
   return (
@@ -45,7 +45,7 @@ export default function Intro() {
             <div className="flex flex-row gap-1">
               <Button
                 className="py-1 px-2 w-20"
-                onClick={() => openFolder('/Documents/Articles')}
+                onClick={() => openFolder('679b7214-24c9-439e-86bc-cd86cc215dc3')}
               >
                 <div className="flex flex-col items-center gap-1 pt-1">
                   <img src={`${resources}/articles.png`} alt="" />
@@ -54,7 +54,7 @@ export default function Intro() {
               </Button>
               <Button
                 className="py-1 px-2 w-20"
-                onClick={() => openFolder('/Documents/Photos')}
+                onClick={() => openFolder('49fba51f-c8ee-450d-bc21-522066ceb7ea')}
               >
                 <div className="flex flex-col items-center gap-1 pt-1">
                   <img src={`${resources}/photos.png`} alt="" />
@@ -63,7 +63,7 @@ export default function Intro() {
               </Button>
               <Button
                 className="py-1 px-2 w-20"
-                onClick={() => openFolder('/Documents/Projects')}
+                onClick={() => openFolder('2d282fb9-580f-47c1-a419-1db426c6a2c9')}
               >
                 <div className="flex flex-col items-center gap-1 pt-1">
                   <img src={`${resources}/projects.png`} alt="" />
