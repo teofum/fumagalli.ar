@@ -5,9 +5,9 @@ import { sanityImage } from '~/utils/sanity.image';
 export const portableTextComponents: PortableTextComponents = {
   types: {
     image: ({ value, isInline }) => {
-      return "heck";
       return (
         <img
+          className="mt-2"
           src={sanityImage(value)
             .width(isInline ? 100 : 1280)
             .fit('max')

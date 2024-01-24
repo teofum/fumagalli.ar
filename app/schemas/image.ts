@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
 const imageSchema = z.object({
+  _type: z.literal('image'),
   asset: z.object({
     _type: z.string(),
     _ref: z.string(),
   }),
-
   crop: z
     .object({
       top: z.number(),
@@ -14,7 +14,6 @@ const imageSchema = z.object({
       right: z.number(),
     })
     .optional(),
-
   hotspot: z
     .object({
       height: z.number(),
