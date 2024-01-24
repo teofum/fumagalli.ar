@@ -1,5 +1,7 @@
 import ScrollContainer from '~/components/ui/ScrollContainer';
-import type { AnyFile, Directory, FSObject } from '~/content/types';
+import type { FSObject } from '~/content/types';
+import type { Folder } from '~/schemas/folder';
+import type { AnyFile } from '~/schemas/file';
 import FilesListItem from './FilesListItem';
 import { useEffect, useState } from 'react';
 import TreeLess from '~/components/ui/icons/TreeLess';
@@ -10,7 +12,7 @@ import { useAppState } from '~/components/desktop/Window/context';
 import { useFetcher } from '@remix-run/react';
 
 interface BranchProps {
-  item: Directory;
+  item: Folder;
   root?: boolean;
   open: (item: FSObject, path?: string) => void;
   navigate: (path: string, absolute?: boolean) => void;

@@ -1,4 +1,4 @@
-import type { AnyFile } from '~/content/types';
+import type { AnyFile } from '~/schemas/file';
 
 export type FilesView = 'grid' | 'list' | 'details' | 'tree' | 'columns';
 

@@ -1,6 +1,6 @@
-import type { Directory } from './types';
+import type { Folder } from './types';
 
-const FS_ROOT: Directory = {
+const FS_ROOT: Folder = {
   class: 'dir',
   name: 'My Computer',
   createdAt: 0,

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
-import type { Directory, FSObject } from '~/content/types';
+import type { Folder } from '~/schemas/folder';
+import type { FSObject } from '~/content/types';
 import { getAppResourcesUrl } from '~/content/utils';
 
 import Button, { IconButton } from '~/components/ui/Button';
@@ -34,8 +35,8 @@ export default function Files() {
   const [settings, set] = useAppSettings('files');
   const [selected, setSelected] = useState<FSObject | null>(null);
 
-  const { load: loadRoot, data: rootDir } = useFetcher<Directory>();
-  const { load, data: dir } = useFetcher<Directory>();
+  const { load: loadRoot, data: rootDir } = useFetcher<Folder>();
+  const { load, data: dir } = useFetcher<Folder>();
 
   const fileHandler = useFileHandler();
 

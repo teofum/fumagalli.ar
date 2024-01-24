@@ -8,11 +8,11 @@ import parseCSSColor from 'parse-css-color';
 import { useState } from 'react';
 import GroupBox from '~/components/ui/GroupBox';
 import resolvePath from '~/utils/resolvePath';
-import type { Directory } from '~/content/types';
+import type { Folder } from '~/schemas/folder';
 import Monitor from './Monitor';
 
 const DEFAULT_BACKGROUNDS = (
-  resolvePath(['System Files', 'Backgrounds']) as Directory
+  resolvePath(['System Files', 'Backgrounds']) as Folder
 ).items
   .filter((item) => item.class === 'file' && item.type === 'image')
   .map((item) => ({

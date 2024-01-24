@@ -4,7 +4,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 // import fuzzysort from 'fuzzysort';
 // import cn from 'classnames';
 
-import type { Directory } from '~/content/types';
+import type { Folder } from '~/schemas/folder';
 import Button from '~/components/ui/Button';
 import ArrowDown from '~/components/ui/icons/ArrowDown';
 // import useFileHandler from '~/hooks/useFileHandler';
@@ -46,7 +46,7 @@ import ArrowDown from '~/components/ui/icons/ArrowDown';
 // }
 
 interface AddressBarProps {
-  dir?: Directory;
+  dir?: Folder;
   navigate: (to: string) => void;
 }
 
@@ -92,7 +92,7 @@ export default function AddressBar({ dir, navigate }: AddressBarProps) {
   //   }
   // };
 
-  let path: Directory[] = [];
+  let path: Folder[] = [];
   if (dir?.parent) path.unshift(dir.parent);
   if (dir?.parent?.parent) path.unshift(dir.parent.parent);
   if (dir?.parent?.parent?.parent) path.unshift(dir.parent.parent.parent);

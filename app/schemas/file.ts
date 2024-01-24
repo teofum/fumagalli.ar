@@ -1,17 +1,30 @@
 import { z } from 'zod';
 import imageSchema from './image';
+import blockSchema from './block';
 
-const imageFileSchema = z.object({
+const baseFileSchema = z.object({
   _id: z.string(),
-  _type: z.literal('fileImage'),
   _createdAt: z.string(),
   _updatedAt: z.string(),
   name: z.string(),
+});
+
+const richTextFileSchema = baseFileSchema.extend({
+  _type: z.literal('fileRichText'),
+  content: z.union([blockSchema, imageSchema]).array(),
+});
+
+export type RichTextFile = z.infer<typeof richTextFileSchema>;
+
+const imageFileSchema = baseFileSchema.extend({
+  _type: z.literal('fileImage'),
   content: imageSchema,
 });
 
-const fileSchema = imageFileSchema; // z.union([imageFileSchema]);
+export type ImageFile = z.infer<typeof imageFileSchema>;
+
+const fileSchema = z.union([imageFileSchema, richTextFileSchema]);
 
 export default fileSchema;
 
-export type AnyFile = z.infer<typeof fileSchema>;
+export type AnyFile = ImageFile | RichTextFile;

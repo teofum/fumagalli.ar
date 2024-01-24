@@ -1,5 +1,7 @@
 import ScrollContainer from '~/components/ui/ScrollContainer';
-import type { AnyFile, Directory, FSObject } from '~/content/types';
+import type { Folder } from '~/schemas/folder';
+import type { AnyFile } from '~/schemas/file';
+import type { FSObject } from '~/content/types';
 import { useLayoutEffect, useState } from 'react';
 import TreeLess from '~/components/ui/icons/TreeLess';
 import TreeMore from '~/components/ui/icons/TreeMore';
@@ -7,7 +9,7 @@ import resolvePath from '~/utils/resolvePath';
 import cn from 'classnames';
 import { useAppState } from '~/components/desktop/Window/context';
 
-const HELP_ROOT = resolvePath(['Applications', 'help', 'content']) as Directory;
+const HELP_ROOT = resolvePath(['Applications', 'help', 'content']) as Folder;
 
 function parsePath(path: string) {
   if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
@@ -76,7 +78,7 @@ function HelpListItem({
 }
 
 interface BranchProps {
-  item: Directory;
+  item: Folder;
   path: string;
   root?: boolean;
   open: (path: string) => void;
@@ -139,7 +141,7 @@ function Branch({ item, path, root = false, open, openPath }: BranchProps) {
                 .map((child) => (
                   <Branch
                     key={child.name}
-                    item={child as Directory}
+                    item={child as Folder}
                     path={`${path}/${child.name}`}
                     open={open}
                     openPath={openPath}
@@ -213,7 +215,7 @@ export default function HelpTreeView({ setPath }: HelpTreeViewProps) {
         .map((child) => (
           <Branch
             key={child.name}
-            item={child as Directory}
+            item={child as Folder}
             path={`/${child.name}`}
             open={setPath}
             openPath={state.path}

@@ -5,7 +5,7 @@ import { useAppState } from '~/components/desktop/Window/context';
 import filterByType from '../utils/filterByType';
 import { Fragment, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import cn from 'classnames';
-import type { Directory } from '~/content/types';
+import type { Folder } from '~/schemas/folder';
 
 export default function FilesColumnsView({
   dir,
@@ -14,7 +14,7 @@ export default function FilesColumnsView({
   select,
 }: FilesViewProps) {
   const [state] = useAppState('files');
-  const [stack, setStack] = useState<Directory[]>([]);
+  const [stack, setStack] = useState<Folder[]>([]);
 
   const lastNavigation = useRef('');
   useEffect(() => {

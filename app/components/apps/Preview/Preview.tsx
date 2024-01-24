@@ -7,7 +7,7 @@ import {
   type PreviewSupportedFile,
   isPreviewable,
 } from './types';
-import PreviewMarkdown from './modes/PreviewMarkdown';
+import PreviewRichText from './modes/PreviewRichText';
 import PreviewMDX from './modes/PreviewMDX';
 import PreviewImage from './modes/PreviewImage';
 import useDesktopStore from '~/stores/desktop';
@@ -16,10 +16,10 @@ import { files } from '../Files';
 
 const getPreviewMode = (fileType: PreviewSupportedFile['_type']) => {
   switch (fileType) {
-    case 'md':
-      return PreviewMarkdown;
-    case 'mdx':
-      return PreviewMDX;
+    case 'fileRichText':
+      return PreviewRichText;
+    // case 'mdx':
+    //   return PreviewMDX;
     case 'fileImage':
       return PreviewImage;
   }

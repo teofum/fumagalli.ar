@@ -1,15 +1,9 @@
-import type {
-  MarkdownFile,
-  ImageFile,
-  AnyFile,
-  MDXFile,
-} from '~/content/types';
+import { AnyFile, ImageFile, RichTextFile } from '~/schemas/file';
 
-export type PreviewSupportedFile = MarkdownFile | MDXFile | ImageFile;
+export type PreviewSupportedFile = ImageFile | RichTextFile;
 export const previewSupportedFileTypes: AnyFile['_type'][] = [
-  'md',
-  'mdx',
   'fileImage',
+  'fileRichText',
 ];
 
 export function isPreviewable(file: AnyFile): file is PreviewSupportedFile {

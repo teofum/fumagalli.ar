@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import merge from 'ts-deepmerge';
 
-import type { AnyFile, Directory } from '~/content/types';
+import type { AnyFile, Folder } from '~/schemas/folder';
 import {
   defaultTheme,
   type ThemeCustomization,
@@ -54,7 +54,7 @@ export interface FileAccess {
 
 export interface DirectoryAccess {
   time: number;
-  item: Directory;
+  item: Folder;
 }
 
 interface SystemState {
