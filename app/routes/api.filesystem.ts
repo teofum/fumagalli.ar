@@ -13,7 +13,14 @@ const folderQuery = (id: string = 'root') => `
       "parent": *[_type == "folder" && references(^._id)][0],
     },
   },
-  items[]->
+  items[]-> {
+    _id,
+    _type,
+    _createdAt,
+    _updatedAt,
+    name,
+    icon,
+  }
 }`;
 
 export async function loader({ request }: LoaderArgs) {

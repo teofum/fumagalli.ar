@@ -1,10 +1,9 @@
 import { z } from 'zod';
-import fileSchema from './file';
 import imageSchema from './image';
 
-const baseFolderSchema = z.object({
+const itemStubSchema = z.object({
   _id: z.string(),
-  _type: z.literal('folder'),
+  _type: z.enum(['folder', 'fileImage', 'fileRichText']),
   _createdAt: z.string(),
   _updatedAt: z.string(),
   name: z.string(),
@@ -16,6 +15,12 @@ const baseFolderSchema = z.object({
     .optional(),
 });
 
+export type ItemStub = z.infer<typeof itemStubSchema>;
+
+const baseFolderSchema = itemStubSchema.extend({
+  _type: z.literal('folder'),
+});
+
 type ParentFolder = z.infer<typeof baseFolderSchema> & {
   parent?: ParentFolder;
 };
@@ -24,14 +29,8 @@ const parentFolderSchema: z.ZodType<ParentFolder> = baseFolderSchema.extend({
   parent: z.lazy(() => parentFolderSchema.optional()),
 });
 
-const childFolderSchema = baseFolderSchema.extend({
-  items: z.any().array().optional(),
-});
-
 const folderSchema = baseFolderSchema.extend({
-  items: z.lazy(() =>
-    z.union([childFolderSchema, fileSchema]).array().optional(),
-  ),
+  items: itemStubSchema.array().optional(),
   parent: parentFolderSchema.optional(),
 });
 
