@@ -45,17 +45,15 @@ const MAX_DIR_HISTORY = 10; // Number of last accessed directories to keep
 // Schema version, ensures incompatible data isn't loaded
 // CHANGING THIS WILL WIPE ALL DATA FOR EVERYONE.
 // Update ONLY for breaking changes to the schema.
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
 
 export interface FileAccess {
   time: number;
-  path: string;
   item: AnyFile;
 }
 
 export interface DirectoryAccess {
   time: number;
-  path: string;
   item: Directory;
 }
 
@@ -144,7 +142,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
           fileHistory: [
             item,
             ...fileHistory.filter(
-              (historyItem) => historyItem.path !== item.path,
+              (historyItem) => historyItem.item._id !== item.item._id,
             ),
           ].slice(0, MAX_FILE_HISTORY),
         })),
@@ -153,7 +151,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
           dirHistory: [
             item,
             ...dirHistory.filter(
-              (historyItem) => historyItem.path !== item.path,
+              (historyItem) => historyItem.item._id !== item.item._id,
             ),
           ].slice(0, MAX_DIR_HISTORY),
         })),

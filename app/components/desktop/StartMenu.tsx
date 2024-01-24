@@ -119,12 +119,12 @@ export default function StartMenu() {
 
               <Menu.Separator />
 
-              {fileHistory.map(({ time, item, path }) => (
+              {fileHistory.map(({ time, item }) => (
                 <Menu.Item
                   key={`${time}_${item.name}`}
                   label={item.name}
-                  icon={`/fs/System Files/Icons/FileType/${item.type}_16.png`}
-                  onSelect={() => fileHandler.open(item, path)}
+                  icon={`/fs/System Files/Icons/FileType/${item._type}_16.png`}
+                  onSelect={() => fileHandler.open(item)}
                 />
               ))}
 

@@ -7,7 +7,7 @@ import {
 import { getApp } from '~/components/apps/renderApp';
 import type { AnyFile } from '~/content/types';
 import useDesktopStore from '~/stores/desktop';
-// import useSystemStore from '~/stores/system';
+import useSystemStore from '~/stores/system';
 
 function isPreviewable(file: AnyFile): file is PreviewSupportedFile {
   return previewSupportedFileTypes.includes(file._type);
@@ -15,7 +15,7 @@ function isPreviewable(file: AnyFile): file is PreviewSupportedFile {
 
 export default function useFileHandler() {
   const { launch } = useDesktopStore();
-  // const { saveFileToHistory } = useSystemStore();
+  const { saveFileToHistory } = useSystemStore();
 
   const open = (file: AnyFile) => {
     let handled = false;
@@ -33,9 +33,9 @@ export default function useFileHandler() {
       // launch(dosEmu({ bundleUrl: `/fs${path}` }));
     }
 
-    // if (handled && file._type !== 'app') {
-    //   saveFileToHistory({ time: Date.now(), path, item: file });
-    // }
+    if (handled && file._type !== 'app') {
+      saveFileToHistory({ time: Date.now(), item: file });
+    }
 
     return handled;
   };

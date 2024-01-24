@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import type { Directory, FSObject } from '~/content/types';
 import { getAppResourcesUrl } from '~/content/utils';
@@ -57,6 +57,24 @@ export default function Files() {
   }, [setTitle, id, parentId, dir]);
 
   /**
+   * Add visited folder to recents on dir change
+   */
+  const lastSavedId = useRef('');
+  useEffect(() => {
+    // Prevents crazy recents-adding loop when two windows are open to
+    // different folders
+    if (!dir || dir._id === lastSavedId.current) return;
+    lastSavedId.current = dir._id;
+
+    // Save next folder to recent
+    if (dirHistory[0]?.item._id !== dir._id) {
+      saveDirToHistory({ time: Date.now(), item: dir });
+    }
+
+    console.log('saved dir to history');
+  }, [dir, dirHistory, saveDirToHistory]);
+
+  /**
    * History
    */
   const canGoBack = state.history.length > state.backCount + 1;
@@ -79,11 +97,6 @@ export default function Files() {
    * File/directory open handler
    */
   const navigate = (to: string) => {
-    // Save next folder to recent
-    // if (dirHistory[0]?.path !== nextPwd) {
-    //   saveDirToHistory({ time: Date.now(), item: nextDir, path: nextPwd });
-    // }
-
     // Navigate
     const history = [
       to,
@@ -121,12 +134,12 @@ export default function Files() {
       <Menu.Bar>
         <Menu.Menu trigger={<Menu.Trigger>File</Menu.Trigger>}>
           <Menu.Sub label="Recent">
-            {dirHistory.map(({ time, item, path }) => (
+            {dirHistory.map(({ time, item }) => (
               <Menu.Item
                 key={`${time}_${item.name}`}
                 label={item.name}
                 icon="/fs/System Files/Icons/FileType/dir_16.png"
-                // onSelect={() => navigate(path)}
+                onSelect={() => navigate(item._id)}
               />
             ))}
           </Menu.Sub>
