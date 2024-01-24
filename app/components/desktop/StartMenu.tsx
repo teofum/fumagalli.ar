@@ -69,7 +69,7 @@ export default function StartMenu() {
                 ))}
               </Menu.Sub>
               {[
-                files({ path: '/Documents' }),
+                files({ folderId: '949f9fc6-19d4-479a-a1ec-c4a80cffb3a6' }),
                 paint,
                 ditherLab(),
                 about,
@@ -92,17 +92,25 @@ export default function StartMenu() {
               <Menu.Item
                 label="Articles"
                 icon="/fs/System Files/Icons/FileType/dir_16.png"
-                onSelect={() => launch(files({ path: '/Documents/Articles' }))}
+                onSelect={() =>
+                  launch(
+                    files({ folderId: '679b7214-24c9-439e-86bc-cd86cc215dc3' }),
+                  )
+                }
               />
               <Menu.Item
                 label="Photos"
                 icon="/fs/System Files/Icons/FileType/dir_16.png"
-                onSelect={() => launch(files({ path: '/Documents/Photos' }))}
+                onSelect={() =>
+                  launch(
+                    files({ folderId: '49fba51f-c8ee-450d-bc21-522066ceb7ea' }),
+                  )
+                }
               />
               <Menu.Item
                 label="Projects"
                 icon="/fs/System Files/Icons/FileType/dir_16.png"
-                onSelect={() => launch(files({ path: '/Documents/Projects' }))}
+                onSelect={() => launch(files({ folderId: 'root' }))}
               />
             </Menu.Sub>
 
@@ -114,7 +122,11 @@ export default function StartMenu() {
               <Menu.Item
                 label="My Documents"
                 icon="/fs/Applications/files/icon_16.png"
-                onSelect={() => launch(files({ path: '/Documents' }))}
+                onSelect={() =>
+                  launch(
+                    files({ folderId: '949f9fc6-19d4-479a-a1ec-c4a80cffb3a6' }),
+                  )
+                }
               />
 
               <Menu.Separator />
