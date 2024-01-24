@@ -6,14 +6,14 @@ import type {
 } from '~/content/types';
 
 export type PreviewSupportedFile = MarkdownFile | MDXFile | ImageFile;
-export const previewSupportedFileTypes: AnyFile['type'][] = [
+export const previewSupportedFileTypes: AnyFile['_type'][] = [
   'md',
   'mdx',
-  'image',
+  'fileImage',
 ];
 
 export function isPreviewable(file: AnyFile): file is PreviewSupportedFile {
-  return previewSupportedFileTypes.includes(file.type);
+  return previewSupportedFileTypes.includes(file._type);
 }
 
 export interface PreviewState {

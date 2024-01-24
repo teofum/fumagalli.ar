@@ -74,10 +74,10 @@ export default function FilesDetailsView({
                 {getReadableFileType(item)}
               </td>
               <td className="py-0 px-1 min-w-32 w-32 max-w-32">
-                {formatDate(item.created)}
+                {formatDate(item.createdAt)}
               </td>
               <td className="py-0 px-1 min-w-32 w-32 max-w-32">
-                {formatDate(item.modified)}
+                {formatDate(item.updatedAt)}
               </td>
               <td />
             </tr>

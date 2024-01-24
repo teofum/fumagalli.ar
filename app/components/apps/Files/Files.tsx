@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import type { FSObject } from '~/content/types';
+import type { Directory, FSObject } from '~/content/types';
 import { getAppResourcesUrl } from '~/content/utils';
 
 import Button, { IconButton } from '~/components/ui/Button';
@@ -13,17 +13,15 @@ import type { FilesView } from './types';
 import FilesGridView from './views/FilesGridView';
 import FilesListView from './views/FilesListView';
 import FilesDetailsView from './views/FilesDetailsView';
-import getReadableSize from './utils/getReadableSize';
-import useDirectory from './useDirectory';
+// import getReadableSize from './utils/getReadableSize';
 import AddressBar from './AddressBar';
 import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 import FilesTreeView from './views/FilesTreeView';
 import FS_ROOT from '~/content/dir';
 import useDesktopStore from '~/stores/desktop';
-import resolvePath from '~/utils/resolvePath';
 import cn from 'classnames';
 import FilesColumnsView from './views/FilesColumnsView';
-import parsePath from './utils/parsePath';
+import { useFetcher } from '@remix-run/react';
 
 const MAX_HISTORY = 1000;
 const resources = getAppResourcesUrl('files');
@@ -37,21 +35,18 @@ export default function Files() {
   const [settings, set] = useAppSettings('files');
   const [selected, setSelected] = useState<FSObject | null>(null);
 
-  const path = useMemo(() => parsePath(state.path), [state.path]);
-  const setPath = (nextPwd: string) => {
-    const history = [
-      nextPwd,
-      ...state.history.slice(state.backCount), // Drop anything newer than the last undo
-    ].slice(0, MAX_HISTORY); // Limit # of history items
+  const { load, data: dir } = useFetcher<Directory>();
 
-    setState({ path: nextPwd, history, backCount: 0 });
-  };
-
-  const pwd = useMemo(() => `/${path.join('/')}`, [path]);
-  const dir = useDirectory(path);
   const fileHandler = useFileHandler();
 
   const isModal = state.modalCallback !== undefined;
+
+  /**
+   * Initial load
+   */
+  useEffect(() => {
+    load(`/api/filesystem?id=${state.folderId}`);
+  }, [state.folderId, load]);
 
   /**
    * Set window title on dir change
@@ -68,7 +63,7 @@ export default function Files() {
   const goBack = () => {
     const restored = state.history.at(state.backCount + 1);
     if (canGoBack && restored) {
-      setState({ backCount: state.backCount + 1, path: restored });
+      setState({ backCount: state.backCount + 1, folderId: restored });
     }
   };
 
@@ -76,47 +71,41 @@ export default function Files() {
   const goForward = () => {
     const restored = state.history.at(state.backCount - 1);
     if (canGoForward && restored) {
-      setState({ backCount: state.backCount - 1, path: restored });
+      setState({ backCount: state.backCount - 1, folderId: restored });
     }
   };
 
   /**
    * File/directory open handler
    */
-  const navigate = (
-    to: string,
-    absolute = false,
-    preserveSelection = false,
-  ) => {
-    let nextPath = [];
-    if (to === '..') nextPath = path.slice(0, -1);
-    else if (absolute) nextPath = parsePath(to);
-    else nextPath = [...path, to];
-
-    const nextDir = resolvePath(nextPath);
-    const nextPwd = `/${nextPath.join('/')}`;
-    if (!nextDir) return;
-
+  const navigate = (to: string) => {
     // Save next folder to recent
-    if (dirHistory[0]?.path !== nextPwd) {
-      saveDirToHistory({ time: Date.now(), item: nextDir, path: nextPwd });
-    }
+    // if (dirHistory[0]?.path !== nextPwd) {
+    //   saveDirToHistory({ time: Date.now(), item: nextDir, path: nextPwd });
+    // }
 
     // Navigate
-    if (!preserveSelection) setSelected(null);
-    setPath(nextPwd);
+    const history = [
+      to,
+      ...state.history.slice(state.backCount), // Drop anything newer than the last undo
+    ].slice(0, MAX_HISTORY); // Limit # of history items
+
+    setState({ folderId: to, backCount: 0, history });
+    setSelected(null);
   };
 
-  const open = (item: FSObject, path = pwd) => {
-    if (item.class === 'dir') {
-      navigate(item.name);
-    } else if (state.modalCallback) {
-      // Modal file handling
-      state.modalCallback(item, `${path}/${item.name}`);
-      close();
-    } else {
+  const open = (item: FSObject) => {
+    if (item._type === 'folder') {
+      navigate(item._id);
+    }
+    // else if (state.modalCallback) {
+    //   // Modal file handling
+    //   state.modalCallback(item, `${path}/${item.name}`);
+    //   close();
+    // }
+    else {
       // Regular file handling
-      if (!fileHandler.open(item, `${path}/${item.name}`))
+      if (!fileHandler.open(item))
         console.log('Unhandled file, possibly unknown type');
     }
   };
@@ -137,7 +126,7 @@ export default function Files() {
                 key={`${time}_${item.name}`}
                 label={item.name}
                 icon="/fs/System Files/Icons/FileType/dir_16.png"
-                onSelect={() => navigate(path, true)}
+                // onSelect={() => navigate(path)}
               />
             ))}
           </Menu.Sub>
@@ -206,8 +195,8 @@ export default function Files() {
           />
           <Menu.Item
             label="Up one level"
-            onSelect={() => navigate('..')}
-            disabled={path.length === 0}
+            onSelect={() => navigate(dir?.parent?._id ?? 'root')}
+            disabled={!dir?.parent}
           />
         </Menu.Menu>
       </Menu.Bar>
@@ -234,8 +223,8 @@ export default function Files() {
 
           <IconButton
             variant="light"
-            onClick={() => navigate('..')}
-            disabled={path.length === 0}
+            onClick={() => navigate(dir?.parent?._id ?? 'root')}
+            disabled={state.folderId === 'root'}
             imageUrl={`${resources}/go-up.png`}
             label={settings.buttons === 'large' ? 'Up' : null}
           />
@@ -243,7 +232,7 @@ export default function Files() {
 
         <Toolbar className="grow">
           <div className="mr-1 ml-1.5">Address</div>
-          <AddressBar path={path} navigate={navigate} />
+          {/* <AddressBar path={path} navigate={navigate} /> */}
         </Toolbar>
       </ToolbarGroup>
 
@@ -256,7 +245,7 @@ export default function Files() {
               open={open}
               navigate={navigate}
               select={setSelected}
-              openPath={path.slice(0, -1)}
+              openPath={[]}
             />
           </div>
         ) : null}
@@ -264,7 +253,7 @@ export default function Files() {
           <div className="flex-1 min-w-0 flex flex-col">
             <ViewComponent
               dir={dir}
-              path={pwd}
+              path={''}
               open={open}
               navigate={navigate}
               select={setSelected}
@@ -284,9 +273,9 @@ export default function Files() {
             {selected ? (
               <span>
                 {selected.name}:{' '}
-                {selected.class === 'file'
+                {/* {selected._type === 'file'
                   ? `File (${getReadableSize(selected.size)})`
-                  : `Folder (${selected.items.length} objects)`}
+                  : `Folder (${selected.items.length} objects)`} */}
               </span>
             ) : null}
           </div>
@@ -296,14 +285,14 @@ export default function Files() {
       {isModal ? (
         <div className="flex flex-row gap-1 p-2 items-center">
           <span className="mr-auto">
-            {selected?.class === 'file' ? selected.name : 'No file selected'}
+            {/* {selected?.class === 'file' ? selected.name : 'No file selected'} */}
           </span>
 
           <Button
             className="py-1 px-2 w-20"
             onMouseDown={(ev) => ev.preventDefault()}
             onClick={() => selected && open(selected)}
-            disabled={selected?.class !== 'file'}
+            // disabled={selected?.class !== 'file'}
           >
             <span>Choose file</span>
           </Button>

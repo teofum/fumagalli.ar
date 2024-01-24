@@ -2,46 +2,36 @@
  * Filesystem object types
  */
 interface FSObjectBase {
+  _id: string;
   name: string;
-  created: number;
-  modified: number;
+  createdAt: number;
+  updatedAt: number;
 }
 
 export interface Directory extends FSObjectBase {
-  class: 'dir';
-
+  _type: 'folder';
+  parent?: Directory;
   items: FSObject[];
 }
 
-export interface FileBase extends FSObjectBase {
-  class: 'file';
-  size: number;
+export interface ImageFile extends FSObjectBase {
+  _type: 'fileImage';
 }
 
-export interface GenericFile extends FileBase {
-  type: 'file';
+export interface MarkdownFile extends FSObjectBase {
+  _type: 'md';
 }
 
-export interface ImageFile extends FileBase {
-  type: 'image';
-
-  altText?: string;
+export interface MDXFile extends FSObjectBase {
+  _type: 'mdx';
 }
 
-export interface MarkdownFile extends FileBase {
-  type: 'md';
+export interface DosRomFile extends FSObjectBase {
+  _type: 'dos';
 }
 
-export interface MDXFile extends FileBase {
-  type: 'mdx';
-}
-
-export interface DosRomFile extends FileBase {
-  type: 'dos';
-}
-
-export interface AppFile extends FileBase {
-  type: 'app';
+export interface AppFile extends FSObjectBase {
+  _type: 'app';
 }
 
 export type AnyFile =
@@ -49,7 +39,6 @@ export type AnyFile =
   | MarkdownFile
   | MDXFile
   | DosRomFile
-  | AppFile
-  | GenericFile;
+  | AppFile;
 
 export type FSObject = Directory | AnyFile;

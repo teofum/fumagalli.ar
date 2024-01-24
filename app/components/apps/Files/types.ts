@@ -19,7 +19,7 @@ export const defaultFilesSettings: FilesSettings = {
 };
 
 export interface FilesState {
-  path: string;
+  folderId: string;
   history: string[];
   backCount: number;
 
@@ -28,7 +28,7 @@ export interface FilesState {
 }
 
 export const defaultFilesState: FilesState = {
-  path: '/',
+  folderId: 'root',
   history: [],
   backCount: 0,
 };
