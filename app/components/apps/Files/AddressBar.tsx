@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 // import { Command } from 'cmdk';
 // import fuzzysort from 'fuzzysort';
 // import cn from 'classnames';
 
-import type { AnyFile, Directory, FSObject } from '~/content/types';
+import type { Directory } from '~/content/types';
 import Button from '~/components/ui/Button';
 import ArrowDown from '~/components/ui/icons/ArrowDown';
 // import useFileHandler from '~/hooks/useFileHandler';

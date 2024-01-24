@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import fileSchema from './file';
+import imageSchema from './image';
 
 const baseFolderSchema = z.object({
   _id: z.string(),
@@ -7,6 +8,12 @@ const baseFolderSchema = z.object({
   _createdAt: z.string(),
   _updatedAt: z.string(),
   name: z.string(),
+  icon: z
+    .object({
+      icon16: imageSchema,
+      icon32: imageSchema,
+    })
+    .optional(),
 });
 
 type ParentFolder = z.infer<typeof baseFolderSchema> & {
