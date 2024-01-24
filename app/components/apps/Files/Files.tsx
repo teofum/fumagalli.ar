@@ -111,11 +111,11 @@ export default function Files() {
     if (item._type === 'folder') {
       navigate(item._id);
     }
-    // else if (state.modalCallback) {
-    //   // Modal file handling
-    //   state.modalCallback(item, `${path}/${item.name}`);
-    //   close();
-    // }
+    else if (state.modalCallback) {
+      // Modal file handling
+      state.modalCallback(item);
+      close();
+    }
     else {
       // Regular file handling
       if (!fileHandler.open(item))
@@ -278,17 +278,17 @@ export default function Files() {
       {settings.statusBar && !isModal ? (
         <div className="flex flex-row gap-0.5">
           <div className="flex-1 bg-surface bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden py-0.5 px-1">
-            {dir?.items.length || 'No'} object
-            {dir?.items.length === 1 ? '' : 's'}
+            {dir?.items?.length || 'No'} object
+            {dir?.items?.length === 1 ? '' : 's'}
           </div>
 
           <div className="flex-1 bg-surface bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden py-0.5 px-1">
             {selected ? (
               <span>
                 {selected.name}:{' '}
-                {/* {selected._type === 'file'
-                  ? `File (${getReadableSize(selected.size)})`
-                  : `Folder (${selected.items.length} objects)`} */}
+                {selected._type === 'folder'
+                  ? `Folder (${selected.items?.length ?? 0} objects)`
+                  : `File`}
               </span>
             ) : null}
           </div>

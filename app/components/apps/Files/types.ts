@@ -23,8 +23,8 @@ export interface FilesState {
   history: string[];
   backCount: number;
 
-  typeFilter?: AnyFile['type'][];
-  modalCallback?: (file: AnyFile, path: string) => void;
+  typeFilter?: AnyFile['_type'][];
+  modalCallback?: (file: AnyFile) => void;
 }
 
 export const defaultFilesState: FilesState = {

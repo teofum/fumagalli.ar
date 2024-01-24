@@ -7,6 +7,8 @@ export default function filterByType(
 ) {
   return items.filter(
     (item) =>
-      !typeFilter || item.class === 'dir' || typeFilter.includes(item.type),
+      !typeFilter ||
+      item._type === 'folder' ||
+      (typeFilter as string[]).includes(item._type),
   );
 }

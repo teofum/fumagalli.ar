@@ -12,7 +12,7 @@ import PreviewMDX from './modes/PreviewMDX';
 import PreviewImage from './modes/PreviewImage';
 import useDesktopStore from '~/stores/desktop';
 import Menu from '~/components/ui/Menu';
-// import { files } from '../Files';
+import { files } from '../Files';
 
 const getPreviewMode = (fileType: PreviewSupportedFile['_type']) => {
   switch (fileType) {
@@ -38,18 +38,16 @@ export default function Preview() {
 
   if (!state.file) return null;
 
-  // TODO restore file > open functionality
-  // const open = () => {
-  //   modal(
-  //     files({
-  //       path: state.filePath?.split('/').slice(0, -1).join('/') ?? '/Documents',
-  //       typeFilter: previewSupportedFileTypes,
-  //       modalCallback: (file, filePath) => {
-  //         if (isPreviewable(file)) setState({ file, filePath });
-  //       },
-  //     }),
-  //   );
-  // };
+  const open = () => {
+    modal(
+      files({
+        typeFilter: previewSupportedFileTypes,
+        modalCallback: (file) => {
+          if (isPreviewable(file)) setState({ file });
+        },
+      }),
+    );
+  };
 
   const download = () => {
     // TODO restore download functionality
@@ -67,7 +65,7 @@ export default function Preview() {
       <Component
         commonMenu={
           <Menu.Menu trigger={<Menu.Trigger>File</Menu.Trigger>}>
-            {/* <Menu.Item label="Open..." onSelect={open} /> */}
+            <Menu.Item label="Open..." onSelect={open} />
             <Menu.Item label="Download" onSelect={download} />
 
             <Menu.Separator />

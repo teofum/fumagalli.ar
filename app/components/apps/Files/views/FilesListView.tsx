@@ -32,7 +32,7 @@ export default function FilesListView({ dir, open, select }: FilesViewProps) {
           className="p-1 select-none grid grid-flow-col auto-cols-max"
           ref={contentRef}
         >
-          {filterByType(dir.items, state.typeFilter).map((item) => (
+          {filterByType(dir.items ?? [], state.typeFilter).map((item) => (
             <FilesListItem
               key={item.name}
               item={item}

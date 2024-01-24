@@ -1,3 +1,4 @@
+import type { Folder } from '~/schemas/folder';
 import type { Image } from '~/schemas/image';
 
 /**
@@ -6,15 +7,9 @@ import type { Image } from '~/schemas/image';
 interface FSObjectBase {
   _id: string;
   name: string;
-  createdAt: number;
-  updatedAt: number;
 }
 
-export interface Directory extends FSObjectBase {
-  _type: 'folder';
-  parent?: Directory;
-  items: FSObject[];
-}
+export type Directory = Folder;
 
 export interface ImageFile extends FSObjectBase {
   _type: 'fileImage';

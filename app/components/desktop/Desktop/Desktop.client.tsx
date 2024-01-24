@@ -157,12 +157,12 @@ export default function Desktop() {
               <DesktopIcon
                 iconUrl="/fs/System Files/Icons/computer.png"
                 title="My Computer"
-                open={() => launch(files({ path: '/' }))}
+                open={() => launch(files())}
               />
               <DesktopIcon
                 iconUrl="/fs/System Files/Icons/documents.png"
                 title="My Documents"
-                open={() => launch(files({ path: '/Documents' }))}
+                open={() => launch(files({ folderId: '949f9fc6-19d4-479a-a1ec-c4a80cffb3a6' }))}
               />
               <DesktopIcon
                 iconUrl="/fs/Applications/intro/icon_32.png"

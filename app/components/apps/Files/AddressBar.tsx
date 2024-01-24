@@ -138,8 +138,12 @@ export default function AddressBar({ dir, navigate }: AddressBarProps) {
               );
             })}
 
-            <span>/</span>
-            <span>{dir?.name}</span>
+            {dir?._id !== 'root' ? (
+              <>
+                <span>/</span>
+                <span>{dir?.name}</span>
+              </>
+            ) : null}
           </div>
 
           <Button className="ml-auto">

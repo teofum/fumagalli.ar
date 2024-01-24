@@ -4,28 +4,26 @@ import fileSchema from './file';
 const baseFolderSchema = z.object({
   _id: z.string(),
   _type: z.literal('folder'),
-  _createdAt: z.coerce.date(),
-  _updatedAt: z.coerce.date(),
+  _createdAt: z.string(),
+  _updatedAt: z.string(),
   name: z.string(),
-  items: z.unknown().array().optional(),
 });
 
-type ParentFolder = Omit<z.infer<typeof baseFolderSchema>, 'items'> & {
+type ParentFolder = z.infer<typeof baseFolderSchema> & {
   parent?: ParentFolder;
 };
 
-const parentFolderSchema: z.ZodType<ParentFolder> = z.object({
-  _id: z.string(),
-  _type: z.literal('folder'),
-  _createdAt: z.coerce.date(),
-  _updatedAt: z.coerce.date(),
-  name: z.string(),
+const parentFolderSchema: z.ZodType<ParentFolder> = baseFolderSchema.extend({
   parent: z.lazy(() => parentFolderSchema.optional()),
+});
+
+const childFolderSchema = baseFolderSchema.extend({
+  items: z.any().array().optional(),
 });
 
 const folderSchema = baseFolderSchema.extend({
   items: z.lazy(() =>
-    z.union([baseFolderSchema, fileSchema]).array().optional(),
+    z.union([childFolderSchema, fileSchema]).array().optional(),
   ),
   parent: parentFolderSchema.optional(),
 });

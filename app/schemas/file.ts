@@ -4,8 +4,8 @@ import imageSchema from './image';
 const imageFileSchema = z.object({
   _id: z.string(),
   _type: z.literal('fileImage'),
-  _createdAt: z.coerce.date(),
-  _updatedAt: z.coerce.date(),
+  _createdAt: z.string(),
+  _updatedAt: z.string(),
   name: z.string(),
   content: imageSchema,
 });
