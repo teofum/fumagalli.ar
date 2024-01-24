@@ -6,9 +6,12 @@ import { sanityClient } from '~/utils/sanity.server';
 const folderQuery = (id: string = 'root') => `
 *[_type == "folder" && _id == "${id}"][0] {
   ...,
-  "parent": *[references(^._id)][0] {
+  "parent": *[_type == "folder" && _id != "root" && references(^._id)][0] {
     ...,
-    items[]->
+    "parent": *[_type == "folder" && _id != "root" && references(^._id)][0] {
+      ...,
+      "parent": *[_type == "folder" && _id != "root" && references(^._id)][0],
+    },
   },
   items[]->
 }`;

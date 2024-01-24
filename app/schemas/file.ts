@@ -13,3 +13,5 @@ const imageFileSchema = z.object({
 const fileSchema = imageFileSchema; // z.union([imageFileSchema]);
 
 export default fileSchema;
+
+export type AnyFile = z.infer<typeof fileSchema>;
