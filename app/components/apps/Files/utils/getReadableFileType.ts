@@ -10,8 +10,8 @@ export default function getReadableFileType(item: ItemStub) {
       return `${extension?.toUpperCase()} Image`;
     case 'fileRichText':
       return 'Rich Text File';
-    // case 'mdx':
-    //   return 'MDX File';
+    case 'fileMDX':
+      return 'MDX File';
     case 'fileDos':
       return 'DOSEmu ROM';
     case 'fileApp':

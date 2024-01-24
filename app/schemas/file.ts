@@ -27,13 +27,23 @@ const appFileSchema = baseFileSchema.extend({ _type: z.literal('fileApp') });
 
 const dosFileSchema = baseFileSchema.extend({ _type: z.literal('fileDos') });
 
+const mdxFileSchema = baseFileSchema.extend({
+  _type: z.literal('fileMDX'),
+  content: z.object({
+    slug: z.string(),
+  }),
+});
+
+export type MDXFile = z.infer<typeof mdxFileSchema>;
+
 const fileSchema = z.union([
   imageFileSchema,
   richTextFileSchema,
   appFileSchema,
   dosFileSchema,
+  mdxFileSchema,
 ]);
 
 export default fileSchema;
 
-export type AnyFile = ImageFile | RichTextFile;
+export type AnyFile = z.infer<typeof fileSchema>;

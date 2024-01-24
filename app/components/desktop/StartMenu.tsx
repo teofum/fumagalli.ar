@@ -91,7 +91,7 @@ export default function StartMenu() {
             >
               <Menu.Item
                 label="Articles"
-                icon="/fs/System Files/Icons/FileType/dir_16.png"
+                icon="/fs/System Files/Icons/FileType/folder_16.png"
                 onSelect={() =>
                   launch(
                     files({ folderId: '679b7214-24c9-439e-86bc-cd86cc215dc3' }),
@@ -100,7 +100,7 @@ export default function StartMenu() {
               />
               <Menu.Item
                 label="Photos"
-                icon="/fs/System Files/Icons/FileType/dir_16.png"
+                icon="/fs/System Files/Icons/FileType/folder_16.png"
                 onSelect={() =>
                   launch(
                     files({ folderId: '49fba51f-c8ee-450d-bc21-522066ceb7ea' }),
@@ -109,7 +109,7 @@ export default function StartMenu() {
               />
               <Menu.Item
                 label="Projects"
-                icon="/fs/System Files/Icons/FileType/dir_16.png"
+                icon="/fs/System Files/Icons/FileType/folder_16.png"
                 onSelect={() => launch(files({ folderId: 'root' }))}
               />
             </Menu.Sub>
