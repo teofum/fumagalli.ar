@@ -12,10 +12,10 @@ export default function getReadableFileType(item: ItemStub) {
       return 'Rich Text File';
     // case 'mdx':
     //   return 'MDX File';
-    // case 'dos':
-    //   return 'DOSEmu ROM';
-    // case 'app':
-    //   return 'Application';
+    case 'fileDos':
+      return 'DOSEmu ROM';
+    case 'fileApp':
+      return 'Application';
     default:
       return `${extension?.toUpperCase()} File`;
   }

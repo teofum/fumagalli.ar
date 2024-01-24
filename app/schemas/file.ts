@@ -25,10 +25,13 @@ export type ImageFile = z.infer<typeof imageFileSchema>;
 
 const appFileSchema = baseFileSchema.extend({ _type: z.literal('fileApp') });
 
+const dosFileSchema = baseFileSchema.extend({ _type: z.literal('fileDos') });
+
 const fileSchema = z.union([
   imageFileSchema,
   richTextFileSchema,
   appFileSchema,
+  dosFileSchema,
 ]);
 
 export default fileSchema;

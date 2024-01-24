@@ -1,4 +1,5 @@
-// import { dosEmu } from '~/components/apps/DOSEmu';
+import { dosEmu } from '~/components/apps/DOSEmu';
+import { DOS_GAMES } from '~/components/apps/DOSEmu/types';
 import { preview } from '~/components/apps/Preview';
 import { previewSupportedFileTypes } from '~/components/apps/Preview/types';
 import { getApp } from '~/components/apps/renderApp';
@@ -26,11 +27,17 @@ export default function useFileHandler() {
         launch(app);
         handled = true;
       }
+    } else if (stub._type === 'fileDos') {
+      launch(
+        dosEmu(
+          DOS_GAMES.find(
+            (game) =>
+              game.title.toLowerCase().replace(' ', '_') ===
+              stub.name.split('.')[0],
+          ),
+        ),
+      );
     }
-    // else if (file._type === 'dos') {
-    //   // TODO restore DOS ROM files
-    //   // launch(dosEmu({ bundleUrl: `/fs${path}` }));
-    // }
 
     if (handled) {
       saveFileToHistory({ time: Date.now(), item: stub });
