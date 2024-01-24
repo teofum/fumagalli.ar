@@ -252,13 +252,13 @@ export default function Files() {
       <div className="flex-1 min-h-0 flex flex-row gap-0.5">
         {settings.sideBar === 'tree' ? (
           <div className="w-40 min-w-40 flex flex-col">
-            <FilesTreeView
+            {/* <FilesTreeView
               dir={FS_ROOT}
               open={open}
               navigate={navigate}
               select={setSelected}
-              openPath={[]}
-            />
+              openId="root"
+            /> */}
           </div>
         ) : null}
         {dir ? (

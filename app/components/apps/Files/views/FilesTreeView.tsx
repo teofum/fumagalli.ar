@@ -1,44 +1,67 @@
 import ScrollContainer from '~/components/ui/ScrollContainer';
 import type { AnyFile, Directory, FSObject } from '~/content/types';
 import FilesListItem from './FilesListItem';
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import TreeLess from '~/components/ui/icons/TreeLess';
 import TreeMore from '~/components/ui/icons/TreeMore';
 import type FilesViewProps from './FilesViewProps';
 import filterByType from '../utils/filterByType';
 import { useAppState } from '~/components/desktop/Window/context';
-import parsePath from '../utils/parsePath';
+import { useFetcher } from '@remix-run/react';
 
 interface BranchProps {
   item: Directory;
-  path: string;
   root?: boolean;
   open: (item: FSObject, path?: string) => void;
   navigate: (path: string, absolute?: boolean) => void;
   select: React.Dispatch<React.SetStateAction<FSObject | null>>;
 
-  openPath?: string[];
+  openId?: string;
 }
 
 function Branch({
-  item,
-  path,
+  item: itemProp,
   root = false,
   open,
   navigate,
   select,
-  openPath,
+  openId,
 }: BranchProps) {
   const [expanded, setExpanded] = useState(root);
   const [state] = useAppState('files');
 
-  useLayoutEffect(() => {
-    if (!openPath) return;
-    
-    const segments = parsePath(path);
-    if (segments.every((segment, i) => segment === openPath.at(i)))
+  const [item, setItem] = useState(itemProp);
+  // useEffect(() => {
+  //   if (expandedItem._id === item._id) return;
+  //   setExpandedItem(item);
+  // }, [item]);
+
+  // useLayoutEffect(() => {
+  //   if (!openId) return;
+
+  //   const segments = parsePath(path);
+  //   if (segments.every((segment, i) => segment === openPath.at(i)))
+  //     setExpanded(true);
+  // }, [path, openPath]);
+
+  const { load, data } = useFetcher();
+  const toggleExpanded = () => {
+    if (expanded || data) {
+      setExpanded(!expanded);
+    } else {
+      // Before expanding, fetch the folder's contents and replace the item
+      load(`/api/filesystem?id=${item._id}`);
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      setItem(data);
       setExpanded(true);
-  }, [path, openPath]);
+    }
+  }, [data]);
+
+  const filteredItems = filterByType(item.items ?? [], state.typeFilter);
 
   return (
     <div className="relative group tree-branch">
@@ -51,7 +74,7 @@ function Branch({
       <div className="flex flex-row items-start relative z-[1]">
         <button
           className="button bg-default p-px m-px mt-0.5"
-          onClick={() => setExpanded(!expanded)}
+          onClick={toggleExpanded}
         >
           {expanded ? <TreeLess /> : <TreeMore />}
         </button>
@@ -61,32 +84,34 @@ function Branch({
         <div className="flex flex-col w-full">
           <FilesListItem
             item={item}
-            open={() => navigate(path, true)}
+            open={() => navigate(item._id)}
             select={select}
             className="relative z-[1]"
           />
           {expanded ? (
             <div className="">
-              {filterByType(item.items, state.typeFilter).map((child) =>
-                child.class === 'dir' ? (
+              {filteredItems.map((child) =>
+                child._type === 'folder' ? (
                   <Branch
                     key={child.name}
                     item={child}
-                    path={`${path}/${child.name}`}
                     open={open}
                     navigate={navigate}
                     select={select}
-                    openPath={openPath}
+                    openId={openId}
                   />
                 ) : (
                   <Leaf
                     key={child.name}
                     item={child}
-                    open={(item) => open(item, path)}
+                    open={(item) => open(item)}
                     select={select}
                   />
                 ),
               )}
+              {filteredItems.length === 0 ? (
+                <div className="text-disabled pl-5">[EMPTY]</div>
+              ) : null}
             </div>
           ) : null}
         </div>
@@ -127,22 +152,20 @@ function Leaf({ item, root = false, open, select }: LeafProps) {
 
 export default function FilesTreeView({
   dir,
-  path,
   open,
   navigate,
   select,
-  openPath,
-}: FilesViewProps & { openPath?: string[] }) {
-  return null;
+  openId,
+}: FilesViewProps & { openId?: string }) {
   return (
     <ScrollContainer className="flex-1">
       <Branch
-        path={path}
+        key={dir._id}
         item={dir}
         open={open}
         navigate={navigate}
         select={select}
-        openPath={openPath}
+        openId={openId}
         root
       />
     </ScrollContainer>

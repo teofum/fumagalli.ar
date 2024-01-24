@@ -30,6 +30,7 @@ export default function useFileHandler() {
         handled = true;
       }
     } else if (file._type === 'dos') {
+      // TODO restore DOS ROM files
       // launch(dosEmu({ bundleUrl: `/fs${path}` }));
     }
 
