@@ -82,10 +82,12 @@ export default function PaintFileMenu({ clear }: PaintFileMenuProps) {
   const open = () => {
     modal(
       files({
-        path: '/Documents',
-        typeFilter: ['image'],
-        modalCallback: (file, path) => {
-          openImage(`/fs${path}`, file.name.split('.').slice(0, -1).join('.'));
+        typeFilter: ['fileImage'],
+        modalCallback: (stub) => {
+          openImage(
+            `/api/safeimage?id=${stub._id}`,
+            stub.name.split('.').slice(0, -1).join('.'),
+          );
         },
       }),
     );
