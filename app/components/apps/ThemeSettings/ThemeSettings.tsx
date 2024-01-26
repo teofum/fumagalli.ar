@@ -7,18 +7,21 @@ import ColorPicker from '~/components/ui/ColorPicker';
 import parseCSSColor from 'parse-css-color';
 import { useState } from 'react';
 import GroupBox from '~/components/ui/GroupBox';
-import resolvePath from '~/utils/resolvePath';
-import type { Folder } from '~/schemas/folder';
 import Monitor from './Monitor';
 
-const DEFAULT_BACKGROUNDS = (
-  resolvePath(['System Files', 'Backgrounds']) as Folder
-).items
-  .filter((item) => item.class === 'file' && item.type === 'image')
-  .map((item) => ({
-    name: item.name.split('.').slice(0, -1).join('.'),
-    url: `/fs/System Files/Backgrounds/${item.name}`,
-  }));
+const DEFAULT_BACKGROUNDS = [
+  'Black Thatch',
+  'Blue Rivets',
+  'Carved Stone',
+  'Chess',
+  'Clouds',
+  'Houndstooth',
+  'Metal Links',
+  'Red Blocks',
+].map((item) => ({
+  name: item,
+  url: `/assets/backgrounds/${item}.png`,
+}));
 
 export default function ThemeSettings() {
   const { theme, updateTheme, themeCustomizations, updateThemeCustomizations } =
