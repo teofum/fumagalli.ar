@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import imageSchema from './image';
 import blockSchema from './block';
+import codeSchema from './code';
 
 const baseFileSchema = z.object({
   _id: z.string(),
@@ -11,7 +12,7 @@ const baseFileSchema = z.object({
 
 const richTextFileSchema = baseFileSchema.extend({
   _type: z.literal('fileRichText'),
-  content: z.union([blockSchema, imageSchema]).array(),
+  content: z.union([blockSchema, imageSchema, codeSchema]).array(),
 });
 
 export type RichTextFile = z.infer<typeof richTextFileSchema>;

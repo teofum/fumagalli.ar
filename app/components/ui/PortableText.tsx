@@ -17,6 +17,13 @@ export const portableTextComponents: PortableTextComponents = {
         />
       );
     },
+    code: ({ value }) => {
+      return (
+        <pre className="paragraph text-content-xs bg-codeblock rounded-md p-4 my-4 overflow-auto">
+          {value.code}
+        </pre>
+      );
+    },
   },
   block: {
     normal: (props) => <p className="paragraph" {...props} />,
@@ -28,9 +35,10 @@ export const portableTextComponents: PortableTextComponents = {
     ),
   },
   list: {
-    bullet: ({ children }) => (
-      <li className="mt-2 list-outside list-['>__'] ml-4">{children}</li>
-    ),
+    bullet: ({ children }) =>
+      children ? (
+        <ul className="mt-2 list-outside list-['>__'] ml-4">{children}</ul>
+      ) : null,
   },
   marks: {
     link: ({ children, value }) => (

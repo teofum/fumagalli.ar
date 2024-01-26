@@ -6,9 +6,6 @@ import { sanityClient } from '~/utils/sanity.server';
 const fileQuery = (id: string) => `
 *[_type != "folder" && _id == "${id}"][0] {
   ...,
-  content {
-    ...,
-  },
   'size': content.asset->size,
 }`;
 
