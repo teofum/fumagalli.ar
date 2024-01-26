@@ -32,7 +32,7 @@ export default function Preview() {
 
   const [state, setState] = useAppState('preview');
 
-  const { load, data } = useFetcher<PreviewSupportedFile>();
+  const { load, data, state: fetchState } = useFetcher<PreviewSupportedFile>();
 
   /**
    * Initialization, load file contents and set window title
@@ -51,6 +51,12 @@ export default function Preview() {
     setState({ file: data });
   }, [data, setState, state.file]);
 
+  if (fetchState === 'loading') return (
+    <div className="flex flex-col items-center justify-center gap-0.5 min-w-0">
+      Starting...
+    </div>
+  );
+
   if (!state.file) return null;
 
   const open = () => {
@@ -64,16 +70,6 @@ export default function Preview() {
     );
   };
 
-  const download = () => {
-    // TODO restore download functionality
-    // const a = document.createElement('a');
-    // a.href = resourceUrl;
-    // a.download = '';
-    // document.body.appendChild(a);
-    // a.click();
-    // document.body.removeChild(a);
-  };
-
   const Component = getPreviewMode(state.file._type);
   return (
     <div className="flex flex-col gap-0.5 min-w-0">
@@ -81,7 +77,6 @@ export default function Preview() {
         commonMenu={
           <Menu.Menu trigger={<Menu.Trigger>File</Menu.Trigger>}>
             <Menu.Item label="Open..." onSelect={open} />
-            <Menu.Item label="Download" onSelect={download} />
 
             <Menu.Separator />
 

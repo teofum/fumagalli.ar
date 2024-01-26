@@ -7,6 +7,7 @@ const fileQuery = (id: string) => `
 *[_type != "folder" && _id == "${id}"][0] {
   ...,
   'size': content.asset->size,
+  'lqip': content.asset->metadata.lqip,
 }`;
 
 export async function loader({ request }: LoaderArgs) {

@@ -7,17 +7,35 @@ const imageBuilder = createImageUrlBuilder({
   dataset: 'production',
 });
 
+export const MAX_IMG_SIZE = 2000;
+
 export function sanityImage(source: SanityImageSource) {
   return imageBuilder.image(source).auto('format');
 }
 
+export function getImageSize(file: ImageFile) {
+  return (
+    file.content.asset._ref
+      .split('-')
+      .at(-2)
+      ?.split('x')
+      .map((s) => parseInt(s, 10)) ?? [0, 0]
+  );
+}
+
+export function getFetchedImageSize(file: ImageFile) {
+  const [originalWidth, originalHeight] = getImageSize(file);
+
+  const scaling = Math.min(
+    1 / Math.max(originalWidth / 2000, originalHeight / 2000),
+  );
+
+  return [originalWidth * scaling, originalHeight * scaling];
+}
+
 export function getImageUrl(file: ImageFile) {
   // Get the width and height from the asset URL
-  const [width, height] = file.content.asset._ref
-    .split('-')
-    .at(-2)
-    ?.split('x')
-    .map((s) => parseInt(s, 10)) ?? [0, 0];
+  const [width, height] = getImageSize(file);
   if (!width || !height) return;
 
   // TODO: allow adjusting this somewhere?
