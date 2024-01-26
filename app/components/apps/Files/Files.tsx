@@ -21,6 +21,7 @@ import useDesktopStore from '~/stores/desktop';
 import cn from 'classnames';
 import FilesColumnsView from './views/FilesColumnsView';
 import { useFetcher } from '@remix-run/react';
+import useFolder from './utils/useFolder';
 
 const MAX_HISTORY = 1000;
 const resources = getAppResourcesUrl('files');
@@ -35,7 +36,7 @@ export default function Files() {
   const [selected, setSelected] = useState<ItemStub | null>(null);
 
   const { load: loadRoot, data: rootDir } = useFetcher<Folder>();
-  const { load, data: dir } = useFetcher<Folder>();
+  const { load, dir } = useFolder();
 
   const fileHandler = useFileHandler();
 
@@ -45,7 +46,7 @@ export default function Files() {
    * Data fetching
    */
   useEffect(() => {
-    load(`/api/filesystem?id=${state.folderId}`);
+    load(state.folderId);
   }, [state.folderId, load]);
 
   useEffect(() => {
