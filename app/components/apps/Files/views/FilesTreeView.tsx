@@ -1,7 +1,5 @@
 import ScrollContainer from '~/components/ui/ScrollContainer';
-import type { FSObject } from '~/content/types';
-import type { Folder } from '~/schemas/folder';
-import type { AnyFile } from '~/schemas/file';
+import type { Folder, ItemStub } from '~/schemas/folder';
 import FilesListItem from './FilesListItem';
 import { useEffect, useState } from 'react';
 import TreeLess from '~/components/ui/icons/TreeLess';
@@ -9,14 +7,14 @@ import TreeMore from '~/components/ui/icons/TreeMore';
 import type FilesViewProps from './FilesViewProps';
 import filterByType from '../utils/filterByType';
 import { useAppState } from '~/components/desktop/Window/context';
-import { useFetcher } from '@remix-run/react';
+import useFolder from '../utils/useFolder';
 
 interface BranchProps {
-  item: Folder;
+  item: Folder | ItemStub;
   root?: boolean;
-  open: (item: FSObject, path?: string) => void;
+  open: (item: ItemStub, path?: string) => void;
   navigate: (path: string, absolute?: boolean) => void;
-  select: React.Dispatch<React.SetStateAction<FSObject | null>>;
+  select: React.Dispatch<React.SetStateAction<ItemStub | null>>;
 }
 
 function Branch({
@@ -30,37 +28,28 @@ function Branch({
   const [state] = useAppState('files');
 
   const [item, setItem] = useState(itemProp);
-  // useEffect(() => {
-  //   if (expandedItem._id === item._id) return;
-  //   setExpandedItem(item);
-  // }, [item]);
 
-  // useLayoutEffect(() => {
-  //   if (!openId) return;
-
-  //   const segments = parsePath(path);
-  //   if (segments.every((segment, i) => segment === openPath.at(i)))
-  //     setExpanded(true);
-  // }, [path, openPath]);
-
-  const { load, data } = useFetcher();
+  const { load, dir } = useFolder();
   const toggleExpanded = () => {
-    if (expanded || data) {
+    if (expanded || dir) {
       setExpanded(!expanded);
     } else {
       // Before expanding, fetch the folder's contents and replace the item
-      load(`/api/filesystem?id=${item._id}`);
+      load(item._id);
     }
   };
 
   useEffect(() => {
-    if (data) {
-      setItem(data);
+    if (dir) {
+      setItem(dir);
       setExpanded(true);
     }
-  }, [data]);
+  }, [dir]);
 
-  const filteredItems = filterByType(item.items ?? [], state.typeFilter);
+  const filteredItems = filterByType(
+    (item as Folder).items ?? [],
+    state.typeFilter,
+  );
 
   return (
     <div className="relative group tree-branch">
@@ -119,10 +108,10 @@ function Branch({
 }
 
 interface LeafProps {
-  item: AnyFile;
+  item: ItemStub;
   root?: boolean;
-  open: (item: FSObject) => void;
-  select: React.Dispatch<React.SetStateAction<FSObject | null>>;
+  open: (item: ItemStub) => void;
+  select: React.Dispatch<React.SetStateAction<ItemStub | null>>;
 }
 
 function Leaf({ item, root = false, open, select }: LeafProps) {

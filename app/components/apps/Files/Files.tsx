@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import cn from 'classnames';
+import { useFetcher } from '@remix-run/react';
 
 import type { Folder, ItemStub } from '~/schemas/folder';
 import { getAppResourcesUrl } from '~/content/utils';
@@ -6,22 +8,19 @@ import { getAppResourcesUrl } from '~/content/utils';
 import Button, { IconButton } from '~/components/ui/Button';
 import Menu from '~/components/ui/Menu';
 import { useAppState, useWindow } from '~/components/desktop/Window/context';
+import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 import useFileHandler from '~/hooks/useFileHandler';
 import useSystemStore, { useAppSettings } from '~/stores/system';
+import useDesktopStore from '~/stores/desktop';
 
 import type { FilesView } from './types';
+import useFolder from './utils/useFolder';
 import FilesGridView from './views/FilesGridView';
 import FilesListView from './views/FilesListView';
 import FilesDetailsView from './views/FilesDetailsView';
-// import getReadableSize from './utils/getReadableSize';
-import AddressBar from './AddressBar';
-import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 import FilesTreeView from './views/FilesTreeView';
-import useDesktopStore from '~/stores/desktop';
-import cn from 'classnames';
 import FilesColumnsView from './views/FilesColumnsView';
-import { useFetcher } from '@remix-run/react';
-import useFolder from './utils/useFolder';
+import AddressBar from './AddressBar';
 
 const MAX_HISTORY = 1000;
 const resources = getAppResourcesUrl('files');
