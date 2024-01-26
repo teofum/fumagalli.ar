@@ -37,13 +37,13 @@ export default function Preview() {
   /**
    * Initialization, load file contents and set window title
    */
+  const openFileId = useRef('');
   useEffect(() => {
-    if (!state.fileStub) return;
+    if (!state.fileStub || state.fileStub._id === openFileId.current) return;
     setTitle(id, `${state.fileStub.name} - Preview`);
     load(`/api/file?id=${state.fileStub._id}`);
   }, [setTitle, setState, id, state.fileStub, load]);
-  
-  const openFileId = useRef('');
+
   useEffect(() => {
     if (!data || data._id === openFileId.current) return;
     openFileId.current = data._id;
