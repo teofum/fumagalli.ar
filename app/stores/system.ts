@@ -178,7 +178,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
           ).themeCustomizations.backgroundUrl?.includes('/system/')
         )
           (persisted as typeof current).themeCustomizations.backgroundUrl =
-            '/fs/System Files/Backgrounds/Chess.png';
+            '/assets/backgrounds/Chess.png';
 
         // Wipe persisted state on schema version change
         // This will allow me to safely introduce breaking schema changes
