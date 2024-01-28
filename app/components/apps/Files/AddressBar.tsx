@@ -1,99 +1,102 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { Command } from 'cmdk';
-import fuzzysort from 'fuzzysort';
-import cn from 'classnames';
+// import { Command } from 'cmdk';
+// import fuzzysort from 'fuzzysort';
+// import cn from 'classnames';
 
-import type { AnyFile, FSObject } from '~/content/types';
+import type { Folder } from '~/schemas/folder';
 import Button from '~/components/ui/Button';
 import ArrowDown from '~/components/ui/icons/ArrowDown';
-import useDirectory from './useDirectory';
-import useFileHandler from '~/hooks/useFileHandler';
+// import useFileHandler from '~/hooks/useFileHandler';
 
-function parsePath(path: string) {
-  if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
-  return path
-    .split('/')
-    .slice(0, -1)
-    .filter((segment) => segment !== '');
-}
+// function parsePath(path: string) {
+//   if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
+//   return path
+//     .split('/')
+//     .slice(0, -1)
+//     .filter((segment) => segment !== '');
+// }
 
-interface IconProps {
-  item: FSObject;
-}
+// interface IconProps {
+//   item: FSObject;
+// }
 
-function Icon({ item }: IconProps) {
-  const type = item.class === 'file' ? item.type : item.class;
-  let iconUrl = `/fs/System Files/Icons/FileType/${type}_16.png`;
-  if (type === 'app') {
-    const appName = item.name.split('.')[0];
-    iconUrl = `/fs/Applications/${appName}/icon_16.png`;
-  }
+// function Icon({ item }: IconProps) {
+//   const type = item._type === 'folder' ? 'dir' : item._type;
+//   let iconUrl = `/fs/System Files/Icons/FileType/${type}_16.png`;
+//   if (type === 'app') {
+//     const appName = item.name.split('.')[0];
+//     iconUrl = `/fs/Applications/${appName}/icon_16.png`;
+//   }
 
-  return (
-    <span className="relative">
-      <img src={iconUrl} alt={type} />
-      <span
-        className={cn(
-          'absolute inset-0 bg-selection bg-opacity-50',
-          'hidden group-aria-selected:inline',
-        )}
-        style={{
-          WebkitMaskImage: `url('${iconUrl}')`,
-        }}
-      />
-    </span>
-  );
-}
+//   return (
+//     <span className="relative">
+//       <img src={iconUrl} alt={type} />
+//       <span
+//         className={cn(
+//           'absolute inset-0 bg-selection bg-opacity-50',
+//           'hidden group-aria-selected:inline',
+//         )}
+//         style={{
+//           WebkitMaskImage: `url('${iconUrl}')`,
+//         }}
+//       />
+//     </span>
+//   );
+// }
 
 interface AddressBarProps {
-  path: string[];
-  navigate: (path: string, absolute?: boolean) => void;
+  dir?: Folder;
+  navigate: (to: string) => void;
 }
 
-export default function AddressBar({ path, navigate }: AddressBarProps) {
-  const fileHandler = useFileHandler();
+export default function AddressBar({ dir, navigate }: AddressBarProps) {
+  // const fileHandler = useFileHandler();
 
   const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState(`/${path.join('/')}/`);
+  // const [search, setSearch] = useState(`/${path.join('/')}/`);
 
   /**
    * Reset path on navigation and close
    */
-  useEffect(() => setSearch(`/${path.join('/')}/`), [open, path]);
+  // useEffect(() => setSearch(`/${path.join('/')}/`), [open, path]);
 
   /**
    * Search functions
    */
-  const searchPath = parsePath(search);
-  const dir = useDirectory(searchPath);
+  // const searchPath = parsePath(search);
 
-  const refine = (name: string) => {
-    setSearch(`/${[...searchPath, name].join('/')}/`);
-  };
+  // const refine = (name: string) => {
+  //   setSearch(`/${[...searchPath, name].join('/')}/`);
+  // };
 
-  const openFile = (file: AnyFile) => {
-    const filePath = `/${[...searchPath, file.name].join('/')}`;
-    fileHandler.open(file, filePath);
-    setOpen(false);
+  // const openFile = (file: AnyFile) => {
+  //   fileHandler.open(file);
+  //   setOpen(false);
 
-    setSearch(`/${path.join('/')}/`); // Reset search
-  };
+  //   setSearch(`/${path.join('/')}/`); // Reset search
+  // };
 
-  const onSelect = (item: FSObject) => {
-    if (item.class === 'dir') refine(item.name);
-    else openFile(item);
-  };
+  // const onSelect = (item: FSObject) => {
+  //   if (item.class === 'dir') refine(item.name);
+  //   else openFile(item);
+  // };
 
-  const onClick = (item: FSObject) => {
-    if (item.class === 'dir') {
-      const path = `/${[...searchPath, item.name].join('/')}`;
-      navigate(path, true);
-      setOpen(false);
-    } else {
-      openFile(item);
-    }
-  };
+  // const onClick = (item: FSObject) => {
+  //   if (item.class === 'dir') {
+  //     const path = `/${[...searchPath, item.name].join('/')}`;
+  //     navigate(path, true);
+  //     setOpen(false);
+  //   } else {
+  //     openFile(item);
+  //   }
+  // };
+
+  let path: Folder[] = [];
+  if (dir?.parent) path.unshift(dir.parent);
+  if (dir?.parent?.parent) path.unshift(dir.parent.parent);
+  if (dir?.parent?.parent?.parent) path.unshift(dir.parent.parent.parent);
+  path = path.filter(p => p._id !== 'root');
 
   return (
     <DropdownMenu.Root open={open} onOpenChange={setOpen}>
@@ -105,34 +108,43 @@ export default function AddressBar({ path, navigate }: AddressBarProps) {
               onPointerDown={(ev) => ev.preventDefault()}
               onClick={(ev) => {
                 ev.stopPropagation();
-                navigate('/', true);
+                navigate('root');
               }}
             >
               My Computer
             </button>
 
-            {path.slice(0, -1).map((name, i) => {
-              const partialPath = path.slice(0, i + 1).join('/');
+            {path.length === 3 ? (
+              <>
+                <span>/</span>
+                <span>...</span>
+              </>
+            ) : null}
 
+            {path.slice(-2).map((item, i) => {
               return (
-                <div key={`${partialPath}`} className="flex flex-row gap-0.5">
+                <div key={item._id} className="flex flex-row gap-0.5">
                   <span>/</span>
                   <button
                     className="outline-none decoration-1 hover:underline focus-visible:underline"
                     onPointerDown={(ev) => ev.preventDefault()}
                     onClick={(ev) => {
                       ev.stopPropagation();
-                      navigate(partialPath, true);
+                      navigate(item._id);
                     }}
                   >
-                    {name}
+                    {item.name}
                   </button>
                 </div>
               );
             })}
 
-            <span>/</span>
-            <span>{path.at(-1)}</span>
+            {dir?._id !== 'root' ? (
+              <>
+                <span>/</span>
+                <span>{dir?.name}</span>
+              </>
+            ) : null}
           </div>
 
           <Button className="ml-auto">
@@ -150,7 +162,7 @@ export default function AddressBar({ path, navigate }: AddressBarProps) {
             w-[var(--radix-dropdown-menu-trigger-width)]
           "
         >
-          <Command
+          {/* <Command
             className="w-full flex flex-col select-none"
             filter={(value, path) => {
               const search = path.split('/').at(-1);
@@ -201,7 +213,7 @@ export default function AddressBar({ path, navigate }: AddressBarProps) {
                 </Command.Item>
               ))}
             </Command.List>
-          </Command>
+          </Command> */}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
     </DropdownMenu.Root>

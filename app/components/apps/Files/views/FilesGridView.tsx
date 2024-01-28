@@ -11,7 +11,7 @@ export default function FilesGridView({ dir, open, select }: FilesViewProps) {
   return (
     <ScrollContainer className="flex-1">
       <div className="p-1 select-none grid grid-cols-[repeat(auto-fill,4rem)] gap-2">
-        {filterByType(dir.items, state.typeFilter).map((item) => {
+        {filterByType(dir.items ?? [], state.typeFilter).map((item) => {
           const iconUrl = getIconUrl(item, 32);
 
           return (

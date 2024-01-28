@@ -1,13 +1,8 @@
-import type { Directory, FSObject } from '~/content/types';
+import type { Folder, ItemStub } from '~/schemas/folder';
 
 export default interface FilesViewProps {
-  dir: Directory;
-  path: string;
-  open: (item: FSObject, path?: string) => void;
-  navigate: (
-    to: string,
-    absolute?: boolean,
-    preserveSelection?: boolean,
-  ) => void;
-  select: React.Dispatch<React.SetStateAction<FSObject | null>>;
+  dir: Folder;
+  open: (item: ItemStub, path?: string) => void;
+  navigate: (to: string) => void;
+  select: React.Dispatch<React.SetStateAction<ItemStub | null>>;
 }

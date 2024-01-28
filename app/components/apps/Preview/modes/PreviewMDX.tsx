@@ -7,10 +7,10 @@ import Menu from '~/components/ui/Menu';
 
 export default function PreviewMDX({ commonMenu }: PreviewModeProps) {
   const [state] = useAppState('preview');
-  if (state.file?.type !== 'mdx') throw new Error('Wrong file type');
+  if (state.file?._type !== 'fileMDX') throw new Error('Wrong file type');
 
-  const name = state.file.name.split('.').slice(0, -1).join('.');
-  const Component = mdx.find((article) => article.title === name)?.Component;
+  const slug = state.file.content.slug;
+  const Component = mdx.find((article) => article.slug === slug)?.Component;
   if (!Component) return null;
 
   return (

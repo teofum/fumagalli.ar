@@ -8,7 +8,7 @@ export const help = (
   appState: {
     ...defaultHelpState,
     ...initialState,
-    history: [initialState?.path ?? defaultHelpState.path],
+    history: [initialState?.openId ?? defaultHelpState.openId],
   },
 
   title: 'Help',

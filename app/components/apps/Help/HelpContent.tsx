@@ -1,67 +1,50 @@
-import { useEffect, useMemo, useState } from 'react';
-import type { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
+import { useEffect } from 'react';
+import { useFetcher } from '@remix-run/react';
+import { PortableText, type PortableTextComponents } from '@portabletext/react';
+
 import { useAppState } from '~/components/desktop/Window/context';
 import RetroLink from '~/components/ui/Link';
-import Markdown from '~/components/ui/Markdown';
 import ScrollContainer from '~/components/ui/ScrollContainer';
+import type { RichTextFile } from '~/schemas/file';
 
-export const helpComponents = {
-  h1: (props) => <h1 className="bold text-h1 mb-3" {...props} />,
-  h2: (props) => <h2 className="bold text-h2 mt-3" {...props} />,
-  h3: (props) => <h3 className="bold text-h3 mt-2" {...props} />,
-  strong: (props) => <strong className="font-normal bold" {...props} />,
-  li: (props) => (
-    <li className="mt-0.5 list-outside list-['>__'] ml-4" {...props} />
-  ),
-} satisfies ReactMarkdownOptions['components'];
+export const helpComponents: PortableTextComponents = {
+  block: {
+    h1: (props) => <h1 className="bold text-h1 mb-3" {...props} />,
+    h2: (props) => <h2 className="bold text-h2 mt-3" {...props} />,
+    h3: (props) => <h3 className="bold text-h3 mt-2" {...props} />,
+  },
+  marks: {
+    strong: (props) => <strong className="font-normal bold" {...props} />,
+    link: ({ children, value }) => (
+      <RetroLink href={value.href} target="_blank" rel="noreferrer noopener">
+        {children}
+      </RetroLink>
+    ),
+  },
+  list: {
+    bullet: ({ children }) =>
+      children ? (
+        <ul className="mt-0.5 list-outside list-['>__'] ml-4">{children}</ul>
+      ) : null,
+  },
+};
 
 interface HelpContentProps {
-  setPath: (path: string) => void;
+  setId: (id: string) => void;
 }
 
-export default function HelpContent({ setPath }: HelpContentProps) {
+export default function HelpContent({ setId }: HelpContentProps) {
   const [state] = useAppState('help');
-  const resourceUrl = '/fs/Applications/help/content' + state.path;
 
-  const [content, setContent] = useState('No content available');
+  const { load, data: file } = useFetcher<RichTextFile>();
   useEffect(() => {
-    if (!resourceUrl) return;
-
-    const fetchMarkdown = async () => {
-      const res = await fetch(resourceUrl);
-      if (res.ok) {
-        setContent(await res.text());
-      }
-    };
-
-    fetchMarkdown();
-  }, [resourceUrl]);
-
-  const components = useMemo<ReactMarkdownOptions['components']>(
-    () => ({
-      ...helpComponents,
-      a: ({ href, children, ...props }) =>
-        href?.startsWith('?') ? (
-          // eslint-disable-next-line jsx-a11y/anchor-is-valid
-          <button
-            className="link"
-            onClick={() => setPath(href.slice(1).replace('%20', ' '))}
-          >
-            {children}
-          </button>
-        ) : (
-          <RetroLink href={href} {...props}>
-            {children}
-          </RetroLink>
-        ),
-    }),
-    [setPath],
-  );
+    load(`/api/file?id=${state.openId}`);
+  }, [state.openId, load]);
 
   return (
     <ScrollContainer className="flex-1">
       <article className="p-4 max-w-xl">
-        <Markdown components={components}>{content}</Markdown>
+        <PortableText components={helpComponents} value={file?.content} />
       </article>
     </ScrollContainer>
   );

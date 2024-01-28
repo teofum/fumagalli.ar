@@ -16,14 +16,14 @@ export default function Help() {
   const [state, setState] = useAppState('help');
   const [settings, set] = useAppSettings('help');
 
-  const setPath = useCallback(
-    (nextPath: string) => {
+  const setId = useCallback(
+    (nextId: string) => {
       const history = [
-        nextPath,
+        nextId,
         ...state.history.slice(state.backCount), // Drop anything newer than the last undo
       ].slice(0, MAX_HISTORY); // Limit # of history items
 
-      setState({ path: nextPath, history, backCount: 0 });
+      setState({ openId: nextId, history, backCount: 0 });
     },
     [setState, state.backCount, state.history],
   );
@@ -35,7 +35,7 @@ export default function Help() {
   const goBack = () => {
     const restored = state.history.at(state.backCount + 1);
     if (canGoBack && restored) {
-      setState({ backCount: state.backCount + 1, path: restored });
+      setState({ backCount: state.backCount + 1, openId: restored });
     }
   };
 
@@ -43,7 +43,7 @@ export default function Help() {
   const goForward = () => {
     const restored = state.history.at(state.backCount - 1);
     if (canGoForward && restored) {
-      setState({ backCount: state.backCount - 1, path: restored });
+      setState({ backCount: state.backCount - 1, openId: restored });
     }
   };
 
@@ -81,7 +81,7 @@ export default function Help() {
           />
           <Menu.Item
             label="Home"
-            onSelect={() => setPath(defaultHelpState.path)}
+            onSelect={() => setId(defaultHelpState.openId)}
           />
         </Menu.Menu>
       </Menu.Bar>
@@ -122,12 +122,12 @@ export default function Help() {
       <div className="flex-1 flex flex-row gap-0.5 min-h-0">
         {settings.sideBar ? (
           <div className="w-48 min-w-48 flex flex-col">
-            <HelpTreeView setPath={setPath} />
+            <HelpTreeView setId={setId} />
           </div>
         ) : null}
 
         <div className="flex-1 min-w-0 flex flex-col">
-          <HelpContent setPath={setPath} />
+          <HelpContent setId={setId} />
         </div>
       </div>
     </div>

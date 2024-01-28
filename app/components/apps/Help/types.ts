@@ -1,11 +1,11 @@
 export interface HelpState {
-  path: string;
+  openId: string;
   history: string[];
   backCount: number;
 }
 
 export const defaultHelpState: HelpState = {
-  path: '/01.Welcome to Help.md',
+  openId: '69c76666-1610-4ff9-87d7-81956e1a12b5',
   history: [],
   backCount: 0,
 };

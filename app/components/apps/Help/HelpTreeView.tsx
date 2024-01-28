@@ -1,45 +1,38 @@
+import { useEffect, useState } from 'react';
+import cn from 'classnames';
+
+import type { Folder, ItemStub } from '~/schemas/folder';
+import type { AnyFile } from '~/schemas/file';
+
 import ScrollContainer from '~/components/ui/ScrollContainer';
-import type { AnyFile, Directory, FSObject } from '~/content/types';
-import { useLayoutEffect, useState } from 'react';
 import TreeLess from '~/components/ui/icons/TreeLess';
 import TreeMore from '~/components/ui/icons/TreeMore';
-import resolvePath from '~/utils/resolvePath';
-import cn from 'classnames';
-import { useAppState } from '~/components/desktop/Window/context';
+import useFolder from '../Files/utils/useFolder';
 
-const HELP_ROOT = resolvePath(['Applications', 'help', 'content']) as Directory;
-
-function parsePath(path: string) {
-  if (path.startsWith('/')) path = path.slice(1); // Remove leading slash
-  return path.split('/').filter((segment) => segment !== '');
-}
+const HELP_ROOT = '2de4d52e-d1ca-4c9a-b9a4-7937e06c9bcf';
 
 interface HelpItemProps {
-  item: FSObject;
-  path: string;
+  item: ItemStub;
   expanded?: boolean;
   open: () => void;
   className?: string;
-  openPath?: string;
 }
 
 function HelpListItem({
   item,
   expanded = false,
-  path,
   open,
   className,
-  openPath,
 }: HelpItemProps) {
   const type =
-    item.class === 'file'
+    item._type !== 'folder'
       ? 'help_page'
       : expanded
       ? 'help_book_open'
       : 'help_book_closed';
 
   const iconUrl = `/fs/Applications/help/resources/${type}.png`;
-  const name = item.name.split('.')[1];
+  const name = item.name.split('.')[0];
 
   return (
     <button
@@ -66,7 +59,7 @@ function HelpListItem({
         className={cn(
           'px-0.5 whitespace-nowrap overflow-hidden text-ellipsis',
           'group-focus:bg-selection group-focus:text-selection',
-          { 'outline-dotted outline-current outline-1': path === openPath }
+          // { 'outline-dotted outline-current outline-1': path === openPath },
         )}
       >
         {name}
@@ -76,24 +69,34 @@ function HelpListItem({
 }
 
 interface BranchProps {
-  item: Directory;
-  path: string;
+  item: Folder | ItemStub;
   root?: boolean;
   open: (path: string) => void;
-  openPath?: string;
 }
 
-function Branch({ item, path, root = false, open, openPath }: BranchProps) {
+function Branch({ item: itemProp, root = false, open }: BranchProps) {
   const [expanded, setExpanded] = useState(false);
 
-  useLayoutEffect(() => {
-    if (!openPath) return;
+  const [item, setItem] = useState(itemProp);
 
-    const segments = parsePath(path);
-    const openSegments = parsePath(openPath);
-    if (segments.every((segment, i) => segment === openSegments.at(i)))
+  const { load, dir } = useFolder();
+  const toggleExpanded = () => {
+    if (expanded || dir) {
+      setExpanded(!expanded);
+    } else {
+      // Before expanding, fetch the folder's contents and replace the item
+      load(item._id);
+    }
+  };
+
+  useEffect(() => {
+    if (dir) {
+      setItem(dir);
       setExpanded(true);
-  }, [path, openPath]);
+    }
+  }, [dir]);
+
+  const children = (item as Folder).items ?? [];
 
   return (
     <div className="relative group tree-branch">
@@ -106,7 +109,7 @@ function Branch({ item, path, root = false, open, openPath }: BranchProps) {
       <div className="flex flex-row items-start relative z-[1]">
         <button
           className="button bg-default p-px m-px mt-0.5"
-          onClick={() => setExpanded(!expanded)}
+          onClick={toggleExpanded}
         >
           {expanded ? <TreeLess /> : <TreeMore />}
         </button>
@@ -116,33 +119,28 @@ function Branch({ item, path, root = false, open, openPath }: BranchProps) {
         <div className="flex flex-col w-full">
           <HelpListItem
             item={item}
-            path={path}
             expanded={expanded}
-            open={() => setExpanded(!expanded)}
+            open={toggleExpanded}
             className="relative z-[1]"
           />
           {expanded ? (
             <div className="">
-              {item.items
-                .filter((child) => child.class === 'file')
+              {children
+                .filter((child) => child._type !== 'folder')
                 .map((child) => (
                   <Leaf
                     key={child.name}
                     item={child as AnyFile}
-                    path={`${path}/${child.name}`}
-                    open={() => open(`${path}/${child.name}`)}
-                    openPath={openPath}
+                    open={() => open(child._id)}
                   />
                 ))}
-              {item.items
-                .filter((child) => child.class === 'dir')
+              {children
+                .filter((child) => child._type === 'folder')
                 .map((child) => (
                   <Branch
                     key={child.name}
-                    item={child as Directory}
-                    path={`${path}/${child.name}`}
+                    item={child as Folder}
                     open={open}
-                    openPath={openPath}
                   />
                 ))}
             </div>
@@ -155,13 +153,11 @@ function Branch({ item, path, root = false, open, openPath }: BranchProps) {
 
 interface LeafProps {
   item: AnyFile;
-  path: string;
   root?: boolean;
   open: () => void;
-  openPath?: string;
 }
 
-function Leaf({ item, path, root = false, open, openPath }: LeafProps) {
+function Leaf({ item, root = false, open }: LeafProps) {
   return (
     <div className="relative group tree-branch">
       {!root ? (
@@ -178,9 +174,7 @@ function Leaf({ item, path, root = false, open, openPath }: LeafProps) {
         <HelpListItem
           item={item}
           open={open}
-          path={path}
           className="relative z-[1]"
-          openPath={openPath}
         />
       </div>
     </div>
@@ -188,37 +182,30 @@ function Leaf({ item, path, root = false, open, openPath }: LeafProps) {
 }
 
 interface HelpTreeViewProps {
-  setPath: (path: string) => void;
+  setId: (id: string) => void;
 }
 
-export default function HelpTreeView({ setPath }: HelpTreeViewProps) {
-  const [state] = useAppState('help');
+export default function HelpTreeView({ setId }: HelpTreeViewProps) {
+  const { load, dir: help } = useFolder();
+  useEffect(() => load(HELP_ROOT), [load]);
 
+  if (!help) return null;
   return (
     <ScrollContainer className="flex-1">
-      {HELP_ROOT.items
-        .filter((child) => child.class === 'file')
+      {help.items
+        ?.filter((child) => child._type !== 'folder')
         .map((child) => (
           <Leaf
             key={child.name}
             item={child as AnyFile}
-            path={`/${child.name}`}
-            open={() => setPath(`/${child.name}`)}
-            openPath={state.path}
+            open={() => setId(child._id)}
             root
           />
         ))}
-      {HELP_ROOT.items
-        .filter((child) => child.class === 'dir')
+      {help.items
+        ?.filter((child) => child._type === 'folder')
         .map((child) => (
-          <Branch
-            key={child.name}
-            item={child as Directory}
-            path={`/${child.name}`}
-            open={setPath}
-            openPath={state.path}
-            root
-          />
+          <Branch key={child.name} item={child as Folder} open={setId} root />
         ))}
     </ScrollContainer>
   );

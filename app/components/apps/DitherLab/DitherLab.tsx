@@ -185,13 +185,12 @@ export default function DitherLab() {
   const open = () => {
     modal(
       files({
-        path: '/Documents',
-        typeFilter: ['image'],
-        modalCallback: (file, path) =>
+        typeFilter: ['fileImage'],
+        modalCallback: (stub) =>
           openImage({
-            filename: file.name,
-            size: file.size,
-            url: `/fs${path}`,
+            filename: stub.name,
+            size: stub.size ?? 0,
+            url: `/api/safeimage?id=${stub._id}`,
           }),
       }),
     );

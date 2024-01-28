@@ -69,7 +69,7 @@ export default function StartMenu() {
                 ))}
               </Menu.Sub>
               {[
-                files({ path: '/Documents' }),
+                files({ folderId: '949f9fc6-19d4-479a-a1ec-c4a80cffb3a6' }),
                 paint,
                 ditherLab(),
                 about,
@@ -91,18 +91,30 @@ export default function StartMenu() {
             >
               <Menu.Item
                 label="Articles"
-                icon="/fs/System Files/Icons/FileType/dir_16.png"
-                onSelect={() => launch(files({ path: '/Documents/Articles' }))}
+                icon="/fs/System Files/Icons/FileType/folder_16.png"
+                onSelect={() =>
+                  launch(
+                    files({ folderId: '679b7214-24c9-439e-86bc-cd86cc215dc3' }),
+                  )
+                }
               />
               <Menu.Item
                 label="Photos"
-                icon="/fs/System Files/Icons/FileType/dir_16.png"
-                onSelect={() => launch(files({ path: '/Documents/Photos' }))}
+                icon="/fs/System Files/Icons/FileType/folder_16.png"
+                onSelect={() =>
+                  launch(
+                    files({ folderId: '49fba51f-c8ee-450d-bc21-522066ceb7ea' }),
+                  )
+                }
               />
               <Menu.Item
                 label="Projects"
-                icon="/fs/System Files/Icons/FileType/dir_16.png"
-                onSelect={() => launch(files({ path: '/Documents/Projects' }))}
+                icon="/fs/System Files/Icons/FileType/folder_16.png"
+                onSelect={() =>
+                  launch(
+                    files({ folderId: '2d282fb9-580f-47c1-a419-1db426c6a2c9' }),
+                  )
+                }
               />
             </Menu.Sub>
 
@@ -114,17 +126,21 @@ export default function StartMenu() {
               <Menu.Item
                 label="My Documents"
                 icon="/fs/Applications/files/icon_16.png"
-                onSelect={() => launch(files({ path: '/Documents' }))}
+                onSelect={() =>
+                  launch(
+                    files({ folderId: '949f9fc6-19d4-479a-a1ec-c4a80cffb3a6' }),
+                  )
+                }
               />
 
               <Menu.Separator />
 
-              {fileHistory.map(({ time, item, path }) => (
+              {fileHistory.map(({ time, item }) => (
                 <Menu.Item
                   key={`${time}_${item.name}`}
                   label={item.name}
-                  icon={`/fs/System Files/Icons/FileType/${item.type}_16.png`}
-                  onSelect={() => fileHandler.open(item, path)}
+                  icon={`/fs/System Files/Icons/FileType/${item._type}_16.png`}
+                  onSelect={() => fileHandler.open(item)}
                 />
               ))}
 

@@ -1,12 +1,14 @@
-import type { FSObject } from '~/content/types';
 import type { FilesState } from '../types';
+import type { ItemStub } from '~/schemas/folder';
 
 export default function filterByType(
-  items: FSObject[],
+  items: ItemStub[],
   typeFilter: FilesState['typeFilter'],
 ) {
   return items.filter(
     (item) =>
-      !typeFilter || item.class === 'dir' || typeFilter.includes(item.type),
+      !typeFilter ||
+      item._type === 'folder' ||
+      (typeFilter as string[]).includes(item._type),
   );
 }

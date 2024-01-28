@@ -1,25 +1,21 @@
-import type {
-  MarkdownFile,
-  ImageFile,
-  AnyFile,
-  MDXFile,
-} from '~/content/types';
+import type { AnyFile, ImageFile, RichTextFile, MDXFile } from '~/schemas/file';
+import type { ItemStub } from '~/schemas/folder';
 
-export type PreviewSupportedFile = MarkdownFile | MDXFile | ImageFile;
-export const previewSupportedFileTypes: AnyFile['type'][] = [
-  'md',
-  'mdx',
-  'image',
+export type PreviewSupportedFile = ImageFile | RichTextFile | MDXFile;
+export const previewSupportedFileTypes: AnyFile['_type'][] = [
+  'fileImage',
+  'fileRichText',
+  'fileMDX',
 ];
 
-export function isPreviewable(file: AnyFile): file is PreviewSupportedFile {
-  return previewSupportedFileTypes.includes(file.type);
+export function isPreviewable(file: ItemStub) {
+  return previewSupportedFileTypes.includes(file._type as any);
 }
 
 export interface PreviewState {
   // General
   file?: PreviewSupportedFile;
-  filePath?: string;
+  fileStub?: ItemStub;
 
   // Image preview
   zoom?: number;

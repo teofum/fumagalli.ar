@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useAppState, useWindow } from '~/components/desktop/Window/context';
 
@@ -7,20 +7,21 @@ import {
   type PreviewSupportedFile,
   isPreviewable,
 } from './types';
-import PreviewMarkdown from './modes/PreviewMarkdown';
+import PreviewRichText from './modes/PreviewRichText';
 import PreviewMDX from './modes/PreviewMDX';
 import PreviewImage from './modes/PreviewImage';
 import useDesktopStore from '~/stores/desktop';
 import Menu from '~/components/ui/Menu';
 import { files } from '../Files';
+import { useFetcher } from '@remix-run/react';
 
-const getPreviewMode = (fileType: PreviewSupportedFile['type']) => {
+const getPreviewMode = (fileType: PreviewSupportedFile['_type']) => {
   switch (fileType) {
-    case 'md':
-      return PreviewMarkdown;
-    case 'mdx':
+    case 'fileRichText':
+      return PreviewRichText;
+    case 'fileMDX':
       return PreviewMDX;
-    case 'image':
+    case 'fileImage':
       return PreviewImage;
   }
 };
@@ -31,43 +32,51 @@ export default function Preview() {
 
   const [state, setState] = useAppState('preview');
 
-  // Set window title to file title
-  useEffect(() => {
-    if (state.file) setTitle(id, `${state.file.name} - Preview`);
-  }, [setTitle, id, state.file]);
+  const { load, data, state: fetchState } = useFetcher<PreviewSupportedFile>();
 
-  if (!state.file || !state.filePath) return null;
-  const resourceUrl = '/fs' + state.filePath;
+  /**
+   * Initialization, load file contents and set window title
+   */
+  const openFileId = useRef('');
+  useEffect(() => {
+    if (!state.fileStub || state.fileStub._id === openFileId.current) return;
+    setTitle(id, `${state.fileStub.name} - Preview`);
+    load(`/api/file?id=${state.fileStub._id}`);
+  }, [setTitle, setState, id, state.fileStub, load]);
+
+  useEffect(() => {
+    if (!data || data._id === openFileId.current) return;
+    openFileId.current = data._id;
+
+    setState({ file: data });
+  }, [data, setState, state.file]);
+
+  if (fetchState === 'loading') return (
+    <div className="flex flex-col items-center justify-center gap-0.5 min-w-0">
+      Starting...
+    </div>
+  );
+
+  if (!state.file) return null;
 
   const open = () => {
     modal(
       files({
-        path: state.filePath?.split('/').slice(0, -1).join('/') ?? '/Documents',
         typeFilter: previewSupportedFileTypes,
-        modalCallback: (file, filePath) => {
-          if (isPreviewable(file)) setState({ file, filePath });
+        modalCallback: (stub) => {
+          if (isPreviewable(stub)) setState({ fileStub: stub });
         },
       }),
     );
   };
 
-  const download = () => {
-    const a = document.createElement('a');
-    a.href = resourceUrl;
-    a.download = '';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
-
-  const Component = getPreviewMode(state.file.type);
+  const Component = getPreviewMode(state.file._type);
   return (
     <div className="flex flex-col gap-0.5 min-w-0">
       <Component
         commonMenu={
           <Menu.Menu trigger={<Menu.Trigger>File</Menu.Trigger>}>
             <Menu.Item label="Open..." onSelect={open} />
-            <Menu.Item label="Download" onSelect={download} />
 
             <Menu.Separator />
 

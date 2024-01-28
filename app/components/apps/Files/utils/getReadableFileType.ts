@@ -1,24 +1,22 @@
-import type { FSObject } from '~/content/types';
+import type { ItemStub } from '~/schemas/folder';
 
-export default function getReadableFileType(item: FSObject) {
-  if (item.class === 'dir') return 'Folder';
-
+export default function getReadableFileType(item: ItemStub) {
   const extension = item.name.split('.').at(-1);
 
-  switch (item.type) {
-    case 'image':
+  switch (item._type) {
+    case 'folder':
+      return 'Folder';
+    case 'fileImage':
       return `${extension?.toUpperCase()} Image`;
-    case 'md':
-      return 'Markdown File';
-    case 'mdx':
+    case 'fileRichText':
+      return 'Rich Text File';
+    case 'fileMDX':
       return 'MDX File';
-    case 'dos':
+    case 'fileDos':
       return 'DOSEmu ROM';
-    case 'app':
+    case 'fileApp':
       return 'Application';
-    case 'file':
-      return `${extension?.toUpperCase()} File`;
     default:
-      return 'Unknown';
+      return `${extension?.toUpperCase()} File`;
   }
 }

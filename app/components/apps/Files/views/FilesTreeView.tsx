@@ -1,44 +1,55 @@
 import ScrollContainer from '~/components/ui/ScrollContainer';
-import type { AnyFile, Directory, FSObject } from '~/content/types';
+import type { Folder, ItemStub } from '~/schemas/folder';
 import FilesListItem from './FilesListItem';
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import TreeLess from '~/components/ui/icons/TreeLess';
 import TreeMore from '~/components/ui/icons/TreeMore';
 import type FilesViewProps from './FilesViewProps';
 import filterByType from '../utils/filterByType';
 import { useAppState } from '~/components/desktop/Window/context';
-import parsePath from '../utils/parsePath';
+import useFolder from '../utils/useFolder';
 
 interface BranchProps {
-  item: Directory;
-  path: string;
+  item: Folder | ItemStub;
   root?: boolean;
-  open: (item: FSObject, path?: string) => void;
+  open: (item: ItemStub, path?: string) => void;
   navigate: (path: string, absolute?: boolean) => void;
-  select: React.Dispatch<React.SetStateAction<FSObject | null>>;
-
-  openPath?: string[];
+  select: React.Dispatch<React.SetStateAction<ItemStub | null>>;
 }
 
 function Branch({
-  item,
-  path,
+  item: itemProp,
   root = false,
   open,
   navigate,
   select,
-  openPath,
 }: BranchProps) {
   const [expanded, setExpanded] = useState(root);
   const [state] = useAppState('files');
 
-  useLayoutEffect(() => {
-    if (!openPath) return;
-    
-    const segments = parsePath(path);
-    if (segments.every((segment, i) => segment === openPath.at(i)))
+  const [item, setItem] = useState(itemProp);
+
+  const { load, dir } = useFolder();
+  const toggleExpanded = () => {
+    if (expanded || dir) {
+      setExpanded(!expanded);
+    } else {
+      // Before expanding, fetch the folder's contents and replace the item
+      load(item._id);
+    }
+  };
+
+  useEffect(() => {
+    if (dir) {
+      setItem(dir);
       setExpanded(true);
-  }, [path, openPath]);
+    }
+  }, [dir]);
+
+  const filteredItems = filterByType(
+    (item as Folder).items ?? [],
+    state.typeFilter,
+  );
 
   return (
     <div className="relative group tree-branch">
@@ -51,7 +62,7 @@ function Branch({
       <div className="flex flex-row items-start relative z-[1]">
         <button
           className="button bg-default p-px m-px mt-0.5"
-          onClick={() => setExpanded(!expanded)}
+          onClick={toggleExpanded}
         >
           {expanded ? <TreeLess /> : <TreeMore />}
         </button>
@@ -61,32 +72,33 @@ function Branch({
         <div className="flex flex-col w-full">
           <FilesListItem
             item={item}
-            open={() => navigate(path, true)}
+            open={() => navigate(item._id)}
             select={select}
             className="relative z-[1]"
           />
           {expanded ? (
             <div className="">
-              {filterByType(item.items, state.typeFilter).map((child) =>
-                child.class === 'dir' ? (
+              {filteredItems.map((child) =>
+                child._type === 'folder' ? (
                   <Branch
                     key={child.name}
                     item={child}
-                    path={`${path}/${child.name}`}
                     open={open}
                     navigate={navigate}
                     select={select}
-                    openPath={openPath}
                   />
                 ) : (
                   <Leaf
                     key={child.name}
                     item={child}
-                    open={(item) => open(item, path)}
+                    open={(item) => open(item)}
                     select={select}
                   />
                 ),
               )}
+              {filteredItems.length === 0 ? (
+                <div className="text-disabled pl-5">[EMPTY]</div>
+              ) : null}
             </div>
           ) : null}
         </div>
@@ -96,10 +108,10 @@ function Branch({
 }
 
 interface LeafProps {
-  item: AnyFile;
+  item: ItemStub;
   root?: boolean;
-  open: (item: FSObject) => void;
-  select: React.Dispatch<React.SetStateAction<FSObject | null>>;
+  open: (item: ItemStub) => void;
+  select: React.Dispatch<React.SetStateAction<ItemStub | null>>;
 }
 
 function Leaf({ item, root = false, open, select }: LeafProps) {
@@ -127,21 +139,18 @@ function Leaf({ item, root = false, open, select }: LeafProps) {
 
 export default function FilesTreeView({
   dir,
-  path,
   open,
   navigate,
   select,
-  openPath,
-}: FilesViewProps & { openPath?: string[] }) {
+}: FilesViewProps) {
   return (
     <ScrollContainer className="flex-1">
       <Branch
-        path={path}
+        key={dir._id}
         item={dir}
         open={open}
         navigate={navigate}
         select={select}
-        openPath={openPath}
         root
       />
     </ScrollContainer>

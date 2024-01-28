@@ -1,4 +1,5 @@
-import type { AnyFile } from '~/content/types';
+import type { AnyFile } from '~/schemas/file';
+import type { ItemStub } from '~/schemas/folder';
 
 export type FilesView = 'grid' | 'list' | 'details' | 'tree' | 'columns';
 
@@ -19,16 +20,16 @@ export const defaultFilesSettings: FilesSettings = {
 };
 
 export interface FilesState {
-  path: string;
+  folderId: string;
   history: string[];
   backCount: number;
 
-  typeFilter?: AnyFile['type'][];
-  modalCallback?: (file: AnyFile, path: string) => void;
+  typeFilter?: AnyFile['_type'][];
+  modalCallback?: (file: ItemStub) => void;
 }
 
 export const defaultFilesState: FilesState = {
-  path: '/',
+  folderId: 'root',
   history: [],
   backCount: 0,
 };
