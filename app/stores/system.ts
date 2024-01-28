@@ -3,7 +3,9 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import merge from 'ts-deepmerge';
 
-import type { AnyFile, Folder } from '~/schemas/folder';
+import type { AnyFile } from '~/schemas/file';
+import type { Folder } from '~/schemas/folder';
+
 import {
   defaultTheme,
   type ThemeCustomization,
@@ -46,6 +48,8 @@ const MAX_DIR_HISTORY = 10; // Number of last accessed directories to keep
 // CHANGING THIS WILL WIPE ALL DATA FOR EVERYONE.
 // Update ONLY for breaking changes to the schema.
 const SCHEMA_VERSION = 2;
+
+// V2: Switched to Sanity for content
 
 export interface FileAccess {
   time: number;

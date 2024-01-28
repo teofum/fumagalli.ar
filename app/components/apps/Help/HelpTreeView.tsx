@@ -13,20 +13,16 @@ const HELP_ROOT = '2de4d52e-d1ca-4c9a-b9a4-7937e06c9bcf';
 
 interface HelpItemProps {
   item: ItemStub;
-  path: string;
   expanded?: boolean;
   open: () => void;
   className?: string;
-  openPath?: string;
 }
 
 function HelpListItem({
   item,
   expanded = false,
-  path,
   open,
   className,
-  openPath,
 }: HelpItemProps) {
   const type =
     item._type !== 'folder'
@@ -63,7 +59,7 @@ function HelpListItem({
         className={cn(
           'px-0.5 whitespace-nowrap overflow-hidden text-ellipsis',
           'group-focus:bg-selection group-focus:text-selection',
-          { 'outline-dotted outline-current outline-1': path === openPath },
+          // { 'outline-dotted outline-current outline-1': path === openPath },
         )}
       >
         {name}
@@ -74,12 +70,11 @@ function HelpListItem({
 
 interface BranchProps {
   item: Folder | ItemStub;
-  path: string;
   root?: boolean;
   open: (path: string) => void;
 }
 
-function Branch({ item: itemProp, path, root = false, open }: BranchProps) {
+function Branch({ item: itemProp, root = false, open }: BranchProps) {
   const [expanded, setExpanded] = useState(false);
 
   const [item, setItem] = useState(itemProp);
@@ -124,7 +119,6 @@ function Branch({ item: itemProp, path, root = false, open }: BranchProps) {
         <div className="flex flex-col w-full">
           <HelpListItem
             item={item}
-            path={path}
             expanded={expanded}
             open={toggleExpanded}
             className="relative z-[1]"
@@ -137,8 +131,7 @@ function Branch({ item: itemProp, path, root = false, open }: BranchProps) {
                   <Leaf
                     key={child.name}
                     item={child as AnyFile}
-                    path={`${path}/${child.name}`}
-                    open={() => open(`${path}/${child.name}`)}
+                    open={() => open(child._id)}
                   />
                 ))}
               {children
@@ -147,7 +140,6 @@ function Branch({ item: itemProp, path, root = false, open }: BranchProps) {
                   <Branch
                     key={child.name}
                     item={child as Folder}
-                    path={`${path}/${child.name}`}
                     open={open}
                   />
                 ))}
@@ -161,12 +153,11 @@ function Branch({ item: itemProp, path, root = false, open }: BranchProps) {
 
 interface LeafProps {
   item: AnyFile;
-  path: string;
   root?: boolean;
   open: () => void;
 }
 
-function Leaf({ item, path, root = false, open }: LeafProps) {
+function Leaf({ item, root = false, open }: LeafProps) {
   return (
     <div className="relative group tree-branch">
       {!root ? (
@@ -183,7 +174,6 @@ function Leaf({ item, path, root = false, open }: LeafProps) {
         <HelpListItem
           item={item}
           open={open}
-          path={path}
           className="relative z-[1]"
         />
       </div>
@@ -192,10 +182,10 @@ function Leaf({ item, path, root = false, open }: LeafProps) {
 }
 
 interface HelpTreeViewProps {
-  setPath: (path: string) => void;
+  setId: (id: string) => void;
 }
 
-export default function HelpTreeView({ setPath }: HelpTreeViewProps) {
+export default function HelpTreeView({ setId }: HelpTreeViewProps) {
   const { load, dir: help } = useFolder();
   useEffect(() => load(HELP_ROOT), [load]);
 
@@ -208,21 +198,14 @@ export default function HelpTreeView({ setPath }: HelpTreeViewProps) {
           <Leaf
             key={child.name}
             item={child as AnyFile}
-            path={`/${child.name}`}
-            open={() => setPath(`/${child.name}`)}
+            open={() => setId(child._id)}
             root
           />
         ))}
       {help.items
         ?.filter((child) => child._type === 'folder')
         .map((child) => (
-          <Branch
-            key={child.name}
-            item={child as Folder}
-            path={`/${child.name}`}
-            open={setPath}
-            root
-          />
+          <Branch key={child.name} item={child as Folder} open={setId} root />
         ))}
     </ScrollContainer>
   );

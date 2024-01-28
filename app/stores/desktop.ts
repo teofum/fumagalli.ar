@@ -11,9 +11,10 @@ import clamp from '~/utils/clamp';
 // Schema version, ensures incompatible data isn't loaded
 // CHANGING THIS WILL WIPE ALL DATA FOR EVERYONE.
 // Update ONLY for breaking changes to the schema.
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 3;
 
 // V2: FS restructuring, updated to prevent stale explorer windows
+// V3: Switched to Sanity for content
 
 const defaultWindowProps = {
   title: 'New Window',
