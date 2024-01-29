@@ -125,7 +125,10 @@ export default function Desktop() {
 
   return (
     <>
-      <div className={cn('w-screen h-screen flex flex-col overflow-hidden')}>
+      <div
+        className={cn('w-screen h-screen flex flex-col overflow-hidden')}
+        onContextMenu={(ev) => ev.preventDefault()}
+      >
         <div
           id="desktop"
           className="relative flex-1 bg-desktop [image-rendering:pixelated]"
@@ -162,7 +165,11 @@ export default function Desktop() {
               <DesktopIcon
                 iconUrl="/fs/System Files/Icons/documents.png"
                 title="My Documents"
-                open={() => launch(files({ folderId: '949f9fc6-19d4-479a-a1ec-c4a80cffb3a6' }))}
+                open={() =>
+                  launch(
+                    files({ folderId: '949f9fc6-19d4-479a-a1ec-c4a80cffb3a6' }),
+                  )
+                }
               />
               <DesktopIcon
                 iconUrl="/fs/Applications/intro/icon_32.png"
