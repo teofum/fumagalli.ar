@@ -97,6 +97,10 @@ export default function Solitaire() {
     resetTimer();
   };
 
+  const undo = () => {
+    dispatch({ type: 'undo' });
+  };
+
   /**
    * Card drag handlers
    */
@@ -123,6 +127,11 @@ export default function Solitaire() {
       <Menu.Bar>
         <Menu.Menu trigger={<Menu.Trigger>Game</Menu.Trigger>}>
           <Menu.Item label="Deal" onSelect={() => newGame()} />
+          <Menu.Item
+            label="Undo"
+            onSelect={() => undo()}
+            disabled={game.state !== 'playing' || !game.lastState}
+          />
 
           <Menu.Separator />
 

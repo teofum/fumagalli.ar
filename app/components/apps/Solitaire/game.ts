@@ -149,3 +149,9 @@ export function score(
   if (state.settings.scoring === mode) return Math.max(0, state.score + add);
   return state.score;
 }
+
+export function baseState(state: GameState) {
+  const { settings, state: _, lastState, ...base } = state;
+
+  return base;
+}
