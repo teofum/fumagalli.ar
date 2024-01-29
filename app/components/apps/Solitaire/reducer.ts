@@ -1,4 +1,5 @@
 import {
+  baseState,
   canMoveToRowStack,
   canMoveToSuitStack,
   deal,
@@ -8,57 +9,65 @@ import {
 } from './game';
 import type { Card, SolitaireSettings } from './types';
 
-export interface GameState {
-  state: 'playing' | 'win_anim' | 'won';
+type BaseGameState = {
   score: number;
 
   deck: Card[];
   drawn: Card[];
   drawnOffset: number; // Display state used for draw-three rules
 
-  stacks: Card[][]; // 4 stacks
-  rows: { turned: Card[]; unturned: Card[] }[]; // 7 row-stacks
+  stacks: Card[][]; // 4 foundation stacks
+  rows: { turned: Card[]; unturned: Card[] }[]; // 7 tableau stacks
+};
 
+export type GameState = BaseGameState & {
+  state: 'playing' | 'win_anim' | 'won';
   settings: SolitaireSettings;
-}
 
-interface DealAction {
+  lastState?: BaseGameState;
+};
+
+type DealAction = {
   type: 'deal';
   settings?: SolitaireSettings;
-}
+};
 
-interface DrawAction {
+type DrawAction = {
   type: 'draw';
-}
+};
 
-interface UndrawAction {
+type UndrawAction = {
   type: 'undraw';
-}
+};
 
-interface RevealAction {
+type RevealAction = {
   type: 'reveal';
   rowIndex: number;
-}
+};
 
-interface StackAction {
+type StackAction = {
   type: 'sendToStack';
   card: Card;
-}
+};
 
-interface MoveAction {
+type MoveAction = {
   type: 'move';
   cards: Card[];
   to: { type: 'suit' | 'row'; index: number };
-}
+};
 
-interface ChangeDeckAction {
+type ChangeDeckAction = {
   type: 'changeDeck';
   back: number;
-}
+};
 
-interface EndWinAnimationAction {
+type EndWinAnimationAction = {
   type: 'endWinAnimation';
-}
+};
+
+type UndoAction = {
+  type: 'undo';
+};
 
 type Action =
   | DealAction
@@ -68,7 +77,8 @@ type Action =
   | StackAction
   | MoveAction
   | ChangeDeckAction
-  | EndWinAnimationAction;
+  | EndWinAnimationAction
+  | UndoAction;
 
 export default function solitaireReducer(
   state: GameState,
@@ -99,6 +109,7 @@ export default function solitaireReducer(
             deck: state.deck.slice(0, -3),
             drawn: [...state.drawn, ...drawn],
             drawnOffset: Math.min(2, drawn.length),
+            lastState: baseState(state),
           };
         }
       }
@@ -114,6 +125,7 @@ export default function solitaireReducer(
           'standard',
           state.settings.rules === 'draw-one' ? -100 : -25,
         ),
+        lastState: baseState(state),
       };
     }
     case 'reveal': {
@@ -133,6 +145,7 @@ export default function solitaireReducer(
             : row,
         ),
         score: score(state, 'standard', 5), // 5 points for turning card
+        lastState: baseState(state),
       };
     }
     case 'sendToStack': {
@@ -181,6 +194,7 @@ export default function solitaireReducer(
         // Remove an offset card if a card was removed from the drawn pile
         // Kinda hacky, but it works
         drawnOffset: fromDrawn ? state.drawnOffset - 1 : state.drawnOffset,
+        lastState: baseState(state),
       };
     }
     case 'move': {
@@ -228,6 +242,7 @@ export default function solitaireReducer(
             state: isWin(newState) ? 'win_anim' : 'playing',
             drawnOffset: fromDrawn ? state.drawnOffset - 1 : state.drawnOffset,
             score: score(state, 'standard', points),
+            lastState: baseState(state),
           };
         }
         case 'row': {
@@ -266,6 +281,7 @@ export default function solitaireReducer(
             drawnOffset: fromDrawn ? state.drawnOffset - 1 : state.drawnOffset,
             // 5 points for drawn -> rows, -15 for suit -> rows
             score: score(state, 'standard', points),
+            lastState: baseState(state),
           };
         }
       }
@@ -275,6 +291,18 @@ export default function solitaireReducer(
     }
     case 'endWinAnimation': {
       return { ...state, state: 'won' };
+    }
+    case 'undo': {
+      if (!state.lastState) return state;
+
+      const scoreDifference = state.score - state.lastState.score;
+
+      return {
+        ...state,
+        ...state.lastState,
+        lastState: undefined,
+        score: score(state, 'standard', -(20 + scoreDifference)),
+      };
     }
   }
 }
