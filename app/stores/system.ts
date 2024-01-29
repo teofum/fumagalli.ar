@@ -40,6 +40,10 @@ import {
   defaultHelpSettings,
   type HelpSettings,
 } from '~/components/apps/Help/types';
+import {
+  defaultSystemSettings,
+  type SystemSettings,
+} from '~/components/apps/SystemSettings/types';
 
 const MAX_FILE_HISTORY = 10; // Number of last accessed files to keep
 const MAX_DIR_HISTORY = 10; // Number of last accessed directories to keep
@@ -75,6 +79,7 @@ interface SystemState {
   dirHistory: DirectoryAccess[];
   theme: SystemTheme;
   themeCustomizations: ThemeCustomization;
+  settings: SystemSettings;
 
   _schema: number;
 }
@@ -95,9 +100,10 @@ interface SystemActions {
   saveFileToHistory: (item: FileAccess) => void;
   saveDirToHistory: (item: DirectoryAccess) => void;
 
-  // System theme
+  // System theme and settings
   updateTheme: (theme: SystemTheme) => void;
   updateThemeCustomizations: (theme: Partial<ThemeCustomization>) => void;
+  updateSettings: (settings: SystemSettings) => void;
 }
 
 /**
@@ -127,6 +133,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
         backgroundColor: 'rgb(0 0 0)',
         backgroundUrl: '/fs/System Files/Backgrounds/Chess.png',
       },
+      settings: defaultSystemSettings,
 
       _schema: SCHEMA_VERSION,
 
@@ -165,6 +172,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
         set(({ themeCustomizations }) => ({
           themeCustomizations: { ...themeCustomizations, ...theme },
         })),
+      updateSettings: (settings) => set(() => ({ settings })),
     }),
     {
       name: 'system-storage',

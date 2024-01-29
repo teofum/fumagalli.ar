@@ -16,6 +16,7 @@ import { ditherLab } from '../apps/DitherLab';
 import { DOS_GAMES } from '../apps/DOSEmu/types';
 import { help } from '../apps/Help';
 import { paint } from '../apps/Paint';
+import { systemSettings } from '../apps/SystemSettings';
 
 const ICON_PATH = '/fs/System Files/Icons/Start';
 
@@ -154,7 +155,7 @@ export default function StartMenu() {
               label="Settings"
               icon={`${ICON_PATH}/settings.png`}
             >
-              {[themeSettings].map((app) => (
+              {[themeSettings, systemSettings].map((app) => (
                 <Menu.Item
                   key={app.appType}
                   label={app.title ?? ''}
