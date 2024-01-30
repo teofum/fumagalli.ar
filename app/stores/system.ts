@@ -131,7 +131,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
       themeCustomizations: {
         backgroundImageMode: 'fill',
         backgroundColor: 'rgb(0 0 0)',
-        backgroundUrl: '/fs/System Files/Backgrounds/Chess.png',
+        backgroundUrl: '/assets/backgrounds/Chess.png',
       },
       settings: defaultSystemSettings,
 
