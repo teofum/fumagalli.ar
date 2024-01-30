@@ -30,6 +30,7 @@ import PaintStretchAndSkew, {
   paint_stretchAndSkew,
 } from './Paint/modals/StretchAndSkew';
 import type { PaintStretchAndSkewState } from './Paint/modals/StretchAndSkew';
+import SystemSettings, { systemSettings } from './SystemSettings';
 
 const applications = [
   { Component: About, meta: about },
@@ -43,6 +44,7 @@ const applications = [
   { Component: SolitaireDeckSelect, meta: solitaire_deck },
   { Component: Sudoku, meta: sudoku },
   { Component: ThemeSettings, meta: themeSettings },
+  { Component: SystemSettings, meta: systemSettings },
   { Component: DOSEmu, meta: dosEmu() },
   { Component: DitherLab, meta: ditherLab() },
   { Component: Paint, meta: paint },

@@ -79,7 +79,7 @@ function DesktopIcon({ iconUrl, title, x, y, open }: DesktopIconProps) {
 }
 
 export default function Desktop() {
-  const { theme, themeCustomizations } = useSystemStore();
+  const { theme, themeCustomizations, settings } = useSystemStore();
   const { windows, launch } = useDesktopStore();
 
   const { backgroundColor, backgroundUrl, backgroundImageMode } =
@@ -129,6 +129,7 @@ export default function Desktop() {
         className={cn('w-screen h-screen flex flex-col overflow-hidden')}
         onContextMenu={(ev) => ev.preventDefault()}
       >
+        {settings.taskbarPosition === 'top' ? <Taskbar /> : null}
         <div
           id="desktop"
           className="relative flex-1 bg-desktop [image-rendering:pixelated]"
@@ -222,7 +223,7 @@ export default function Desktop() {
             <Window key={window.id} {...window} />
           ))}
         </div>
-        <Taskbar />
+        {settings.taskbarPosition === 'bottom' ? <Taskbar /> : null}
       </div>
 
       <ShutdownDialog />
