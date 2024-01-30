@@ -40,11 +40,22 @@ export default function AboutRoute() {
                 <span className="tracking-[-2px]">F</span>umaga
                 <span className="tracking-[-9px] -ml-1.5">lli</span>
               </h1>
-              <p className="font-display-text text-xl max-w-[55ch]">
-                and I'm a web developer and designer based in Buenos Aires,
-                Argentina. I make cool stuff for the web, and I'm passionate
-                about exploring new possibilities and pushing the limits of what
-                websites can do.
+              <p className="font-display-text text-xl">
+                and I'm a UI developer based in Buenos Aires, Argentina. I build
+                things for the web, combining design and technical skill to
+                bring products to life.
+              </p>
+
+              <p className="font-display-text text-xl">
+                I specialize in creating things out of the ordinary, with a
+                focus on interaction and intricate attention to detail. I
+                believe the web can be both useful and fun, and enjoy exploring
+                new and unusual ideas.
+              </p>
+
+              <p className="font-display-text text-xl">
+                I'm currently working as a UI developer at Aerolab, building
+                quality websites and apps for a variety of clients.
               </p>
 
               <p className="font-display-text text-xl max-w-[55ch]">

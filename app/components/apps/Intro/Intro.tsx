@@ -2,7 +2,6 @@ import useDesktopStore from '~/stores/desktop';
 import Button from '~/components/ui/Button';
 import { Tab, TabContent, Tabs, TabsList } from '~/components/ui/Tabs';
 import { files } from '../Files';
-import { help } from '../Help';
 import RetroLink from '~/components/ui/Link';
 
 const resources = '/fs/Applications/intro/resources';
@@ -31,10 +30,21 @@ export default function Intro() {
               <span className="tracking-[-9px] -ml-1.5">lli</span>
             </h1>
             <p className="font-display-text text-xl">
-              and I'm a web developer and designer based in Buenos Aires,
-              Argentina. I make cool stuff for the web, and I'm passionate about
-              exploring new possibilities and pushing the limits of what
-              websites can do.
+              and I'm a UI developer based in Buenos Aires, Argentina. I build
+              things for the web, combining design and technical skill to bring
+              products to life.
+            </p>
+
+            <p className="font-display-text text-xl">
+              I specialize in creating things out of the ordinary, with a focus
+              on interaction and intricate attention to detail. I believe the
+              web can be both useful and fun, and enjoy exploring new and
+              unusual ideas.
+            </p>
+
+            <p className="font-display-text text-xl">
+              I'm currently working as a UI developer at Aerolab, building
+              quality websites and apps for a variety of clients.
             </p>
 
             <p className="font-display-text text-xl">
@@ -45,7 +55,9 @@ export default function Intro() {
             <div className="flex flex-row gap-1">
               <Button
                 className="py-1 px-2 w-20"
-                onClick={() => openFolder('679b7214-24c9-439e-86bc-cd86cc215dc3')}
+                onClick={() =>
+                  openFolder('679b7214-24c9-439e-86bc-cd86cc215dc3')
+                }
               >
                 <div className="flex flex-col items-center gap-1 pt-1">
                   <img src={`${resources}/articles.png`} alt="" />
@@ -54,7 +66,9 @@ export default function Intro() {
               </Button>
               <Button
                 className="py-1 px-2 w-20"
-                onClick={() => openFolder('49fba51f-c8ee-450d-bc21-522066ceb7ea')}
+                onClick={() =>
+                  openFolder('49fba51f-c8ee-450d-bc21-522066ceb7ea')
+                }
               >
                 <div className="flex flex-col items-center gap-1 pt-1">
                   <img src={`${resources}/photos.png`} alt="" />
@@ -63,23 +77,16 @@ export default function Intro() {
               </Button>
               <Button
                 className="py-1 px-2 w-20"
-                onClick={() => openFolder('2d282fb9-580f-47c1-a419-1db426c6a2c9')}
+                onClick={() =>
+                  openFolder('2d282fb9-580f-47c1-a419-1db426c6a2c9')
+                }
               >
                 <div className="flex flex-col items-center gap-1 pt-1">
                   <img src={`${resources}/projects.png`} alt="" />
-                  Projects
+                  Work
                 </div>
               </Button>
             </div>
-
-            <p className="font-display-text text-xl">
-              You can take a look at the{' '}
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <button className="link" onClick={() => launch(help())}>
-                help pages
-              </button>{' '}
-              to learn more about the different features of this site.
-            </p>
 
             <p className="font-display-text text-xl mt-auto pt-8">
               Let's build awesome things together!{' '}
