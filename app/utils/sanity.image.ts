@@ -1,6 +1,7 @@
 import createImageUrlBuilder from '@sanity/image-url';
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
 import type { ImageFile } from '~/schemas/file';
+import useSystemStore from '~/stores/system';
 
 const imageBuilder = createImageUrlBuilder({
   projectId: 'y9lopbef',
@@ -23,11 +24,15 @@ export function getImageSize(file: ImageFile) {
   );
 }
 
-export function getFetchedImageSize(file: ImageFile) {
+export function useImageSize(file: ImageFile) {
   const [originalWidth, originalHeight] = getImageSize(file);
+  const {
+    settings: { imageSize },
+  } = useSystemStore();
 
   const scaling = Math.min(
-    1 / Math.max(originalWidth / 2000, originalHeight / 2000),
+    1 / Math.max(originalWidth / imageSize, originalHeight / imageSize),
+    1,
   );
 
   return [originalWidth * scaling, originalHeight * scaling];
@@ -42,4 +47,26 @@ export function getImageUrl(file: ImageFile) {
   if (width >= height)
     return sanityImage(file.content).width(2000).quality(80).url();
   else return sanityImage(file.content).height(2000).quality(80).url();
+}
+
+export function useImageUrl(file: ImageFile) {
+  const {
+    settings: { imageSize: size, imageQuality: quality },
+  } = useSystemStore();
+
+  // Get the width and height from the asset URL
+  const [width, height] = getImageSize(file);
+  if (!width || !height) return;
+
+  // TODO: allow adjusting this somewhere?
+  if (width >= height)
+    return sanityImage(file.content)
+      .width(Math.min(width, size))
+      .quality(quality)
+      .url();
+  else
+    return sanityImage(file.content)
+      .height(Math.min(height, size))
+      .quality(quality)
+      .url();
 }

@@ -7,7 +7,7 @@ import useDesktopStore from '~/stores/desktop';
 import { MAX_INITIAL_SIZE, UI_SIZE, ZOOM_STOPS } from '../constants';
 import Menu from '~/components/ui/Menu';
 import type { PreviewModeProps } from '../types';
-import { getFetchedImageSize, getImageUrl } from '~/utils/sanity.image';
+import { useImageSize, useImageUrl } from '~/utils/sanity.image';
 import type { ImageFile } from '~/schemas/file';
 
 export default function PreviewImage({ commonMenu }: PreviewModeProps) {
@@ -17,8 +17,8 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
   const [state, setState] = useAppState('preview');
 
   if (state.file?._type !== 'fileImage') throw new Error('Wrong file type');
-  const imageUrl = getImageUrl(state.file as ImageFile);
-  const [imageWidth, imageHeight] = getFetchedImageSize(state.file);
+  const imageUrl = useImageUrl(state.file as ImageFile);
+  const [imageWidth, imageHeight] = useImageSize(state.file);
 
   const viewportRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
