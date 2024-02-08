@@ -1,6 +1,7 @@
 import { json, type V2_MetaFunction, type LoaderArgs } from '@remix-run/node';
 import { useParams } from '@remix-run/react';
-import { baseComponents } from '~/components/ui/Markdown';
+
+import { markdownComponents } from '~/utils/markdownComponents';
 import projects from '~/content/md/projects';
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
@@ -26,7 +27,7 @@ export default function Project() {
 
   return (
     <article className="article pb-16">
-      <Component components={baseComponents as any} />
+      <Component components={markdownComponents} />
     </article>
   );
 }

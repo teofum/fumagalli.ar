@@ -1,7 +1,7 @@
 import { json, type LoaderArgs } from '@remix-run/node';
 import { type V2_MetaFunction, useParams } from '@remix-run/react';
 
-import { baseComponents } from '~/components/ui/Markdown';
+import { markdownComponents } from '~/utils/markdownComponents';
 import articles from '~/content/md/articles';
 import mdx from '~/content/mdx';
 
@@ -30,7 +30,7 @@ export default function Post() {
 
   return (
     <article className="article pb-16">
-      <Component components={baseComponents as any} />
+      <Component components={markdownComponents} />
     </article>
   );
 }

@@ -6,19 +6,11 @@ import cn from 'classnames';
 import Button, { IconButton } from '~/components/ui/Button';
 import { useWindow } from '~/components/desktop/Window/context';
 import { useFetcher } from '@remix-run/react';
-import Markdown from '~/components/ui/Markdown';
 import { Toolbar, ToolbarGroup } from '~/components/ui/Toolbar';
 import { useAppSettings } from '~/stores/system';
-import type { ReactMarkdownOptions } from 'react-markdown/lib/react-markdown';
 import type { SudokuPuzzle } from '~/routes/api.sudoku';
 import type { SudokuSettings } from './types';
 import { ToggleIconButton } from '~/components/ui/ToggleButton';
-
-export const sudokuComponents = {
-  h1: (props) => <h1 className="font-display text-2xl text-h1" {...props} />,
-  h2: (props) => <h2 className="bold text-h2 mt-4" {...props} />,
-  em: (props) => <span className="not-italic text-accent" {...props} />,
-} satisfies ReactMarkdownOptions['components'];
 
 const resources = '/fs/Applications/sudoku/resources';
 
@@ -169,21 +161,6 @@ export default function Sudoku() {
 
   const boardRef = useRef<HTMLDivElement>(null);
   const [annotate, setAnnotate] = useState(false);
-
-  /**
-   * Fetch help MD
-   */
-  const [helpContent, setHelpContent] = useState('');
-  useEffect(() => {
-    const fetchMarkdown = async () => {
-      const res = await fetch('/fs/Applications/sudoku/resources/help.md');
-      if (res.ok) {
-        setHelpContent(await res.text());
-      }
-    };
-
-    fetchMarkdown();
-  }, []);
 
   /**
    * Game state
@@ -386,7 +363,30 @@ export default function Sudoku() {
 
           {game.board === null ? (
             <div className="col-span-9 w-[360px] h-[360px] p-4">
-              <Markdown components={sudokuComponents}>{helpContent}</Markdown>
+              <h1 className="font-display text-2xl text-h1">Sudoku</h1>
+              <p className="paragraph">
+                The goal is to fill the grid with numbers from 1 to 9, so that
+                each column, row and 3x3 "block" contains each number exactly
+                once.
+              </p>
+              <h2 className="bold text-h2 mt-4">Controls</h2>
+              <p className="paragraph">
+                <em className="not-italic text-accent">Click</em> on a cell to
+                select it.
+              </p>
+              <p className="paragraph">
+                Number keys <em className="not-italic text-accent">1-9</em> to
+                change the selected cell.{' '}
+                <em className="not-italic text-accent">0</em> or{' '}
+                <em className="not-italic text-accent">BackSpace</em> clears the
+                cell value.
+              </p>
+              <p className="paragraph">
+                <em className="not-italic text-accent">Arrow keys</em> to move
+                between cells.{' '}
+                <em className="not-italic text-accent">Shift+Arrow keys</em>{' '}
+                moves one block (3 cells) at a time.
+              </p>
 
               <Button className="py-1 px-4 mt-6" onClick={() => newGame()}>
                 Start game

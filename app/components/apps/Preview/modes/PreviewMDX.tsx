@@ -2,8 +2,8 @@ import ScrollContainer from '~/components/ui/ScrollContainer';
 import { useAppState } from '~/components/desktop/Window/context';
 import type { PreviewModeProps } from '../types';
 import mdx from '~/content/mdx';
-import { baseComponents } from '~/components/ui/Markdown';
 import Menu from '~/components/ui/Menu';
+import { markdownComponents } from '~/utils/markdownComponents';
 
 export default function PreviewMDX({ commonMenu }: PreviewModeProps) {
   const [state] = useAppState('preview');
@@ -19,7 +19,9 @@ export default function PreviewMDX({ commonMenu }: PreviewModeProps) {
 
       <ScrollContainer className="flex-1">
         <article className="p-4 article font-text text-content-sm pb-16">
-          <Component components={baseComponents as any} />
+          <Component
+            components={markdownComponents}
+          />
         </article>
       </ScrollContainer>
     </>
