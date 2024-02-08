@@ -8,6 +8,7 @@ import {
   ScrollRestoration,
 } from '@remix-run/react';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/remix';
 
 import styles from './styles/index.css';
 
@@ -28,6 +29,7 @@ export default function App() {
         <Scripts />
         <LiveReload />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
