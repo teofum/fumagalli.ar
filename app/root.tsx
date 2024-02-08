@@ -18,8 +18,6 @@ export default function App() {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <script src="/js-dos/js-dos.js" />
-        <script src="/js-dos/init.js" />
         <Meta />
         <Links />
       </head>
