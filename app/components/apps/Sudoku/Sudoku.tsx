@@ -363,25 +363,25 @@ export default function Sudoku() {
 
           {game.board === null ? (
             <div className="col-span-9 w-[360px] h-[360px] p-4">
-              <h1 className="font-display text-2xl text-h1 mb-4">Sudoku</h1>
-              <p>
+              <h1 className="font-display text-2xl text-h1">Sudoku</h1>
+              <p className="paragraph">
                 The goal is to fill the grid with numbers from 1 to 9, so that
                 each column, row and 3x3 "block" contains each number exactly
                 once.
               </p>
               <h2 className="bold text-h2 mt-4">Controls</h2>
-              <p>
+              <p className="paragraph">
                 <em className="not-italic text-accent">Click</em> on a cell to
                 select it.
               </p>
-              <p>
+              <p className="paragraph">
                 Number keys <em className="not-italic text-accent">1-9</em> to
                 change the selected cell.{' '}
                 <em className="not-italic text-accent">0</em> or{' '}
                 <em className="not-italic text-accent">BackSpace</em> clears the
                 cell value.
               </p>
-              <p>
+              <p className="paragraph">
                 <em className="not-italic text-accent">Arrow keys</em> to move
                 between cells.{' '}
                 <em className="not-italic text-accent">Shift+Arrow keys</em>{' '}
