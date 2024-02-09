@@ -240,7 +240,7 @@
   }
 
   /* Article components */
-  .article > * {
+  .article.mdx > :not(:first-child) {
     @apply max-w-3xl mx-auto;
   }
 

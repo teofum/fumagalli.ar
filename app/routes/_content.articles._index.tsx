@@ -1,5 +1,9 @@
-import { Link, type V2_MetaFunction } from '@remix-run/react';
-import articles from '~/content/md/articles';
+import { json } from '@remix-run/node';
+import { Link, useLoaderData, type V2_MetaFunction } from '@remix-run/react';
+
+import { articleSchema } from '~/schemas/article';
+import { sanityClient } from '~/utils/sanity.server';
+
 import DitherCard from '~/content/mdx/dither/dither.card';
 import Dither2Card from '~/content/mdx/dither2/dither2.card';
 
@@ -11,17 +15,48 @@ export const meta: V2_MetaFunction = () => {
 };
 
 const dateCompareFn = (a: { date: Date }, b: { date: Date }) => {
-  return a.date.getTime() - b.date.getTime();
+  return b.date.getTime() - a.date.getTime();
 };
 
+const ARTICLES_QUERY = `
+*[_type == "article"] {
+  _id,
+  title,
+  slug,
+  legacyDate,
+  'fileDate': file->_createdAt,
+}`;
+
+export async function loader() {
+  const data = await articleSchema
+    .array()
+    .promise()
+    .parse(sanityClient.fetch(ARTICLES_QUERY));
+
+  return json(
+    data.map(({ fileDate, legacyDate, ...article }) => ({
+      ...article,
+      date: legacyDate ?? fileDate,
+    })),
+  );
+}
+
 export default function PostsIndexRoute() {
+  const data = useLoaderData<typeof loader>();
+
+  const articles = data.map((article) => ({
+    ...article,
+    date: new Date(article.date),
+  }));
+  articles.sort(dateCompareFn);
+
   return (
     <div className="max-w-3xl mx-auto">
       <h1 className="font-title text-content-4xl sm:text-content-6xl mb-8">
-        Articles
+        Writing
       </h1>
 
-      <h2 className="heading2">Featured articles</h2>
+      <h2 className="heading2">Interactive articles</h2>
       <p className="mb-4">
         These are detailed, interactive deep-dives into a topic I find
         interesting. They take a long time to write and code, so don't expect a
@@ -29,10 +64,10 @@ export default function PostsIndexRoute() {
       </p>
 
       <div className="grid grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-2">
-        <Link to="introduction-to-dithering">
+        <Link to="mdx/introduction-to-dithering">
           <DitherCard />
         </Link>
-        <Link to="dithering-color">
+        <Link to="mdx/dithering-color">
           <Dither2Card />
         </Link>
       </div>
@@ -40,7 +75,7 @@ export default function PostsIndexRoute() {
       <h2 className="heading2">Other articles</h2>
 
       <ul>
-        {articles.sort(dateCompareFn).map((post) => (
+        {articles.map((post) => (
           <li key={post.slug} className="border-t last:border-b">
             <Link
               to={post.slug}
