@@ -18,10 +18,16 @@ const richTextFileSchema = baseFileSchema.extend({
 
 export type RichTextFile = z.infer<typeof richTextFileSchema>;
 
-const imageFileSchema = baseFileSchema.extend({
+export const imageFileSchema = baseFileSchema.extend({
   _type: z.literal('fileImage'),
   content: imageSchema,
   lqip: z.string().optional(),
+  originalFilename: z.string().optional(),
+  dimensions: z.object({
+    width: z.number(),
+    height: z.number(),
+    aspectRatio: z.number(),
+  }),
 });
 
 export type ImageFile = z.infer<typeof imageFileSchema>;
