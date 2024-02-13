@@ -17,8 +17,8 @@
     @apply text-base text-default selection:bg-selection selection:text-selection;
   }
 
-  img,
-  canvas {
+  #desktop img,
+  #desktop canvas {
     image-rendering: pixelated;
   }
 
