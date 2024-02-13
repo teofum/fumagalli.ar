@@ -8,6 +8,7 @@ const fileQuery = (id: string) => `
   ...,
   'size': content.asset->size,
   'lqip': content.asset->metadata.lqip,
+  'dimensions': content.asset->metadata.dimensions,
 }`;
 
 export async function loader({ request }: LoaderArgs) {

@@ -1,5 +1,8 @@
-import { Link, type V2_MetaFunction } from '@remix-run/react';
-import projects from '~/content/md/projects';
+import { json } from '@remix-run/node';
+import { Link, useLoaderData, type V2_MetaFunction } from '@remix-run/react';
+
+import { projectSchema } from '~/schemas/project';
+import { sanityClient } from '~/utils/sanity.server';
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -8,7 +11,25 @@ export const meta: V2_MetaFunction = () => {
   ];
 };
 
-export default function PostsIndexRoute() {
+const PROJECTS_QUERY = `
+*[_type == "project"] {
+  _id,
+  name,
+  slug,
+}`;
+
+export async function loader() {
+  const data = await projectSchema
+    .array()
+    .promise()
+    .parse(sanityClient.fetch(PROJECTS_QUERY));
+
+  return json(data);
+}
+
+export default function ProjectsIndexRoute() {
+  const projects = useLoaderData<typeof loader>();
+
   return (
     <div className="max-w-3xl mx-auto">
       <h1 className="font-title text-content-4xl sm:text-content-6xl mb-8">
@@ -24,7 +45,7 @@ export default function PostsIndexRoute() {
               to={project.slug}
               className="flex flex-row p-4 gap-4 hover:bg-text hover:bg-opacity-10 transition-colors"
             >
-              {project.title}
+              {project.name}
             </Link>
           </li>
         ))}
