@@ -17,7 +17,11 @@ import DitherLabPaletteEditor from './panels/DitherLabPaletteEditor';
 import { DitherLabDevice } from './types';
 import SoftwareRenderer from './renderers/SoftwareRenderer';
 import palettes from '~/dither/palettes';
-import { PaletteType } from '~/dither/palettes/types';
+import {
+  type Palette,
+  PaletteGroup,
+  PaletteType,
+} from '~/dither/palettes/types';
 import { generatePalette } from '~/dither/paletteGen/PaletteGenerator';
 import { messageBox } from '../MessageBox';
 import { Toolbar } from '~/components/ui/Toolbar';
@@ -86,6 +90,7 @@ export default function DitherLab() {
   const [settings, set] = useAppSettings('dither');
 
   const hiddenInputRef = useRef<HTMLInputElement>(null);
+  const importHiddenInputRef = useRef<HTMLInputElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
 
   const [rt, setRt] = useState<HTMLCanvasElement | null>(null);
@@ -243,6 +248,75 @@ export default function DitherLab() {
     );
   };
 
+  const readPalettes = (el: HTMLImageElement) => {
+    const offscreen = new OffscreenCanvas(el.naturalWidth, el.naturalHeight);
+    const ctx = offscreen.getContext('2d');
+    if (!ctx) return;
+
+    ctx.drawImage(el, 0, 0);
+    const data = ctx.getImageData(0, 0, offscreen.width, offscreen.height);
+
+    const newPalettes: Palette[] = [];
+    for (let i = 0; i < data.height; i++) {
+      const rowIdx = i * data.width * 4;
+      let j = 0;
+      let name = '';
+      const pdata: number[] = [];
+
+      // Parse palette name
+      while (data.data[rowIdx + j * 4 + 3] != 0) {
+        name += String.fromCharCode(data.data[rowIdx + j * 4]);
+        j++;
+      }
+      j++;
+
+      // Parse palette data
+      while (data.data[rowIdx + j * 4 + 3] != 0) {
+        pdata.push(data.data[rowIdx + j * 4 + 0]);
+        pdata.push(data.data[rowIdx + j * 4 + 1]);
+        pdata.push(data.data[rowIdx + j * 4 + 2]);
+        j++;
+      }
+
+      // Create palette
+      newPalettes.push({
+        name,
+        type: PaletteType.Indexed,
+        group: PaletteGroup.User,
+        data: pdata,
+      });
+    }
+
+    set({ customPalettes: [...settings.customPalettes, ...newPalettes] });
+    if (newPalettes.length > 0)
+      setState({ paletteGroup: PaletteGroup.User, palette: newPalettes[0] });
+  };
+
+  const importPaletteFromImage = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    const input = ev.target;
+    if (input?.files) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.addEventListener(
+        'load',
+        () => {
+          const el = document.createElement('img');
+          el.src = reader.result as string;
+          el.addEventListener('load', () => {
+            readPalettes(el);
+            el.remove();
+          });
+          document.body.appendChild(el);
+        },
+        { once: true },
+      );
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const importPalettes = () => importHiddenInputRef.current?.click();
+
   const Renderer = useMemo(
     () => (state.device === DitherLabDevice.GL ? GlRenderer : SoftwareRenderer),
     [state.device],
@@ -255,6 +329,12 @@ export default function DitherLab() {
         className="hidden"
         ref={hiddenInputRef}
         onChange={uploadImage}
+      />
+      <input
+        type="file"
+        className="hidden"
+        ref={importHiddenInputRef}
+        onChange={importPaletteFromImage}
       />
       {state.image ? (
         <img
@@ -362,6 +442,7 @@ export default function DitherLab() {
               <DitherLabResizeOptions />
               <DitherLabPaletteSelect
                 openEditor={() => set({ showPaletteEditor: true })}
+                importPalettes={importPalettes}
               />
               <DitherLabRenderOptions />
             </div>

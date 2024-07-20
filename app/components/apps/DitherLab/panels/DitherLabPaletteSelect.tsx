@@ -12,10 +12,12 @@ import { useSyncedAppSettings } from '~/stores/system';
 
 interface DitherLabPaletteSelectProps {
   openEditor: () => void;
+  importPalettes: () => void;
 }
 
 export default function DitherLabPaletteSelect({
   openEditor,
+  importPalettes,
 }: DitherLabPaletteSelectProps) {
   const [state, setState] = useAppState('dither');
   const [settings] = useSyncedAppSettings('dither');
@@ -75,9 +77,14 @@ export default function DitherLabPaletteSelect({
 
         <PalettePreview />
 
-        <Button className="py-1 px-2" onClick={openEditor}>
-          Palette Editor
-        </Button>
+        <div className="flex flex-row">
+          <Button className="py-1 px-2 flex-1" onClick={openEditor}>
+            Palette Editor
+          </Button>
+          <Button className="py-1 px-2 flex-1" onClick={importPalettes}>
+            Import...
+          </Button>
+        </div>
       </div>
     </Collapsible>
   );
