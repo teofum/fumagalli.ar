@@ -39,6 +39,7 @@ export interface DitherLabState {
 
   paletteGroup: PaletteGroup;
   paletteName: string;
+  paletteSelectOffset: number;
   palette: Palette;
 
   device: DitherLabDevice;
@@ -59,6 +60,7 @@ export const defaultDitherLabState: DitherLabState = {
 
   paletteGroup: PaletteGroup.RetroPC,
   paletteName: Win4bRGBI.name,
+  paletteSelectOffset: 0,
   palette: Win4bRGBI,
 
   device: DitherLabDevice.GL,

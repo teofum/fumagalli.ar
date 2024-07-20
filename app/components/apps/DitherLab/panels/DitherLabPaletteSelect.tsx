@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useAppState } from '~/components/desktop/Window/context';
 import Button from '~/components/ui/Button';
@@ -9,6 +9,10 @@ import PalettePreview from '../components/PalettePreview';
 import palettes from '~/dither/palettes';
 import { PaletteGroup } from '~/dither/palettes/types';
 import { useSyncedAppSettings } from '~/stores/system';
+import cn from 'classnames';
+import ArrowLeft from '~/components/ui/icons/ArrowLeft';
+
+const PAGE_SIZE = 8;
 
 interface DitherLabPaletteSelectProps {
   openEditor: () => void;
@@ -47,17 +51,25 @@ export default function DitherLabPaletteSelect({
 
   const selectGroup = (group: string) => {
     const palette = allPalettes.find((pal) => pal.group === group);
-    if (palette)
+    if (palette) {
       setState({
         paletteGroup: group as PaletteGroup,
         paletteName: palette.name,
+        paletteSelectOffset: 0,
       });
+    }
   };
 
   const selectPalette = (name: string) => {
     setState({ paletteName: name });
   };
 
+  const setOffset = (offset: number) => {
+    setState({ paletteSelectOffset: offset });
+  };
+
+  const offset = state.paletteSelectOffset;
+  const count = paletteOptions.length;
   return (
     <Collapsible defaultOpen title="Color Palette">
       <div className="flex flex-col gap-2">
@@ -69,17 +81,44 @@ export default function DitherLabPaletteSelect({
           ))}
         </Select>
 
-        <Select
-          value={state.paletteName}
-          onValueChange={selectPalette}
-          contentProps={{ className: 'max-h-40' }}
+        <div
+          className={cn('bg-default bevel-content p-0.5 flex flex-col', {
+            'min-h-[152px]': count > PAGE_SIZE,
+          })}
         >
-          {paletteOptions.map((palette) => (
-            <SelectItem key={palette} value={palette}>
+          {paletteOptions.slice(offset, offset + PAGE_SIZE).map((palette) => (
+            <button
+              key={palette}
+              onClick={() => selectPalette(palette)}
+              className={cn('flex px-1 cursor-default', {
+                'bg-selection text-selection': palette === state.paletteName,
+              })}
+            >
               {palette}
-            </SelectItem>
+            </button>
           ))}
-        </Select>
+          {count > PAGE_SIZE ? (
+            <div className="flex flex-row mt-auto">
+              <Button
+                className="px-1"
+                onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
+              >
+                <ArrowLeft className="rotate-180" />
+              </Button>
+              <div className="text-center grow bevel bg-surface p-0.5">
+                {offset + 1} - {Math.min(offset + PAGE_SIZE, count)} of {count}
+              </div>
+              <Button
+                className="px-1"
+                onClick={() => {
+                  if (offset + PAGE_SIZE < count) setOffset(offset + PAGE_SIZE);
+                }}
+              >
+                <ArrowLeft />
+              </Button>
+            </div>
+          ) : null}
+        </div>
 
         <PalettePreview />
 
