@@ -31,7 +31,9 @@ export default function DitherLabPaletteSelect({
     () =>
       Object.values(PaletteGroup)
         .filter((val) => !val.startsWith('__'))
-        .filter((val) => allPalettes.filter((p) => p.group === val).length > 0),
+        .filter(
+          (val) => allPalettes.find((p) => p.group === val) !== undefined,
+        ),
     [allPalettes],
   );
 

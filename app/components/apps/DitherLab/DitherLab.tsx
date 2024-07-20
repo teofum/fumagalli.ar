@@ -25,6 +25,7 @@ import {
 import { generatePalette } from '~/dither/paletteGen/PaletteGenerator';
 import { messageBox } from '../MessageBox';
 import { Toolbar } from '~/components/ui/Toolbar';
+import Win4bRGBI from '~/dither/palettes/Win4bRGBI';
 
 export const ZOOM_STOPS = [1, 1.5, 2, 3, 4, 6, 8, 16, 32, 64];
 
@@ -268,6 +269,11 @@ export default function DitherLab() {
         name += String.fromCharCode(data.data[rowIdx + j * 4]);
         j++;
       }
+      name = name.trim();
+      if (newPalettes.some((pal) => pal.name === name)) {
+        console.warn(`DitherLab: duplicate palette name ${name}, skipped`);
+        continue;
+      }
       j++;
 
       // Parse palette data
@@ -316,6 +322,16 @@ export default function DitherLab() {
   };
 
   const importPalettes = () => importHiddenInputRef.current?.click();
+
+  const clearPalettes = () => {
+    set({ customPalettes: [] });
+    if (state.paletteGroup === PaletteGroup.User)
+      setState({
+        paletteGroup: PaletteGroup.RetroPC,
+        palette: Win4bRGBI,
+        paletteName: Win4bRGBI.name,
+      });
+  };
 
   const Renderer = useMemo(
     () => (state.device === DitherLabDevice.GL ? GlRenderer : SoftwareRenderer),
@@ -398,6 +414,14 @@ export default function DitherLab() {
               <Menu.RadioItem label="Right" value="right" />
             </Menu.RadioGroup>
           </Menu.Sub>
+        </Menu.Menu>
+
+        <Menu.Menu trigger={<Menu.Trigger>Palettes</Menu.Trigger>}>
+          <Menu.Item label="Import..." onSelect={importPalettes} />
+
+          <Menu.Separator />
+
+          <Menu.Item label="Clear custom palettes" onSelect={clearPalettes} />
         </Menu.Menu>
       </Menu.Bar>
 
