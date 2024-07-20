@@ -69,7 +69,11 @@ export default function DitherLabPaletteSelect({
           ))}
         </Select>
 
-        <Select value={state.paletteName} onValueChange={selectPalette}>
+        <Select
+          value={state.paletteName}
+          onValueChange={selectPalette}
+          contentProps={{ className: 'max-h-40' }}
+        >
           {paletteOptions.map((palette) => (
             <SelectItem key={palette} value={palette}>
               {palette}

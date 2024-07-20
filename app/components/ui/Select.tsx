@@ -60,13 +60,13 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
             )}
           >
             <SelectPrimitive.ScrollUpButton>
-              <ArrowDown className="rotate-180" />
+              <ArrowDown className="rotate-180 mx-auto" />
             </SelectPrimitive.ScrollUpButton>
             <SelectPrimitive.Viewport className={viewportClassName}>
               {children}
             </SelectPrimitive.Viewport>
             <SelectPrimitive.ScrollDownButton>
-              <ArrowDown />
+              <ArrowDown className="mx-auto" />
             </SelectPrimitive.ScrollDownButton>
           </SelectPrimitive.Content>
         </SelectPrimitive.Portal>
