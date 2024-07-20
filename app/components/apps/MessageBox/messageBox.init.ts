@@ -7,7 +7,7 @@ export const messageBox = (
   appType: 'messageBox',
   appState: initialState ?? defaultMessageBoxState,
 
-  title: 'Message box',
+  title: initialState?.title ?? 'Message box',
 
   minWidth: 100,
   minHeight: 100,
