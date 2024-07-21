@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { useAppState } from '~/components/desktop/Window/context';
 import Button from '~/components/ui/Button';

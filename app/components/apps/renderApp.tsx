@@ -32,7 +32,7 @@ import PaintStretchAndSkew, {
 import type { PaintStretchAndSkewState } from './Paint/modals/StretchAndSkew';
 import SystemSettings, { systemSettings } from './SystemSettings';
 
-const applications = [
+export const applications = [
   { Component: About, meta: about },
   { Component: Intro, meta: intro },
   { Component: Files, meta: files() },
@@ -66,7 +66,7 @@ export interface AppStateTypes {
 }
 
 export type AppState<AppType extends string> =
-  AppType extends keyof AppStateTypes ? AppStateTypes[AppType] : undefined;
+  AppType extends keyof AppStateTypes ? AppStateTypes[AppType] : unknown;
 
 interface AppOutletProps {
   type: string;

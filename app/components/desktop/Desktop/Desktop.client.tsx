@@ -19,6 +19,8 @@ import ContextMenu from '~/components/ui/ContextMenu';
 import { themeSettings } from '~/components/apps/ThemeSettings';
 import ShutdownDialog from './ShutdownDialog';
 import MobileDialog from './MobileDialog';
+import { useLocation } from '@remix-run/react';
+import { applications } from '~/components/apps/renderApp';
 
 let initialized = false;
 
@@ -81,6 +83,7 @@ function DesktopIcon({ iconUrl, title, x, y, open }: DesktopIconProps) {
 export default function Desktop() {
   const { theme, themeCustomizations, settings } = useSystemStore();
   const { windows, launch } = useDesktopStore();
+  const location = useLocation();
 
   const { backgroundColor, backgroundUrl, backgroundImageMode } =
     themeCustomizations;
@@ -109,19 +112,28 @@ export default function Desktop() {
     if (initialized) return;
 
     if (windows.length === 0) {
-      const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
-      const desktop = desktopEl.getBoundingClientRect();
+      const params = new URLSearchParams(location.search);
+      const appName = params.get('app');
+      if (appName) {
+        const appInit = applications.find(
+          (app) => (app.meta.appType as string) === appName,
+        );
+        if (appInit) launch(appInit.meta);
+      } else {
+        const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
+        const desktop = desktopEl.getBoundingClientRect();
 
-      launch({ ...about, top: 50, left: 50 });
-      launch({
-        ...intro,
-        top: desktop.height / 2 - 300,
-        left: desktop.width / 2 - 320,
-      });
+        launch({ ...about, top: 50, left: 50 });
+        launch({
+          ...intro,
+          top: desktop.height / 2 - 300,
+          left: desktop.width / 2 - 320,
+        });
+      }
     }
 
     initialized = true;
-  }, [launch, windows.length]);
+  }, [launch, windows.length, location.search]);
 
   return (
     <>
