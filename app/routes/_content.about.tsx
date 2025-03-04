@@ -33,76 +33,55 @@ export default function AboutRoute() {
           </div>
 
           <div className="bg-default bevel-content p-0.5 flex flex-col sm:flex-row gap-2">
-            <div className="flex flex-col flex-1 p-4 sm:p-8 gap-2">
-              <p className="font-display-text text-xl">Hi there! My name is</p>
+            <div className="flex flex-col flex-1 p-4 gap-2">
+              <p>Hi there! My name is</p>
               <h1 className="font-display text-4xl">
                 <span className="tracking-[-3px]">T</span>eo{' '}
                 <span className="tracking-[-2px]">F</span>umaga
                 <span className="tracking-[-9px] -ml-1.5">lli</span>
               </h1>
-              <p className="font-display-text text-xl">
-                and I'm a UI developer based in Buenos Aires, Argentina. I build
-                things for the web, combining design and technical skill to
-                bring products to life.
+              <p>
+                I'm a programmer, UI designer and amateur photographer based in
+                Buenos Aires, Argentina. I do a bit of everything, but my professional
+                background is in web development and my primary interest in rendering
+                and graphics programming.
               </p>
 
-              <p className="font-display-text text-xl">
-                I specialize in creating things out of the ordinary, with a
-                focus on interaction and intricate attention to detail. I
-                believe the web can be both useful and fun, and enjoy exploring
-                new and unusual ideas.
+              <p>
+                Welcome to my site! Click on the Start button or one of the desktop
+                shortcuts to begin, or check out some of my stuff:
               </p>
 
-              <p className="font-display-text text-xl">
-                I'm currently working as a UI developer at Aerolab, building
-                quality websites and apps for a variety of clients.
-              </p>
-
-              <p className="font-display-text text-xl max-w-[55ch]">
-                You can check out my stuff below:
-              </p>
-
-              <div className="flex flex-row gap-1">
-                <LinkButton to="/articles" className="py-1 px-2 w-20">
-                  <div className="flex flex-col items-center gap-1 pt-1">
+              <div className="flex flex-row gap-1 my-2">
+                <LinkButton to="/articles" className="py-1 px-2 w-28">
+                  <div className="flex flex-row items-center gap-2">
                     <img src={`${resources}/articles.png`} alt="" />
                     Articles
                   </div>
                 </LinkButton>
-                <LinkButton to="/photos" className="py-1 px-2 w-20">
-                  <div className="flex flex-col items-center gap-1 pt-1">
+                <LinkButton to="/photos" className="py-1 px-2 w-28">
+                  <div className="flex flex-row items-center gap-2">
                     <img src={`${resources}/photos.png`} alt="" />
                     Photos
                   </div>
                 </LinkButton>
-                <LinkButton to="/projects" className="py-1 px-2 w-20">
-                  <div className="flex flex-col items-center gap-1 pt-1">
+                <LinkButton to="/projects" className="py-1 px-2 w-28">
+                  <div className="flex flex-row items-center gap-2">
                     <img src={`${resources}/projects.png`} alt="" />
                     Projects
                   </div>
                 </LinkButton>
               </div>
 
-              <p className="font-display-text text-xl mt-auto pt-8">
+              <p className="mt-auto">
                 Let's build awesome things together!{' '}
                 <RetroLink href="mailto:teo.fum@outlook.com">
-                  Get&nbsp;in&nbsp;touch
+                  Get in touch
                 </RetroLink>
-              </p>
-
-              <p className="font-display-text text-xl">
-                You can also find me on{' '}
-                <RetroLink href="https://github.com/teofum">GitHub</RetroLink>{' '}
-                and{' '}
-                <RetroLink href="https://codepen.io/teofum">CodePen</RetroLink>.
               </p>
             </div>
 
-            <img
-              src={`${resources}/me.png`}
-              alt="me"
-              className="self-end mt-6"
-            />
+            <img src={`${resources}/me2.png`} alt="me" className="self-end h-[400px]" />
           </div>
         </div>
       </div>
