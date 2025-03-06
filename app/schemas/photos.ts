@@ -21,7 +21,6 @@ export const photoCategorySchema = z.object({
   _type: z.literal('photoCategory'),
   _id: z.string(),
   title: z.string(),
-  thumbnail: imageFileSchema,
   collections: photoCollectionBaseSchema.array(),
 });
 
