@@ -68,7 +68,7 @@ export default function PhotosCategoryRoute() {
 
   // noinspection com.intellij.reactbuddy.ExhaustiveDepsInspection
   const selectedImageUrl = useMemo(
-    () => selected
+    () => selected !== null
       ? sanityImage(data.photos[selected].content)
         .width(Math.max(200, width)).dpr(dpr).quality(100).url()
       : '',
@@ -119,9 +119,10 @@ export default function PhotosCategoryRoute() {
         })}
         onClick={close}>
         <div className="max-w-7xl mx-auto w-max h-full grid grid-cols-1 place-content-center">
-          <div className="relative bg-black" style={{ width, height }}>
+          <div className="relative bg-black overflow-hidden"
+               style={{ width, height }}>
             <img
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover blur-3xl"
               alt=""
               src={data.photos[selected].lqip}
             />
