@@ -112,6 +112,10 @@ export default {
       dropShadow: {
         disabled: '1px 1px 0 rgb(var(--color-text-disabled-shadow))',
       },
+      animation: {
+        'overlay-fadein': '200ms ease-out 0ms 1 normal both running overlay-fadein',
+        'overlay-fadeout': '200ms ease-out 0ms 1 normal both running overlay-fadeout',
+      },
     },
   },
   plugins: [],

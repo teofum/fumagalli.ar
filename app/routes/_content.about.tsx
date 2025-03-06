@@ -42,14 +42,14 @@ export default function AboutRoute() {
               </h1>
               <p>
                 I'm a programmer, UI designer and amateur photographer based in
-                Buenos Aires, Argentina. I do a bit of everything, but my professional
-                background is in web development and my primary interest in rendering
-                and graphics programming.
+                Buenos Aires, Argentina. I do a bit of everything, but my
+                professional background is in web development and my primary
+                interest in rendering and graphics programming.
               </p>
 
               <p>
-                Welcome to my site! Click on the Start button or one of the desktop
-                shortcuts to begin, or check out some of my stuff:
+                Welcome to my site! Click on the Start button or one of the
+                desktop shortcuts to begin, or check out some of my stuff:
               </p>
 
               <div className="flex flex-row gap-1 my-2">
@@ -81,7 +81,9 @@ export default function AboutRoute() {
               </p>
             </div>
 
-            <img src={`${resources}/me2.png`} alt="me" className="self-end h-[400px]" />
+            <img src={`${resources}/me2.png`}
+                 alt="me"
+                 className="self-end h-[400px]" />
           </div>
         </div>
       </div>

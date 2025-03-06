@@ -8,10 +8,9 @@ const imageBuilder = createImageUrlBuilder({
   dataset: 'production',
 });
 
-export const MAX_IMG_SIZE = 2000;
-
-export function sanityImage(source: SanityImageSource) {
-  return imageBuilder.image(source).auto('format');
+export function sanityImage(source: SanityImageSource, autoFormat: boolean = true) {
+  if (autoFormat) return imageBuilder.image(source).auto('format');
+  return imageBuilder.image(source);
 }
 
 export function getImageSize(file: ImageFile) {

@@ -3,6 +3,7 @@
 @import './theme.css';
 @import './components.css';
 @import './article.css';
+@import './static.css';
 @import './utils.css';
 @import './js-dos.css';
 
@@ -25,6 +26,7 @@
   #desktop {
     user-select: none;
   }
+
   @media (pointer: fine) {
     #desktop {
       user-select: auto;
