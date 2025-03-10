@@ -40,8 +40,10 @@ export default function PhotosCategoryRoute() {
     setDpr(window.devicePixelRatio);
 
     const updateSize = () => {
-      const maxWidth = Math.min(1280, window.innerWidth - 96);
-      const maxHeight = window.innerHeight - 144;
+      const margin = window.innerWidth >= 640 ? 48 : 20;
+
+      const maxWidth = Math.min(1280, window.innerWidth - 2 * margin);
+      const maxHeight = window.innerHeight - 2 * margin - 48;
 
       if (selected !== null) {
         let [naturalWidth, naturalHeight] = getImageSize(data.photos[selected ?? 0]);
@@ -113,7 +115,7 @@ export default function PhotosCategoryRoute() {
       </div>
 
       {selected !== null ? <div
-        className={cn('fixed inset-0  bg-default/20 pixelate-bg p-12', {
+        className={cn('fixed inset-0  bg-default/20 pixelate-bg p-5 sm:p-12', {
           'animate-overlay-fadein': showOverlay,
           'animate-overlay-fadeout pointer-events-none': !showOverlay,
         })}
