@@ -27,3 +27,30 @@ export const PHOTO_COLLECTION_QUERY = (slug: string) => `
   thumbnail-> ${IMAGE_FILE_QUERY},
   photos[]-> ${IMAGE_FILE_QUERY},
 }`;
+
+export const PROJECT_CATEGORY_QUERY = `
+*[_type == "projectCategory"] {
+  _id,
+  _type,
+  title,
+  projects[]-> {
+    _type,
+    _id,
+    name,
+    slug,
+    'thumbnail': file->content[_type == "image"][0] {
+      ...,
+      'lqip': asset->metadata.lqip,
+    },
+  }
+}`;
+
+
+export const PROJECT_QUERY = (slug: string) => `
+*[_type == "project" && slug == "${slug}"][0] {
+  _type,
+  _id,
+  name,
+  slug,
+  'content': file->content,
+}`;

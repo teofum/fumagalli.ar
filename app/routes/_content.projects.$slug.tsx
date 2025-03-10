@@ -1,10 +1,11 @@
 import { PortableText } from '@portabletext/react';
-import { json, type V2_MetaFunction, type LoaderArgs } from '@remix-run/node';
+import { json, type LoaderArgs, type V2_MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 
 import { portableTextComponents } from '~/components/ui/PortableText';
 import { fullProjectSchema } from '~/schemas/project';
 import { sanityClient } from '~/utils/sanity.server';
+import { PROJECT_QUERY } from '~/queries/queries';
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -12,14 +13,6 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
     { name: 'description', content: 'A thing I made' },
   ];
 };
-
-const PROJECT_QUERY = (slug: string) => `
-*[_type == "project" && slug == "${slug}"][0] {
-  _id,
-  name,
-  slug,
-  'content': file->content,
-}`;
 
 export async function loader({ params }: LoaderArgs) {
   const { slug } = params;
