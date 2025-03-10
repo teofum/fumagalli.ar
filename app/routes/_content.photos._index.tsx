@@ -37,7 +37,7 @@ export default function PhotosIndexRoute() {
         size.
       </p>
 
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1">
         {data.map((category) => (
           <Collapsible.Root className="flex flex-col">
             <Collapsible.Trigger className="group border-b border-current p-4 hover:bg-[rgb(from_currentcolor_r_g_b/20%)] transition-colors duration-200">
@@ -56,8 +56,8 @@ export default function PhotosIndexRoute() {
               </div>
             </Collapsible.Trigger>
 
-            <Collapsible.Content>
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(16rem,1fr))] pt-3 gap-3">
+            <Collapsible.Content className="group/category">
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(16rem,1fr))] group-data-[state='open']/category:pt-3 gap-3">
                 {category.collections.map(collection => (
                   <a key={collection._id}
                      className="block relative overflow-hidden group"
