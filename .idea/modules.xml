@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/fumagalli.ar.iml" filepath="$PROJECT_DIR$/.idea/fumagalli.ar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../fumagalli.ar-cms/.idea/fumagalli.ar-cms.iml" filepath="$PROJECT_DIR$/../fumagalli.ar-cms/.idea/fumagalli.ar-cms.iml" />
     </modules>
   </component>
 </project>

@@ -75,7 +75,7 @@ export default function PhotosIndexRoute() {
                       loading="lazy"
                     />
 
-                    <div className="absolute left-0 bottom-0 w-full bg-default/20 pixelate-bg py-3 px-6">
+                    <div className="absolute left-0 bottom-0 w-full bg-default/20 pixelate-bg py-3 px-6 text-white">
                       {collection.title}
                     </div>
                   </a>
