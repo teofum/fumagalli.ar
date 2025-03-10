@@ -19,8 +19,8 @@ const itemStubSchema = z.object({
       icon16: imageSchema,
       icon32: imageSchema,
     })
-    .optional(),
-  size: z.number().optional(),
+    .nullish(),
+  size: z.number().nullish(),
 });
 
 export type ItemStub = z.infer<typeof itemStubSchema>;
@@ -30,16 +30,16 @@ const baseFolderSchema = itemStubSchema.extend({
 });
 
 type ParentFolder = z.infer<typeof baseFolderSchema> & {
-  parent?: ParentFolder;
+  parent?: ParentFolder | null;
 };
 
 const parentFolderSchema: z.ZodType<ParentFolder> = baseFolderSchema.extend({
-  parent: z.lazy(() => parentFolderSchema.optional()),
+  parent: z.lazy(() => parentFolderSchema.nullish()),
 });
 
 const folderSchema = baseFolderSchema.extend({
-  items: itemStubSchema.array().optional(),
-  parent: parentFolderSchema.optional(),
+  items: itemStubSchema.array().nullish(),
+  parent: parentFolderSchema.nullish(),
 });
 
 export default folderSchema;

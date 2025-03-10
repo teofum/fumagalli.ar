@@ -8,7 +8,7 @@ const baseFileSchema = z.object({
   _createdAt: z.string(),
   _updatedAt: z.string(),
   name: z.string(),
-  size: z.number().optional(),
+  size: z.number().nullish(),
 });
 
 const richTextFileSchema = baseFileSchema.extend({
@@ -21,8 +21,8 @@ export type RichTextFile = z.infer<typeof richTextFileSchema>;
 export const imageFileSchema = baseFileSchema.extend({
   _type: z.literal('fileImage'),
   content: imageSchema,
-  lqip: z.string().optional(),
-  originalFilename: z.string().optional(),
+  lqip: z.string().nullish(),
+  originalFilename: z.string().nullish(),
   dimensions: z.object({
     width: z.number(),
     height: z.number(),
