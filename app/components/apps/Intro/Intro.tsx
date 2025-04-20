@@ -3,6 +3,7 @@ import Button from '~/components/ui/Button';
 import { Tab, TabContent, Tabs, TabsList } from '~/components/ui/Tabs';
 import { files } from '../Files';
 import RetroLink from '~/components/ui/Link';
+import Webring from '~/components/ui/Webring';
 
 const resources = '/fs/Applications/intro/resources';
 
@@ -83,11 +84,20 @@ export default function Intro() {
                 Get in touch
               </RetroLink>
             </p>
+
+            <p>This site is part of the following webrings</p>
+            <Webring
+              indexUrl="https://graphics-programming.org/webring"
+              baseUrl="https://graphics-programming.org/webring/frogs/bluescreen"
+              iconUrl="/assets/misc/froge.webp"
+            />
           </div>
 
-          <img src={`${resources}/me2.png`}
-               alt="me"
-               className="self-end h-[400px]" />
+          <img
+            src={`${resources}/me2.png`}
+            alt="me"
+            className="self-end h-[400px]"
+          />
         </div>
       </TabContent>
 
