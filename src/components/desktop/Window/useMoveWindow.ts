@@ -1,6 +1,6 @@
-import useDesktopStore from "@/stores/desktop";
-import type { AnyWindowProps } from "./Window";
-import useDrag from "@/hooks/useDrag";
+import useDesktopStore from '@/stores/desktop';
+import type { AnyWindowProps } from './Window';
+import useDrag from '@/hooks/use-drag';
 
 export default function useMoveWindow(
   { id, parentId }: AnyWindowProps,
@@ -27,13 +27,13 @@ export default function useMoveWindow(
     if (!el) return;
 
     // Calculate new window position from cursor + offset
-    const offsetX = Number(el.dataset.offsetX || "0");
-    const offsetY = Number(el.dataset.offsetY || "0");
+    const offsetX = Number(el.dataset.offsetX || '0');
+    const offsetY = Number(el.dataset.offsetY || '0');
     const newX = ev.clientX + offsetX;
     const newY = ev.clientY + offsetY;
 
-    el.style.setProperty("top", `${~~newY}px`);
-    el.style.setProperty("left", `${~~newX}px`);
+    el.style.setProperty('top', `${~~newY}px`);
+    el.style.setProperty('left', `${~~newX}px`);
   };
 
   const onDragEnd = () => {

@@ -1,5 +1,5 @@
-import useDrag from "@/hooks/useDrag";
-import type { PaintState } from "./types";
+import useDrag from '@/hooks/use-drag';
+import type { PaintState } from './types';
 
 export default function useMoveSelection(
   containerRef: React.RefObject<HTMLDivElement>,
@@ -27,19 +27,19 @@ export default function useMoveSelection(
     if (!el || !container) return;
 
     // Calculate new selection position from cursor + offset
-    const offsetX = Number(el.dataset.offsetX || "0");
-    const offsetY = Number(el.dataset.offsetY || "0");
+    const offsetX = Number(el.dataset.offsetX || '0');
+    const offsetY = Number(el.dataset.offsetY || '0');
     const newX = ev.clientX + offsetX;
     const newY = ev.clientY + offsetY;
 
     const { x: cx, y: cy } = container.getBoundingClientRect();
 
     el.style.setProperty(
-      "top",
+      'top',
       `${~~((newY - cy) / state.zoom) * state.zoom}px`,
     );
     el.style.setProperty(
-      "left",
+      'left',
       `${~~((newX - cx) / state.zoom) * state.zoom}px`,
     );
   };

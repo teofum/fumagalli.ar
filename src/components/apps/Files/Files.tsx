@@ -8,7 +8,7 @@ import Button, { IconButton } from '@/components/ui/Button';
 import Menu from '@/components/ui/Menu';
 import { useAppState, useWindow } from '@/components/desktop/Window/context';
 import { Toolbar, ToolbarGroup } from '@/components/ui/Toolbar';
-import useFileHandler from '@/hooks/useFileHandler';
+import useFileHandler from '@/hooks/use-file-handler';
 import { useAppSettings } from '@/hooks/use-app-settings';
 import useSystemStore from '@/stores/system';
 import useDesktopStore from '@/stores/desktop';

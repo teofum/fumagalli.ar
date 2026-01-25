@@ -1,12 +1,12 @@
-import useDesktopStore from "@/stores/desktop";
-import type { AnyWindowProps } from "./Window";
-import useDrag from "@/hooks/useDrag";
-import clamp from "@/utils/clamp";
+import useDesktopStore from '@/stores/desktop';
+import type { AnyWindowProps } from './Window';
+import useDrag from '@/hooks/use-drag';
+import clamp from '@/utils/clamp';
 
 export default function useResizeWindow(
   { id, minWidth, minHeight, maxWidth, maxHeight, parentId }: AnyWindowProps,
   windowRef: React.RefObject<HTMLDivElement | null>,
-  direction: "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw",
+  direction: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw',
 ) {
   const { moveAndResize } = useDesktopStore();
 
@@ -31,47 +31,47 @@ export default function useResizeWindow(
     if (!el) return;
 
     // Calculate cursor delta
-    const initialX = Number(el.dataset.initialX || "0");
-    const initialY = Number(el.dataset.initialY || "0");
+    const initialX = Number(el.dataset.initialX || '0');
+    const initialY = Number(el.dataset.initialY || '0');
     const deltaX = ev.clientX - initialX;
     const deltaY = ev.clientY - initialY;
 
     // Horizontal resizing
-    if (direction.includes("e")) {
-      const windowWidth = Number(el.dataset.windowWidth || "0");
+    if (direction.includes('e')) {
+      const windowWidth = Number(el.dataset.windowWidth || '0');
       const newWidth = clamp(windowWidth + deltaX, minWidth, maxWidth);
 
-      el.style.setProperty("width", `${~~newWidth}px`);
-    } else if (direction.includes("w")) {
-      const windowWidth = Number(el.dataset.windowWidth || "0");
+      el.style.setProperty('width', `${~~newWidth}px`);
+    } else if (direction.includes('w')) {
+      const windowWidth = Number(el.dataset.windowWidth || '0');
       const newWidth = clamp(windowWidth - deltaX, minWidth, maxWidth);
 
-      const windowX = Number(el.dataset.windowX || "0");
+      const windowX = Number(el.dataset.windowX || '0');
       const maxDeltaX = windowWidth - minWidth;
       const minDeltaX = windowWidth - (maxWidth ?? Number.MAX_VALUE);
       const newX = windowX + clamp(deltaX, minDeltaX, maxDeltaX);
 
-      el.style.setProperty("width", `${~~newWidth}px`);
-      el.style.setProperty("left", `${~~newX}px`);
+      el.style.setProperty('width', `${~~newWidth}px`);
+      el.style.setProperty('left', `${~~newX}px`);
     }
 
     // Vertical resizing
-    if (direction.includes("s")) {
-      const windowHeight = Number(el.dataset.windowHeight || "0");
+    if (direction.includes('s')) {
+      const windowHeight = Number(el.dataset.windowHeight || '0');
       const newHeight = clamp(windowHeight + deltaY, minHeight, maxHeight);
 
-      el.style.setProperty("height", `${~~newHeight}px`);
-    } else if (direction.includes("n")) {
-      const windowHeight = Number(el.dataset.windowHeight || "0");
+      el.style.setProperty('height', `${~~newHeight}px`);
+    } else if (direction.includes('n')) {
+      const windowHeight = Number(el.dataset.windowHeight || '0');
       const newHeight = clamp(windowHeight - deltaY, minHeight, maxHeight);
 
-      const windowY = Number(el.dataset.windowY || "0");
+      const windowY = Number(el.dataset.windowY || '0');
       const maxDeltaY = windowHeight - minHeight;
       const minDeltaY = windowHeight - (maxHeight ?? Number.MAX_VALUE);
       const newY = windowY + clamp(deltaY, minDeltaY, maxDeltaY);
 
-      el.style.setProperty("height", `${~~newHeight}px`);
-      el.style.setProperty("top", `${~~newY}px`);
+      el.style.setProperty('height', `${~~newHeight}px`);
+      el.style.setProperty('top', `${~~newY}px`);
     }
   };
 

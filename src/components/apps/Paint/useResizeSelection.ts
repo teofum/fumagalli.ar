@@ -1,7 +1,7 @@
-import useDrag from "@/hooks/useDrag";
-import clamp from "@/utils/clamp";
-import type { PaintState } from "./types";
-import getPixelData from "./utils/getPixelData";
+import useDrag from '@/hooks/use-drag';
+import clamp from '@/utils/clamp';
+import type { PaintState } from './types';
+import getPixelData from './utils/getPixelData';
 
 export default function useResizeSelection(
   containerRef: React.RefObject<HTMLDivElement>,
@@ -9,7 +9,7 @@ export default function useResizeSelection(
   selectionCanvasRef: React.RefObject<HTMLCanvasElement>,
   state: PaintState,
   setState: (value: Partial<PaintState>) => void,
-  direction: "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw",
+  direction: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw',
 ) {
   const onDragStart = (ev: PointerEvent) => {
     const el = selectionRef.current;
@@ -25,57 +25,57 @@ export default function useResizeSelection(
     if (!el || !state.selection) return;
 
     // Calculate cursor delta
-    const initialX = Number(el.dataset.initialX || "0");
-    const initialY = Number(el.dataset.initialY || "0");
+    const initialX = Number(el.dataset.initialX || '0');
+    const initialY = Number(el.dataset.initialY || '0');
     const deltaX = ev.clientX - initialX;
     const deltaY = ev.clientY - initialY;
 
     const { x, y, w, h } = state.selection;
 
     // Horizontal resizing
-    if (direction.includes("e")) {
+    if (direction.includes('e')) {
       const newWidth = clamp(w * state.zoom + deltaX, 1);
 
       el.style.setProperty(
-        "width",
+        'width',
         `${Math.round(newWidth / state.zoom) * state.zoom}px`,
       );
-    } else if (direction.includes("w")) {
+    } else if (direction.includes('w')) {
       const newWidth = clamp(w * state.zoom - deltaX, 1);
 
       const maxDeltaX = (w - 1) * state.zoom;
       const newX = x * state.zoom + clamp(deltaX, -Number.MAX_VALUE, maxDeltaX);
 
       el.style.setProperty(
-        "width",
+        'width',
         `${Math.round(newWidth / state.zoom) * state.zoom}px`,
       );
       el.style.setProperty(
-        "left",
+        'left',
         `${Math.round(newX / state.zoom) * state.zoom}px`,
       );
     }
 
     // Vertical resizing
-    if (direction.includes("s")) {
+    if (direction.includes('s')) {
       const newHeight = clamp(h * state.zoom + deltaY, 1);
 
       el.style.setProperty(
-        "height",
+        'height',
         `${Math.round(newHeight / state.zoom) * state.zoom}px`,
       );
-    } else if (direction.includes("n")) {
+    } else if (direction.includes('n')) {
       const newHeight = clamp(h * state.zoom - deltaY, 1);
 
       const maxDeltaY = (h - 1) * state.zoom;
       const newY = y * state.zoom + clamp(deltaY, -Number.MAX_VALUE, maxDeltaY);
 
       el.style.setProperty(
-        "height",
+        'height',
         `${Math.round(newHeight / state.zoom) * state.zoom}px`,
       );
       el.style.setProperty(
-        "top",
+        'top',
         `${Math.round(newY / state.zoom) * state.zoom}px`,
       );
     }
@@ -107,7 +107,7 @@ export default function useResizeSelection(
 
     // Resize selection
     const selectionCanvas = selectionCanvasRef.current;
-    const selectionCtx = selectionCanvas?.getContext("2d");
+    const selectionCtx = selectionCanvas?.getContext('2d');
     if (selectionCanvas && selectionCtx) {
       const imageData = selectionCtx.getImageData(
         0,
