@@ -1,0 +1,35 @@
+@import "../styles/tailwind.css";
+@import "../styles/font.css";
+@import "../styles/theme.css";
+@import "../styles/components.css";
+@import "../styles/article.css";
+@import "../styles/static.css";
+@import "../styles/utils.css";
+@import "../styles/js-dos.css";
+
+@layer base {
+  /*@media (prefers-color-scheme: dark) {
+    :root:not([class]) {
+      @apply theme-dark;
+    }
+  }*/
+
+  body {
+    @apply text-base text-default selection:bg-selection selection:text-selection;
+  }
+
+  #desktop img,
+  #desktop canvas {
+    image-rendering: pixelated;
+  }
+
+  #desktop {
+    user-select: none;
+  }
+
+  @media (pointer: fine) {
+    #desktop {
+      user-select: auto;
+    }
+  }
+}
