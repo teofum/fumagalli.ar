@@ -1,23 +1,23 @@
-import useSystemStore from "@/stores/system";
-import { themes } from "./types";
-import { Select, SelectItem } from "@/components/ui/Select";
-import { useWindow } from "@/components/desktop/Window/context";
-import Button from "@/components/ui/Button";
-import ColorPicker from "@/components/ui/ColorPicker";
-import parseCSSColor from "parse-css-color";
-import { useState } from "react";
-import GroupBox from "@/components/ui/GroupBox";
-import Monitor from "./Monitor";
+import useSystemStore from '@/stores/system';
+import { ThemeCustomization, themes } from './types';
+import { Select, SelectItem } from '@/components/ui/Select';
+import { useWindow } from '@/components/desktop/Window/context';
+import Button from '@/components/ui/Button';
+import ColorPicker from '@/components/ui/ColorPicker';
+import parseCSSColor from 'parse-css-color';
+import { useState } from 'react';
+import GroupBox from '@/components/ui/GroupBox';
+import Monitor from './Monitor';
 
 const DEFAULT_BACKGROUNDS = [
-  "Black Thatch",
-  "Blue Rivets",
-  "Carved Stone",
-  "Chess",
-  "Clouds",
-  "Houndstooth",
-  "Metal Links",
-  "Red Blocks",
+  'Black Thatch',
+  'Blue Rivets',
+  'Carved Stone',
+  'Chess',
+  'Clouds',
+  'Houndstooth',
+  'Metal Links',
+  'Red Blocks',
 ].map((item) => ({
   name: item,
   url: `/assets/backgrounds/${item}.png`,
@@ -57,20 +57,20 @@ export default function ThemeSettings() {
       <div className="w-auto mx-auto relative">
         <Monitor />
         <div
-          className="absolute bg-desktop top-[17px] left-[16px] w-[1216px] h-[896px] scale-[0.125] origin-top-left"
+          className="absolute bg-desktop top-4.25 left-4 w-304 h-224 scale-[0.125] origin-top-left"
           style={{
             backgroundColor: backgroundColor ?? undefined,
             backgroundImage: `url('${backgroundUrl}')`,
             backgroundRepeat:
-              backgroundImageMode === "tile" ? "repeat" : "no-repeat",
+              backgroundImageMode === 'tile' ? 'repeat' : 'no-repeat',
             backgroundPosition:
-              backgroundImageMode === "tile" ? "top left" : "center center",
+              backgroundImageMode === 'tile' ? 'top left' : 'center center',
             backgroundSize:
-              backgroundImageMode === "fill"
-                ? "cover"
-                : backgroundImageMode === "stretch"
-                  ? "100% 100%"
-                  : "auto auto",
+              backgroundImageMode === 'fill'
+                ? 'cover'
+                : backgroundImageMode === 'stretch'
+                  ? '100% 100%'
+                  : 'auto auto',
           }}
         />
       </div>
@@ -80,7 +80,7 @@ export default function ThemeSettings() {
         <Select
           value={theme.cssClass}
           onValueChange={selectTheme}
-          triggerProps={{ className: "w-full" }}
+          triggerProps={{ className: 'w-full' }}
         >
           {themes.map((t) => (
             <SelectItem key={t.cssClass} value={t.cssClass}>
@@ -113,13 +113,16 @@ export default function ThemeSettings() {
           <span className="w-20">Picture</span>
 
           <Select
-            triggerProps={{ className: "flex-1" }}
-            value={backgroundUrl ?? ""}
+            triggerProps={{ className: 'flex-1' }}
+            value={backgroundUrl ?? ''}
             onValueChange={(value) =>
-              updateThemeCustomizations({ backgroundUrl: value })
+              updateThemeCustomizations({
+                backgroundUrl: value === '__none__' ? '' : value,
+              })
             }
+            placeholder="None"
           >
-            <SelectItem value="">None</SelectItem>
+            <SelectItem value="__none__">None</SelectItem>
 
             {DEFAULT_BACKGROUNDS.map((image) => (
               <SelectItem key={image.name} value={image.url}>
@@ -129,10 +132,13 @@ export default function ThemeSettings() {
           </Select>
 
           <Select
-            triggerProps={{ className: "flex-1" }}
+            triggerProps={{ className: 'flex-1' }}
             value={backgroundImageMode}
             onValueChange={(value) =>
-              updateThemeCustomizations({ backgroundImageMode: value as any })
+              updateThemeCustomizations({
+                backgroundImageMode:
+                  value as ThemeCustomization['backgroundImageMode'],
+              })
             }
           >
             <SelectItem value="center">Center</SelectItem>
