@@ -1,6 +1,6 @@
-import cn from "classnames";
-import getIconUrl from "../utils/getIconUrl";
-import type { ItemStub } from "@/schemas/folder";
+import cn from 'classnames';
+import getIconUrl from '../utils/getIconUrl';
+import type { ItemStub } from '@/schemas/folder';
 
 interface DetailsItemProps {
   item: ItemStub;
@@ -22,14 +22,14 @@ export default function FilesListItem({
   return (
     <button
       className={cn(
-        "flex flex-row gap-0.5 py-px items-center cursor-default",
-        "max-w-full group outline-hidden",
+        'flex flex-row gap-0.5 py-px items-center cursor-default',
+        'max-w-full group outline-hidden',
         className,
       )}
       onClick={onClick}
       onDoubleClick={() => open(item)}
       onKeyDown={(ev) => {
-        if (ev.key === "Enter") open(item);
+        if (ev.key === 'Enter') open(item);
       }}
       onFocus={() => select(item)}
       onBlur={() => select(null)}
@@ -37,7 +37,7 @@ export default function FilesListItem({
       <span className="relative min-w-4">
         <img src={iconUrl} alt="" />
         <span
-          className="absolute inset-0 bg-selection bg-opacity-50 hidden group-focus:inline"
+          className="absolute inset-0 bg-selection/50 hidden group-focus:inline"
           style={{
             WebkitMaskImage: `url('${iconUrl}')`,
           }}
@@ -45,8 +45,8 @@ export default function FilesListItem({
       </span>
       <span
         className={cn(
-          "px-0.5 whitespace-nowrap overflow-hidden text-ellipsis",
-          "group-focus:bg-selection group-focus:text-selection",
+          'px-0.5 whitespace-nowrap overflow-hidden text-ellipsis',
+          'group-focus:bg-selection group-focus:text-selection',
         )}
       >
         {item.name}

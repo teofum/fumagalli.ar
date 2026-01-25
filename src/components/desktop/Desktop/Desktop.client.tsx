@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
-import { useEffect, useLayoutEffect } from "react";
-import Window from "../Window";
-import Taskbar from "../Taskbar";
-import useDesktopStore from "@/stores/desktop";
-import { about } from "@/components/apps/About";
-import { intro } from "@/components/apps/Intro";
-import cn from "classnames";
-import useSystemStore from "@/stores/system";
-import parseCSSColor from "parse-css-color";
-import { files } from "@/components/apps/Files";
-import { minesweeper } from "@/components/apps/Minesweeper";
-import { sudoku } from "@/components/apps/Sudoku";
-import { solitaire } from "@/components/apps/Solitaire";
-import { dosEmu } from "@/components/apps/DOSEmu";
-import { ditherLab } from "@/components/apps/DitherLab";
-import { DOS_GAMES } from "@/components/apps/DOSEmu/types";
-import { paint } from "@/components/apps/Paint";
-import ContextMenu from "@/components/ui/ContextMenu";
-import { themeSettings } from "@/components/apps/ThemeSettings";
-import ShutdownDialog from "./ShutdownDialog";
-import MobileDialog from "./MobileDialog";
-import { applications } from "@/components/apps/renderApp";
+import { useEffect, useLayoutEffect } from 'react';
+import Window from '../Window';
+import Taskbar from '../Taskbar';
+import useDesktopStore from '@/stores/desktop';
+import { about } from '@/components/apps/About';
+import { intro } from '@/components/apps/Intro';
+import cn from 'classnames';
+import useSystemStore from '@/stores/system';
+import parseCSSColor from 'parse-css-color';
+import { files } from '@/components/apps/Files';
+import { minesweeper } from '@/components/apps/Minesweeper';
+import { sudoku } from '@/components/apps/Sudoku';
+import { solitaire } from '@/components/apps/Solitaire';
+import { dosEmu } from '@/components/apps/DOSEmu';
+import { ditherLab } from '@/components/apps/DitherLab';
+import { DOS_GAMES } from '@/components/apps/DOSEmu/types';
+import { paint } from '@/components/apps/Paint';
+import ContextMenu from '@/components/ui/ContextMenu';
+import { themeSettings } from '@/components/apps/ThemeSettings';
+import ShutdownDialog from './ShutdownDialog';
+import MobileDialog from './MobileDialog';
+import { applications } from '@/components/apps/renderApp';
 
 let initialized = false;
 
@@ -34,22 +34,22 @@ interface DesktopIconProps {
 }
 
 function DesktopIcon({ iconUrl, title, x, y, open }: DesktopIconProps) {
-  const desktopEl = document.querySelector("#desktop") as HTMLDivElement;
+  const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
   const desktopColor = desktopEl
     ? getComputedStyle(desktopEl).backgroundColor
-    : "black";
+    : 'black';
 
   const parsed = parseCSSColor(desktopColor);
   const [r, g, b] = parsed?.values ?? [0, 0, 0];
   const luma = (r * 299 + g * 587 + b * 114) / (255.0 * 1000);
-  const contrastColor = luma > 0.5 ? "black" : "white";
+  const contrastColor = luma > 0.5 ? 'black' : 'white';
 
   return (
     <button
       className="flex flex-col gap-1 w-16 items-center cursor-default group outline-hidden"
       onDoubleClick={() => open()}
       onKeyDown={(ev) => {
-        if (ev.key === "Enter") open();
+        if (ev.key === 'Enter') open();
       }}
       style={{ gridColumn: x, gridRow: y }}
     >
@@ -57,8 +57,8 @@ function DesktopIcon({ iconUrl, title, x, y, open }: DesktopIconProps) {
         <img src={iconUrl} alt="" />
         <span
           className={cn(
-            "absolute inset-0 bg-selection bg-opacity-50",
-            "hidden group-focus:inline",
+            'absolute inset-0 bg-selection/50',
+            'hidden group-focus:inline',
           )}
           style={{
             WebkitMaskImage: `url('${iconUrl}')`,
@@ -68,9 +68,9 @@ function DesktopIcon({ iconUrl, title, x, y, open }: DesktopIconProps) {
       <div className="max-h-8">
         <div
           className={cn(
-            "px-0.5 text-ellipsis",
-            "group-focus:bg-selection! group-focus:text-selection!",
-            "line-clamp-2 group-focus:line-clamp-none",
+            'px-0.5 text-ellipsis',
+            'group-focus:bg-selection! group-focus:text-selection!',
+            'line-clamp-2 group-focus:line-clamp-none',
           )}
           style={{ backgroundColor: desktopColor, color: contrastColor }}
         >
@@ -98,11 +98,11 @@ export default function Desktop() {
    */
   useLayoutEffect(() => {
     document.documentElement.className = theme.cssClass;
-    document.documentElement.style.setProperty("overflow", "hidden");
+    document.documentElement.style.setProperty('overflow', 'hidden');
 
     return () => {
-      document.documentElement.className = "";
-      document.documentElement.style.removeProperty("overflow");
+      document.documentElement.className = '';
+      document.documentElement.style.removeProperty('overflow');
     };
   }, [theme.cssClass]);
 
@@ -114,14 +114,14 @@ export default function Desktop() {
 
     if (windows.length === 0) {
       const params = new URLSearchParams(location.search);
-      const appName = params.get("app");
+      const appName = params.get('app');
       if (appName) {
         const appInit = applications.find(
           (app) => (app.meta.appType as string) === appName,
         );
         if (appInit) launch(appInit.meta);
       } else {
-        const desktopEl = document.querySelector("#desktop") as HTMLDivElement;
+        const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
         const desktop = desktopEl.getBoundingClientRect();
 
         launch({ ...about, top: 50, left: 50 });
@@ -139,10 +139,10 @@ export default function Desktop() {
   return (
     <>
       <div
-        className={cn("w-screen h-screen flex flex-col overflow-hidden")}
+        className={cn('w-screen h-screen flex flex-col overflow-hidden')}
         onContextMenu={(ev) => ev.preventDefault()}
       >
-        {settings.taskbarPosition === "top" ? <Taskbar /> : null}
+        {settings.taskbarPosition === 'top' ? <Taskbar /> : null}
         <div
           id="desktop"
           className="relative flex-1 bg-desktop [image-rendering:pixelated]"
@@ -150,15 +150,15 @@ export default function Desktop() {
             backgroundColor: backgroundColor ?? undefined,
             backgroundImage: `url('${backgroundUrl}')`,
             backgroundRepeat:
-              backgroundImageMode === "tile" ? "repeat" : "no-repeat",
+              backgroundImageMode === 'tile' ? 'repeat' : 'no-repeat',
             backgroundPosition:
-              backgroundImageMode === "tile" ? "top left" : "center center",
+              backgroundImageMode === 'tile' ? 'top left' : 'center center',
             backgroundSize:
-              backgroundImageMode === "fill"
-                ? "cover"
-                : backgroundImageMode === "stretch"
-                  ? "100% 100%"
-                  : "auto auto",
+              backgroundImageMode === 'fill'
+                ? 'cover'
+                : backgroundImageMode === 'stretch'
+                  ? '100% 100%'
+                  : 'auto auto',
           }}
         >
           <ContextMenu.Root
@@ -181,7 +181,7 @@ export default function Desktop() {
                 title="My Documents"
                 open={() =>
                   launch(
-                    files({ folderId: "949f9fc6-19d4-479a-a1ec-c4a80cffb3a6" }),
+                    files({ folderId: '949f9fc6-19d4-479a-a1ec-c4a80cffb3a6' }),
                   )
                 }
               />
@@ -236,7 +236,7 @@ export default function Desktop() {
             <Window key={window.id} {...window} />
           ))}
         </div>
-        {settings.taskbarPosition === "bottom" ? <Taskbar /> : null}
+        {settings.taskbarPosition === 'bottom' ? <Taskbar /> : null}
       </div>
 
       <ShutdownDialog />

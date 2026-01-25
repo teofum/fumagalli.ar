@@ -79,7 +79,7 @@ export default function PostsIndexRoute() {
           <li key={post.slug} className="border-t last:border-b">
             <Link
               href={post.slug}
-              className="flex flex-row p-4 gap-4 hover:bg-text hover:bg-opacity-10 transition-colors"
+              className="flex flex-row p-4 gap-4 hover:bg-text/10 transition-colors"
             >
               <span className="w-20">
                 {post.date.toLocaleDateString('en-US', {

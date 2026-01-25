@@ -1,12 +1,12 @@
-import cn from "classnames";
-import ScrollContainer from "@/components/ui/ScrollContainer";
-import type FilesViewProps from "./FilesViewProps";
-import filterByType from "../utils/filterByType";
-import { useAppState } from "@/components/desktop/Window/context";
-import getIconUrl from "../utils/getIconUrl";
+import cn from 'classnames';
+import ScrollContainer from '@/components/ui/ScrollContainer';
+import type FilesViewProps from './FilesViewProps';
+import filterByType from '../utils/filterByType';
+import { useAppState } from '@/components/desktop/Window/context';
+import getIconUrl from '../utils/getIconUrl';
 
 export default function FilesGridView({ dir, open, select }: FilesViewProps) {
-  const [state] = useAppState("files");
+  const [state] = useAppState('files');
 
   return (
     <ScrollContainer className="flex-1">
@@ -20,7 +20,7 @@ export default function FilesGridView({ dir, open, select }: FilesViewProps) {
               className="flex flex-col gap-1 w-16 items-center cursor-default group outline-hidden"
               onDoubleClick={() => open(item)}
               onKeyDown={(ev) => {
-                if (ev.key === "Enter") open(item);
+                if (ev.key === 'Enter') open(item);
               }}
               onFocus={() => select(item)}
               onBlur={() => select(null)}
@@ -29,8 +29,8 @@ export default function FilesGridView({ dir, open, select }: FilesViewProps) {
                 <img width={32} height={32} src={iconUrl} alt="" />
                 <span
                   className={cn(
-                    "absolute inset-0 bg-selection bg-opacity-50",
-                    "hidden group-focus:inline",
+                    'absolute inset-0 bg-selection/50',
+                    'hidden group-focus:inline',
                   )}
                   style={{
                     WebkitMaskImage: `url('${iconUrl}')`,
@@ -40,9 +40,9 @@ export default function FilesGridView({ dir, open, select }: FilesViewProps) {
               <div className="max-h-8 z-1">
                 <div
                   className={cn(
-                    "px-0.5 text-ellipsis",
-                    "group-focus:bg-selection group-focus:text-selection",
-                    "line-clamp-2 group-focus:line-clamp-none",
+                    'px-0.5 text-ellipsis',
+                    'group-focus:bg-selection group-focus:text-selection',
+                    'line-clamp-2 group-focus:line-clamp-none',
                   )}
                 >
                   {item.name}

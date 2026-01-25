@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import cn from "classnames";
+import { useEffect, useState } from 'react';
+import cn from 'classnames';
 
-import type { Folder, ItemStub } from "@/schemas/folder";
-import type { AnyFile } from "@/schemas/file";
+import type { Folder, ItemStub } from '@/schemas/folder';
+import type { AnyFile } from '@/schemas/file';
 
-import ScrollContainer from "@/components/ui/ScrollContainer";
-import TreeLess from "@/components/ui/icons/TreeLess";
-import TreeMore from "@/components/ui/icons/TreeMore";
-import useFolder from "../Files/utils/useFolder";
+import ScrollContainer from '@/components/ui/ScrollContainer';
+import TreeLess from '@/components/ui/icons/TreeLess';
+import TreeMore from '@/components/ui/icons/TreeMore';
+import useFolder from '../Files/utils/useFolder';
 
-const HELP_ROOT = "2de4d52e-d1ca-4c9a-b9a4-7937e06c9bcf";
+const HELP_ROOT = '2de4d52e-d1ca-4c9a-b9a4-7937e06c9bcf';
 
 interface HelpItemProps {
   item: ItemStub;
@@ -25,31 +25,31 @@ function HelpListItem({
   className,
 }: HelpItemProps) {
   const type =
-    item._type !== "folder"
-      ? "help_page"
+    item._type !== 'folder'
+      ? 'help_page'
       : expanded
-        ? "help_book_open"
-        : "help_book_closed";
+        ? 'help_book_open'
+        : 'help_book_closed';
 
   const iconUrl = `/fs/Applications/help/resources/${type}.png`;
-  const name = item.name.split(".")[0];
+  const name = item.name.split('.')[0];
 
   return (
     <button
       className={cn(
-        "flex flex-row gap-0.5 py-px items-center cursor-default",
-        "max-w-full group outline-hidden",
+        'flex flex-row gap-0.5 py-px items-center cursor-default',
+        'max-w-full group outline-hidden',
         className,
       )}
       onClick={() => open()}
       onKeyDown={(ev) => {
-        if (ev.key === "Enter") open();
+        if (ev.key === 'Enter') open();
       }}
     >
       <span className="relative min-w-4">
         <img src={iconUrl} alt={type} />
         <span
-          className="absolute inset-0 bg-selection bg-opacity-50 hidden group-focus:inline"
+          className="absolute inset-0 bg-selection/50 hidden group-focus:inline"
           style={{
             WebkitMaskImage: `url('${iconUrl}')`,
           }}
@@ -57,8 +57,8 @@ function HelpListItem({
       </span>
       <span
         className={cn(
-          "px-0.5 whitespace-nowrap overflow-hidden text-ellipsis",
-          "group-focus:bg-selection group-focus:text-selection",
+          'px-0.5 whitespace-nowrap overflow-hidden text-ellipsis',
+          'group-focus:bg-selection group-focus:text-selection',
           // { 'outline-dotted outline-current outline-1': path === openPath },
         )}
       >
@@ -126,7 +126,7 @@ function Branch({ item: itemProp, root = false, open }: BranchProps) {
           {expanded ? (
             <div className="">
               {children
-                .filter((child) => child._type !== "folder")
+                .filter((child) => child._type !== 'folder')
                 .map((child) => (
                   <Leaf
                     key={child.name}
@@ -135,7 +135,7 @@ function Branch({ item: itemProp, root = false, open }: BranchProps) {
                   />
                 ))}
               {children
-                .filter((child) => child._type === "folder")
+                .filter((child) => child._type === 'folder')
                 .map((child) => (
                   <Branch key={child.name} item={child as Folder} open={open} />
                 ))}
@@ -185,7 +185,7 @@ export default function HelpTreeView({ setId }: HelpTreeViewProps) {
   return (
     <ScrollContainer className="flex-1">
       {help.items
-        ?.filter((child) => child._type !== "folder")
+        ?.filter((child) => child._type !== 'folder')
         .map((child) => (
           <Leaf
             key={child.name}
@@ -195,7 +195,7 @@ export default function HelpTreeView({ setId }: HelpTreeViewProps) {
           />
         ))}
       {help.items
-        ?.filter((child) => child._type === "folder")
+        ?.filter((child) => child._type === 'folder')
         .map((child) => (
           <Branch key={child.name} item={child as Folder} open={setId} root />
         ))}

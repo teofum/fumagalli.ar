@@ -8,7 +8,7 @@ export default function Header() {
           bg-cover [image-rendering:pixelated]
         "
       >
-        <div className="bg-default bg-opacity-50 p-8 sticky top-0">
+        <div className="bg-default/50 p-8 sticky top-0">
           <div className="max-w-3xl mx-auto">
             <h1 className="font-title text-[1.75rem] sm:text-content-4xl">
               A Visual Introduction to dithering in

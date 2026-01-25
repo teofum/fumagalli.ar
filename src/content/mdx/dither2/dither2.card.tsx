@@ -15,7 +15,7 @@ export default function DitherCard() {
         alt=""
       />
 
-      <div className="bg-default bg-opacity-50 p-4 relative transition group-hover:bg-opacity-70">
+      <div className="bg-default/50 p-4 relative transition group-hover:bg-default/70">
         <h1 className="font-title text-center text-content-3xl transition group-hover:scale-[1.02] group-hover:text-link">
           Dithering in
           <img
