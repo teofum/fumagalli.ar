@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
-import Slider from "@/components/ui/Slider";
+'use client';
+
+import { useEffect, useState } from 'react';
+import Slider from '@/components/ui/Slider';
 
 const thresholdMap = [0, 12, 3, 15, 8, 4, 11, 7, 2, 14, 1, 13, 10, 6, 9, 5];
 
@@ -24,11 +26,11 @@ export default function DemoPattern({
   let canvas: HTMLCanvasElement | null = null;
 
   useEffect(() => {
-    const ctx = canvas?.getContext("2d");
-    const patternCanvas = document.createElement("canvas");
-    const ctxPattern = patternCanvas.getContext("2d");
+    const ctx = canvas?.getContext('2d');
+    const patternCanvas = document.createElement('canvas');
+    const ctxPattern = patternCanvas.getContext('2d');
     if (!canvas || !ctx || !ctxPattern) {
-      console.warn("Canvas unavailable");
+      console.warn('Canvas unavailable');
       return;
     }
 
@@ -51,15 +53,15 @@ export default function DemoPattern({
         const threshold = thresholdMap[(x % 4) + 4 * (y % 4)];
 
         const bright = threshold / 16;
-        const color = showPattern ? `hsl(0, 0%, ${bright * 100}%)` : "white";
+        const color = showPattern ? `hsl(0, 0%, ${bright * 100}%)` : 'white';
 
-        ctxPattern.fillStyle = threshold < ratio ? color : "black";
+        ctxPattern.fillStyle = threshold < ratio ? color : 'black';
         ctxPattern.fillRect(x * size, y * size, size, size);
       }
     }
 
     // Repeat grid
-    const pattern = ctx.createPattern(patternCanvas, "repeat");
+    const pattern = ctx.createPattern(patternCanvas, 'repeat');
     if (pattern) {
       ctx.fillStyle = pattern;
       ctx.fillRect(0, 0, canvas.width, canvas.height);

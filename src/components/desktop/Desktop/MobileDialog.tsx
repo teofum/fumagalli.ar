@@ -32,7 +32,7 @@ export default function MobileDialog() {
 
         <div className="flex flex-col gap-2 mt-16">
           <LinkButton
-            href="/about"
+            href="/home"
             className="p-3 outline-solid outline-1 outline-black"
           >
             <span>Go to mobile site</span>

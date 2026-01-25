@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
-import DemoImageBase, { NULL_PALETTE } from "./DemoImageBase";
-import useGlRenderer from "@/dither/renderers/useGlRenderer";
-import { ToggleButton, ToggleGroup } from "@/components/ui/ToggleGroup";
-import Switch from "@/components/ui/Switch";
+'use client';
+
+import { useEffect, useState } from 'react';
+import DemoImageBase, { NULL_PALETTE } from './DemoImageBase';
+import useGlRenderer from '@/dither/renderers/useGlRenderer';
+import { ToggleButton, ToggleGroup } from '@/components/ui/ToggleGroup';
+import Switch from '@/components/ui/Switch';
 
 const shader = `
 precision mediump float;
@@ -50,7 +52,7 @@ export default function DemoPatternImage({
   showSizeRadio,
   gamma,
 }: DemoPatternImageProps) {
-  const [size, setSize] = useState("4");
+  const [size, setSize] = useState('4');
   const [pattern, setPattern] = useState(false);
 
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);

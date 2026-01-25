@@ -1,5 +1,8 @@
-import { Link, useLocation } from '@remix-run/react';
+'use client';
+
+import Link from 'next/link';
 import { LinkButton } from '../ui/Button';
+import { usePathname } from 'next/navigation';
 
 interface BreadcrumbProps {
   route: { name: string; path: string };
@@ -15,12 +18,12 @@ function Breadcrumb({ route }: BreadcrumbProps) {
 }
 
 export default function Header() {
-  const location = useLocation();
+  const pathname = usePathname();
 
-  const fragments = location.pathname.split('/');
+  const fragments = pathname.split('/');
   const routes = fragments.map((fragment, i) => ({
     name: fragment || 'home',
-    path: `${fragments.slice(0, i + 1).join('/')}` || '/about',
+    path: `${fragments.slice(0, i + 1).join('/')}` || '/home',
   }));
 
   return (

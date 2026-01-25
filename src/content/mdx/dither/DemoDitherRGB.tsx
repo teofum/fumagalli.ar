@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import Slider from "@/components/ui/Slider";
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import Slider from '@/components/ui/Slider';
 
 const thresholdMap = [0, 12, 3, 15, 8, 4, 11, 7, 2, 14, 1, 13, 10, 6, 9, 5];
 
@@ -28,11 +30,11 @@ export default function DemoDitherRGB({ useWhite }: DemoDitherRGBProps) {
     const canvas = canvasRef.current;
     const preview = previewRef.current;
 
-    const ctx = canvas?.getContext("2d");
-    const patternCanvas = document.createElement("canvas");
-    const ctxPattern = patternCanvas.getContext("2d");
+    const ctx = canvas?.getContext('2d');
+    const patternCanvas = document.createElement('canvas');
+    const ctxPattern = patternCanvas.getContext('2d');
     if (!canvas || !ctx || !ctxPattern) {
-      console.warn("Canvas unavailable");
+      console.warn('Canvas unavailable');
       return;
     }
 
@@ -90,13 +92,13 @@ export default function DemoDitherRGB({ useWhite }: DemoDitherRGBProps) {
 
         ctxPattern.fillStyle = `rgb(${candidates[threshold]
           .map((n) => n * 255)
-          .join(",")})`;
+          .join(',')})`;
         ctxPattern.fillRect(x * size, y * size, size, size);
       }
     }
 
     // Repeat grid
-    const pattern = ctx.createPattern(patternCanvas, "repeat");
+    const pattern = ctx.createPattern(patternCanvas, 'repeat');
     if (pattern) {
       ctx.fillStyle = pattern;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -105,7 +107,7 @@ export default function DemoDitherRGB({ useWhite }: DemoDitherRGBProps) {
     if (preview)
       preview.style.background = `rgb(${[red, green, blue]
         .map((n) => n * 255)
-        .join(",")})`;
+        .join(',')})`;
   }, [zoom, red, green, blue, useWhite]);
 
   return (
@@ -135,7 +137,7 @@ export default function DemoDitherRGB({ useWhite }: DemoDitherRGBProps) {
             min={0}
             max={1}
             step={1 / 256}
-            style={{ "--progress-color": `rgb(${red * 255},0,0)` } as any}
+            style={{ '--progress-color': `rgb(${red * 255},0,0)` } as any}
             value={red}
             onValueChange={setRed}
           />
@@ -146,7 +148,7 @@ export default function DemoDitherRGB({ useWhite }: DemoDitherRGBProps) {
             min={0}
             max={1}
             step={1 / 256}
-            style={{ "--progress-color": `rgb(0,${green * 255},0)` } as any}
+            style={{ '--progress-color': `rgb(0,${green * 255},0)` } as any}
             value={green}
             onValueChange={setGreen}
           />
@@ -157,7 +159,7 @@ export default function DemoDitherRGB({ useWhite }: DemoDitherRGBProps) {
             min={0}
             max={1}
             step={1 / 256}
-            style={{ "--progress-color": `rgb(0,0,${blue * 255})` } as any}
+            style={{ '--progress-color': `rgb(0,0,${blue * 255})` } as any}
             value={blue}
             onValueChange={setBlue}
           />

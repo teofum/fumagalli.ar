@@ -1,12 +1,14 @@
-import cn from "classnames";
+'use client';
+
+import cn from 'classnames';
 import {
   PaletteType,
   type Palette,
   PaletteGroup,
-} from "@/dither/palettes/types";
+} from '@/dither/palettes/types';
 
 export const NULL_PALETTE: Palette = {
-  name: "",
+  name: '',
   type: PaletteType.Indexed,
   group: PaletteGroup.Hidden,
   data: [],
@@ -24,7 +26,7 @@ export default function DemoImageBase({
   canvasRef,
   imgRef,
   hideCanvas,
-  imageUrl = "/fs/Documents/Articles/assets/dither/tram-original",
+  imageUrl = '/fs/Documents/Articles/assets/dither/tram-original',
   children,
 }: DemoImageBaseProps) {
   return (
@@ -37,8 +39,8 @@ export default function DemoImageBase({
             <img src={`${imageUrl}.jpeg`} alt="Original" ref={imgRef} />
           </picture>
           <canvas
-            className={cn("absolute inset-0 w-full h-full", {
-              "opacity-0": hideCanvas,
+            className={cn('absolute inset-0 w-full h-full', {
+              'opacity-0': hideCanvas,
             })}
             ref={canvasRef}
           />

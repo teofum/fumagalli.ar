@@ -1,20 +1,11 @@
-import { type V2_MetaFunction } from '@remix-run/react';
-
-import Button, { LinkButton } from '~/components/ui/Button';
-import RetroLink from '~/components/ui/Link';
-import Webring from '~/components/ui/Webring';
-import Close from '~/components/ui/icons/Close';
-
-export const meta: V2_MetaFunction = () => {
-  return [
-    { title: 'Teo Fumagalli' },
-    { name: 'description', content: 'Welcome to my site!' },
-  ];
-};
+import Button, { LinkButton } from '@/components/ui/Button';
+import Close from '@/components/ui/icons/Close';
+import RetroLink from '@/components/ui/Link';
+import Webring from '@/components/ui/Webring';
 
 const resources = '/fs/Applications/intro/resources';
 
-export default function AboutRoute() {
+export default function Home() {
   return (
     <main className="p-4">
       <div className="max-w-3xl mx-auto">
@@ -42,9 +33,9 @@ export default function AboutRoute() {
                 <span className="tracking-[-9px] -ml-1.5">lli</span>
               </h1>
               <p>
-                I'm a programmer, UI designer and amateur photographer based in
-                Buenos Aires, Argentina. I do a bit of everything, but my
-                professional background is in web development and my primary
+                I&apos;m a programmer, UI designer and amateur photographer
+                based in Buenos Aires, Argentina. I do a bit of everything, but
+                my professional background is in web development and my primary
                 interest in rendering and graphics programming.
               </p>
 
@@ -75,7 +66,7 @@ export default function AboutRoute() {
               </div>
 
               <p className="mt-auto">
-                Let's build awesome things together!{' '}
+                Let&apos;s build awesome things together!{' '}
                 <RetroLink href="mailto:teo.fum@outlook.com">
                   Get in touch
                 </RetroLink>

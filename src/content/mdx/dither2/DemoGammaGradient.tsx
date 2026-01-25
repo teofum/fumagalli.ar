@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
-import useGlRenderer from "@/dither/renderers/useGlRenderer";
-import { NULL_PALETTE } from "../dither/DemoImageBase";
-import Slider from "@/components/ui/Slider";
+'use client';
+
+import { useEffect, useState } from 'react';
+import useGlRenderer from '@/dither/renderers/useGlRenderer';
+import { NULL_PALETTE } from '../dither/DemoImageBase';
+import Slider from '@/components/ui/Slider';
 
 const shader = `
 precision mediump float;
@@ -45,7 +47,7 @@ const DemoOrdered = () => {
     img,
     shader,
     NULL_PALETTE,
-    { threshold: "bayer8" },
+    { threshold: 'bayer8' },
     { u_gamma: gamma },
   );
   useEffect(() => {

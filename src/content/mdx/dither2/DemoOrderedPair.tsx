@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
-import useGlRenderer from "@/dither/renderers/useGlRenderer";
-import DemoImageBase from "../dither/DemoImageBase";
-import { ToggleGroup, ToggleButton } from "@/components/ui/ToggleGroup";
-import Switch from "@/components/ui/Switch";
-import Slider from "@/components/ui/Slider";
-import NicePalette from "@/dither/palettes/NicePalette";
+'use client';
+
+import { useEffect, useState } from 'react';
+import useGlRenderer from '@/dither/renderers/useGlRenderer';
+import DemoImageBase from '../dither/DemoImageBase';
+import { ToggleGroup, ToggleButton } from '@/components/ui/ToggleGroup';
+import Switch from '@/components/ui/Switch';
+import Slider from '@/components/ui/Slider';
+import NicePalette from '@/dither/palettes/NicePalette';
 
 const shader = `
 precision mediump float;
@@ -99,7 +101,7 @@ void main() {
 }`;
 
 interface DemoOrderedProps {
-  type: "bayer" | "blueNoise" | "halftone";
+  type: 'bayer' | 'blueNoise' | 'halftone';
   sizes?: { name: string; value: string }[];
   initial?: string;
   gammaSlider?: boolean;
@@ -117,7 +119,7 @@ const DemoOrdered = ({
   useRatio = false,
   imageUrl,
 }: DemoOrderedProps) => {
-  const [size, setSize] = useState(initial ?? "8");
+  const [size, setSize] = useState(initial ?? '8');
   const [original, setOriginal] = useState(false);
   const [gamma, setGamma] = useState(2.2);
   const [variance, setVariance] = useState(3);

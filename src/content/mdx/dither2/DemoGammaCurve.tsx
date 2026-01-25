@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
-import Slider from "@/components/ui/Slider";
+'use client';
+
+import { useEffect, useState } from 'react';
+import Slider from '@/components/ui/Slider';
 
 export default function DemoThreshold() {
   const [gamma, setGamma] = useState(1);
@@ -7,9 +9,9 @@ export default function DemoThreshold() {
   let canvas: HTMLCanvasElement | null = null;
 
   useEffect(() => {
-    const ctx = canvas?.getContext("2d");
+    const ctx = canvas?.getContext('2d');
     if (!canvas || !ctx) {
-      console.warn("Canvas unavailable");
+      console.warn('Canvas unavailable');
       return;
     }
 
@@ -20,8 +22,8 @@ export default function DemoThreshold() {
 
     const [w, h] = [canvas.width, canvas.height];
 
-    const textColor = "#ffffff";
-    const drawColor = "#d00000";
+    const textColor = '#ffffff';
+    const drawColor = '#d00000';
     ctx.lineWidth = 1 * scaling;
 
     const points = Array.from(Array(64), (_, i) => Math.pow(i / 63, gamma));

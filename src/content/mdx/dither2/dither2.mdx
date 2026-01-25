@@ -1,14 +1,14 @@
-import DemoPatternImage from "../dither/DemoPatternImage";
-import DemoOrdered from "../dither/DemoOrdered";
-import DemoGammaCurve from "./DemoGammaCurve";
-import DemoGammaGradient from "./DemoGammaGradient";
-import PaletteSwatches from "./PaletteSwatches";
-import NicePalette from "@/dither/palettes/NicePalette";
-import DemoOrderedPair from "./DemoOrderedPair";
-import DemoOrderedPattern from "./DemoOrderedPattern";
-import DemoCandidateList from "./DemoCandidateList";
-import ImageGrid from "../dither/ImageGrid";
-import Header from "./Header";
+import DemoPatternImage from '../dither/DemoPatternImage';
+import DemoOrdered from '../dither/DemoOrdered';
+import DemoGammaCurve from './DemoGammaCurve';
+import DemoGammaGradient from './DemoGammaGradient';
+import PaletteSwatches from './PaletteSwatches';
+import NicePalette from '@/dither/palettes/NicePalette';
+import DemoOrderedPair from './DemoOrderedPair';
+import DemoOrderedPattern from './DemoOrderedPattern';
+import DemoCandidateList from './DemoCandidateList';
+import ImageGrid from '../dither/ImageGrid';
+import Header from './Header';
 
 <Header />
 
@@ -174,16 +174,16 @@ And just like that, it works! This is what error diffusion with an arbitrary pal
   basePath="/Documents/Articles/assets/dither2/"
   images={[
     {
-      src: "car-original",
-      formats: ["webp", "jpeg"],
-      alt: "Original image of a yellow car",
-      caption: "Original image",
+      src: 'car-original',
+      formats: ['webp', 'jpeg'],
+      alt: 'Original image of a yellow car',
+      caption: 'Original image',
     },
     {
-      src: "car-ed-fs",
-      formats: ["webp", "png"],
-      alt: "Floyd-Steinberg",
-      caption: "Floyd-Steinberg color dithering",
+      src: 'car-ed-fs',
+      formats: ['webp', 'png'],
+      alt: 'Floyd-Steinberg',
+      caption: 'Floyd-Steinberg color dithering',
     },
   ]}
 />
@@ -400,8 +400,8 @@ And that's it! The actual code is a bit different, moving as much as possible ou
 <DemoOrderedPattern
   type="blueNoise"
   sizes={[
-    { value: "16", name: "16×16" },
-    { value: "64", name: "64×64" },
+    { value: '16', name: '16×16' },
+    { value: '64', name: '64×64' },
   ]}
   initial="64"
   imageUrl="/fs/Documents/Articles/assets/dither2/car-original"

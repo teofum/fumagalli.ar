@@ -1,6 +1,10 @@
-import type { PortableTextComponents } from "@portabletext/react";
-import RetroLink from "./Link";
-import { sanityImage } from "@/utils/sanity.image";
+'use client';
+
+import { ComponentProps } from 'react';
+import { PortableText, PortableTextComponents } from '@portabletext/react';
+import { sanityImage } from '@/utils/sanity.image';
+
+import RetroLink from './Link';
 
 export const portableTextComponents: PortableTextComponents = {
   types: {
@@ -10,9 +14,9 @@ export const portableTextComponents: PortableTextComponents = {
           className="mt-2"
           src={sanityImage(value)
             .width(isInline ? 100 : 1280)
-            .fit("max")
+            .fit('max')
             .url()}
-          alt={value.alt || ""}
+          alt={value.alt || ''}
           loading="lazy"
         />
       );
@@ -54,3 +58,7 @@ export const portableTextComponents: PortableTextComponents = {
   //   />
   // ),
 };
+
+export function CustomPortableText(props: ComponentProps<typeof PortableText>) {
+  return <PortableText components={portableTextComponents} {...props} />;
+}

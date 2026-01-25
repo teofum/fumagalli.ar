@@ -1,11 +1,13 @@
-import cn from "classnames";
-import { preview } from "@/components/apps/Preview";
-import useDesktopStore from "@/stores/desktop";
+'use client';
+
+import cn from 'classnames';
+import { preview } from '@/components/apps/Preview';
+import useDesktopStore from '@/stores/desktop';
 
 function file(name: string) {
   return {
-    class: "file",
-    type: "image",
+    class: 'file',
+    type: 'image',
     name,
     size: 0,
     created: 0,
@@ -21,13 +23,13 @@ interface ImageGridProps {
     alt: string;
     caption?: string;
   }[];
-  size?: "md" | "lg";
+  size?: 'md' | 'lg';
 }
 
 export default function ImageGrid({
   basePath,
   images,
-  size = "md",
+  size = 'md',
 }: ImageGridProps) {
   const { launch } = useDesktopStore();
 
@@ -36,12 +38,12 @@ export default function ImageGrid({
   return (
     <div
       className={cn(
-        "bg-surface bevel p-2 font-sans text-base",
-        "mx-auto my-4 grid gap-x-0.5 gap-y-1",
+        'bg-surface bevel p-2 font-sans text-base',
+        'mx-auto my-4 grid gap-x-0.5 gap-y-1',
         {
-          "grid-cols-[repeat(auto-fit,minmax(12rem,1fr))]": size === "md",
-          "grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]": size === "lg",
-          "max-w-max": images.length === 1,
+          'grid-cols-[repeat(auto-fit,minmax(12rem,1fr))]': size === 'md',
+          'grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]': size === 'lg',
+          'max-w-max': images.length === 1,
         },
       )}
     >

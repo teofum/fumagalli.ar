@@ -1,6 +1,8 @@
-import cn from "classnames";
-import { useEffect, useState } from "react";
-import Slider from "@/components/ui/Slider";
+'use client';
+
+import cn from 'classnames';
+import { useEffect, useState } from 'react';
+import Slider from '@/components/ui/Slider';
 
 // Precalculated random array
 const noise = [
@@ -64,9 +66,9 @@ export default function DemoThreshold() {
   let canvas: HTMLCanvasElement | null = null;
 
   useEffect(() => {
-    const ctx = canvas?.getContext("2d");
+    const ctx = canvas?.getContext('2d');
     if (!canvas || !ctx) {
-      console.warn("Canvas unavailable");
+      console.warn('Canvas unavailable');
       return;
     }
 
@@ -77,8 +79,8 @@ export default function DemoThreshold() {
 
     const [w, h] = [canvas.width, canvas.height];
 
-    const textColor = "#ffffff";
-    const drawColor = "#d00000";
+    const textColor = '#ffffff';
+    const drawColor = '#d00000';
     ctx.lineWidth = 1 * scaling;
 
     const points = [0].concat(noise.slice(0, Math.min(noise.length, n)), [0]);
@@ -116,7 +118,7 @@ export default function DemoThreshold() {
     );
 
     for (let i = 1; i < points.length - 1; i++) {
-      ctx.fillStyle = y(i) < h / 2 ? "white" : "black";
+      ctx.fillStyle = y(i) < h / 2 ? 'white' : 'black';
 
       ctx.beginPath();
       ctx.ellipse(x(i), y(i), size, size, 0, 0, 2 * Math.PI);
@@ -140,8 +142,8 @@ export default function DemoThreshold() {
           >
             <span
               className={cn({
-                "text-white": brightness < 0.5,
-                "text-black": brightness >= 0.5,
+                'text-white': brightness < 0.5,
+                'text-black': brightness >= 0.5,
               })}
             >
               Target
@@ -153,8 +155,8 @@ export default function DemoThreshold() {
           >
             <span
               className={cn({
-                "text-white": average < 0.5,
-                "text-black": average >= 0.5,
+                'text-white': average < 0.5,
+                'text-black': average >= 0.5,
               })}
             >
               Sample average

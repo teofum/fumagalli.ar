@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
-import DemoImageBase, { NULL_PALETTE } from "./DemoImageBase";
-import useGlRenderer from "@/dither/renderers/useGlRenderer";
-import Slider from "@/components/ui/Slider";
-import Switch from "@/components/ui/Switch";
+'use client';
+
+import { useEffect, useState } from 'react';
+import DemoImageBase, { NULL_PALETTE } from './DemoImageBase';
+import useGlRenderer from '@/dither/renderers/useGlRenderer';
+import Slider from '@/components/ui/Slider';
+import Switch from '@/components/ui/Switch';
 
 const shader = `
 precision mediump float;

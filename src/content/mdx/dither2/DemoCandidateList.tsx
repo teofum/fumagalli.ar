@@ -1,13 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
-import useGlRenderer from "@/dither/renderers/useGlRenderer";
-import DemoImageBase from "../dither/DemoImageBase";
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
+import useGlRenderer from '@/dither/renderers/useGlRenderer';
+import DemoImageBase from '../dither/DemoImageBase';
 import {
   type Palette,
   PaletteGroup,
   PaletteType,
-} from "@/dither/palettes/types";
-import ColorPicker from "@/components/ui/ColorPicker";
-import { getPaletteColor } from "@/dither/utils/paletteColors";
+} from '@/dither/palettes/types';
+import ColorPicker from '@/components/ui/ColorPicker';
+import { getPaletteColor } from '@/dither/utils/paletteColors';
 
 const shader = `
 precision mediump float;
@@ -43,7 +45,7 @@ const DemoOrdered = () => {
   const [paletteData, setPaletteData] = useState<number[]>(Array(48).fill(0));
   const customPalette: Palette = useMemo(
     () => ({
-      name: "",
+      name: '',
       type: PaletteType.Indexed,
       group: PaletteGroup.Other,
       data: paletteData,
@@ -64,7 +66,7 @@ const DemoOrdered = () => {
     img,
     shader,
     customPalette,
-    { threshold: "bayer4" },
+    { threshold: 'bayer4' },
     {},
   );
   useEffect(() => {

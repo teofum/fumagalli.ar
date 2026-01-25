@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
-import useGlRenderer from "@/dither/renderers/useGlRenderer";
-import DemoImageBase from "../dither/DemoImageBase";
-import { ToggleGroup, ToggleButton } from "@/components/ui/ToggleGroup";
-import Switch from "@/components/ui/Switch";
-import Slider from "@/components/ui/Slider";
-import NicePalette from "@/dither/palettes/NicePalette";
-import { mapFns } from "@/components/apps/DitherLab/process";
+'use client';
+
+import { useEffect, useState } from 'react';
+import useGlRenderer from '@/dither/renderers/useGlRenderer';
+import DemoImageBase from '../dither/DemoImageBase';
+import { ToggleGroup, ToggleButton } from '@/components/ui/ToggleGroup';
+import Switch from '@/components/ui/Switch';
+import Slider from '@/components/ui/Slider';
+import NicePalette from '@/dither/palettes/NicePalette';
+import { mapFns } from '@/components/apps/DitherLab/process';
 
 const shader = `
 precision mediump float;
@@ -100,7 +102,7 @@ void main() {
 }`;
 
 interface DemoOrderedProps {
-  type: "bayer" | "blueNoise" | "halftone";
+  type: 'bayer' | 'blueNoise' | 'halftone';
   sizes?: { name: string; value: string }[];
   initial?: string;
   imageUrl?: string;
@@ -116,7 +118,7 @@ const DemoOrdered = ({
   gamma = false,
   errorSlider = false,
 }: DemoOrderedProps) => {
-  const [size, setSize] = useState(initial ?? "8");
+  const [size, setSize] = useState(initial ?? '8');
   const [original, setOriginal] = useState(false);
   const [errorCoeff, setErrorCoeff] = useState(5);
 

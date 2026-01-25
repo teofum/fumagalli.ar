@@ -1,7 +1,7 @@
 import dither from './dither/dither.mdx';
 import dither2 from './dither2/dither2.mdx';
 
-export default [
+const mdx = [
   {
     title: 'A Visual Introduction to Dithering',
     slug: 'introduction-to-dithering',
@@ -13,3 +13,5 @@ export default [
     Component: dither2,
   },
 ];
+
+export default mdx;
