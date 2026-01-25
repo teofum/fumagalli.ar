@@ -6,7 +6,7 @@ import cn from 'classnames';
 import Button, { IconButton } from '@/components/ui/Button';
 import { useWindow } from '@/components/desktop/Window/context';
 import { Toolbar, ToolbarGroup } from '@/components/ui/Toolbar';
-import { useAppSettings } from '@/stores/system';
+import { useAppSettings } from '@/hooks/use-app-settings';
 import type { SudokuSettings, SudokuPuzzle } from './types';
 import { ToggleIconButton } from '@/components/ui/ToggleButton';
 import useFetch from '@/hooks/use-fetch';

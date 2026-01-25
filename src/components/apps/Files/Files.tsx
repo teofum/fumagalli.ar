@@ -9,7 +9,8 @@ import Menu from '@/components/ui/Menu';
 import { useAppState, useWindow } from '@/components/desktop/Window/context';
 import { Toolbar, ToolbarGroup } from '@/components/ui/Toolbar';
 import useFileHandler from '@/hooks/useFileHandler';
-import useSystemStore, { useAppSettings } from '@/stores/system';
+import { useAppSettings } from '@/hooks/use-app-settings';
+import useSystemStore from '@/stores/system';
 import useDesktopStore from '@/stores/desktop';
 
 import type { FilesSettings, FilesView } from './types';

@@ -12,7 +12,7 @@ import solitaireReducer from './reducer';
 import { deal } from './game';
 import useDragCard from './useDragCard';
 import winAnimation from './animation';
-import { useAppSettings, useSyncedAppSettings } from '@/stores/system';
+import { useAppSettings, useSyncedAppSettings } from '@/hooks/use-app-settings';
 import { solitaire_deck } from './modals/DeckSelect';
 
 const resources = getAppResourcesUrl('solitaire');

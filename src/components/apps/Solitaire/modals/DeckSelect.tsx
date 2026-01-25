@@ -1,16 +1,16 @@
-import type { WindowInit } from "@/components/desktop/Window";
-import { WindowSizingMode } from "@/components/desktop/Window/WindowSizingMode";
-import { useWindow } from "@/components/desktop/Window/context";
-import Button from "@/components/ui/Button";
-import { ToggleButton, ToggleGroup } from "@/components/ui/ToggleGroup";
-import { getAppResourcesUrl } from "@/content/utils";
-import { useSyncedAppSettings } from "@/stores/system";
+import type { WindowInit } from '@/components/desktop/Window';
+import { WindowSizingMode } from '@/components/desktop/Window/WindowSizingMode';
+import { useWindow } from '@/components/desktop/Window/context';
+import Button from '@/components/ui/Button';
+import { ToggleButton, ToggleGroup } from '@/components/ui/ToggleGroup';
+import { getAppResourcesUrl } from '@/content/utils';
+import { useSyncedAppSettings } from '@/hooks/use-app-settings';
 
-const resources = getAppResourcesUrl("solitaire");
+const resources = getAppResourcesUrl('solitaire');
 
 export default function SolitaireDeckSelect() {
   const { close } = useWindow();
-  const [settings, set] = useSyncedAppSettings("solitaire");
+  const [settings, set] = useSyncedAppSettings('solitaire');
 
   return (
     <div className="flex flex-col gap-4 p-2">
@@ -33,11 +33,11 @@ export default function SolitaireDeckSelect() {
   );
 }
 
-export const solitaire_deck: WindowInit<"solitaire_deck"> = {
-  appType: "solitaire_deck",
+export const solitaire_deck: WindowInit<'solitaire_deck'> = {
+  appType: 'solitaire_deck',
   appState: undefined,
 
-  title: "Select Card Back",
+  title: 'Select Card Back',
 
   sizingX: WindowSizingMode.AUTO,
   sizingY: WindowSizingMode.AUTO,

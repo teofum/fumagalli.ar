@@ -8,7 +8,7 @@ import { Select, SelectItem } from '@/components/ui/Select';
 import PalettePreview from '../components/PalettePreview';
 import palettes from '@/dither/palettes';
 import { PaletteGroup } from '@/dither/palettes/types';
-import { useSyncedAppSettings } from '@/stores/system';
+import { useSyncedAppSettings } from '@/hooks/use-app-settings';
 import cn from 'classnames';
 import ArrowLeft from '@/components/ui/icons/ArrowLeft';
 

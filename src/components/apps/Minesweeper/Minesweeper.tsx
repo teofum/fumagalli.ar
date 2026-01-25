@@ -1,25 +1,25 @@
-import { useEffect, useReducer, useRef, useState } from "react";
-import cn from "classnames";
+import { useEffect, useReducer, useRef, useState } from 'react';
+import cn from 'classnames';
 
-import { useWindow } from "@/components/desktop/Window/context";
-import Menu from "@/components/ui/Menu";
+import { useWindow } from '@/components/desktop/Window/context';
+import Menu from '@/components/ui/Menu';
 
-import { useAppSettings } from "@/stores/system";
+import { useAppSettings } from '@/hooks/use-app-settings';
 
-import { difficultyPresets, newBoard } from "./game";
-import { MinesweeperState } from "./types";
-import minesweeperReducer from "./reducer";
-import MinesweeperStatus from "./MinesweeperStatus";
-import MinesweeperCell from "./MinesweeperCell";
+import { difficultyPresets, newBoard } from './game';
+import { MinesweeperState } from './types';
+import minesweeperReducer from './reducer';
+import MinesweeperStatus from './MinesweeperStatus';
+import MinesweeperCell from './MinesweeperCell';
 import {
   type MinesweeperCustomDifficultyState,
   mine_difficulty,
-} from "./modals/CustomDifficulty";
+} from './modals/CustomDifficulty';
 
 export default function Minesweeper() {
   const { close, modal } = useWindow();
 
-  const [settings, set] = useAppSettings("minesweeper");
+  const [settings, set] = useAppSettings('minesweeper');
 
   /**
    * Game state
@@ -66,16 +66,16 @@ export default function Minesweeper() {
    * Event handlers
    */
   const onCellClick = (cellIndex: number) => {
-    dispatch({ type: "reveal", cellIndex });
+    dispatch({ type: 'reveal', cellIndex });
   };
 
   const onCellRightClick = (ev: React.MouseEvent, cellIndex: number) => {
     ev.preventDefault();
-    dispatch({ type: "cycleFlag", cellIndex });
+    dispatch({ type: 'cycleFlag', cellIndex });
   };
 
   const reset = (s = settings) => {
-    dispatch({ type: "newGame", settings: s });
+    dispatch({ type: 'newGame', settings: s });
     set(s);
   };
 
@@ -103,22 +103,22 @@ export default function Minesweeper() {
 
           <Menu.CheckboxItem
             label="Beginner"
-            checked={settings.name === "beginner"}
+            checked={settings.name === 'beginner'}
             onSelect={() => reset(difficultyPresets.beginner)}
           />
           <Menu.CheckboxItem
             label="Intermediate"
-            checked={settings.name === "intermediate"}
+            checked={settings.name === 'intermediate'}
             onSelect={() => reset(difficultyPresets.intermediate)}
           />
           <Menu.CheckboxItem
             label="Expert"
-            checked={settings.name === "expert"}
+            checked={settings.name === 'expert'}
             onSelect={() => reset(difficultyPresets.expert)}
           />
           <Menu.CheckboxItem
             label="Custom..."
-            checked={settings.name === "custom"}
+            checked={settings.name === 'custom'}
             onSelect={() => modal(mine_difficulty(dialogInitialState))}
           />
 
@@ -138,8 +138,8 @@ export default function Minesweeper() {
 
         <div
           className={cn(
-            "bg-surface bevel-content p-0.5 grid auto-rows-auto justify-start",
-            { "pointer-events-none": !playing },
+            'bg-surface bevel-content p-0.5 grid auto-rows-auto justify-start',
+            { 'pointer-events-none': !playing },
           )}
           style={{ gridTemplateColumns: `repeat(${board?.width}, auto)` }}
         >

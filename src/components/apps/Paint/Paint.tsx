@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { useAppSettings } from "@/stores/system";
-import { useWindow } from "@/components/desktop/Window/context";
-import ScrollContainer from "@/components/ui/ScrollContainer";
-import usePaintCanvas from "./usePaintCanvas";
-import PaintToolbox from "./ui/PaintToolbox";
-import { type PaintState, defaultPaintState } from "./types";
-import { PaintProvider } from "./context";
-import PaintColor from "./ui/PaintColor";
-import useDesktopStore from "@/stores/desktop";
-import PaintFileMenu from "./ui/PaintFileMenu";
-import PaintEditMenu from "./ui/PaintEditMenu";
-import PaintImageMenu from "./ui/PaintImageMenu";
-import PaintViewMenu from "./ui/PaintViewMenu";
-import ContextMenu from "@/components/ui/ContextMenu";
-import PaintContextMenu from "./ui/PaintContextMenu";
-import { brushes } from "./brushes";
-import Menu from "@/components/ui/Menu";
+import { useAppSettings } from '@/hooks/use-app-settings';
+import { useWindow } from '@/components/desktop/Window/context';
+import ScrollContainer from '@/components/ui/ScrollContainer';
+import usePaintCanvas from './usePaintCanvas';
+import PaintToolbox from './ui/PaintToolbox';
+import { type PaintState, defaultPaintState } from './types';
+import { PaintProvider } from './context';
+import PaintColor from './ui/PaintColor';
+import useDesktopStore from '@/stores/desktop';
+import PaintFileMenu from './ui/PaintFileMenu';
+import PaintEditMenu from './ui/PaintEditMenu';
+import PaintImageMenu from './ui/PaintImageMenu';
+import PaintViewMenu from './ui/PaintViewMenu';
+import ContextMenu from '@/components/ui/ContextMenu';
+import PaintContextMenu from './ui/PaintContextMenu';
+import { brushes } from './brushes';
+import Menu from '@/components/ui/Menu';
 
 // const resources = '/fs/Applications/paint/resources';
 
@@ -26,7 +26,7 @@ function PaintGrid({ zoom }: { zoom: number }) {
       className="absolute inset-0 pointer-events-none"
       style={
         {
-          backgroundColor: "#C0C0C0",
+          backgroundColor: '#C0C0C0',
           backgroundImage: `linear-gradient(
               45deg,#808080 25%, transparent 25%
             ),
@@ -39,10 +39,10 @@ function PaintGrid({ zoom }: { zoom: number }) {
             linear-gradient(
               -45deg, transparent 75%,#808080 75%
             )`,
-          backgroundSize: "2px 2px",
-          backgroundPosition: "0 0, 0 1px, 1px -1px, -1px 0",
+          backgroundSize: '2px 2px',
+          backgroundPosition: '0 0, 0 1px, 1px -1px, -1px 0',
           WebkitMaskImage:
-            "linear-gradient(white 1px, transparent 1px), linear-gradient(to right, white 1px, transparent 1px)",
+            'linear-gradient(white 1px, transparent 1px), linear-gradient(to right, white 1px, transparent 1px)',
           WebkitMaskSize: `${zoom}px ${zoom}px`,
         } as any
       }
@@ -54,7 +54,7 @@ export default function Paint() {
   const { id } = useWindow();
   const { setTitle } = useDesktopStore();
 
-  const [settings, set] = useAppSettings("paint");
+  const [settings, set] = useAppSettings('paint');
 
   const [state, _setState] = useState<PaintState>(defaultPaintState);
   const setState = (value: Partial<PaintState>) =>
@@ -146,7 +146,7 @@ export default function Paint() {
         {settings.statusBar ? (
           <div className="flex flex-row gap-0.5">
             <div className="py-0.5 px-1 bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden flex-4">
-              <span className="bold">{brush.name}:</span>{" "}
+              <span className="bold">{brush.name}:</span>{' '}
               <span>{brush.hint}</span>
             </div>
             <div className="py-0.5 px-1 bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden flex-1">

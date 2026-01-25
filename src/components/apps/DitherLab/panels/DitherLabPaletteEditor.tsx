@@ -1,28 +1,28 @@
-import { useAppState } from "@/components/desktop/Window/context";
-import Button from "@/components/ui/Button";
-import ScrollContainer from "@/components/ui/ScrollContainer";
-import Close from "@/components/ui/icons/Close";
+import { useAppState } from '@/components/desktop/Window/context';
+import Button from '@/components/ui/Button';
+import ScrollContainer from '@/components/ui/ScrollContainer';
+import Close from '@/components/ui/icons/Close';
 
-import PalettePreview from "../components/PalettePreview";
+import PalettePreview from '../components/PalettePreview';
 import {
   type Palette,
   PaletteGroup,
   PaletteType,
-} from "@/dither/palettes/types";
-import getPaletteColors, { getPaletteSize } from "@/dither/utils/paletteColors";
-import Divider from "@/components/ui/Divider";
-import { useSyncedAppSettings } from "@/stores/system";
-import Win4bRGBI from "@/dither/palettes/Win4bRGBI";
-import Input from "@/components/ui/Input";
-import { useEffect, useState } from "react";
-import ColorPicker from "@/components/ui/ColorPicker";
+} from '@/dither/palettes/types';
+import getPaletteColors, { getPaletteSize } from '@/dither/utils/paletteColors';
+import Divider from '@/components/ui/Divider';
+import { useSyncedAppSettings } from '@/hooks/use-app-settings';
+import Win4bRGBI from '@/dither/palettes/Win4bRGBI';
+import Input from '@/components/ui/Input';
+import { useEffect, useState } from 'react';
+import ColorPicker from '@/components/ui/ColorPicker';
 
 interface PaletteInfoProps {
   duplicate: () => void;
 }
 
 function PaletteInfo({ duplicate }: PaletteInfoProps) {
-  const [state] = useAppState("dither");
+  const [state] = useAppState('dither');
 
   return (
     <div className="flex flex-col gap-2">
@@ -58,8 +58,8 @@ function PaletteInfo({ duplicate }: PaletteInfoProps) {
 }
 
 function PaletteEditor() {
-  const [state, setState] = useAppState("dither");
-  const [settings, set] = useSyncedAppSettings("dither");
+  const [state, setState] = useAppState('dither');
+  const [settings, set] = useSyncedAppSettings('dither');
 
   const [openPicker, setOpenPicker] = useState<number | null>(null);
   const [name, setName] = useState(state.palette.name);
@@ -124,7 +124,7 @@ function PaletteEditor() {
       </div>
 
       <div>
-        {state.palette.type},{" "}
+        {state.palette.type},{' '}
         <span className="bold">{getPaletteSize(state.palette)}</span> colors
       </div>
 
@@ -161,8 +161,8 @@ interface DitherLabPaletteEditorProps {
 export default function DitherLabPaletteEditor({
   close,
 }: DitherLabPaletteEditorProps) {
-  const [state, setState] = useAppState("dither");
-  const [settings, set] = useSyncedAppSettings("dither");
+  const [state, setState] = useAppState('dither');
+  const [settings, set] = useSyncedAppSettings('dither');
 
   const isCustom = state.palette.group === PaletteGroup.User;
 
@@ -195,7 +195,7 @@ export default function DitherLabPaletteEditor({
     for (
       let i = 0;
       settings.customPalettes.some(
-        ({ name }) => name === `${src.name} copy${i ? ` ${i}` : ""}`,
+        ({ name }) => name === `${src.name} copy${i ? ` ${i}` : ''}`,
       );
 
     ) {
@@ -203,7 +203,7 @@ export default function DitherLabPaletteEditor({
     }
 
     const newPalette: Palette = {
-      name: `${src.name} copy${n ? ` ${n}` : ""}`,
+      name: `${src.name} copy${n ? ` ${n}` : ''}`,
       type: PaletteType.Indexed,
       group: PaletteGroup.User,
       data: getPaletteColors(src).flat(),

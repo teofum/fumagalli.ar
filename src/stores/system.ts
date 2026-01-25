@@ -1,49 +1,48 @@
-import { useState } from "react";
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { merge } from "ts-deepmerge";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { merge } from 'ts-deepmerge';
 
-import type { AnyFile } from "@/schemas/file";
-import type { Folder } from "@/schemas/folder";
+import type { AnyFile } from '@/schemas/file';
+import type { Folder } from '@/schemas/folder';
 
 import {
   defaultTheme,
   type ThemeCustomization,
   type SystemTheme,
-} from "@/components/apps/ThemeSettings/types";
+} from '@/components/apps/ThemeSettings/types';
 
 import {
   defaultFilesSettings,
   type FilesSettings,
-} from "@/components/apps/Files/types";
+} from '@/components/apps/Files/types';
 import {
   defaultMinesweeperSettings,
   type MinesweeperSettings,
-} from "@/components/apps/Minesweeper/types";
+} from '@/components/apps/Minesweeper/types';
 import {
   defaultSolitaireSettings,
   type SolitaireSettings,
-} from "@/components/apps/Solitaire/types";
+} from '@/components/apps/Solitaire/types';
 import {
   defaultSudokuSettings,
   type SudokuSettings,
-} from "@/components/apps/Sudoku/types";
+} from '@/components/apps/Sudoku/types';
 import {
   defaultDitherLabSettings,
   type DitherLabSettings,
-} from "@/components/apps/DitherLab/types";
+} from '@/components/apps/DitherLab/types';
 import {
   defaultPaintSettings,
   type PaintSettings,
-} from "@/components/apps/Paint/types";
+} from '@/components/apps/Paint/types';
 import {
   defaultHelpSettings,
   type HelpSettings,
-} from "@/components/apps/Help/types";
+} from '@/components/apps/Help/types';
 import {
   defaultSystemSettings,
   type SystemSettings,
-} from "@/components/apps/SystemSettings/types";
+} from '@/components/apps/SystemSettings/types';
 
 const MAX_FILE_HISTORY = 10; // Number of last accessed files to keep
 const MAX_DIR_HISTORY = 10; // Number of last accessed directories to keep
@@ -84,10 +83,11 @@ interface SystemState {
   _schema: number;
 }
 
-type AppWithSettings = keyof SystemState["appSettings"];
-type AppSettings<T extends AppWithSettings> = SystemState["appSettings"][T];
+export type AppWithSettings = keyof SystemState['appSettings'];
+export type AppSettings<T extends AppWithSettings> =
+  SystemState['appSettings'][T];
 
-type UpdateAppSettingsAction = <T extends AppWithSettings>(
+export type UpdateAppSettingsAction = <T extends AppWithSettings>(
   app: T,
   settings: Partial<AppSettings<T>>,
 ) => void;
@@ -112,7 +112,7 @@ interface SystemActions {
  */
 const useSystemStore = create<SystemState & SystemActions>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       /**
        * State
        */
@@ -129,9 +129,9 @@ const useSystemStore = create<SystemState & SystemActions>()(
       dirHistory: [],
       theme: defaultTheme,
       themeCustomizations: {
-        backgroundImageMode: "fill",
-        backgroundColor: "rgb(0 0 0)",
-        backgroundUrl: "/assets/backgrounds/Chess.png",
+        backgroundImageMode: 'fill',
+        backgroundColor: 'rgb(0 0 0)',
+        backgroundUrl: '/assets/backgrounds/Chess.png',
       },
       settings: defaultSystemSettings,
 
@@ -175,7 +175,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
       updateSettings: (settings) => set(() => ({ settings })),
     }),
     {
-      name: "system-storage",
+      name: 'system-storage',
       merge: (persisted, current) => {
         // Ugly hack so I don't have to change the schema version and wipe data
         // Reset desktop background because its location changed
@@ -183,10 +183,10 @@ const useSystemStore = create<SystemState & SystemActions>()(
         if (
           (
             persisted as typeof current
-          ).themeCustomizations.backgroundUrl?.includes("/system/")
+          ).themeCustomizations.backgroundUrl?.includes('/system/')
         )
           (persisted as typeof current).themeCustomizations.backgroundUrl =
-            "/assets/backgrounds/Chess.png";
+            '/assets/backgrounds/Chess.png';
 
         // Wipe persisted state on schema version change
         // This will allow me to safely introduce breaking schema changes
@@ -200,53 +200,10 @@ const useSystemStore = create<SystemState & SystemActions>()(
           { mergeArrays: false },
           current,
           persisted as typeof current,
-        ) as any;
+        );
       },
     },
   ),
 );
 
 export default useSystemStore;
-
-/**
- * Helper hook that selects and exposes a single app's settings from the system
- * store. This version caches settings in local state with `useState`, so
- * existing windows aren't affected by setting changes in another window.
- *
- * Independent window state will not be kept on reload, all windows will reset
- * to the globally set config. Because settings are merged, the global state and
- * new windows may have settings different to any existing windows.
- *
- * If you want settings to immediately sync across all open windows, use
- * `useSyncedAppSettings` instead.
- */
-export function useAppSettings<T extends AppWithSettings>(app: T) {
-  const settings: AppSettings<T> = useSystemStore(
-    (store) => store.appSettings[app],
-  );
-  const [cached, setCached] = useState(settings);
-
-  const { updateAppSettings } = useSystemStore();
-  const set = (s: Partial<AppSettings<T>>) => {
-    updateAppSettings(app, s);
-    setCached({ ...cached, ...s });
-  };
-
-  return [cached, set] as const;
-}
-
-/**
- * Helper hook that selects and exposes a single app's settings from the system
- * store. This version doesn't cache settings, and will cause changes in
- * settings to immediately sync across all open windows.
- */
-export function useSyncedAppSettings<T extends AppWithSettings>(app: T) {
-  const settings: AppSettings<T> = useSystemStore(
-    (store) => store.appSettings[app],
-  );
-
-  const { updateAppSettings } = useSystemStore();
-  const set = (s: Partial<AppSettings<T>>) => updateAppSettings(app, s);
-
-  return [settings, set] as const;
-}

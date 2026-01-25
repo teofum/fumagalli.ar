@@ -1,20 +1,20 @@
-import Menu from "@/components/ui/Menu";
-import HelpContent from "./HelpContent";
-import HelpTreeView from "./HelpTreeView";
-import { useAppState, useWindow } from "@/components/desktop/Window/context";
-import { Toolbar, ToolbarGroup } from "@/components/ui/Toolbar";
-import { useAppSettings } from "@/stores/system";
-import { IconButton } from "@/components/ui/Button";
-import { useCallback } from "react";
-import { defaultHelpState } from "./types";
+import Menu from '@/components/ui/Menu';
+import HelpContent from './HelpContent';
+import HelpTreeView from './HelpTreeView';
+import { useAppState, useWindow } from '@/components/desktop/Window/context';
+import { Toolbar, ToolbarGroup } from '@/components/ui/Toolbar';
+import { useAppSettings } from '@/hooks/use-app-settings';
+import { IconButton } from '@/components/ui/Button';
+import { useCallback } from 'react';
+import { defaultHelpState } from './types';
 
 const MAX_HISTORY = 1000;
-const resources = "/fs/Applications/help/resources";
+const resources = '/fs/Applications/help/resources';
 
 export default function Help() {
   const { close } = useWindow();
-  const [state, setState] = useAppState("help");
-  const [settings, set] = useAppSettings("help");
+  const [state, setState] = useAppState('help');
+  const [settings, set] = useAppSettings('help');
 
   const setId = useCallback(
     (nextId: string) => {
@@ -65,9 +65,9 @@ export default function Help() {
 
           <Menu.CheckboxItem
             label="Large Buttons"
-            checked={settings.buttons === "large"}
+            checked={settings.buttons === 'large'}
             onCheckedChange={(checked) =>
-              set({ buttons: checked ? "large" : "icon" })
+              set({ buttons: checked ? 'large' : 'icon' })
             }
           />
         </Menu.Menu>
@@ -91,12 +91,12 @@ export default function Help() {
           <IconButton
             variant="light"
             onClick={() => set({ sideBar: !settings.sideBar })}
-            imageUrl={`${resources}/${settings.sideBar ? "hide" : "show"}.png`}
+            imageUrl={`${resources}/${settings.sideBar ? 'hide' : 'show'}.png`}
             label={
-              settings.buttons === "large"
+              settings.buttons === 'large'
                 ? settings.sideBar
-                  ? "Hide"
-                  : "Show"
+                  ? 'Hide'
+                  : 'Show'
                 : null
             }
           />
@@ -106,7 +106,7 @@ export default function Help() {
             onClick={goBack}
             disabled={!canGoBack}
             imageUrl={`${resources}/back.png`}
-            label={settings.buttons === "large" ? "Back" : null}
+            label={settings.buttons === 'large' ? 'Back' : null}
           />
 
           <IconButton
@@ -114,7 +114,7 @@ export default function Help() {
             onClick={goForward}
             disabled={!canGoForward}
             imageUrl={`${resources}/forward.png`}
-            label={settings.buttons === "large" ? "Forward" : null}
+            label={settings.buttons === 'large' ? 'Forward' : null}
           />
         </Toolbar>
       </ToolbarGroup>

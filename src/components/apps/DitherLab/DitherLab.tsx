@@ -1,31 +1,31 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { useAppState, useWindow } from "@/components/desktop/Window/context";
-import ScrollContainer from "@/components/ui/ScrollContainer";
+import { useAppState, useWindow } from '@/components/desktop/Window/context';
+import ScrollContainer from '@/components/ui/ScrollContainer';
 
-import DitherLabImageInfo from "./panels/DitherLabImageInfo";
-import DitherLabResizeOptions from "./panels/DitherLabResizeOptions";
-import GlRenderer from "./renderers/GlRenderer";
-import DitherLabRenderOptions from "./panels/DitherLabRenderOptions";
-import DitherLabPaletteSelect from "./panels/DitherLabPaletteSelect";
-import { files } from "../Files";
-import Menu from "@/components/ui/Menu";
-import Button from "@/components/ui/Button";
-import { useAppSettings } from "@/stores/system";
-import cn from "classnames";
-import DitherLabPaletteEditor from "./panels/DitherLabPaletteEditor";
-import { DitherLabDevice } from "./types";
-import SoftwareRenderer from "./renderers/SoftwareRenderer";
-import palettes from "@/dither/palettes";
+import DitherLabImageInfo from './panels/DitherLabImageInfo';
+import DitherLabResizeOptions from './panels/DitherLabResizeOptions';
+import GlRenderer from './renderers/GlRenderer';
+import DitherLabRenderOptions from './panels/DitherLabRenderOptions';
+import DitherLabPaletteSelect from './panels/DitherLabPaletteSelect';
+import { files } from '../Files';
+import Menu from '@/components/ui/Menu';
+import Button from '@/components/ui/Button';
+import { useAppSettings } from '@/hooks/use-app-settings';
+import cn from 'classnames';
+import DitherLabPaletteEditor from './panels/DitherLabPaletteEditor';
+import { DitherLabDevice } from './types';
+import SoftwareRenderer from './renderers/SoftwareRenderer';
+import palettes from '@/dither/palettes';
 import {
   type Palette,
   PaletteGroup,
   PaletteType,
-} from "@/dither/palettes/types";
-import { generatePalette } from "@/dither/paletteGen/PaletteGenerator";
-import { messageBox } from "../MessageBox";
-import { Toolbar } from "@/components/ui/Toolbar";
-import Win4bRGBI from "@/dither/palettes/Win4bRGBI";
+} from '@/dither/palettes/types';
+import { generatePalette } from '@/dither/paletteGen/PaletteGenerator';
+import { messageBox } from '../MessageBox';
+import { Toolbar } from '@/components/ui/Toolbar';
+import Win4bRGBI from '@/dither/palettes/Win4bRGBI';
 
 export const ZOOM_STOPS = [1, 1.5, 2, 3, 4, 6, 8, 16, 32, 64];
 
@@ -34,7 +34,7 @@ interface ZoomControlsProps {
   setZoom: (zoom: number) => void;
   zoomOut: () => void;
   zoomIn: () => void;
-  zoomTo: (mode: "fit" | "fill") => void;
+  zoomTo: (mode: 'fit' | 'fill') => void;
 }
 
 function ZoomControls({
@@ -70,14 +70,14 @@ function ZoomControls({
       <Button
         variant="light"
         className="py-1 px-2"
-        onClick={() => zoomTo("fit")}
+        onClick={() => zoomTo('fit')}
       >
         Fit
       </Button>
       <Button
         variant="light"
         className="py-1 px-2"
-        onClick={() => zoomTo("fill")}
+        onClick={() => zoomTo('fill')}
       >
         Fill
       </Button>
@@ -87,8 +87,8 @@ function ZoomControls({
 
 export default function DitherLab() {
   const { close, modal } = useWindow();
-  const [state, setState] = useAppState("dither");
-  const [settings, set] = useAppSettings("dither");
+  const [state, setState] = useAppState('dither');
+  const [settings, set] = useAppSettings('dither');
 
   const hiddenInputRef = useRef<HTMLInputElement>(null);
   const importHiddenInputRef = useRef<HTMLInputElement>(null);
@@ -97,7 +97,7 @@ export default function DitherLab() {
   const [rt, setRt] = useState<HTMLCanvasElement | null>(null);
   const [img, setImg] = useState<HTMLImageElement | null>(null);
 
-  const [status, setStatus] = useState<"ready" | "rendering" | "done">("ready");
+  const [status, setStatus] = useState<'ready' | 'rendering' | 'done'>('ready');
   const [renderTime, setRenderTime] = useState(0);
 
   const allPalettes = useMemo(
@@ -116,8 +116,8 @@ export default function DitherLab() {
     if (palette.type !== PaletteType.Auto) setState({ palette });
     // For auto palettes, generate a palette from the image
     else if (img) {
-      const temp = document.createElement("canvas");
-      const ctx = temp.getContext("2d");
+      const temp = document.createElement('canvas');
+      const ctx = temp.getContext('2d');
       if (!ctx) return;
 
       temp.width = rt?.width ?? 0;
@@ -140,17 +140,17 @@ export default function DitherLab() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allPalettes, img, rt, state.paletteName]);
 
-  const openImage = (newImage: (typeof state)["image"]) => {
+  const openImage = (newImage: (typeof state)['image']) => {
     const lastImage = state.image;
     try {
       setState({ image: newImage });
     } catch (err: unknown) {
       setState({ image: lastImage });
 
-      const message = err instanceof Error ? err.message : "Unknown error.";
+      const message = err instanceof Error ? err.message : 'Unknown error.';
       modal(
         messageBox({
-          type: "warning",
+          type: 'warning',
           title: "Can't open image",
           message: `An error ocurred while opening the image: ${message} The most likely cause is insufficient localStorage memory. Try uploading a smaller image or closing other windows.`,
         }),
@@ -167,7 +167,7 @@ export default function DitherLab() {
       // if (file.size > MAX_UPLOAD_SIZE)
 
       reader.addEventListener(
-        "load",
+        'load',
         () => {
           openImage({
             filename: file.name,
@@ -191,7 +191,7 @@ export default function DitherLab() {
   const open = () => {
     modal(
       files({
-        typeFilter: ["fileImage"],
+        typeFilter: ['fileImage'],
         modalCallback: (stub) =>
           openImage({
             filename: stub.name,
@@ -205,15 +205,15 @@ export default function DitherLab() {
   const download = () => {
     if (!rt || !state.image) return;
     const dataUrl = rt
-      .toDataURL("image/png")
-      .replace("image/png", "image/octet-stream");
+      .toDataURL('image/png')
+      .replace('image/png', 'image/octet-stream');
 
-    let filename = state.image.filename.split(".").slice(0, -1).join(".");
+    let filename = state.image.filename.split('.').slice(0, -1).join('.');
     filename = `${filename} - ${state.palette.name}.png`;
 
-    const link = document.createElement("a");
-    link.setAttribute("download", filename);
-    link.setAttribute("href", dataUrl);
+    const link = document.createElement('a');
+    link.setAttribute('download', filename);
+    link.setAttribute('href', dataUrl);
     link.click();
   };
 
@@ -232,7 +232,7 @@ export default function DitherLab() {
     setZoom(nextZoomStop ?? 1);
   };
 
-  const zoomTo = (mode: "fit" | "fill") => {
+  const zoomTo = (mode: 'fit' | 'fill') => {
     if (!viewportRef.current || !rt) return;
 
     const { width: rtWidth, height: rtHeight } = rt;
@@ -243,7 +243,7 @@ export default function DitherLab() {
     const zoomToFitHeight = (height - 18) / rtHeight;
 
     setZoom(
-      mode === "fit"
+      mode === 'fit'
         ? Math.min(zoomToFitWidth, zoomToFitHeight)
         : Math.max(zoomToFitWidth, zoomToFitHeight),
     );
@@ -251,7 +251,7 @@ export default function DitherLab() {
 
   const readPalettes = (el: HTMLImageElement) => {
     const offscreen = new OffscreenCanvas(el.naturalWidth, el.naturalHeight);
-    const ctx = offscreen.getContext("2d");
+    const ctx = offscreen.getContext('2d');
     if (!ctx) return;
 
     ctx.drawImage(el, 0, 0);
@@ -261,7 +261,7 @@ export default function DitherLab() {
     for (let i = 0; i < data.height; i++) {
       const rowIdx = i * data.width * 4;
       let j = 0;
-      let name = "";
+      let name = '';
       const pdata: number[] = [];
 
       // Parse palette name
@@ -305,11 +305,11 @@ export default function DitherLab() {
       const reader = new FileReader();
 
       reader.addEventListener(
-        "load",
+        'load',
         () => {
-          const el = document.createElement("img");
+          const el = document.createElement('img');
           el.src = reader.result as string;
-          el.addEventListener("load", () => {
+          el.addEventListener('load', () => {
             readPalettes(el);
             el.remove();
           });
@@ -389,8 +389,8 @@ export default function DitherLab() {
 
             <Menu.Separator />
 
-            <Menu.Item label="Zoom to fit" onSelect={() => zoomTo("fit")} />
-            <Menu.Item label="Zoom to fill" onSelect={() => zoomTo("fill")} />
+            <Menu.Item label="Zoom to fit" onSelect={() => zoomTo('fit')} />
+            <Menu.Item label="Zoom to fill" onSelect={() => zoomTo('fill')} />
           </Menu.Sub>
 
           <Menu.Separator />
@@ -426,9 +426,9 @@ export default function DitherLab() {
       </Menu.Bar>
 
       <div
-        className={cn("grow flex gap-0.5 min-h-0", {
-          "flex-row": settings.panelSide === "right",
-          "flex-row-reverse": settings.panelSide === "left",
+        className={cn('grow flex gap-0.5 min-h-0', {
+          'flex-row': settings.panelSide === 'right',
+          'flex-row-reverse': settings.panelSide === 'left',
         })}
       >
         <Renderer
@@ -480,11 +480,11 @@ export default function DitherLab() {
       {settings.showStatusBar ? (
         <div className="flex flex-row gap-0.5">
           <div className="py-0.5 px-2 bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden flex-3">
-            {status === "done"
+            {status === 'done'
               ? `Done (${renderTime.toFixed(0)}ms)`
-              : status === "ready"
-                ? "Ready"
-                : "Rendering..."}
+              : status === 'ready'
+                ? 'Ready'
+                : 'Rendering...'}
           </div>
           <div className="py-0.5 px-2 bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden flex-1">
             {state.image?.filename}
