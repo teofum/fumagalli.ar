@@ -1,12 +1,13 @@
-import Divider from "@/components/ui/Divider";
-import { ToggleButton, ToggleGroup } from "@/components/ui/ToggleGroup";
-import { brushes } from "../brushes";
-import BrushIcons from "../icons/Brush";
-import { ZOOM_STOPS } from "../brushes/zoom";
-import cn from "classnames";
-import AirbrushIcons from "../icons/Airbrush";
-import { usePaintContext } from "../context";
-import Brushes from "../icons/Brushes";
+import Divider from '@/components/ui/Divider';
+import { ToggleButton, ToggleGroup } from '@/components/ui/ToggleGroup';
+import { brushes } from '../brushes';
+import BrushIcons from '../icons/Brush';
+import { ZOOM_STOPS } from '../brushes/zoom';
+import cn from 'classnames';
+import AirbrushIcons from '../icons/Airbrush';
+import { usePaintContext } from '../context';
+import Brushes from '../icons/Brushes';
+import { CSSProperties } from 'react';
 
 // const resources = '/fs/Applications/paint/resources';
 
@@ -21,25 +22,25 @@ export default function PaintToolbox() {
   const fgColor = `rgb(${r} ${g} ${b})`;
 
   return (
-    <div className={cn("flex flex-col gap-1", { hidden: !settings.toolBar })}>
+    <div className={cn('flex flex-col gap-1', { hidden: !settings.toolBar })}>
       <Divider />
       <ToggleGroup
         type="single"
         value={state.brush}
-        onValueChange={(value) => setBrush(value as any)}
+        onValueChange={(value) => setBrush(value as keyof typeof Brushes)}
         className="mx-1 w-12 flex-wrap"
       >
         {Object.keys(brushes).map((brush) => {
           const Icon = Brushes[brush as keyof typeof Brushes] ?? Brushes.select;
           return (
             <ToggleButton key={brush} className="w-6 h-6 p-0.5!" value={brush}>
-              <Icon style={{ "--paint-color": fgColor } as any} />
+              <Icon style={{ '--paint-color': fgColor } as CSSProperties} />
             </ToggleButton>
           );
         })}
       </ToggleGroup>
 
-      {state.brush === "brush" ? (
+      {state.brush === 'brush' ? (
         <div className="mx-1 bevel-light-inset self-center p-1">
           <ToggleGroup
             type="single"
@@ -65,7 +66,7 @@ export default function PaintToolbox() {
         </div>
       ) : null}
 
-      {state.brush === "eraser" ? (
+      {state.brush === 'eraser' ? (
         <div className="mx-1 bevel-light-inset self-center p-1">
           <ToggleGroup
             type="single"
@@ -94,7 +95,7 @@ export default function PaintToolbox() {
         </div>
       ) : null}
 
-      {state.brush === "zoom" ? (
+      {state.brush === 'zoom' ? (
         <div className="mx-1 bevel-light-inset self-center p-1">
           <ToggleGroup
             type="single"
@@ -117,7 +118,7 @@ export default function PaintToolbox() {
         </div>
       ) : null}
 
-      {["line", "curve"].includes(state.brush) ? (
+      {['line', 'curve'].includes(state.brush) ? (
         <div className="mx-1 bevel-light-inset self-center p-1">
           <ToggleGroup
             type="single"
@@ -143,7 +144,7 @@ export default function PaintToolbox() {
         </div>
       ) : null}
 
-      {["rectangle", "ellipse", "polygon", "roundedrect", "freehand"].includes(
+      {['rectangle', 'ellipse', 'polygon', 'roundedrect', 'freehand'].includes(
         state.brush,
       ) ? (
         <div className="mx-1 bevel-light-inset self-center p-1">
@@ -162,10 +163,10 @@ export default function PaintToolbox() {
                 value={variant.toString()}
               >
                 <div
-                  className={cn("w-8 h-3", {
-                    "bg-[#808080]": variant === 1,
-                    "bg-current": variant === 2,
-                    "border border-current": variant < 2,
+                  className={cn('w-8 h-3', {
+                    'bg-[#808080]': variant === 1,
+                    'bg-current': variant === 2,
+                    'border border-current': variant < 2,
                   })}
                 />
               </ToggleButton>
@@ -174,7 +175,7 @@ export default function PaintToolbox() {
         </div>
       ) : null}
 
-      {state.brush === "airbrush" ? (
+      {state.brush === 'airbrush' ? (
         <div className="mx-1 bevel-light-inset self-center py-1 px-2">
           <ToggleGroup
             type="single"

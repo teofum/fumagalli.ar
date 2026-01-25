@@ -297,7 +297,7 @@ function rectangle(props: React.ComponentProps<'svg'>) {
       height={20}
       {...props}
     >
-      <path fill="rgb(var(--color-surface))" d="M3 5h13v9H3z" />
+      <path fill="rgb(var(--theme-surface))" d="M3 5h13v9H3z" />
       <path fill="currentcolor" d="M2 4v11h15V4H2Zm14 10H3V5h13v9Z" />
     </svg>
   );
@@ -313,7 +313,7 @@ function polygon(props: React.ComponentProps<'svg'>) {
       {...props}
     >
       <path
-        fill="rgb(var(--color-surface))"
+        fill="rgb(var(--theme-surface))"
         d="M9 12v-1h1v-1h1V8h1V6h1V4H7v2H6v2H5v2H4v3H3v2h12v-3H9z"
       />
       <path
@@ -334,7 +334,7 @@ function ellipse(props: React.ComponentProps<'svg'>) {
       {...props}
     >
       <path
-        fill="rgb(var(--color-surface))"
+        fill="rgb(var(--theme-surface))"
         d="M16 8h-1V7h-2V6H6v1H4v1H3v4h1v1h2v1h7v-1h2v-1h1V8z"
       />
       <path
@@ -355,7 +355,7 @@ function roundedrect(props: React.ComponentProps<'svg'>) {
       {...props}
     >
       <path
-        fill="rgb(var(--color-surface))"
+        fill="rgb(var(--theme-surface))"
         d="M16 7h-1V6H4v1H3v7h1v1h11v-1h1V7z"
       />
       <path
@@ -376,7 +376,7 @@ function freehand(props: React.ComponentProps<'svg'>) {
       {...props}
     >
       <path
-        fill="rgb(var(--color-surface))"
+        fill="rgb(var(--theme-surface))"
         d="M15 11v-1h-1V5h-1v1h-1v1h-2V6H9V5H8V4H7v5H6v1H5v1H4v1h3v4h1v-1h1v-1h1v-1h1v-1h5v-1h-1z"
       />
       <path
@@ -387,7 +387,7 @@ function freehand(props: React.ComponentProps<'svg'>) {
   );
 }
 
-export default {
+const brushes = {
   select,
   selectfree,
   eraser,
@@ -406,3 +406,5 @@ export default {
   roundedrect,
   freehand,
 };
+
+export default brushes;
