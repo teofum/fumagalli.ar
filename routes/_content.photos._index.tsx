@@ -41,10 +41,12 @@ export default function PhotosIndexRoute() {
         {data.map((category) => (
           <Collapsible key={category._id} title={category.title}>
             <div className="grid grid-cols-[repeat(auto-fill,minmax(16rem,1fr))] group-data-[state='open']/content:pt-3 gap-3">
-              {category.collections.map(collection => (
-                <Link key={collection._id}
-                      to={collection.slug}
-                      className="block relative overflow-hidden group">
+              {category.collections.map((collection) => (
+                <Link
+                  key={collection._id}
+                  href={collection.slug}
+                  className="block relative overflow-hidden group"
+                >
                   <img
                     className="absolute inset-0 w-full h-full object-cover [image-rendering:auto]"
                     alt=""
@@ -54,7 +56,11 @@ export default function PhotosIndexRoute() {
                   <img
                     className="relative w-full aspect-[3/2] group-hover:scale-[1.05] transition-transform duration-200"
                     alt=""
-                    src={sanityImage(collection.thumbnail.content).width(524).dpr(dpr).quality(80).url()}
+                    src={sanityImage(collection.thumbnail.content)
+                      .width(524)
+                      .dpr(dpr)
+                      .quality(80)
+                      .url()}
                     loading="lazy"
                   />
 

@@ -1,7 +1,7 @@
-import { getAppResourcesUrl } from "@/content/utils";
-import { IconLinkButton } from "./Button";
+import { getAppResourcesUrl } from '@/content/utils';
+import { IconLinkButton } from './Button';
 
-const resources = getAppResourcesUrl("files");
+const resources = getAppResourcesUrl('files');
 
 type WebringProps = {
   indexUrl: string;
@@ -15,8 +15,8 @@ type WebringProps = {
 export default function Webring({
   indexUrl,
   baseUrl,
-  nextUrl = "next",
-  prevUrl = "prev",
+  nextUrl = 'next',
+  prevUrl = 'prev',
   iconUrl,
 }: WebringProps) {
   const fullPrevUrl = `${baseUrl}/${prevUrl}`;
@@ -24,11 +24,14 @@ export default function Webring({
 
   return (
     <div className="flex flex-row">
-      <IconLinkButton to={fullPrevUrl} imageUrl={`${resources}/back.png`} />
+      <IconLinkButton href={fullPrevUrl} imageUrl={`${resources}/back.png`} />
 
-      <IconLinkButton to={indexUrl} imageUrl={iconUrl} />
+      <IconLinkButton href={indexUrl} imageUrl={iconUrl} />
 
-      <IconLinkButton to={fullNextUrl} imageUrl={`${resources}/forward.png`} />
+      <IconLinkButton
+        href={fullNextUrl}
+        imageUrl={`${resources}/forward.png`}
+      />
     </div>
   );
 }

@@ -64,10 +64,10 @@ export default function PostsIndexRoute() {
       </p>
 
       <div className="grid grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-2">
-        <Link to="mdx/introduction-to-dithering">
+        <Link href="mdx/introduction-to-dithering">
           <DitherCard />
         </Link>
-        <Link to="mdx/dithering-color">
+        <Link href="mdx/dithering-color">
           <Dither2Card />
         </Link>
       </div>
@@ -78,7 +78,7 @@ export default function PostsIndexRoute() {
         {articles.map((post) => (
           <li key={post.slug} className="border-t last:border-b">
             <Link
-              to={post.slug}
+              href={post.slug}
               className="flex flex-row p-4 gap-4 hover:bg-text hover:bg-opacity-10 transition-colors"
             >
               <span className="w-20">

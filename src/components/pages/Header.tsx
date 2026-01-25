@@ -8,7 +8,7 @@ interface BreadcrumbProps {
 function Breadcrumb({ route }: BreadcrumbProps) {
   return (
     <>
-      <Link to={route.path}>{route.name}</Link>
+      <Link href={route.path}>{route.name}</Link>
       <span>/</span>
     </>
   );
@@ -32,13 +32,15 @@ export default function Header() {
           ))}
         </div>
 
-        <LinkButton to="/" className="px-2 py-1 min-w-20 text-base font-sans">
+        <LinkButton href="/" className="px-2 py-1 min-w-20 text-base font-sans">
           <div className="flex flex-row items-center gap-2">
-            <img src="/fs/System Files/Icons/shutdown.png"
-                 width={32}
-                 height={32}
-                 className="[image-rendering:pixelated]"
-                 alt="" />
+            <img
+              src="/fs/System Files/Icons/shutdown.png"
+              width={32}
+              height={32}
+              className="[image-rendering:pixelated]"
+              alt=""
+            />
             <span>Boot TeOS</span>
           </div>
         </LinkButton>

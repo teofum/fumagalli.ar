@@ -1,6 +1,6 @@
-import { useState } from "react";
-import Button, { LinkButton } from "@/components/ui/Button";
-import Dialog, { DialogClose } from "@/components/ui/Dialog";
+import { useState } from 'react';
+import Button, { LinkButton } from '@/components/ui/Button';
+import Dialog, { DialogClose } from '@/components/ui/Dialog';
 
 export default function MobileDialog() {
   // Assume any small viewport is a phone, because the limitation is screen size anyway
@@ -32,7 +32,7 @@ export default function MobileDialog() {
 
         <div className="flex flex-col gap-2 mt-16">
           <LinkButton
-            to="/about"
+            href="/about"
             className="p-3 outline-solid outline-1 outline-black"
           >
             <span>Go to mobile site</span>

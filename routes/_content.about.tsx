@@ -54,19 +54,19 @@ export default function AboutRoute() {
               </p>
 
               <div className="flex flex-row gap-1 my-2">
-                <LinkButton to="/articles" className="py-1 px-2 w-28">
+                <LinkButton href="/articles" className="py-1 px-2 w-28">
                   <div className="flex flex-row items-center gap-2">
                     <img src={`${resources}/articles.png`} alt="" />
                     Articles
                   </div>
                 </LinkButton>
-                <LinkButton to="/photos" className="py-1 px-2 w-28">
+                <LinkButton href="/photos" className="py-1 px-2 w-28">
                   <div className="flex flex-row items-center gap-2">
                     <img src={`${resources}/photos.png`} alt="" />
                     Photos
                   </div>
                 </LinkButton>
-                <LinkButton to="/projects" className="py-1 px-2 w-28">
+                <LinkButton href="/projects" className="py-1 px-2 w-28">
                   <div className="flex flex-row items-center gap-2">
                     <img src={`${resources}/projects.png`} alt="" />
                     Projects
