@@ -1,62 +1,51 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
-import { useAppState, useWindow } from "@/components/desktop/Window/context";
+import { useAppState, useWindow } from '@/components/desktop/Window/context';
+import Menu from '@/components/ui/Menu';
+import useDesktopStore from '@/stores/desktop';
+import useFetch from '@/hooks/use-fetch';
 
+import { files } from '@/components/apps/Files';
+import PreviewImage from './modes/PreviewImage';
+import PreviewMDX from './modes/PreviewMDX';
+import PreviewRichText from './modes/PreviewRichText';
 import {
   previewSupportedFileTypes,
   type PreviewSupportedFile,
   isPreviewable,
-} from "./types";
-import PreviewRichText from "./modes/PreviewRichText";
-import PreviewMDX from "./modes/PreviewMDX";
-import PreviewImage from "./modes/PreviewImage";
-import useDesktopStore from "@/stores/desktop";
-import Menu from "@/components/ui/Menu";
-import { files } from "../Files";
-// import { useFetcher } from "@remix-run/react";
-
-const getPreviewMode = (fileType: PreviewSupportedFile["_type"]) => {
-  switch (fileType) {
-    case "fileRichText":
-      return PreviewRichText;
-    case "fileMDX":
-      return PreviewMDX;
-    case "fileImage":
-      return PreviewImage;
-  }
-};
+} from './types';
 
 export default function Preview() {
   const { id, close, modal } = useWindow();
   const { setTitle } = useDesktopStore();
 
-  const [state, setState] = useAppState("preview");
+  const [state, setState] = useAppState('preview');
 
-  // const { load, data, state: fetchState } = useFetcher<PreviewSupportedFile>();
+  const { load, data, state: fetchState } = useFetch<PreviewSupportedFile>();
 
   /**
    * Initialization, load file contents and set window title
    */
-  const openFileId = useRef("");
-  // useEffect(() => {
-  //   if (!state.fileStub || state.fileStub._id === openFileId.current) return;
-  //   setTitle(id, `${state.fileStub.name} - Preview`);
-  //   load(`/api/file?id=${state.fileStub._id}`);
-  // }, [setTitle, setState, id, state.fileStub, load]);
+  const openFileId = useRef('');
+  useEffect(() => {
+    if (!state.fileStub || state.fileStub._id === openFileId.current) return;
+    setTitle(id, `${state.fileStub.name} - Preview`);
+    load(`/api/file?id=${state.fileStub._id}`);
+  }, [setTitle, setState, id, state.fileStub, load]);
 
-  // useEffect(() => {
-  //   if (!data || data._id === openFileId.current) return;
-  //   openFileId.current = data._id;
+  useEffect(() => {
+    if (!data || data._id === openFileId.current) return;
+    openFileId.current = data._id;
 
-  //   setState({ file: data });
-  // }, [data, setState, state.file]);
+    setState({ file: data });
+  }, [data, setState, state.file]);
 
-  // if (fetchState === "loading")
-  //   return (
-  //     <div className="flex flex-col items-center justify-center gap-0.5 min-w-0">
-  //       Starting...
-  //     </div>
-  //   );
+  if (fetchState === 'loading')
+    return (
+      <div className="flex flex-col items-center justify-center gap-0.5 min-w-0">
+        Starting...
+      </div>
+    );
 
   if (!state.file) return null;
 
@@ -71,7 +60,19 @@ export default function Preview() {
     );
   };
 
-  const Component = getPreviewMode(state.file._type);
+  let Component = PreviewMDX;
+  switch (state.file._type) {
+    case 'fileRichText':
+      Component = PreviewRichText;
+      break;
+    case 'fileMDX':
+      Component = PreviewMDX;
+      break;
+    case 'fileImage':
+      Component = PreviewImage;
+      break;
+  }
+
   return (
     <div className="flex flex-col gap-0.5 min-w-0">
       <Component
