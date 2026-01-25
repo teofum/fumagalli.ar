@@ -92,7 +92,7 @@ export default function AboutRoute() {
             <img
               src={`${resources}/me2.png`}
               alt="me"
-              className="self-end h-[400px]"
+              className="self-end h-100"
             />
           </div>
         </div>

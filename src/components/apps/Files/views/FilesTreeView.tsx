@@ -1,13 +1,13 @@
-import ScrollContainer from "@/components/ui/ScrollContainer";
-import type { Folder, ItemStub } from "@/schemas/folder";
-import FilesListItem from "./FilesListItem";
-import { useEffect, useState } from "react";
-import TreeLess from "@/components/ui/icons/TreeLess";
-import TreeMore from "@/components/ui/icons/TreeMore";
-import type FilesViewProps from "./FilesViewProps";
-import filterByType from "../utils/filterByType";
-import { useAppState } from "@/components/desktop/Window/context";
-import useFolder from "../utils/useFolder";
+import ScrollContainer from '@/components/ui/ScrollContainer';
+import type { Folder, ItemStub } from '@/schemas/folder';
+import FilesListItem from './FilesListItem';
+import { useEffect, useState } from 'react';
+import TreeLess from '@/components/ui/icons/TreeLess';
+import TreeMore from '@/components/ui/icons/TreeMore';
+import type FilesViewProps from './FilesViewProps';
+import filterByType from '../utils/filterByType';
+import { useAppState } from '@/components/desktop/Window/context';
+import useFolder from '../utils/useFolder';
 
 interface BranchProps {
   item: Folder | ItemStub;
@@ -25,7 +25,7 @@ function Branch({
   select,
 }: BranchProps) {
   const [expanded, setExpanded] = useState(root);
-  const [state] = useAppState("files");
+  const [state] = useAppState('files');
 
   const [item, setItem] = useState(itemProp);
 
@@ -41,6 +41,7 @@ function Branch({
 
   useEffect(() => {
     if (dir) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setItem(dir);
       setExpanded(true);
     }
@@ -54,10 +55,10 @@ function Branch({
   return (
     <div className="relative group tree-branch">
       {!root ? (
-        <div className="absolute left-[7px] -top-[3px] h-[11px] border-l border-dotted border-light tree-branch-decoration-top" />
+        <div className="absolute left-1.75 -top-0.75 h-2.75 border-l border-dotted border-light tree-branch-decoration-top" />
       ) : null}
       {!root ? (
-        <div className="absolute left-[7px] bottom-0 top-[3px] border-l border-dotted border-light tree-branch-decoration-bottom" />
+        <div className="absolute left-1.75 bottom-0 top-0.75 border-l border-dotted border-light tree-branch-decoration-bottom" />
       ) : null}
       <div className="flex flex-row items-start relative z-1">
         <button
@@ -67,7 +68,7 @@ function Branch({
           {expanded ? <TreeLess /> : <TreeMore />}
         </button>
 
-        <div className="mt-2 w-[5px] border-t border-dotted border-light -ml-px mr-px" />
+        <div className="mt-2 w-1.25 border-t border-dotted border-light -ml-px mr-px" />
 
         <div className="flex flex-col w-full">
           <FilesListItem
@@ -79,7 +80,7 @@ function Branch({
           {expanded ? (
             <div className="">
               {filteredItems.map((child) =>
-                child._type === "folder" ? (
+                child._type === 'folder' ? (
                   <Branch
                     key={child.name}
                     item={child}
@@ -118,13 +119,13 @@ function Leaf({ item, root = false, open, select }: LeafProps) {
   return (
     <div className="relative group tree-branch">
       {!root ? (
-        <div className="absolute left-[7px] -top-[3px] h-[11px] border-l border-dotted border-light tree-branch-decoration-top" />
+        <div className="absolute left-1.75 -top-0.75 h-2.75 border-l border-dotted border-light tree-branch-decoration-top" />
       ) : null}
       {!root ? (
-        <div className="absolute left-[7px] bottom-0 top-[3px] border-l border-dotted border-light tree-branch-decoration-bottom" />
+        <div className="absolute left-1.75 bottom-0 top-0.75 border-l border-dotted border-light tree-branch-decoration-bottom" />
       ) : null}
       <div className="flex flex-row items-start relative z-1">
-        <div className="mt-[9px] w-[13px] border-t border-dotted border-light ml-[7px] -mr-[2px]" />
+        <div className="mt-2.25 w-3.25 border-t border-dotted border-light ml-1.75 -mr-0.5" />
 
         <FilesListItem
           item={item}

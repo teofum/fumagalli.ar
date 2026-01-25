@@ -96,7 +96,7 @@ export default function Intro() {
           <img
             src={`${resources}/me2.png`}
             alt="me"
-            className="self-end h-[400px]"
+            className="self-end h-100"
           />
         </div>
       </TabContent>

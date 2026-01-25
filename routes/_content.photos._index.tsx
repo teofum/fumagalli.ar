@@ -54,7 +54,7 @@ export default function PhotosIndexRoute() {
                   />
 
                   <img
-                    className="relative w-full aspect-[3/2] group-hover:scale-[1.05] transition-transform duration-200"
+                    className="relative w-full aspect-3/2 group-hover:scale-[1.05] transition-transform duration-200"
                     alt=""
                     src={sanityImage(collection.thumbnail.content)
                       .width(524)

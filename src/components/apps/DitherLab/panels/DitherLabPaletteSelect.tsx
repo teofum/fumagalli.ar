@@ -1,16 +1,16 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
-import { useAppState } from "@/components/desktop/Window/context";
-import Button from "@/components/ui/Button";
-import Collapsible from "@/components/ui/Collapsible";
-import { Select, SelectItem } from "@/components/ui/Select";
+import { useAppState } from '@/components/desktop/Window/context';
+import Button from '@/components/ui/Button';
+import Collapsible from '@/components/ui/Collapsible';
+import { Select, SelectItem } from '@/components/ui/Select';
 
-import PalettePreview from "../components/PalettePreview";
-import palettes from "@/dither/palettes";
-import { PaletteGroup } from "@/dither/palettes/types";
-import { useSyncedAppSettings } from "@/stores/system";
-import cn from "classnames";
-import ArrowLeft from "@/components/ui/icons/ArrowLeft";
+import PalettePreview from '../components/PalettePreview';
+import palettes from '@/dither/palettes';
+import { PaletteGroup } from '@/dither/palettes/types';
+import { useSyncedAppSettings } from '@/stores/system';
+import cn from 'classnames';
+import ArrowLeft from '@/components/ui/icons/ArrowLeft';
 
 const PAGE_SIZE = 8;
 
@@ -23,8 +23,8 @@ export default function DitherLabPaletteSelect({
   openEditor,
   importPalettes,
 }: DitherLabPaletteSelectProps) {
-  const [state, setState] = useAppState("dither");
-  const [settings] = useSyncedAppSettings("dither");
+  const [state, setState] = useAppState('dither');
+  const [settings] = useSyncedAppSettings('dither');
 
   const allPalettes = useMemo(
     () => [...palettes, ...settings.customPalettes],
@@ -34,7 +34,7 @@ export default function DitherLabPaletteSelect({
   const groupOptions = useMemo(
     () =>
       Object.values(PaletteGroup)
-        .filter((val) => !val.startsWith("__"))
+        .filter((val) => !val.startsWith('__'))
         .filter(
           (val) => allPalettes.find((p) => p.group === val) !== undefined,
         ),
@@ -82,16 +82,16 @@ export default function DitherLabPaletteSelect({
         </Select>
 
         <div
-          className={cn("bg-default bevel-content p-0.5 flex flex-col", {
-            "min-h-[152px]": count > PAGE_SIZE,
+          className={cn('bg-default bevel-content p-0.5 flex flex-col', {
+            'min-h-38': count > PAGE_SIZE,
           })}
         >
           {paletteOptions.slice(offset, offset + PAGE_SIZE).map((palette) => (
             <button
               key={palette}
               onClick={() => selectPalette(palette)}
-              className={cn("flex px-1 cursor-default", {
-                "bg-selection text-selection": palette === state.paletteName,
+              className={cn('flex px-1 cursor-default', {
+                'bg-selection text-selection': palette === state.paletteName,
               })}
             >
               {palette}
