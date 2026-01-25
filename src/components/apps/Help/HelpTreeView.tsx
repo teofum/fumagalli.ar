@@ -91,6 +91,7 @@ function Branch({ item: itemProp, root = false, open }: BranchProps) {
 
   useEffect(() => {
     if (dir) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setItem(dir);
       setExpanded(true);
     }
@@ -101,10 +102,10 @@ function Branch({ item: itemProp, root = false, open }: BranchProps) {
   return (
     <div className="relative group tree-branch">
       {!root ? (
-        <div className="absolute left-[7px] -top-[3px] h-[11px] border-l border-dotted border-light tree-branch-decoration-top" />
+        <div className="absolute left-1.75 -top-0.75 h-2.75 border-l border-dotted border-light tree-branch-decoration-top" />
       ) : null}
       {!root ? (
-        <div className="absolute left-[7px] bottom-0 top-[3px] border-l border-dotted border-light tree-branch-decoration-bottom" />
+        <div className="absolute left-1.75 bottom-0 top-0.75 border-l border-dotted border-light tree-branch-decoration-bottom" />
       ) : null}
       <div className="flex flex-row items-start relative z-1">
         <button
@@ -114,7 +115,7 @@ function Branch({ item: itemProp, root = false, open }: BranchProps) {
           {expanded ? <TreeLess /> : <TreeMore />}
         </button>
 
-        <div className="mt-2 w-[5px] border-t border-dotted border-light -ml-px mr-px" />
+        <div className="mt-2 w-1.25 border-t border-dotted border-light -ml-px mr-px" />
 
         <div className="flex flex-col w-full">
           <HelpListItem
@@ -157,14 +158,14 @@ function Leaf({ item, root = false, open }: LeafProps) {
   return (
     <div className="relative group tree-branch">
       {!root ? (
-        <div className="absolute left-[7px] -top-[3px] h-[11px] border-l border-dotted border-light tree-branch-decoration-top" />
+        <div className="absolute left-1.75 -top-0.75 h-2.75 border-l border-dotted border-light tree-branch-decoration-top" />
       ) : null}
       {!root ? (
-        <div className="absolute left-[7px] bottom-0 top-[3px] border-l border-dotted border-light tree-branch-decoration-bottom" />
+        <div className="absolute left-1.75 bottom-0 top-0.75 border-l border-dotted border-light tree-branch-decoration-bottom" />
       ) : null}
       <div className="flex flex-row items-start relative z-1">
         {!root ? (
-          <div className="mt-[9px] w-[13px] border-t border-dotted border-light ml-[7px] -mr-[2px]" />
+          <div className="mt-2.25 w-3.25 border-t border-dotted border-light ml-1.75 -mr-0.5" />
         ) : null}
 
         <HelpListItem item={item} open={open} className="relative z-1" />
@@ -179,7 +180,9 @@ interface HelpTreeViewProps {
 
 export default function HelpTreeView({ setId }: HelpTreeViewProps) {
   const { load, dir: help } = useFolder();
-  useEffect(() => load(HELP_ROOT), [load]);
+  useEffect(() => {
+    load(HELP_ROOT);
+  }, [load]);
 
   if (!help) return null;
   return (

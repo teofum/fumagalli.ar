@@ -1,11 +1,11 @@
-import { useEffect } from "react";
-// import { useFetcher } from "@remix-run/react";
-import { PortableText, type PortableTextComponents } from "@portabletext/react";
+import { useEffect } from 'react';
+import { PortableText, type PortableTextComponents } from '@portabletext/react';
 
-import { useAppState } from "@/components/desktop/Window/context";
-import RetroLink from "@/components/ui/Link";
-import ScrollContainer from "@/components/ui/ScrollContainer";
-import type { RichTextFile } from "@/schemas/file";
+import { useAppState } from '@/components/desktop/Window/context';
+import RetroLink from '@/components/ui/Link';
+import ScrollContainer from '@/components/ui/ScrollContainer';
+import type { RichTextFile } from '@/schemas/file';
+import useFetch from '@/hooks/use-fetch';
 
 export const helpComponents: PortableTextComponents = {
   block: {
@@ -34,17 +34,17 @@ interface HelpContentProps {
 }
 
 export default function HelpContent({ setId }: HelpContentProps) {
-  const [state] = useAppState("help");
+  const [state] = useAppState('help');
 
-  // const { load, data: file } = useFetcher<RichTextFile>();
-  // useEffect(() => {
-  //   load(`/api/file?id=${state.openId}`);
-  // }, [state.openId, load]);
+  const { load, data: file } = useFetch<RichTextFile>();
+  useEffect(() => {
+    load(`/api/file?id=${state.openId}`);
+  }, [state.openId, load]);
 
   return (
     <ScrollContainer className="flex-1">
       <article className="p-4 max-w-xl">
-        {/*<PortableText components={helpComponents} value={file?.content} />*/}
+        <PortableText components={helpComponents} value={file?.content} />
       </article>
     </ScrollContainer>
   );
