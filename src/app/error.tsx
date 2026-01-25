@@ -1,27 +1,14 @@
-import type { V2_MetaFunction } from '@remix-run/node';
-import { useRouteError } from '@remix-run/react';
-import { useEffect, useState } from 'react';
-import Desktop from '~/components/desktop/Desktop';
-import useDesktopStore from '~/stores/desktop';
+'use client';
 
-export const meta: V2_MetaFunction = () => {
-  return [
-    { title: 'Teo Fumagalli' },
-    { name: 'description', content: 'Welcome to my site!' },
-  ];
-};
+import { useEffect } from 'react';
 
-export default function Index() {
-  // Prevents this route from rendering on the server
-  // https://github.com/remix-run/remix/discussions/1023
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+import useDesktopStore from '@/stores/desktop';
 
-  return mounted ? <Desktop /> : null;
-}
-
-export function ErrorBoundary() {
-  const error = useRouteError();
+export default function Error({
+  error,
+}: {
+  error: Error & { digest?: string };
+}) {
   const { close, windows } = useDesktopStore();
 
   const mac = navigator.platform.startsWith('Mac');
