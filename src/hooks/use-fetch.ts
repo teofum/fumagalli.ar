@@ -22,6 +22,8 @@ function useFetch<T>() {
 
     setResult(result);
     setState('idle');
+
+    return result;
   }, []);
 
   return {

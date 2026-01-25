@@ -1,0 +1,33 @@
+import folderSchema from '@/schemas/folder';
+import { sanityClient } from '@/utils/sanity.server';
+
+const folderQuery = (id: string = 'root') => `
+*[_type == "folder" && _id == "${id}"][0] {
+  ...,
+  "parent": *[_type == "folder" && references(^._id)][0] {
+    ...,
+    "parent": *[_type == "folder" && references(^._id)][0] {
+      ...,
+      "parent": *[_type == "folder" && references(^._id)][0],
+    },
+  },
+  items[]-> {
+    _id,
+    _type,
+    _createdAt,
+    _updatedAt,
+    name,
+    icon,
+    'size': content.asset->size,
+  }
+}`;
+
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const folderId = url.searchParams.get('id') ?? 'root';
+
+  const raw = await sanityClient.fetch(folderQuery(folderId));
+  const data = folderSchema.parse({ ...raw, items: raw.items ?? [] });
+
+  return Response.json(data);
+}
