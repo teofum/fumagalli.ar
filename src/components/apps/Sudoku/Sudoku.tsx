@@ -1,17 +1,17 @@
-import type { Dispatch, ReducerAction, ReducerState } from "react";
-import { useEffect, useReducer, useRef, useState } from "react";
-import sudokuReducer from "./reducer";
-import Menu from "@/components/ui/Menu";
-import cn from "classnames";
-import Button, { IconButton } from "@/components/ui/Button";
-import { useWindow } from "@/components/desktop/Window/context";
-import { Toolbar, ToolbarGroup } from "@/components/ui/Toolbar";
-import { useAppSettings } from "@/stores/system";
-// import type { SudokuPuzzle } from "@/routes/api.sudoku";
-import type { SudokuSettings } from "./types";
-import { ToggleIconButton } from "@/components/ui/ToggleButton";
+import type { Dispatch, ReducerState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
+import sudokuReducer, { Action } from './reducer';
+import Menu from '@/components/ui/Menu';
+import cn from 'classnames';
+import Button, { IconButton } from '@/components/ui/Button';
+import { useWindow } from '@/components/desktop/Window/context';
+import { Toolbar, ToolbarGroup } from '@/components/ui/Toolbar';
+import { useAppSettings } from '@/stores/system';
+import type { SudokuSettings, SudokuPuzzle } from './types';
+import { ToggleIconButton } from '@/components/ui/ToggleButton';
+import useFetch from '@/hooks/use-fetch';
 
-const resources = "/fs/Applications/sudoku/resources";
+const resources = '/fs/Applications/sudoku/resources';
 
 interface CellProps {
   index: number;
@@ -19,7 +19,7 @@ interface CellProps {
   fixed: boolean;
   annotations: Set<number>;
   game: ReducerState<typeof sudokuReducer>;
-  dispatch: Dispatch<ReducerAction<typeof sudokuReducer>>;
+  dispatch: Dispatch<Action>;
   settings: SudokuSettings;
   boardRef: React.RefObject<HTMLDivElement | null>;
   annotate: boolean;
@@ -60,42 +60,42 @@ function SudokuCell({
     return game.board.filter((cell) => cell.value === number).length === 9;
   };
 
-  const select = () => dispatch({ type: "select", index: i });
+  const select = () => dispatch({ type: 'select', index: i });
   const keyHandler = (ev: React.KeyboardEvent) => {
-    if (ev.key === "Backspace") {
-      dispatch({ type: "set", value: 0 });
-      dispatch({ type: "clearAnnotation" });
+    if (ev.key === 'Backspace') {
+      dispatch({ type: 'set', value: 0 });
+      dispatch({ type: 'clearAnnotation' });
     } else if (ev.code.match(/^Digit[0-9]$/)) {
       const value = Number(ev.code.substring(5));
       const annotation = ev.altKey ? !annotate : annotate;
       if (!allPlaced(value)) {
         const type = annotation
           ? annotations.has(value)
-            ? "resetAnnotation"
-            : "setAnnotation"
-          : "set";
+            ? 'resetAnnotation'
+            : 'setAnnotation'
+          : 'set';
         dispatch({ type, value });
       }
-    } else if (ev.key.includes("Arrow")) {
+    } else if (ev.key.includes('Arrow')) {
       let x = game.selected % 9;
       let y = Math.floor(game.selected / 9);
 
       switch (ev.key) {
-        case "ArrowUp": {
+        case 'ArrowUp': {
           y = y - (ev.shiftKey ? 3 : 1);
           if (y < 0) y += 9;
           break;
         }
-        case "ArrowDown": {
+        case 'ArrowDown': {
           y = (y + (ev.shiftKey ? 3 : 1)) % 9;
           break;
         }
-        case "ArrowLeft": {
+        case 'ArrowLeft': {
           x = x - (ev.shiftKey ? 3 : 1);
           if (x < 0) x += 9;
           break;
         }
-        case "ArrowRight": {
+        case 'ArrowRight': {
           x = (x + (ev.shiftKey ? 3 : 1)) % 9;
           break;
         }
@@ -109,43 +109,40 @@ function SudokuCell({
   return (
     <div
       id={`${id}_cell_${i}`}
-      className={cn("w-10 h-10 border-r border-b border-surface-dark button", {
-        "border-r-surface-darker": i % 9 === 2 || i % 9 === 5,
-        "border-b-surface-darker": ~~(i / 9) % 9 === 2 || ~~(i / 9) % 9 === 5,
-        "border-r-transparent": i % 9 === 8,
-        "border-b-transparent": ~~(i / 9) % 9 === 8,
+      className={cn('w-10 h-10 border-r border-b border-surface-dark button', {
+        'border-r-surface-darker': i % 9 === 2 || i % 9 === 5,
+        'border-b-surface-darker': ~~(i / 9) % 9 === 2 || ~~(i / 9) % 9 === 5,
+        'border-r-transparent': i % 9 === 8,
+        'border-b-transparent': ~~(i / 9) % 9 === 8,
       })}
       tabIndex={0}
       onFocus={select}
       onKeyDown={keyHandler}
     >
       <div
-        className={cn("h-full grid place-items-center relative select-none", {
-          "bg-selection text-selection": isSelected,
-          "bg-default": !isSelected,
-          "bg-highlight": isNeighborOfSelected && settings.highlightNeighbors,
+        className={cn('h-full grid place-items-center relative select-none', {
+          'bg-selection text-selection': isSelected,
+          'bg-default': !isSelected,
+          'bg-highlight': isNeighborOfSelected && settings.highlightNeighbors,
         })}
       >
         <span
-          className={cn("font-display text-2xl", {
-            "text-[#ff2020]": hasConflict && settings.showConflict,
-            "text-light": fixed && !hasConflict,
+          className={cn('font-display text-2xl', {
+            'text-[#ff2020]': hasConflict && settings.showConflict,
+            'text-light': fixed && !hasConflict,
           })}
         >
-          {value || ""}
+          {value || ''}
         </span>
 
         <div
-          className={cn("absolute inset-0 grid grid-cols-3 text-light", {
+          className={cn('absolute inset-0 grid grid-cols-3 text-light', {
             hidden: value !== 0,
           })}
         >
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-            <span
-              key={n}
-              className="text-center leading-[13px] w-[13px] h-[13px]"
-            >
-              {annotations.has(n) ? n : ""}
+            <span key={n} className="text-center leading-3.25 w-3.25 h-3.25">
+              {annotations.has(n) ? n : ''}
             </span>
           ))}
         </div>
@@ -156,7 +153,7 @@ function SudokuCell({
 
 export default function Sudoku() {
   const { close } = useWindow();
-  const [settings, set] = useAppSettings("sudoku");
+  const [settings, set] = useAppSettings('sudoku');
 
   const boardRef = useRef<HTMLDivElement>(null);
   const [annotate, setAnnotate] = useState(false);
@@ -166,7 +163,7 @@ export default function Sudoku() {
    */
   const [game, dispatch] = useReducer(sudokuReducer, {
     board: null,
-    difficulty: "easy",
+    difficulty: 'easy',
     puzzleNumber: -1,
     selected: -1,
     won: false,
@@ -206,28 +203,28 @@ export default function Sudoku() {
   /**
    * New game logic
    */
-  // const { load, data } = useFetcher<SudokuPuzzle>();
+  const { load, data } = useFetch<SudokuPuzzle>();
   const newGame = (difficulty = settings.difficulty) => {
-    // load(`/api/sudoku?difficulty=${difficulty}`);
+    load(`/api/sudoku?difficulty=${difficulty}`);
     startTimer();
 
     if (difficulty !== settings.difficulty) set({ difficulty });
   };
 
-  // useEffect(() => {
-  //   if (!data) return;
+  useEffect(() => {
+    if (!data) return;
 
-  //   dispatch({ type: "newGame", puzzle: data });
-  // }, [data]);
+    dispatch({ type: 'newGame', puzzle: data });
+  }, [data]);
 
   /**
    * History
    */
   const canUndo = game.history.length > game.undoCount + 1;
-  const undo = () => dispatch({ type: "undo" });
+  const undo = () => dispatch({ type: 'undo' });
 
   const canRedo = game.undoCount > 0;
-  const redo = () => dispatch({ type: "redo" });
+  const redo = () => dispatch({ type: 'redo' });
 
   /**
    * Helpers
@@ -243,15 +240,15 @@ export default function Sudoku() {
     const cell = game.board[game.selected];
     const type = annotate
       ? cell.annotations.has(value)
-        ? "resetAnnotation"
-        : "setAnnotation"
-      : "set";
+        ? 'resetAnnotation'
+        : 'setAnnotation'
+      : 'set';
     dispatch({ type, value });
   };
 
   const onResetClick = () => {
-    dispatch({ type: "set", value: 0 });
-    dispatch({ type: "clearAnnotation" });
+    dispatch({ type: 'set', value: 0 });
+    dispatch({ type: 'clearAnnotation' });
   };
 
   /**
@@ -268,7 +265,7 @@ export default function Sudoku() {
           <Menu.RadioGroup
             value={settings.difficulty}
             onValueChange={(value) =>
-              newGame(value as SudokuSettings["difficulty"])
+              newGame(value as SudokuSettings['difficulty'])
             }
           >
             <Menu.RadioItem label="Easy" value="easy" />
@@ -287,7 +284,7 @@ export default function Sudoku() {
               value={settings.toolbarPosition}
               onValueChange={(value) =>
                 set({
-                  toolbarPosition: value as SudokuSettings["toolbarPosition"],
+                  toolbarPosition: value as SudokuSettings['toolbarPosition'],
                 })
               }
             >
@@ -315,7 +312,7 @@ export default function Sudoku() {
       </Menu.Bar>
 
       <ToolbarGroup
-        className={cn({ "order-2": settings.toolbarPosition === "bottom" })}
+        className={cn({ 'order-2': settings.toolbarPosition === 'bottom' })}
       >
         <Toolbar>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((value) => (
@@ -367,12 +364,12 @@ export default function Sudoku() {
           })}
 
           {game.board === null ? (
-            <div className="col-span-9 w-[360px] h-[360px] p-4">
+            <div className="col-span-9 w-90 h-90 p-4">
               <h1 className="font-display text-2xl text-h1">Sudoku</h1>
               <p className="paragraph">
                 The goal is to fill the grid with numbers from 1 to 9, so that
-                each column, row and 3x3 "block" contains each number exactly
-                once.
+                each column, row and 3x3 &quot;block&quot; contains each number
+                exactly once.
               </p>
               <h2 className="bold text-h2 mt-4">Controls</h2>
               <p className="paragraph">
@@ -381,15 +378,15 @@ export default function Sudoku() {
               </p>
               <p className="paragraph">
                 Number keys <em className="not-italic text-accent">1-9</em> to
-                change the selected cell.{" "}
-                <em className="not-italic text-accent">0</em> or{" "}
+                change the selected cell.{' '}
+                <em className="not-italic text-accent">0</em> or{' '}
                 <em className="not-italic text-accent">BackSpace</em> clears the
                 cell value.
               </p>
               <p className="paragraph">
                 <em className="not-italic text-accent">Arrow keys</em> to move
-                between cells.{" "}
-                <em className="not-italic text-accent">Shift+Arrow keys</em>{" "}
+                between cells.{' '}
+                <em className="not-italic text-accent">Shift+Arrow keys</em>{' '}
                 moves one block (3 cells) at a time.
               </p>
 
@@ -412,7 +409,7 @@ export default function Sudoku() {
       <div className="flex flex-row gap-0.5 order-3">
         <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
           Time: {Math.floor(time / 60)}:
-          {(time % 60).toString().padStart(2, "0")}
+          {(time % 60).toString().padStart(2, '0')}
         </div>
         {game.puzzleNumber > 0 ? (
           <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1 capitalize">
@@ -424,7 +421,7 @@ export default function Sudoku() {
           </div>
         )}
         <div className="flex-1 bg-surface bevel-light-inset py-0.5 px-1">
-          {game.won ? "Solved!" : ""}
+          {game.won ? 'Solved!' : ''}
         </div>
       </div>
     </div>

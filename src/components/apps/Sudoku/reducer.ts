@@ -1,57 +1,56 @@
-import type { SudokuPuzzle } from "@/routes/api.sudoku";
-import type { SudokuBoard } from "./types";
+import type { SudokuBoard, SudokuPuzzle } from './types';
 
-const MAX_HISTORY = 10;
+const MAX_HISTORY = 50;
 
-interface GameState {
+type GameState = {
   board: SudokuBoard | null;
-  difficulty: SudokuPuzzle["difficulty"];
+  difficulty: SudokuPuzzle['difficulty'];
   puzzleNumber: number;
   selected: number;
   won: boolean;
 
   history: SudokuBoard[];
   undoCount: number;
-}
+};
 
-interface NewGameAction {
-  type: "newGame";
+type NewGameAction = {
+  type: 'newGame';
   puzzle: SudokuPuzzle;
-}
+};
 
-interface SelectCellAction {
-  type: "select";
+type SelectCellAction = {
+  type: 'select';
   index: number;
-}
+};
 
-interface SetCellAction {
-  type: "set";
+type SetCellAction = {
+  type: 'set';
   value: number;
-}
+};
 
-interface SetAnnotationAction {
-  type: "setAnnotation";
+type SetAnnotationAction = {
+  type: 'setAnnotation';
   value: number;
-}
+};
 
-interface ResetAnnotationAction {
-  type: "resetAnnotation";
+type ResetAnnotationAction = {
+  type: 'resetAnnotation';
   value: number;
-}
+};
 
-interface ClearAnnotationAction {
-  type: "clearAnnotation";
-}
+type ClearAnnotationAction = {
+  type: 'clearAnnotation';
+};
 
-interface UndoAction {
-  type: "undo";
-}
+type UndoAction = {
+  type: 'undo';
+};
 
-interface RedoAction {
-  type: "redo";
-}
+type RedoAction = {
+  type: 'redo';
+};
 
-type Action =
+export type Action =
   | NewGameAction
   | SelectCellAction
   | SetCellAction
@@ -72,7 +71,7 @@ function cloneBoard(board: SudokuBoard): SudokuBoard {
 function updateHistory(state: GameState): GameState {
   if (!state.board) return state;
 
-  console.log("update history", history.length);
+  console.log('update history', history.length);
   return {
     ...state,
     history: [
@@ -88,7 +87,7 @@ export default function sudokuReducer(
   action: Action,
 ): GameState {
   switch (action.type) {
-    case "newGame": {
+    case 'newGame': {
       const board = action.puzzle.data.map((value) => ({
         value,
         fixed: value !== 0,
@@ -105,7 +104,7 @@ export default function sudokuReducer(
         undoCount: 0,
       };
     }
-    case "select": {
+    case 'select': {
       if (state.won) return state;
 
       const i = action.index;
@@ -113,7 +112,7 @@ export default function sudokuReducer(
 
       return state;
     }
-    case "set": {
+    case 'set': {
       if (state.won || !state.board) return state;
 
       const board = cloneBoard(state.board);
@@ -122,7 +121,7 @@ export default function sudokuReducer(
 
       return checkBoard(updateHistory({ ...state, board }));
     }
-    case "setAnnotation": {
+    case 'setAnnotation': {
       if (state.won || !state.board) return state;
 
       const board = cloneBoard(state.board);
@@ -132,7 +131,7 @@ export default function sudokuReducer(
 
       return checkBoard(updateHistory({ ...state, board }));
     }
-    case "resetAnnotation": {
+    case 'resetAnnotation': {
       if (state.won || !state.board) return state;
 
       const board = cloneBoard(state.board);
@@ -142,7 +141,7 @@ export default function sudokuReducer(
 
       return checkBoard(updateHistory({ ...state, board }));
     }
-    case "clearAnnotation": {
+    case 'clearAnnotation': {
       if (state.won || !state.board) return state;
 
       const board = cloneBoard(state.board);
@@ -152,7 +151,7 @@ export default function sudokuReducer(
 
       return checkBoard(updateHistory({ ...state, board }));
     }
-    case "undo": {
+    case 'undo': {
       const canUndo = state.history.length > state.undoCount + 1;
       if (!canUndo) return state;
 
@@ -164,7 +163,7 @@ export default function sudokuReducer(
         undoCount: state.undoCount + 1,
       };
     }
-    case "redo": {
+    case 'redo': {
       const canRedo = state.undoCount > 0;
       if (!canRedo) return state;
 
