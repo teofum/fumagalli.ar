@@ -1,35 +1,12 @@
-import { useLoaderData, type V2_MetaFunction } from '@remix-run/react';
-import { json, type LoaderArgs } from '@remix-run/node';
+'use client';
 
-import { sanityClient } from '~/utils/sanity.server';
-import { photoCollectionSchema } from '~/schemas/photos';
-import { PHOTO_COLLECTION_QUERY } from '~/queries/queries';
-import { getImageSize, sanityImage } from '~/utils/sanity.image';
 import { useEffect, useMemo, useState } from 'react';
 import cn from 'classnames';
 
-export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
-  return [
-    { title: `${data?.title} photos — Teo Fumagalli` },
-    { name: 'description', content: 'I shot some pictures :)' },
-  ];
-};
+import { getImageSize, sanityImage } from '@/utils/sanity.image';
+import { PhotoCollection } from '@/schemas/photos';
 
-export async function loader({ params }: LoaderArgs) {
-  const { slug } = params;
-
-  if (!slug) throw new Error('TODO 404 handling');
-
-  const data = await photoCollectionSchema
-    .promise()
-    .parse(sanityClient.fetch(PHOTO_COLLECTION_QUERY(slug)));
-
-  return json(data);
-}
-
-export default function PhotosCategoryRoute() {
-  const data = useLoaderData<typeof loader>();
-
+export default function PhotoGallery({ data }: { data: PhotoCollection }) {
   const [selected, setSelected] = useState<number | null>(null);
   const [showOverlay, setShowOverlay] = useState(false);
   const [dpr, setDpr] = useState(1);
@@ -37,9 +14,9 @@ export default function PhotosCategoryRoute() {
   const [height, setHeight] = useState(0);
 
   useEffect(() => {
-    setDpr(window.devicePixelRatio);
-
     const updateSize = () => {
+      setDpr(window.devicePixelRatio);
+
       const margin = window.innerWidth >= 640 ? 48 : 20;
 
       const maxWidth = Math.min(1280, window.innerWidth - 2 * margin);
@@ -68,9 +45,8 @@ export default function PhotosCategoryRoute() {
     updateSize();
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
-  }, [selected]);
+  }, [selected, data.photos, dpr]);
 
-  // noinspection com.intellij.reactbuddy.ExhaustiveDepsInspection
   const selectedImageUrl = useMemo(
     () =>
       selected !== null
@@ -109,7 +85,7 @@ export default function PhotosCategoryRoute() {
             <img
               className="absolute inset-0 w-full h-full object-cover [image-rendering:auto]"
               alt=""
-              src={photo.lqip}
+              src={photo.lqip ?? undefined}
             />
 
             <img
@@ -145,7 +121,7 @@ export default function PhotosCategoryRoute() {
               <img
                 className="absolute inset-0 w-full h-full object-cover blur-3xl"
                 alt=""
-                src={data.photos[selected].lqip}
+                src={data.photos[selected].lqip ?? undefined}
               />
 
               <img

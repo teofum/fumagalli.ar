@@ -1,37 +1,14 @@
-import { json } from '@remix-run/node';
-import { Link, useLoaderData, type V2_MetaFunction } from '@remix-run/react';
+import { projectCategorySchema } from '@/schemas/project';
+import { sanityClient } from '@/utils/sanity.server';
+import { PROJECT_CATEGORY_QUERY } from '@/queries/queries';
+import Collapsible from '@/components/pages/Collapsible';
+import { sanityImage } from '@/utils/sanity.image';
+import Link from 'next/link';
 
-import { projectCategorySchema } from '~/schemas/project';
-import { sanityClient } from '~/utils/sanity.server';
-import { PROJECT_CATEGORY_QUERY } from '~/queries/queries';
-import Collapsible from '~/components/pages/Collapsible';
-import { sanityImage } from '~/utils/sanity.image';
-import { useEffect, useState } from 'react';
-
-export const meta: V2_MetaFunction = () => {
-  return [
-    { title: 'Projects — Teo Fumagalli' },
-    { name: 'description', content: 'I make stuff sometimes' },
-  ];
-};
-
-export async function loader() {
-  const data = await projectCategorySchema
+export default async function Projects() {
+  const categories = projectCategorySchema
     .array()
-    .promise()
-    .parse(sanityClient.fetch(PROJECT_CATEGORY_QUERY));
-
-  return json(data);
-}
-
-export default function ProjectsIndexRoute() {
-  const categories = useLoaderData<typeof loader>();
-
-  const [dpr, setDpr] = useState(1);
-
-  useEffect(() => {
-    setDpr(window.devicePixelRatio);
-  }, []);
+    .parse(await sanityClient.fetch(PROJECT_CATEGORY_QUERY));
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -39,7 +16,7 @@ export default function ProjectsIndexRoute() {
         Projects
       </h1>
 
-      <p className="mb-4">Stuff I've worked on.</p>
+      <p className="mb-4">Stuff I&apos;ve worked on.</p>
 
       <div>
         {categories.map((category) => (
@@ -48,7 +25,7 @@ export default function ProjectsIndexRoute() {
               {category.projects.map((project) => (
                 <Link
                   key={project._id}
-                  href={project.slug}
+                  href={`projects/${project.slug}`}
                   className="block relative overflow-hidden group"
                 >
                   <img
@@ -59,11 +36,11 @@ export default function ProjectsIndexRoute() {
 
                   {project.thumbnail ? (
                     <img
-                      className="relative w-full aspect-[3/2] group-hover:scale-[1.05] transition-transform duration-200"
+                      className="relative w-full aspect-3/2 group-hover:scale-[1.05] transition-transform duration-200"
                       alt=""
                       src={sanityImage(project.thumbnail)
                         .width(524)
-                        .dpr(dpr)
+                        .dpr(2)
                         .quality(80)
                         .url()}
                       loading="lazy"

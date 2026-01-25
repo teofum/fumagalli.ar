@@ -1,30 +1,14 @@
-import { useEffect, useState } from 'react';
-import { json } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { sanityClient } from '@/utils/sanity.server';
+import { photoCategorySchema } from '@/schemas/photos';
+import { sanityImage } from '@/utils/sanity.image';
+import { PHOTO_CATEGORY_QUERY } from '@/queries/queries';
+import Collapsible from '@/components/pages/Collapsible';
+import Link from 'next/link';
 
-import { sanityClient } from '~/utils/sanity.server';
-import { photoCategorySchema } from '~/schemas/photos';
-import { sanityImage } from '~/utils/sanity.image';
-import { PHOTO_CATEGORY_QUERY } from '~/queries/queries';
-import Collapsible from '~/components/pages/Collapsible';
-
-export async function loader() {
-  const data = await photoCategorySchema
+export default async function Photos() {
+  const data = photoCategorySchema
     .array()
-    .promise()
-    .parse(sanityClient.fetch(PHOTO_CATEGORY_QUERY));
-
-  return json(data);
-}
-
-export default function PhotosIndexRoute() {
-  const data = useLoaderData<typeof loader>();
-
-  const [dpr, setDpr] = useState(1);
-
-  useEffect(() => {
-    setDpr(window.devicePixelRatio);
-  }, []);
+    .parse(await sanityClient.fetch(PHOTO_CATEGORY_QUERY));
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -44,13 +28,13 @@ export default function PhotosIndexRoute() {
               {category.collections.map((collection) => (
                 <Link
                   key={collection._id}
-                  href={collection.slug}
+                  href={`photos/${collection.slug}`}
                   className="block relative overflow-hidden group"
                 >
                   <img
                     className="absolute inset-0 w-full h-full object-cover [image-rendering:auto]"
                     alt=""
-                    src={collection.thumbnail.lqip}
+                    src={collection.thumbnail.lqip ?? undefined}
                   />
 
                   <img
@@ -58,7 +42,7 @@ export default function PhotosIndexRoute() {
                     alt=""
                     src={sanityImage(collection.thumbnail.content)
                       .width(524)
-                      .dpr(dpr)
+                      .dpr(2)
                       .quality(80)
                       .url()}
                     loading="lazy"
