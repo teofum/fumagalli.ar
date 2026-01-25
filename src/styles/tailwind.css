@@ -48,21 +48,21 @@
 
   --color-*: initial;
   --color-transparent: transparent;
-  --color-current: currentColor;
+  --color-current: currentcolor;
   --color-inherit: inherit;
   --color-black: #000;
   --color-white: #fff;
-  --color-desktop: rgb(var(--color-desktop));
-  --color-highlight: rgb(var(--color-highlight));
-  --color-codeblock: rgb(var(--color-codeblock));
-  --color-surface: rgb(var(--color-surface));
-  --color-surface-dark: rgb(var(--color-dark));
-  --color-surface-darker: rgb(var(--color-darker));
-  --color-surface-light: rgb(var(--color-light));
-  --color-surface-lighter: rgb(var(--color-lighter));
-  --color-light: rgb(var(--color-text-light));
-  --color-disabled: rgb(var(--color-text-disabled));
-  --color-disabled-shadow: rgb(var(--color-text-disabled-shadow));
+  --color-desktop: rgb(var(--theme-desktop));
+  --color-highlight: rgb(var(--theme-highlight));
+  --color-codeblock: rgb(var(--theme-codeblock));
+  --color-surface: rgb(var(--theme-surface));
+  --color-surface-dark: rgb(var(--theme-dark));
+  --color-surface-darker: rgb(var(--theme-darker));
+  --color-surface-light: rgb(var(--theme-light));
+  --color-surface-lighter: rgb(var(--theme-lighter));
+  --color-light: rgb(var(--theme-text-light));
+  --color-disabled: rgb(var(--theme-text-disabled));
+  --color-disabled-shadow: rgb(var(--theme-text-disabled-shadow));
 
   --z-index-*: initial;
   --z-index-1000: 1000;
@@ -216,45 +216,27 @@
   --min-height-2_5: 0.625rem;
   --min-height-3_5: 0.875rem;
 
-  --background-color-default: rgb(var(--color-background));
-  --background-color-selection: rgb(var(--color-selection-bg));
-  --background-color-text: rgb(var(--color-text));
+  --background-color-default: rgb(var(--theme-background));
+  --background-color-selection: rgb(var(--theme-selection-bg));
+  --background-color-text: rgb(var(--theme-text));
 
-  --text-color-default: rgb(var(--color-text));
-  --text-color-title: rgb(var(--color-title));
-  --text-color-h1: rgb(var(--color-heading));
-  --text-color-h2: rgb(var(--color-heading-2));
-  --text-color-h3: rgb(var(--color-heading-3));
-  --text-color-accent: rgb(var(--color-text-accent));
-  --text-color-link: rgb(var(--color-text-link));
-  --text-color-visited: rgb(var(--color-text-visited));
-  --text-color-selection: rgb(var(--color-selection-text));
-  --text-color-background: rgb(var(--color-background));
+  --text-color-default: rgb(var(--theme-text));
+  --text-color-title: rgb(var(--theme-title));
+  --text-color-h1: rgb(var(--theme-heading));
+  --text-color-h2: rgb(var(--theme-heading-2));
+  --text-color-h3: rgb(var(--theme-heading-3));
+  --text-color-accent: rgb(var(--theme-text-accent));
+  --text-color-link: rgb(var(--theme-text-link));
+  --text-color-visited: rgb(var(--theme-text-visited));
+  --text-color-selection: rgb(var(--theme-selection-text));
+  --text-color-background: rgb(var(--theme-background));
 
-  --border-color-default: rgb(var(--color-text));
+  --border-color-default: rgb(var(--theme-text));
 
-  --drop-shadow-disabled: 1px 1px 0 rgb(var(--color-text-disabled-shadow));
+  --drop-shadow-disabled: 1px 1px 0 rgb(var(--theme-text-disabled-shadow));
 
   --animate-overlay-fadein: 200ms ease-out 0ms 1 normal both running
     overlay-fadein;
   --animate-overlay-fadeout: 200ms ease-out 0ms 1 normal both running
     overlay-fadeout;
-}
-
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
 }
