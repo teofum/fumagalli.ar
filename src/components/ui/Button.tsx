@@ -1,18 +1,18 @@
-import cn from "classnames";
-import Link from "next/link";
-import React from "react";
+import cn from 'classnames';
+import Link from 'next/link';
+import React from 'react';
 
 const Button = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<"button"> & { variant?: "normal" | "light" }
->(function Button({ children, className, variant = "normal", ...props }, ref) {
+  React.ComponentProps<'button'> & { variant?: 'normal' | 'light' }
+>(function Button({ children, className, variant = 'normal', ...props }, ref) {
   return (
     <button
       className={cn(
-        "button group",
+        'button group',
         {
-          "button-normal": variant === "normal",
-          "button-light": variant === "light",
+          'button-normal': variant === 'normal',
+          'button-light': variant === 'light',
         },
         className,
       )}
@@ -34,15 +34,15 @@ const Button = React.forwardRef<
 
 export const LinkButton = React.forwardRef<
   HTMLAnchorElement,
-  React.ComponentProps<typeof Link> & { variant?: "normal" | "light" }
->(function Button({ children, className, variant = "normal", ...props }, ref) {
+  React.ComponentProps<typeof Link> & { variant?: 'normal' | 'light' }
+>(function Button({ children, className, variant = 'normal', ...props }, ref) {
   return (
     <Link
       className={cn(
-        "button group text-center",
+        'button group text-center',
         {
-          "button-normal": variant === "normal",
-          "button-light": variant === "light",
+          'button-normal': variant === 'normal',
+          'button-light': variant === 'light',
         },
         className,
       )}
@@ -68,19 +68,17 @@ interface IconButtonProps extends React.ComponentProps<typeof Button> {
 }
 
 export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-  function IconButton(
-    { className, imageUrl, label = null, children, ...props },
-    ref,
-  ) {
+  function IconButton({ className, imageUrl, label = null, ...props }, ref) {
     return (
       <Button
         ref={ref}
-        className={cn("p-0.5 min-w-7", className, {
-          "w-14": label !== null,
+        className={cn('p-0.5 min-w-7', className, {
+          'w-14': label !== null,
         })}
         {...props}
       >
         <div className="relative mx-auto w-fit group-disabled:text-disabled">
+          {/*eslint-disable-next-line @next/next/no-img-element*/}
           <img
             className="grayscale group-hover:grayscale-0"
             src={imageUrl}
@@ -107,19 +105,17 @@ interface IconLinkButtonProps extends React.ComponentProps<typeof LinkButton> {
 export const IconLinkButton = React.forwardRef<
   HTMLAnchorElement,
   IconLinkButtonProps
->(function IconButton(
-  { className, imageUrl, label = null, children, ...props },
-  ref,
-) {
+>(function IconButton({ className, imageUrl, label = null, ...props }, ref) {
   return (
     <LinkButton
       ref={ref}
-      className={cn("p-0.5 min-w-7", className, {
-        "w-14": label !== null,
+      className={cn('p-0.5 min-w-7', className, {
+        'w-14': label !== null,
       })}
       {...props}
     >
       <div className="relative mx-auto w-fit group-disabled:text-disabled">
+        {/*eslint-disable-next-line @next/next/no-img-element*/}
         <img
           className="grayscale group-hover:grayscale-0"
           src={imageUrl}

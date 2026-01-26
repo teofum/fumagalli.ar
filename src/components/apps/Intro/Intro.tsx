@@ -4,6 +4,7 @@ import { Tab, TabContent, Tabs, TabsList } from '@/components/ui/Tabs';
 import { files } from '../Files';
 import RetroLink from '@/components/ui/Link';
 import Webring from '@/components/ui/Webring';
+import Image from 'next/image';
 
 const resources = '/fs/Applications/intro/resources';
 
@@ -50,7 +51,13 @@ export default function Intro() {
                 }
               >
                 <div className="flex flex-row items-center gap-2">
-                  <img src={`${resources}/articles.png`} alt="" />
+                  <Image
+                    width={32}
+                    height={32}
+                    unoptimized
+                    src={`${resources}/articles.png`}
+                    alt=""
+                  />
                   Articles
                 </div>
               </Button>
@@ -61,7 +68,13 @@ export default function Intro() {
                 }
               >
                 <div className="flex flex-row items-center gap-2">
-                  <img src={`${resources}/photos.png`} alt="" />
+                  <Image
+                    width={32}
+                    height={32}
+                    unoptimized
+                    src={`${resources}/photos.png`}
+                    alt=""
+                  />
                   Photos
                 </div>
               </Button>
@@ -72,14 +85,20 @@ export default function Intro() {
                 }
               >
                 <div className="flex flex-row items-center gap-2">
-                  <img src={`${resources}/projects.png`} alt="" />
+                  <Image
+                    width={32}
+                    height={32}
+                    unoptimized
+                    src={`${resources}/projects.png`}
+                    alt=""
+                  />
                   Work
                 </div>
               </Button>
             </div>
 
             <p className="mt-auto">
-              Let's build awesome things together!{' '}
+              Let&apos;s build awesome things together!{' '}
               <RetroLink href="mailto:teo.fum@outlook.com">
                 Get in touch
               </RetroLink>
@@ -93,7 +112,10 @@ export default function Intro() {
             />
           </div>
 
-          <img
+          <Image
+            width={199}
+            height={400}
+            unoptimized
             src={`${resources}/me2.png`}
             alt="me"
             className="self-end h-100"

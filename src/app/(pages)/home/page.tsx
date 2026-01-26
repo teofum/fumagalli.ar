@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import Button, { LinkButton } from '@/components/ui/Button';
 import Close from '@/components/ui/icons/Close';
 import RetroLink from '@/components/ui/Link';
@@ -11,7 +13,13 @@ export default function Home() {
       <div className="max-w-3xl mx-auto">
         <div className="bg-surface bevel-window p-1 flex flex-col font-sans text-base">
           <div className="select-none flex flex-row items-center gap-2 px-0.5 py-px mb-0.5">
-            <img src={`/fs/Applications/intro/icon_16.png`} alt="" />
+            <Image
+              width={16}
+              height={16}
+              unoptimized
+              src={`/fs/Applications/intro/icon_16.png`}
+              alt=""
+            />
 
             <div className="flex-1 h-1.5 border-t border-b border-light" />
 
@@ -47,19 +55,37 @@ export default function Home() {
               <div className="flex flex-row gap-1 my-2">
                 <LinkButton href="/articles" className="py-1 px-2 w-28">
                   <div className="flex flex-row items-center gap-2">
-                    <img src={`${resources}/articles.png`} alt="" />
+                    <Image
+                      width={32}
+                      height={32}
+                      unoptimized
+                      src={`${resources}/articles.png`}
+                      alt=""
+                    />
                     Articles
                   </div>
                 </LinkButton>
                 <LinkButton href="/photos" className="py-1 px-2 w-28">
                   <div className="flex flex-row items-center gap-2">
-                    <img src={`${resources}/photos.png`} alt="" />
+                    <Image
+                      width={32}
+                      height={32}
+                      unoptimized
+                      src={`${resources}/photos.png`}
+                      alt=""
+                    />
                     Photos
                   </div>
                 </LinkButton>
                 <LinkButton href="/projects" className="py-1 px-2 w-28">
                   <div className="flex flex-row items-center gap-2">
-                    <img src={`${resources}/projects.png`} alt="" />
+                    <Image
+                      width={32}
+                      height={32}
+                      unoptimized
+                      src={`${resources}/projects.png`}
+                      alt=""
+                    />
                     Projects
                   </div>
                 </LinkButton>
@@ -80,10 +106,13 @@ export default function Home() {
               />
             </div>
 
-            <img
+            <Image
+              width={199}
+              height={400}
+              unoptimized
               src={`${resources}/me2.png`}
               alt="me"
-              className="self-end h-100"
+              className="self-end h-100 [image-rendering:pixelated]"
             />
           </div>
         </div>

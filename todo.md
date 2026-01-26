@@ -7,7 +7,7 @@
 
 ## Pages
 
-- [ ] Static/mobile homepage
-- [ ] Blog page/posts
-- [ ] MDX pages
-- [ ] Photos page
+- [x] Static/mobile homepage
+- [x] Blog page/posts
+- [x] MDX pages
+- [x] Photos page

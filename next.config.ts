@@ -1,13 +1,16 @@
-import type { NextConfig } from "next";
-import createMDX from "@next/mdx";
+import type { NextConfig } from 'next';
+import createMDX from '@next/mdx';
 
 const nextConfig: NextConfig = {
-  pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
+  images: {
+    qualities: [75, 100],
+  },
   turbopack: {
     rules: {
-      "*.{txt,glsl,vs,fs,vert,frag}": {
-        loaders: ["raw-loader"],
-        as: "*.js",
+      '*.{txt,glsl,vs,fs,vert,frag}': {
+        loaders: ['raw-loader'],
+        as: '*.js',
       },
     },
   },
