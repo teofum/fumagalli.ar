@@ -1,4 +1,4 @@
-import createImageUrlBuilder, { SanityImageSource } from '@sanity/image-url';
+import { createImageUrlBuilder, SanityImageSource } from '@sanity/image-url';
 import type { ImageFile } from '@/schemas/file';
 import useSystemStore from '@/stores/system';
 
