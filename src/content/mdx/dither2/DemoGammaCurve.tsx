@@ -61,7 +61,12 @@ export default function DemoThreshold() {
     <div className="demo font-sans text-base">
       <div className="flex flex-col gap-0.5">
         <div className="bevel-content p-0.5">
-          <canvas className="w-64 h-40" ref={(el) => (canvas = el)} />
+          <canvas
+            className="w-64 h-40"
+            ref={(el) => {
+              canvas = el;
+            }}
+          />
         </div>
       </div>
 

@@ -1,11 +1,11 @@
-import type { Dispatch, ReducerAction } from 'react';
-import useDrag from '@/hooks/use-drag';
-import type solitaireReducer from './reducer';
-import type { Card } from './types';
+import type { Dispatch } from 'react';
 
-export default function useDragCard(
-  dispatch: Dispatch<ReducerAction<typeof solitaireReducer>>,
-) {
+import useDrag from '@/hooks/use-drag';
+
+import type { Card } from './types';
+import { Action } from './reducer';
+
+export default function useDragCard(dispatch: Dispatch<Action>) {
   const onDragStart = (ev: PointerEvent, target: EventTarget | null) => {
     const el = target as HTMLElement;
 

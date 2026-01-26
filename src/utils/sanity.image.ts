@@ -1,27 +1,26 @@
-import createImageUrlBuilder from "@sanity/image-url";
-import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
-import type { ImageFile } from "@/schemas/file";
-import useSystemStore from "@/stores/system";
+import createImageUrlBuilder, { SanityImageSource } from '@sanity/image-url';
+import type { ImageFile } from '@/schemas/file';
+import useSystemStore from '@/stores/system';
 
 const imageBuilder = createImageUrlBuilder({
-  projectId: "y9lopbef",
-  dataset: "production",
+  projectId: 'y9lopbef',
+  dataset: 'production',
 });
 
 export function sanityImage(
   source: SanityImageSource,
   autoFormat: boolean = true,
 ) {
-  if (autoFormat) return imageBuilder.image(source).auto("format");
+  if (autoFormat) return imageBuilder.image(source).auto('format');
   return imageBuilder.image(source);
 }
 
 export function getImageSize(file: ImageFile) {
   return (
     file.content.asset._ref
-      .split("-")
+      .split('-')
       .at(-2)
-      ?.split("x")
+      ?.split('x')
       .map((s) => parseInt(s, 10)) ?? [0, 0]
   );
 }

@@ -14,7 +14,7 @@ import Button from '@/components/ui/Button';
 import { useAppSettings } from '@/hooks/use-app-settings';
 import cn from 'classnames';
 import DitherLabPaletteEditor from './panels/DitherLabPaletteEditor';
-import { DitherLabDevice } from './types';
+import { DitherLabDevice, DitherLabSettings } from './types';
 import SoftwareRenderer from './renderers/SoftwareRenderer';
 import palettes from '@/dither/palettes';
 import {
@@ -408,7 +408,9 @@ export default function DitherLab() {
           <Menu.Sub label="Tool Panels">
             <Menu.RadioGroup
               value={settings.panelSide}
-              onValueChange={(value) => set({ panelSide: value as any })}
+              onValueChange={(value) =>
+                set({ panelSide: value as DitherLabSettings['panelSide'] })
+              }
             >
               <Menu.RadioItem label="Left" value="left" />
               <Menu.RadioItem label="Right" value="right" />

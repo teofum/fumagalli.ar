@@ -4,9 +4,9 @@ import type { PaintState } from './types';
 import getPixelData from './utils/getPixelData';
 
 export default function useResizeSelection(
-  containerRef: React.RefObject<HTMLDivElement>,
-  selectionRef: React.RefObject<HTMLDivElement>,
-  selectionCanvasRef: React.RefObject<HTMLCanvasElement>,
+  containerRef: React.RefObject<HTMLDivElement | null>,
+  selectionRef: React.RefObject<HTMLDivElement | null>,
+  selectionCanvasRef: React.RefObject<HTMLCanvasElement | null>,
   state: PaintState,
   setState: (value: Partial<PaintState>) => void,
   direction: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw',
@@ -81,7 +81,7 @@ export default function useResizeSelection(
     }
   };
 
-  const onDragEnd = (ev: PointerEvent) => {
+  const onDragEnd = () => {
     const el = selectionRef.current;
     const container = containerRef.current;
     if (!el || !container) return;

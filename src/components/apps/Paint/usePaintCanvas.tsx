@@ -24,6 +24,7 @@ export default function usePaintCanvas(
 
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const scratchRef = useRef<any>({});
   const scratchCanvasRef = useRef<HTMLCanvasElement>(null);
 

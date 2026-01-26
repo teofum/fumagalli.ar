@@ -2,8 +2,8 @@ import useDrag from '@/hooks/use-drag';
 import type { PaintState } from './types';
 
 export default function useMoveSelection(
-  containerRef: React.RefObject<HTMLDivElement>,
-  selectionRef: React.RefObject<HTMLDivElement>,
+  containerRef: React.RefObject<HTMLDivElement | null>,
+  selectionRef: React.RefObject<HTMLDivElement | null>,
   state: PaintState,
   setState: (value: Partial<PaintState>) => void,
 ) {

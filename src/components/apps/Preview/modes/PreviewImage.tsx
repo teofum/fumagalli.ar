@@ -1,22 +1,24 @@
-import ScrollContainer from "@/components/ui/ScrollContainer";
-import { useAppState, useWindow } from "@/components/desktop/Window/context";
-import { useRef } from "react";
-import Button from "@/components/ui/Button";
-import { Toolbar, ToolbarGroup } from "@/components/ui/Toolbar";
-import useDesktopStore from "@/stores/desktop";
-import { MAX_INITIAL_SIZE, UI_SIZE, ZOOM_STOPS } from "../constants";
-import Menu from "@/components/ui/Menu";
-import type { PreviewModeProps } from "../types";
-import { useImageSize, useImageUrl } from "@/utils/sanity.image";
-import type { ImageFile } from "@/schemas/file";
+import { useRef } from 'react';
+
+import { useAppState, useWindow } from '@/components/desktop/Window/context';
+import Button from '@/components/ui/Button';
+import Menu from '@/components/ui/Menu';
+import ScrollContainer from '@/components/ui/ScrollContainer';
+import { Toolbar, ToolbarGroup } from '@/components/ui/Toolbar';
+import type { ImageFile } from '@/schemas/file';
+import useDesktopStore from '@/stores/desktop';
+import { useImageSize, useImageUrl } from '@/utils/sanity.image';
+
+import { MAX_INITIAL_SIZE, UI_SIZE, ZOOM_STOPS } from '../constants';
+import type { PreviewModeProps } from '../types';
 
 export default function PreviewImage({ commonMenu }: PreviewModeProps) {
   const { id, minWidth, minHeight } = useWindow();
   const { moveAndResize } = useDesktopStore();
 
-  const [state, setState] = useAppState("preview");
+  const [state, setState] = useAppState('preview');
 
-  if (state.file?._type !== "fileImage") throw new Error("Wrong file type");
+  if (state.file?._type !== 'fileImage') throw new Error('Wrong file type');
   const imageUrl = useImageUrl(state.file as ImageFile);
   const [imageWidth, imageHeight] = useImageSize(state.file);
 
@@ -78,7 +80,7 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
     setZoom(nextZoomStop ?? 1);
   };
 
-  const zoomTo = (mode: "fit" | "fill") => {
+  const zoomTo = (mode: 'fit' | 'fill') => {
     if (!viewportRef.current || !imageRef.current) return;
 
     const { naturalWidth, naturalHeight } = imageRef.current;
@@ -89,7 +91,7 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
     const zoomToFitHeight = (height - 18) / naturalHeight;
 
     setZoom(
-      mode === "fit"
+      mode === 'fit'
         ? Math.min(zoomToFitWidth, zoomToFitHeight)
         : Math.max(zoomToFitWidth, zoomToFitHeight),
     );
@@ -113,8 +115,8 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
 
           <Menu.Separator />
 
-          <Menu.Item label="Zoom to fit" onSelect={() => zoomTo("fit")} />
-          <Menu.Item label="Zoom to fill" onSelect={() => zoomTo("fill")} />
+          <Menu.Item label="Zoom to fit" onSelect={() => zoomTo('fit')} />
+          <Menu.Item label="Zoom to fill" onSelect={() => zoomTo('fill')} />
         </Menu.Menu>
       </Menu.Bar>
 
@@ -148,14 +150,14 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
           <Button
             variant="light"
             className="py-1 px-2"
-            onClick={() => zoomTo("fit")}
+            onClick={() => zoomTo('fit')}
           >
             Fit
           </Button>
           <Button
             variant="light"
             className="py-1 px-2"
-            onClick={() => zoomTo("fill")}
+            onClick={() => zoomTo('fill')}
           >
             Fill
           </Button>
@@ -168,7 +170,7 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
             <img
               className="absolute inset-0 w-full h-full object-cover"
               alt=""
-              src={state.file.lqip}
+              src={state.file.lqip ?? undefined}
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <div className="bg-surface bevel px-6 py-3">Loading...</div>

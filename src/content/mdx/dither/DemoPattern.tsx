@@ -71,7 +71,12 @@ export default function DemoPattern({
   return (
     <div className="demo">
       <div className="bevel-content p-0.5">
-        <canvas className="w-48 h-48" ref={(el) => (canvas = el)} />
+        <canvas
+          className="w-48 h-48"
+          ref={(el) => {
+            canvas = el;
+          }}
+        />
       </div>
 
       <div className="demo-controls">

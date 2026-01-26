@@ -53,14 +53,14 @@ export default function ImageGrid({
         return (
           <figure
             key={img.src}
-            onClick={() =>
-              launch(
-                preview({
-                  file: file(fallback),
-                  filePath: `${basePath}${fallback}`,
-                }),
-              )
-            }
+            // onClick={() =>
+            //   launch(
+            //     preview({
+            //       file: file(fallback),
+            //       filePath: `${basePath}${fallback}`,
+            //     }),
+            //   )
+            // }
           >
             <div className="bevel-content p-0.5">
               <picture>

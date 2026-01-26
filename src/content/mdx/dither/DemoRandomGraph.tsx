@@ -165,7 +165,12 @@ export default function DemoThreshold() {
         </div>
 
         <div className="bevel-content p-0.5">
-          <canvas className="w-64 h-40" ref={(el) => (canvas = el)} />
+          <canvas
+            className="w-64 h-40"
+            ref={(el) => {
+              canvas = el;
+            }}
+          />
         </div>
       </div>
 

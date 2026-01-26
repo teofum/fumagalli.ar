@@ -69,7 +69,7 @@ type UndoAction = {
   type: 'undo';
 };
 
-type Action =
+export type Action =
   | DealAction
   | DrawAction
   | UndrawAction

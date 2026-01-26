@@ -1,14 +1,14 @@
-import { useEffect, useMemo } from "react";
-import cn from "classnames";
+import { useEffect, useMemo } from 'react';
+import cn from 'classnames';
 
-import { useAppState } from "@/components/desktop/Window/context";
+import { useAppState } from '@/components/desktop/Window/context';
 
 import useGlRenderer, {
   type RenderSettings,
-} from "@/dither/renderers/useGlRenderer";
-import { gpuProcess } from "../process";
-import ScrollContainer from "@/components/ui/ScrollContainer";
-import { ToolbarGroup } from "@/components/ui/Toolbar";
+} from '@/dither/renderers/useGlRenderer';
+import { gpuProcess } from '../process';
+import ScrollContainer from '@/components/ui/ScrollContainer';
+import { ToolbarGroup } from '@/components/ui/Toolbar';
 
 const clistSize: { [key: string]: number | undefined } = {
   high: 64,
@@ -20,12 +20,12 @@ export type RendererProps = React.PropsWithChildren<{
   rt: HTMLCanvasElement | null;
   setRt: React.Dispatch<React.SetStateAction<HTMLCanvasElement | null>>;
   img: HTMLImageElement | null;
-  status: "ready" | "rendering" | "done";
+  status: 'ready' | 'rendering' | 'done';
   setStatus: React.Dispatch<
-    React.SetStateAction<"ready" | "rendering" | "done">
+    React.SetStateAction<'ready' | 'rendering' | 'done'>
   >;
   setRenderTime: React.Dispatch<React.SetStateAction<number>>;
-  viewportRef: React.RefObject<HTMLDivElement>;
+  viewportRef: React.RefObject<HTMLDivElement | null>;
 }>;
 
 export default function GlRenderer({
@@ -35,12 +35,13 @@ export default function GlRenderer({
   viewportRef,
   children,
 }: RendererProps) {
-  const [state, setState] = useAppState("dither");
+  const [state, setState] = useAppState('dither');
 
   const settings = useMemo<RenderSettings>(
     () => ({
       clistSize: clistSize[state.settings.quality] ?? 64,
-      threshold: (state.settings.threshold as any) ?? "bayer8",
+      threshold:
+        (state.settings.threshold as RenderSettings['threshold']) ?? 'bayer8',
     }),
     [state.settings],
   );
@@ -65,7 +66,7 @@ export default function GlRenderer({
   ]);
 
   useEffect(() => {
-    console.log("resize");
+    console.log('resize');
 
     // Get the DOM element for the render target canvas
     if (!rt) return;
@@ -74,15 +75,15 @@ export default function GlRenderer({
     let [renderWidth, renderHeight] = [0, 0];
 
     switch (state.resizeMode) {
-      case "none":
+      case 'none':
         renderWidth = iw;
         renderHeight = ih;
         break;
-      case "stretch":
+      case 'stretch':
         renderWidth = state.width;
         renderHeight = state.height;
         break;
-      case "fit": {
+      case 'fit': {
         const wRatio = Math.min(state.width / iw, 1);
         const hRatio = Math.min(state.height / ih, 1);
         const resizeFactor = Math.min(wRatio, hRatio);
@@ -114,7 +115,7 @@ export default function GlRenderer({
         <div className="scroll-center">
           <canvas
             ref={(el) => setRt(el)}
-            className={cn("border border-default", { hidden: !img })}
+            className={cn('border border-default', { hidden: !img })}
             width={state.renderWidth}
             height={state.renderHeight}
             style={{ minWidth: `${state.renderWidth * state.zoom + 2}px` }}
