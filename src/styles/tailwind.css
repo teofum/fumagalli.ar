@@ -1,0 +1,98 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-*: initial;
+  --font-sans: 'PX Sans Nouveaux';
+  --font-display: 'DOS/V re. JPN24';
+  --font-display-text: Paradise132;
+  --font-text: 'IBM Plex Sans';
+  --font-heading: 'IBM Plex Sans';
+  --font-title: 'DM Serif Display';
+  --font-mono: 'IBM Plex Mono';
+  --font-minesweeper: 'Nix8810 M15';
+  --font-bsod: 'IBM VGA';
+
+  --text-*: initial;
+  --text-base: 0.5rem;
+  --text-base--line-height: 1rem;
+  --text-lg: 0.75rem;
+  --text-lg--line-height: 1rem;
+  --text-xl: 1rem;
+  --text-xl--line-height: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 1;
+  --text-3xl: 2rem;
+  --text-3xl--line-height: 1;
+  --text-4xl: 3rem;
+  --text-4xl--line-height: 1;
+  --text-content-xs: 0.75rem;
+  --text-content-xs--line-height: 1rem;
+  --text-content-sm: 0.875rem;
+  --text-content-sm--line-height: 1.25rem;
+  --text-content-base: 1rem;
+  --text-content-base--line-height: 1.5rem;
+  --text-content-lg: 1.125rem;
+  --text-content-lg--line-height: 1.75rem;
+  --text-content-xl: 1.25rem;
+  --text-content-xl--line-height: 2rem;
+  --text-content-2xl: 1.5rem;
+  --text-content-2xl--line-height: 1;
+  --text-content-3xl: 2rem;
+  --text-content-3xl--line-height: 1;
+  --text-content-4xl: 2.5rem;
+  --text-content-4xl--line-height: 1;
+  --text-content-5xl: 3rem;
+  --text-content-5xl--line-height: 1;
+  --text-content-6xl: 4rem;
+  --text-content-6xl--line-height: 1;
+
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentcolor;
+  --color-inherit: inherit;
+  --color-black: #000;
+  --color-white: #fff;
+  --color-desktop: rgb(var(--theme-desktop));
+  --color-highlight: rgb(var(--theme-highlight));
+  --color-codeblock: rgb(var(--theme-codeblock));
+  --color-surface: rgb(var(--theme-surface));
+  --color-surface-dark: rgb(var(--theme-dark));
+  --color-surface-darker: rgb(var(--theme-darker));
+  --color-surface-light: rgb(var(--theme-light));
+  --color-surface-lighter: rgb(var(--theme-lighter));
+  --color-light: rgb(var(--theme-text-light));
+  --color-disabled: rgb(var(--theme-text-disabled));
+  --color-disabled-shadow: rgb(var(--theme-text-disabled-shadow));
+
+  --z-index-*: initial;
+  --z-index-1000: 1000;
+  --z-index-2000: 2000;
+  --z-index-3000: 3000;
+  --z-index-4000: 4000;
+  --z-index-5000: 5000;
+  --z-index-6000: 6000;
+
+  --background-color-default: rgb(var(--theme-background));
+  --background-color-selection: rgb(var(--theme-selection-bg));
+  --background-color-text: rgb(var(--theme-text));
+
+  --text-color-default: rgb(var(--theme-text));
+  --text-color-title: rgb(var(--theme-title));
+  --text-color-h1: rgb(var(--theme-heading));
+  --text-color-h2: rgb(var(--theme-heading-2));
+  --text-color-h3: rgb(var(--theme-heading-3));
+  --text-color-accent: rgb(var(--theme-text-accent));
+  --text-color-link: rgb(var(--theme-text-link));
+  --text-color-visited: rgb(var(--theme-text-visited));
+  --text-color-selection: rgb(var(--theme-selection-text));
+  --text-color-background: rgb(var(--theme-background));
+
+  --border-color-default: rgb(var(--theme-text));
+
+  --drop-shadow-disabled: 1px 1px 0 rgb(var(--theme-text-disabled-shadow));
+
+  --animate-overlay-fadein: 200ms ease-out 0ms 1 normal both running
+    overlay-fadein;
+  --animate-overlay-fadeout: 200ms ease-out 0ms 1 normal both running
+    overlay-fadeout;
+}

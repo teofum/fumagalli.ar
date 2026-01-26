@@ -1,0 +1,16 @@
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const difficulty = url.searchParams.get('difficulty') ?? 'medium';
+
+  // Yes, this loads an entire 300KB JSON file each time. Yes, it's dumb. It's
+  // also fast enough that I don't need to bother with a database.
+  const res = await fetch(
+    `${url.origin}/fs/Applications/sudoku/resources/sudoku_${difficulty}.json`,
+  );
+  const data = (await res.json()) as { name: string; data: number[] }[];
+
+  const i = Math.floor(Math.random() * data.length);
+  const sudoku = data[i];
+
+  return Response.json({ data: sudoku.data, difficulty, number: i + 1 });
+}

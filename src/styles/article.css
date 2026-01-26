@@ -1,0 +1,25 @@
+@utility heading1 {
+  @apply font-title text-content-4xl text-h1 mb-8;
+}
+
+@utility heading2 {
+  @apply font-heading text-content-2xl font-semibold tracking-tight text-h2 mt-6 mb-4;
+}
+
+@utility heading3 {
+  @apply font-heading text-content-lg font-semibold tracking-tight text-h3 mt-3;
+}
+
+@utility paragraph {
+  @apply text-default mt-2;
+}
+
+@utility blockquote {
+  @apply bg-codeblock rounded-md p-4 pt-2 pl-8 my-4 relative;
+
+  &::after {
+    content: '“';
+
+    @apply absolute top-3 -left-2 text-[5rem] font-title;
+  }
+}
