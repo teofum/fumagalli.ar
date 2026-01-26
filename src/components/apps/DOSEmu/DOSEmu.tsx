@@ -1,25 +1,28 @@
-import { useState } from "react";
-import type { DosPlayer as Instance } from "js-dos";
+import { useState } from 'react';
+import type { DosPlayer as Instance } from 'js-dos';
 
-import { useAppState, useWindow } from "@/components/desktop/Window/context";
-import DosPlayer from "./DosPlayer";
-import Menu from "@/components/ui/Menu";
-import { files } from "../Files";
+import { useAppState, useWindow } from '@/components/desktop/Window/context';
+import DosPlayer from './DosPlayer';
+import Menu from '@/components/ui/Menu';
+import { files } from '../Files';
 
 export default function DOSEmu() {
   const { close, modal } = useWindow();
 
-  const [state, setState] = useAppState("dos");
+  const [state, setState] = useAppState('dos');
   const [dos, setDos] = useState<Instance | null>(null);
 
   const open = () => {
     modal(
       files({
-        path: "/Applications/dos/games",
-        typeFilter: ["dos"],
-        modalCallback: (file, filePath) => {
-          if (file.type === "dos")
-            setState({ bundleUrl: `/fs${filePath}`, title: file.name });
+        folderId: 'd27a82f7-135b-4145-bc58-1ec3ff5a6315',
+        typeFilter: ['fileDos'],
+        modalCallback: (stub) => {
+          if (stub._type === 'fileDos')
+            setState({
+              bundleUrl: `/fs/Applications/dos/games/${stub.name}`,
+              title: stub.name,
+            });
         },
       }),
     );
@@ -60,8 +63,8 @@ export default function DOSEmu() {
       <div className="flex flex-row gap-0.5">
         <div className="grow bg-surface bevel-light-inset py-0.5 px-1">
           {dos?.autolock
-            ? "Pointer lock ON | Press Esc to release"
-            : "Pointer lock OFF"}
+            ? 'Pointer lock ON | Press Esc to release'
+            : 'Pointer lock OFF'}
         </div>
         <div className="grow bg-surface bevel-light-inset py-0.5 px-1">
           {state.title}
