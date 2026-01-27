@@ -1,9 +1,10 @@
-import { sanityClient } from '@/utils/sanity.server';
+import Link from 'next/link';
+
+import Collapsible from '@/components/pages/Collapsible';
+import { PHOTO_CATEGORY_QUERY } from '@/queries/queries';
 import { photoCategorySchema } from '@/schemas/photos';
 import { sanityImage } from '@/utils/sanity.image';
-import { PHOTO_CATEGORY_QUERY } from '@/queries/queries';
-import Collapsible from '@/components/pages/Collapsible';
-import Link from 'next/link';
+import { sanityClient } from '@/utils/sanity.server';
 
 export default async function Photos() {
   const data = photoCategorySchema
