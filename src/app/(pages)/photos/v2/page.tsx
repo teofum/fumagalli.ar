@@ -34,9 +34,9 @@ function getSortFn(sort: SearchParams[string]) {
 export default async function Photos({ searchParams }: ServerComponentProps) {
   const { sort, ...filters } = await searchParams;
 
-  const query = PHOTOS_QUERY(filters);
-  console.log(query);
-  const photos = photoSchema.array().parse(await sanityClient.fetch(query));
+  const photos = photoSchema
+    .array()
+    .parse(await sanityClient.fetch(PHOTOS_QUERY(filters)));
 
   photos.sort(getSortFn(sort));
 
@@ -52,11 +52,11 @@ export default async function Photos({ searchParams }: ServerComponentProps) {
         <Filters tags={tags} defaultValues={filters} />
       </Collapsible>
 
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2 gap-2">
         {photos.map((photo) => (
           <Link
             key={photo._id}
-            href={`v2`}
+            href={`v2/${photo._id}`}
             className="block relative overflow-hidden group"
           >
             <img
@@ -71,11 +71,6 @@ export default async function Photos({ searchParams }: ServerComponentProps) {
               src={sanityImage(photo._id).width(524).dpr(2).quality(80).url()}
               loading="lazy"
             />
-
-            <div className="absolute left-0 bottom-0 w-full bg-default/20 pixelate-bg py-3 px-6 text-white">
-              {photo.originalFilename}{' '}
-              {photo.metadata.exif.dateTime.toLocaleDateString()}
-            </div>
           </Link>
         ))}
       </div>

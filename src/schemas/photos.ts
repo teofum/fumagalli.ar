@@ -85,6 +85,7 @@ export const photoSchema = z.object({
   path: z.string(),
 
   metadata: photoMetadataSchema,
+  tags: z.string().array(),
 });
 
 export type Photo = z.infer<typeof photoSchema>;

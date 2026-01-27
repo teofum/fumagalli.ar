@@ -51,6 +51,13 @@ export const PHOTOS_QUERY = (filters: SearchParams) => {
   `;
 };
 
+export const PHOTO_QUERY = (id: string) => `
+*[_type == "sanity.imageAsset" && _id == "${id}"][0] {
+  ...,
+  'tags': opt.media.tags[]->name.current,
+}
+`;
+
 export const TAGS_QUERY = `
 *[_type == "media.tag"].name.current
 `;
