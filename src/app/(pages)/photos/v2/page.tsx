@@ -8,6 +8,7 @@ import { SearchParams, ServerComponentProps } from '@/utils/types';
 
 import { fetchTags } from './use-tags';
 import Filters from './filters';
+import Collapsible from '@/components/pages/Collapsible';
 
 const DEFAULT_SORT_MODE: Record<string, 'desc' | 'asc'> = {
   date: 'desc',
@@ -47,18 +48,9 @@ export default async function Photos({ searchParams }: ServerComponentProps) {
         Photography
       </h1>
 
-      {Object.entries(tags).map(([group, tags]) => (
-        <div key={group}>
-          {group}: {tags.join(', ')}
-        </div>
-      ))}
-
-      <Filters tags={tags} defaultValues={filters} />
-
-      <p className="my-4">
-        Some of my work as a hobby photographer. Click any photo to view full
-        size.
-      </p>
+      <Collapsible title="Filters" className="mb-6">
+        <Filters tags={tags} defaultValues={filters} />
+      </Collapsible>
 
       <div className="grid grid-cols-2">
         {photos.map((photo) => (
