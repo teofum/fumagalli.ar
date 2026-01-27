@@ -2,6 +2,7 @@
 
 import {
   Combobox,
+  ComboboxButton,
   ComboboxInput,
   ComboboxOption,
   ComboboxOptions,
@@ -9,16 +10,19 @@ import {
   Label,
 } from '@headlessui/react';
 import { useState } from 'react';
-import { Check, X } from 'lucide-react';
+import { Check, ChevronDown, X } from 'lucide-react';
 
 import { SearchParams } from '@/utils/types';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 function FilterCombobox({
   tags,
   defaultValue = [],
+  onChange = () => {},
 }: {
   tags: string[];
   defaultValue?: string | string[];
+  onChange?: (value: string[]) => void;
 }) {
   const defaultSelection =
     typeof defaultValue === 'string' ? [defaultValue] : defaultValue;
@@ -26,19 +30,24 @@ function FilterCombobox({
   const [selection, setSelection] = useState(defaultSelection);
   const [query, setQuery] = useState('');
 
+  const select = (s: string[]) => {
+    setSelection(s);
+    onChange(s);
+  };
+
   const filteredTags = query
     ? tags.filter((tag) => tag.toLowerCase().includes(query.toLowerCase()))
     : tags;
 
-  const remove = (tag: string) =>
-    setSelection((s) => s.filter((t) => t !== tag));
+  const remove = (tag: string) => select(selection.filter((t) => t !== tag));
+  const removeLast = () => select(selection.slice(0, -1));
 
   return (
     <div className="border min-w-0 p-1 has-focus-visible:border-teal-700 has-focus-visible:outline-2 outline-teal-400/25">
       <Combobox
         multiple
         value={selection}
-        onChange={setSelection}
+        onChange={select}
         onClose={() => setQuery('')}
       >
         <ul className="flex flex-row gap-1 flex-wrap min-w-0">
@@ -65,7 +74,22 @@ function FilterCombobox({
           <ComboboxInput
             className="grow outline-none h-8.5"
             onChange={(ev) => setQuery(ev.target.value)}
+            onKeyDown={(ev) => {
+              if (
+                ev.key === 'Backspace' &&
+                ev.currentTarget.value.length === 0
+              ) {
+                ev.preventDefault();
+                removeLast();
+              }
+            }}
           />
+          <ComboboxButton className="hover:bg-current/10 w-8.5 grid place-items-center group">
+            <ChevronDown
+              size={16}
+              className="group-data-open:rotate-180 transition-transform duration-200"
+            />
+          </ComboboxButton>
         </ul>
         <ComboboxOptions
           anchor={{ to: 'bottom start', gap: 4 }}
@@ -94,7 +118,19 @@ export default function Filters({
   tags: { [key: string]: string[] };
   defaultValues: SearchParams;
 }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const search = useSearchParams();
+
   const displayTags = Object.keys(tags).filter((group) => group !== 'type');
+
+  const changeHandler = (groupKey: string, tags: string[]) => {
+    const newSearch = new URLSearchParams(search);
+    newSearch.delete(groupKey);
+    for (const tag of tags) newSearch.append(groupKey, tag);
+
+    router.replace(`${pathname}?${newSearch.toString()}`, { scroll: false });
+  };
 
   return (
     <div className="grid grid-cols-[20%_1fr] gap-2 mt-4">
@@ -107,6 +143,7 @@ export default function Filters({
           <FilterCombobox
             tags={tags[groupKey]}
             defaultValue={defaultValues[groupKey]}
+            onChange={(tags) => changeHandler(groupKey, tags)}
           />
         </Field>
       ))}
