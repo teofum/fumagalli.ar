@@ -37,7 +37,15 @@ export const PHOTOS_QUERY = (filters: SearchParams) => {
     const values = typeof value === 'string' ? [value] : value;
     const tagValueArray = `[${values.map((v) => `'${filter}:${v}'`).join(', ')}]`;
 
-    return `&& references(*[_type == 'media.tag' && name.current in ${tagValueArray}]._id)`;
+    const filterString = `references(*[_type == 'media.tag' && name.current in ${tagValueArray}]._id)`;
+
+    // Special handling for lens filter, which uses a combination of tags and EXIF data
+    if (filter === 'lens') {
+      const exifValueArray = `[${values.map((v) => `'${v}'`).join(', ')}]`;
+      return `&& (${filterString} || metadata.exif.LensModel in ${exifValueArray})`;
+    }
+
+    return `&& ${filterString}`;
   });
 
   return `
@@ -56,6 +64,10 @@ export const PHOTO_QUERY = (id: string) => `
   ...,
   'tags': opt.media.tags[]->name.current,
 }
+`;
+
+export const EXIF_QUERY = `
+*[_type == "sanity.imageAsset" && references(*[_type == 'media.tag' && name.current == 'type:Photo']._id)].metadata.exif
 `;
 
 export const TAGS_QUERY = `

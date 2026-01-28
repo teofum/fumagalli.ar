@@ -6,9 +6,10 @@ import { sanityImage } from '@/utils/sanity.image';
 import { sanityClient } from '@/utils/sanity.server';
 import { SearchParams, ServerComponentProps } from '@/utils/types';
 
-import { fetchTags } from './use-tags';
+import { fetchTags } from './fetch-tags';
 import Filters from './filters';
 import Collapsible from '@/components/pages/Collapsible';
+import { fetchExifStats } from './fetch-exif-stats';
 
 const DEFAULT_SORT_MODE: Record<string, 'desc' | 'asc'> = {
   date: 'desc',
@@ -41,6 +42,7 @@ export default async function Photos({ searchParams }: ServerComponentProps) {
   photos.sort(getSortFn(sort));
 
   const tags = await fetchTags();
+  const exif = await fetchExifStats();
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -57,7 +59,7 @@ export default async function Photos({ searchParams }: ServerComponentProps) {
         title="Filters"
         className="mb-6 sticky top-0 z-100 bg-default backdrop-blur-lg"
       >
-        <Filters tags={tags} defaultValues={filters} />
+        <Filters tags={tags} defaultValues={filters} exif={exif} />
       </Collapsible>
 
       <div className="grid grid-cols-2 gap-2">

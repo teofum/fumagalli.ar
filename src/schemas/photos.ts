@@ -39,37 +39,41 @@ const EXIF_EXPOSURE_PROGRAMS = [
   'bulb',
 ] as const;
 
+export const exifMetadataSchema = z
+  .object({
+    DateTimeOriginal: z.string(),
+    LensModel: z.string().optional(),
+
+    FocalLength: z.number().optional(),
+    FNumber: z.number().optional(),
+    ExposureTime: z.number(),
+    ISO: z.number(),
+    ExposureBiasValue: z.number(),
+
+    ExposureProgram: z.number(),
+  })
+  .transform((rawExif) => ({
+    dateTime: new Date(rawExif.DateTimeOriginal),
+    lens: rawExif.LensModel,
+
+    focalLength: rawExif.FocalLength,
+    aperture: rawExif.FNumber,
+    shutterSpeed: rawExif.ExposureTime,
+    iso: rawExif.ISO,
+    exposureBias: rawExif.ExposureBiasValue,
+
+    mode: EXIF_EXPOSURE_PROGRAMS[rawExif.ExposureProgram],
+  }));
+
+export type EXIF = z.infer<typeof exifMetadataSchema>;
+
 const photoMetadataSchema = z.object({
   dimensions: z.object({
     height: z.number(),
     width: z.number(),
     aspectRatio: z.number(),
   }),
-  exif: z
-    .object({
-      DateTimeOriginal: z.string(),
-      LensModel: z.string().optional(),
-
-      FocalLength: z.number().optional(),
-      FNumber: z.number().optional(),
-      ExposureTime: z.number(),
-      ISO: z.number(),
-      ExposureBiasValue: z.number(),
-
-      ExposureProgram: z.number(),
-    })
-    .transform((rawExif) => ({
-      dateTime: new Date(rawExif.DateTimeOriginal),
-      lens: rawExif.LensModel,
-
-      focalLength: rawExif.FocalLength,
-      aperture: rawExif.FNumber,
-      shutterSpeed: rawExif.ExposureTime,
-      iso: rawExif.ISO,
-      exposureBias: rawExif.ExposureBiasValue,
-
-      mode: EXIF_EXPOSURE_PROGRAMS[rawExif.ExposureProgram],
-    })),
+  exif: exifMetadataSchema,
   lqip: z.string(),
 });
 

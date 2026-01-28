@@ -14,6 +14,7 @@ import { Check, ChevronDown, X } from 'lucide-react';
 
 import { SearchParams } from '@/utils/types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ExifStats } from './fetch-exif-stats';
 
 function FilterCombobox({
   tags,
@@ -117,11 +118,13 @@ function FilterCombobox({
 const BASIC_TAGS = ['place', 'subject'];
 
 export default function Filters({
-  tags,
+  tags: allTags,
   defaultValues,
+  exif,
 }: {
   tags: { [key: string]: string[] };
   defaultValues: SearchParams;
+  exif: ExifStats;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -129,9 +132,14 @@ export default function Filters({
 
   const [all, setAll] = useState(false);
 
+  // Lens tags are handled specially
+  const { lens, ...tags } = allTags;
+
   const displayTags = Object.keys(tags).filter((group) => group !== 'type');
   const basicTags = displayTags.filter((tag) => BASIC_TAGS.includes(tag));
   const otherTags = displayTags.filter((tag) => !BASIC_TAGS.includes(tag));
+
+  const lensOptions = [...exif.lenses, ...(lens ?? [])];
 
   const changeHandler = (groupKey: string, tags: string[]) => {
     const newSearch = new URLSearchParams(search);
@@ -172,6 +180,14 @@ export default function Filters({
               />
             </Field>
           ))}
+          <Field className="grid grid-cols-subgrid col-start-1 -col-end-1 items-baseline">
+            <Label className="capitalize">Lens</Label>
+            <FilterCombobox
+              tags={lensOptions}
+              defaultValue={defaultValues['lens']}
+              onChange={(tags) => changeHandler('lens', tags)}
+            />
+          </Field>
         </>
       ) : null}
 
