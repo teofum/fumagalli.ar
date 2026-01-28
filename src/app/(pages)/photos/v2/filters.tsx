@@ -114,6 +114,8 @@ function FilterCombobox({
   );
 }
 
+const BASIC_TAGS = ['place', 'subject'];
+
 export default function Filters({
   tags,
   defaultValues,
@@ -125,7 +127,11 @@ export default function Filters({
   const router = useRouter();
   const search = useSearchParams();
 
+  const [all, setAll] = useState(false);
+
   const displayTags = Object.keys(tags).filter((group) => group !== 'type');
+  const basicTags = displayTags.filter((tag) => BASIC_TAGS.includes(tag));
+  const otherTags = displayTags.filter((tag) => !BASIC_TAGS.includes(tag));
 
   const changeHandler = (groupKey: string, tags: string[]) => {
     const newSearch = new URLSearchParams(search);
@@ -136,8 +142,8 @@ export default function Filters({
   };
 
   return (
-    <div className="grid grid-cols-[20%_1fr] gap-2 p-4 border-b">
-      {displayTags.map((groupKey) => (
+    <div className="grid grid-cols-[8rem_1fr] gap-2 p-4 pb-2 border-b">
+      {basicTags.map((groupKey) => (
         <Field
           key={groupKey}
           className="grid grid-cols-subgrid col-start-1 -col-end-1 items-baseline"
@@ -150,6 +156,33 @@ export default function Filters({
           />
         </Field>
       ))}
+
+      {all ? (
+        <>
+          {otherTags.map((groupKey) => (
+            <Field
+              key={groupKey}
+              className="grid grid-cols-subgrid col-start-1 -col-end-1 items-baseline"
+            >
+              <Label className="capitalize">{groupKey}</Label>
+              <FilterCombobox
+                tags={tags[groupKey]}
+                defaultValue={defaultValues[groupKey]}
+                onChange={(tags) => changeHandler(groupKey, tags)}
+              />
+            </Field>
+          ))}
+        </>
+      ) : null}
+
+      <div className="col-start-1 -col-end-1 flex flex-row justify-end">
+        <button
+          className="text-content-sm px-2 py-1 hover:bg-current/10 w-full"
+          onClick={() => setAll(!all)}
+        >
+          Show {all ? 'less' : 'more'}
+        </button>
+      </div>
     </div>
   );
 }
