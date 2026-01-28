@@ -48,7 +48,10 @@ export default async function Photos({ searchParams }: ServerComponentProps) {
         Photography
       </h1>
 
-      <Collapsible title="Filters" className="mb-6">
+      <Collapsible
+        title="Filters"
+        className="mb-6 sticky top-0 z-100 bg-default backdrop-blur-lg"
+      >
         <Filters tags={tags} defaultValues={filters} />
       </Collapsible>
 

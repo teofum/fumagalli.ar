@@ -39,6 +39,8 @@ function FilterCombobox({
     ? tags.filter((tag) => tag.toLowerCase().includes(query.toLowerCase()))
     : tags;
 
+  filteredTags.sort();
+
   const remove = (tag: string) => select(selection.filter((t) => t !== tag));
   const removeLast = () => select(selection.slice(0, -1));
 
@@ -46,6 +48,7 @@ function FilterCombobox({
     <div className="border min-w-0 p-1 has-focus-visible:border-teal-700 has-focus-visible:outline-2 outline-teal-400/25">
       <Combobox
         multiple
+        immediate
         value={selection}
         onChange={select}
         onClose={() => setQuery('')}
@@ -93,7 +96,7 @@ function FilterCombobox({
         </ul>
         <ComboboxOptions
           anchor={{ to: 'bottom start', gap: 4 }}
-          className="font-text text-content-base bg-default/70 backdrop-blur-lg border min-w-80 select-none"
+          className="font-text text-content-base bg-default/70 backdrop-blur-lg border min-w-80 select-none z-200"
         >
           {filteredTags.map((tag) => (
             <ComboboxOption
@@ -133,13 +136,13 @@ export default function Filters({
   };
 
   return (
-    <div className="grid grid-cols-[20%_1fr] gap-2 mt-4">
+    <div className="grid grid-cols-[20%_1fr] gap-2 p-4 border-b">
       {displayTags.map((groupKey) => (
         <Field
           key={groupKey}
           className="grid grid-cols-subgrid col-start-1 -col-end-1 items-baseline"
         >
-          <Label>{groupKey}</Label>
+          <Label className="capitalize">{groupKey}</Label>
           <FilterCombobox
             tags={tags[groupKey]}
             defaultValue={defaultValues[groupKey]}
