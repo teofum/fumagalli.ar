@@ -46,12 +46,6 @@
   --text-content-6xl: 4rem;
   --text-content-6xl--line-height: 1;
 
-  --color-*: initial;
-  --color-transparent: transparent;
-  --color-current: currentcolor;
-  --color-inherit: inherit;
-  --color-black: #000;
-  --color-white: #fff;
   --color-desktop: rgb(var(--theme-desktop));
   --color-highlight: rgb(var(--theme-highlight));
   --color-codeblock: rgb(var(--theme-codeblock));
@@ -64,7 +58,6 @@
   --color-disabled: rgb(var(--theme-text-disabled));
   --color-disabled-shadow: rgb(var(--theme-text-disabled-shadow));
 
-  --z-index-*: initial;
   --z-index-1000: 1000;
   --z-index-2000: 2000;
   --z-index-3000: 3000;
