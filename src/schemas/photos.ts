@@ -48,10 +48,10 @@ const photoMetadataSchema = z.object({
   exif: z
     .object({
       DateTimeOriginal: z.string(),
-      LensModel: z.string(),
+      LensModel: z.string().optional(),
 
-      FocalLength: z.number(),
-      FNumber: z.number(),
+      FocalLength: z.number().optional(),
+      FNumber: z.number().optional(),
       ExposureTime: z.number(),
       ISO: z.number(),
       ExposureBiasValue: z.number(),

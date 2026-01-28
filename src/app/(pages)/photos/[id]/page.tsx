@@ -25,9 +25,9 @@ export default async function Photos({ params }: ServerComponentProps) {
   if (typeof id !== 'string') return null;
 
   const photo = photoSchema.parse(await sanityClient.fetch(PHOTO_QUERY(id)));
+  const { exif, dimensions } = photo.metadata;
 
-  const aspectRatio = photo.metadata.dimensions.aspectRatio;
-  const vertical = aspectRatio <= 1;
+  const vertical = dimensions.aspectRatio <= 1;
 
   const camera =
     photo.tags.find((tag) => tag.startsWith('camera:'))?.split(':')[1] ??
@@ -38,6 +38,14 @@ export default async function Photos({ params }: ServerComponentProps) {
     else if (ss === 1) return `1 second`;
     return `1/${1 / ss} second`;
   };
+
+  function formatWithFallback<T>(
+    fmt: (s: T) => string,
+    str: T | undefined,
+    fallback: string,
+  ) {
+    return str !== undefined ? fmt(str) : fallback;
+  }
 
   return (
     <>
@@ -55,7 +63,7 @@ export default async function Photos({ params }: ServerComponentProps) {
       >
         <div
           className="relative w-full group overflow-hidden"
-          style={{ aspectRatio }}
+          style={{ aspectRatio: dimensions.aspectRatio }}
         >
           <img
             className="absolute inset-0 w-full h-full object-cover"
@@ -93,21 +101,25 @@ export default async function Photos({ params }: ServerComponentProps) {
             </span>
 
             <Calendar size={20} />
-            <span>{photo.metadata.exif.dateTime.toLocaleDateString()}</span>
+            <span>{exif.dateTime.toLocaleDateString()}</span>
 
             <Camera size={20} />
             <span>
-              {camera} / {photo.metadata.exif.lens}
+              {camera} / {exif.lens ?? 'Unknown lens'}
             </span>
 
             <SquareFunction size={20} />
-            <span>{photo.metadata.exif.focalLength}mm</span>
+            <span>
+              {formatWithFallback((s) => `${s}mm`, exif.focalLength, 'N/A')}
+            </span>
 
             <Aperture size={20} />
-            <span>f/{photo.metadata.exif.aperture}</span>
+            <span>
+              {formatWithFallback((s) => `f/${s}`, exif.aperture, 'N/A')}
+            </span>
 
             <CircleGauge size={20} />
-            <span>{formatShutterSpeed(photo.metadata.exif.shutterSpeed)}</span>
+            <span>{formatShutterSpeed(exif.shutterSpeed)}</span>
 
             <Contrast size={20} />
             <span>ISO {photo.metadata.exif.iso}</span>
