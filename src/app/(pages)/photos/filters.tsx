@@ -146,7 +146,7 @@ export default function Filters({
   const basicTags = displayTags.filter((tag) => BASIC_TAGS.includes(tag));
   const otherTags = displayTags.filter((tag) => !BASIC_TAGS.includes(tag));
 
-  const lensOptions = [...exif.lenses, ...(lens ?? [])];
+  const lensOptions = [...new Set([...exif.lenses, ...(lens ?? [])])];
 
   const changeHandler = (groupKey: string, tags: string[]) => {
     const newSearch = new URLSearchParams(search);
