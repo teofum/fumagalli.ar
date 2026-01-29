@@ -15,15 +15,18 @@ import { Check, ChevronDown, X } from 'lucide-react';
 import { SearchParams } from '@/utils/types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ExifStats } from './fetch-exif-stats';
+import { getLensDisplayName } from './get-lens-name';
 
 function FilterCombobox({
   tags,
   defaultValue = [],
   onChange = () => {},
+  display = (s) => s,
 }: {
   tags: string[];
   defaultValue?: string | string[];
   onChange?: (value: string[]) => void;
+  display?: (value: string) => string;
 }) {
   const defaultSelection =
     typeof defaultValue === 'string' ? [defaultValue] : defaultValue;
@@ -37,7 +40,9 @@ function FilterCombobox({
   };
 
   const filteredTags = query
-    ? tags.filter((tag) => tag.toLowerCase().includes(query.toLowerCase()))
+    ? tags.filter((tag) =>
+        display(tag).toLowerCase().includes(query.toLowerCase()),
+      )
     : tags;
 
   filteredTags.sort();
@@ -61,7 +66,7 @@ function FilterCombobox({
                 key={tag}
                 className="flex flex-row items-center gap-1 pl-2 p-1 border select-none"
               >
-                {tag}
+                {display(tag)}
                 <button
                   onClick={() => remove(tag)}
                   className="p-1 rounded-full hover:bg-current/10"
@@ -106,7 +111,7 @@ function FilterCombobox({
               className="px-2 py-1 data-focus:bg-current/10 hover:bg-current/10 group flex flex-row items-center gap-2"
             >
               <Check size={16} className="not-group-data-selected:opacity-0" />
-              {tag}
+              {display(tag)}
             </ComboboxOption>
           ))}
         </ComboboxOptions>
@@ -184,6 +189,7 @@ export default function Filters({
             <Label className="capitalize">Lens</Label>
             <FilterCombobox
               tags={lensOptions}
+              display={getLensDisplayName}
               defaultValue={defaultValues['lens']}
               onChange={(tags) => changeHandler('lens', tags)}
             />

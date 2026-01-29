@@ -1,11 +1,4 @@
 import cn from 'classnames';
-
-import { PHOTO_QUERY } from '@/queries/queries';
-import { photoSchema } from '@/schemas/photos';
-import { sanityImage } from '@/utils/sanity.image';
-import { sanityClient } from '@/utils/sanity.server';
-import { ServerComponentProps } from '@/utils/types';
-import Collapsible from '@/components/pages/Collapsible';
 import {
   Aperture,
   Calendar,
@@ -17,7 +10,16 @@ import {
   Maximize2,
   SquareFunction,
 } from 'lucide-react';
-import Link from 'next/link';
+
+import Collapsible from '@/components/pages/Collapsible';
+import Link from '@/components/pages/link';
+import { PHOTO_QUERY } from '@/queries/queries';
+import { photoSchema } from '@/schemas/photos';
+import { sanityImage } from '@/utils/sanity.image';
+import { sanityClient } from '@/utils/sanity.server';
+import { ServerComponentProps } from '@/utils/types';
+
+import { getLensDisplayName } from '../get-lens-name';
 
 export default async function Photos({ params }: ServerComponentProps) {
   const { id } = await params;
@@ -105,7 +107,10 @@ export default async function Photos({ params }: ServerComponentProps) {
 
             <Camera size={20} />
             <span>
-              {camera} / {exif.lens ?? 'Unknown lens'}
+              <Link href={`/photos?camera=${camera}`}>{camera}</Link> /{' '}
+              <Link href={`/photos?lens=${exif.lens}`}>
+                {getLensDisplayName(exif.lens)}
+              </Link>
             </span>
 
             <SquareFunction size={20} />
@@ -130,16 +135,6 @@ export default async function Photos({ params }: ServerComponentProps) {
             </span>
           </div>
         </Collapsible>
-      </div>
-
-      <div className="max-w-3xl mx-auto">
-        <p className="my-4">
-          All images are under{' '}
-          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-            Creative Commons BY-NC-SA
-          </a>{' '}
-          license, and are free for non-commercial use.
-        </p>
       </div>
     </>
   );

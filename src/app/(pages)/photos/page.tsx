@@ -78,20 +78,17 @@ export default async function Photos({ searchParams }: ServerComponentProps) {
             <img
               className="relative w-full aspect-3/2 group-hover:scale-[1.05] transition-transform duration-200 object-cover"
               alt=""
-              src={sanityImage(photo._id).width(524).dpr(2).quality(80).url()}
+              src={sanityImage(photo._id)
+                .width(480)
+                .height(320)
+                .dpr(2)
+                .quality(80)
+                .url()}
               loading="lazy"
             />
           </Link>
         ))}
       </div>
-
-      <p className="my-4">
-        All images are under{' '}
-        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-          Creative Commons BY-NC-SA
-        </a>{' '}
-        license, and are free for non-commercial use.
-      </p>
     </div>
   );
 }
