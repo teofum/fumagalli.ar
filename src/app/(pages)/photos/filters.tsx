@@ -80,25 +80,27 @@ function FilterCombobox({
               Any
             </li>
           )}
-          <ComboboxInput
-            className="grow outline-none h-8.5"
-            onChange={(ev) => setQuery(ev.target.value)}
-            onKeyDown={(ev) => {
-              if (
-                ev.key === 'Backspace' &&
-                ev.currentTarget.value.length === 0
-              ) {
-                ev.preventDefault();
-                removeLast();
-              }
-            }}
-          />
-          <ComboboxButton className="hover:bg-current/10 w-8.5 grid place-items-center group">
-            <ChevronDown
-              size={16}
-              className="group-data-open:rotate-180 transition-transform duration-200"
+          <div className="flex flex-row min-w-0 grow">
+            <ComboboxInput
+              className="grow outline-none h-8.5 min-w-0"
+              onChange={(ev) => setQuery(ev.target.value)}
+              onKeyDown={(ev) => {
+                if (
+                  ev.key === 'Backspace' &&
+                  ev.currentTarget.value.length === 0
+                ) {
+                  ev.preventDefault();
+                  removeLast();
+                }
+              }}
             />
-          </ComboboxButton>
+            <ComboboxButton className="hover:bg-current/10 w-8.5 h-8.5 grid place-items-center group">
+              <ChevronDown
+                size={16}
+                className="group-data-open:rotate-180 transition-transform duration-200"
+              />
+            </ComboboxButton>
+          </div>
         </ul>
         <ComboboxOptions
           anchor={{ to: 'bottom start', gap: 4 }}
