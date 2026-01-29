@@ -10,6 +10,7 @@ import {
   Maximize2,
   SquareFunction,
 } from 'lucide-react';
+import NextLink from 'next/link';
 
 import Collapsible from '@/components/pages/Collapsible';
 import Link from '@/components/pages/link';
@@ -34,6 +35,9 @@ export default async function Photos({ params }: ServerComponentProps) {
   const camera =
     photo.tags.find((tag) => tag.startsWith('camera:'))?.split(':')[1] ??
     'Unknown';
+  const lens =
+    photo.tags.find((tag) => tag.startsWith('lens:'))?.split(':')[1] ??
+    exif.lens;
 
   const formatShutterSpeed = (ss: number) => {
     if (ss > 1) return `${ss} seconds`;
@@ -78,13 +82,13 @@ export default async function Photos({ params }: ServerComponentProps) {
             loading="lazy"
           />
 
-          <div className="absolute bottom-0 right-0 bg-black/20 backdrop-blur-lg px-4 py-2 text-white">
-            <Link
+          <div className="absolute bottom-0 right-0 bg-black/20 backdrop-blur-lg text-white">
+            <NextLink
               href={`https://cdn.sanity.io/${photo.path}`}
-              className="flex flex-row gap-2 items-center"
+              className="flex flex-row gap-2 items-center px-4 py-2 hover:bg-current/10 transition-colors duration-200"
             >
               <Maximize2 size={16} /> Full size
-            </Link>
+            </NextLink>
           </div>
         </div>
 
@@ -102,8 +106,8 @@ export default async function Photos({ params }: ServerComponentProps) {
             <Camera size={20} />
             <span>
               <Link href={`/photos?camera=${camera}`}>{camera}</Link> /{' '}
-              <Link href={`/photos?lens=${exif.lens}`}>
-                {getLensDisplayName(exif.lens)}
+              <Link href={`/photos?lens=${lens}`}>
+                {getLensDisplayName(lens)}
               </Link>
             </span>
 
