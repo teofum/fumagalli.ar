@@ -44,6 +44,7 @@ export default async function Photos({ searchParams }: ServerComponentProps) {
   const tags = await fetchTags();
   const exif = await fetchExifStats();
 
+  const filterCount = Object.keys(filters).length;
   return (
     <div className="max-w-3xl mx-auto">
       <h1 className="font-title text-content-4xl sm:text-content-6xl mb-8">
@@ -56,7 +57,7 @@ export default async function Photos({ searchParams }: ServerComponentProps) {
       </p>
 
       <Collapsible
-        title="Filters"
+        title={`Filters ${filterCount ? `(${filterCount})` : ''}`}
         className="mb-6 sticky top-0 z-100 bg-default backdrop-blur-lg"
       >
         <Filters tags={tags} defaultValues={filters} exif={exif} />

@@ -51,12 +51,6 @@ export default async function Photos({ params }: ServerComponentProps) {
 
   return (
     <>
-      {/*<div className="max-w-3xl mx-auto flex flex-row items-center mb-8">
-        <h1 className="font-title text-content-4xl sm:text-content-6xl grow">
-          {photo.originalFilename}
-        </h1>
-      </div>*/}
-
       <div
         className={cn('mx-auto', {
           'max-w-3xl': vertical,
