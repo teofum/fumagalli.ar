@@ -80,9 +80,9 @@ function FilterCombobox({
               Any
             </li>
           )}
-          <div className="flex flex-row min-w-0 grow">
+          <div className="flex flex-row min-w-0 flex-1">
             <ComboboxInput
-              className="grow outline-none h-8.5 min-w-0"
+              className="flex-1 outline-none h-8.5 min-w-0"
               onChange={(ev) => setQuery(ev.target.value)}
               onKeyDown={(ev) => {
                 if (
@@ -157,11 +157,11 @@ export default function Filters({
   };
 
   return (
-    <div className="grid grid-cols-[8rem_1fr] gap-2 p-4 pb-2 border-b">
+    <div className="grid grid-cols-[6rem_1fr] lg:grid-cols-[5rem_1fr_5rem_1fr] gap-2 pt-4 pb-2 border-b">
       {basicTags.map((groupKey) => (
         <Field
           key={groupKey}
-          className="grid grid-cols-subgrid col-start-1 -col-end-1 items-baseline"
+          className="grid grid-cols-subgrid col-span-2 pl-4 items-baseline"
         >
           <Label className="capitalize">{groupKey}</Label>
           <FilterCombobox
@@ -174,26 +174,29 @@ export default function Filters({
 
       {all ? (
         <>
-          {otherTags.map((groupKey) => (
-            <Field
-              key={groupKey}
-              className="grid grid-cols-subgrid col-start-1 -col-end-1 items-baseline"
-            >
-              <Label className="capitalize">{groupKey}</Label>
-              <FilterCombobox
-                tags={tags[groupKey]}
-                defaultValue={defaultValues[groupKey]}
-                onChange={(tags) => changeHandler(groupKey, tags)}
-              />
-            </Field>
-          ))}
-          <Field className="grid grid-cols-subgrid col-start-1 -col-end-1 items-baseline">
+          <Field className="grid grid-cols-subgrid col-span-2 pl-4 items-baseline">
+            <Label className="capitalize">Camera</Label>
+            <FilterCombobox
+              tags={tags['camera']}
+              defaultValue={defaultValues['camera']}
+              onChange={(tags) => changeHandler('camera', tags)}
+            />
+          </Field>
+          <Field className="grid grid-cols-subgrid col-span-2 pl-4 items-baseline">
             <Label className="capitalize">Lens</Label>
             <FilterCombobox
               tags={lensOptions}
               display={getLensDisplayName}
               defaultValue={defaultValues['lens']}
               onChange={(tags) => changeHandler('lens', tags)}
+            />
+          </Field>
+          <Field className="grid grid-cols-subgrid col-span-2 pl-4 items-baseline">
+            <Label className="capitalize">Film</Label>
+            <FilterCombobox
+              tags={tags['film']}
+              defaultValue={defaultValues['film']}
+              onChange={(tags) => changeHandler('film', tags)}
             />
           </Field>
         </>
