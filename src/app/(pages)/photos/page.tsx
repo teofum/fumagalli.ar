@@ -18,7 +18,8 @@ const DEFAULT_SORT_MODE: Record<string, 'desc' | 'asc'> = {
 
 const sortFn: Record<string, (a: Photo, b: Photo) => number> = {
   date: (a, b) =>
-    a.metadata.exif.dateTime.getTime() - b.metadata.exif.dateTime.getTime(),
+    (a.metadata.exif.dateTime?.getTime() ?? 0) -
+    (b.metadata.exif.dateTime?.getTime() ?? 0),
   filename: (a, b) => a.originalFilename.localeCompare(b.originalFilename),
 };
 

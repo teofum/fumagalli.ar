@@ -101,7 +101,7 @@ export default async function Photos({ params }: ServerComponentProps) {
             </span>
 
             <Calendar size={20} />
-            <span>{exif.dateTime.toLocaleDateString()}</span>
+            <span>{exif.dateTime?.toLocaleDateString() ?? 'N/A'}</span>
 
             <Camera size={20} />
             <span>
@@ -122,10 +122,14 @@ export default async function Photos({ params }: ServerComponentProps) {
             </span>
 
             <CircleGauge size={20} />
-            <span>{formatShutterSpeed(exif.shutterSpeed)}</span>
+            <span>
+              {formatWithFallback(formatShutterSpeed, exif.shutterSpeed, 'N/A')}
+            </span>
 
             <Contrast size={20} />
-            <span>ISO {photo.metadata.exif.iso}</span>
+            <span>
+              {formatWithFallback((s) => `ISO ${s}`, exif.iso, 'N/A')}
+            </span>
 
             <Cog size={20} />
             <span className="capitalize">

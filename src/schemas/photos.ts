@@ -41,19 +41,21 @@ const EXIF_EXPOSURE_PROGRAMS = [
 
 export const exifMetadataSchema = z
   .object({
-    DateTimeOriginal: z.string(),
+    DateTimeOriginal: z.string().optional(),
     LensModel: z.string().optional(),
 
     FocalLength: z.number().optional(),
     FNumber: z.number().optional(),
-    ExposureTime: z.number(),
-    ISO: z.number(),
-    ExposureBiasValue: z.number(),
+    ExposureTime: z.number().optional(),
+    ISO: z.number().optional(),
+    ExposureBiasValue: z.number().optional(),
 
-    ExposureProgram: z.number(),
+    ExposureProgram: z.number().optional(),
   })
   .transform((rawExif) => ({
-    dateTime: new Date(rawExif.DateTimeOriginal),
+    dateTime: rawExif.DateTimeOriginal
+      ? new Date(rawExif.DateTimeOriginal)
+      : undefined,
     lens: rawExif.LensModel,
 
     focalLength: rawExif.FocalLength,
@@ -62,7 +64,7 @@ export const exifMetadataSchema = z
     iso: rawExif.ISO,
     exposureBias: rawExif.ExposureBiasValue,
 
-    mode: EXIF_EXPOSURE_PROGRAMS[rawExif.ExposureProgram],
+    mode: EXIF_EXPOSURE_PROGRAMS[rawExif.ExposureProgram ?? 0],
   }));
 
 export type EXIF = z.infer<typeof exifMetadataSchema>;
