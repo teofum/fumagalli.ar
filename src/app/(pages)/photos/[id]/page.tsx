@@ -7,6 +7,7 @@ import {
   Cog,
   Contrast,
   Expand,
+  Film,
   Maximize2,
   SquareFunction,
 } from 'lucide-react';
@@ -38,6 +39,7 @@ export default async function Photos({ params }: ServerComponentProps) {
   const lens =
     photo.tags.find((tag) => tag.startsWith('lens:'))?.split(':')[1] ??
     exif.lens;
+  const film = photo.tags.find((tag) => tag.startsWith('film:'))?.split(':')[1];
 
   const formatShutterSpeed = (ss: number) => {
     if (ss > 1) return `${ss} seconds`;
@@ -100,8 +102,12 @@ export default async function Photos({ params }: ServerComponentProps) {
               {photo.metadata.dimensions.height}
             </span>
 
-            <Calendar size={20} />
-            <span>{exif.dateTime?.toLocaleDateString() ?? 'N/A'}</span>
+            {exif.dateTime ? (
+              <>
+                <Calendar size={20} />
+                <span>{exif.dateTime.toLocaleDateString()}</span>
+              </>
+            ) : null}
 
             <Camera size={20} />
             <span>
@@ -111,25 +117,44 @@ export default async function Photos({ params }: ServerComponentProps) {
               </Link>
             </span>
 
-            <SquareFunction size={20} />
-            <span>
-              {formatWithFallback((s) => `${s}mm`, exif.focalLength, 'N/A')}
-            </span>
+            {film ? (
+              <>
+                <Film size={20} />
+                <span>
+                  <Link href={`/photos?film=${film}`}>{film}</Link>
+                </span>
+              </>
+            ) : null}
 
-            <Aperture size={20} />
-            <span>
-              {formatWithFallback((s) => `f/${s}`, exif.aperture, 'N/A')}
-            </span>
+            {exif.focalLength ? (
+              <>
+                <SquareFunction size={20} />
+                <span>{exif.focalLength}mm</span>
+              </>
+            ) : null}
 
-            <CircleGauge size={20} />
-            <span>
-              {formatWithFallback(formatShutterSpeed, exif.shutterSpeed, 'N/A')}
-            </span>
+            {exif.aperture ? (
+              <>
+                <Aperture size={20} />
+                <span>f/{exif.aperture}</span>
+              </>
+            ) : null}
 
-            <Contrast size={20} />
-            <span>
-              {formatWithFallback((s) => `ISO ${s}`, exif.iso, 'N/A')}
-            </span>
+            {exif.shutterSpeed ? (
+              <>
+                <CircleGauge size={20} />
+                <span>{formatShutterSpeed(exif.shutterSpeed)}</span>
+              </>
+            ) : null}
+
+            {exif.focalLength ? (
+              <>
+                <Contrast size={20} />
+                <span>
+                  {formatWithFallback((s) => `ISO ${s}`, exif.iso, 'N/A')}
+                </span>
+              </>
+            ) : null}
 
             <Cog size={20} />
             <span className="capitalize">
