@@ -9,7 +9,7 @@ export default function PhotosLayout({
     <main className="p-4">
       {children}
 
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-3xl mx-auto pb-16">
         <p className="my-4">
           All images are under{' '}
           <Link href="https://creativecommons.org/licenses/by-nc-sa/4.0/">

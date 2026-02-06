@@ -1,35 +1,5 @@
 import { SearchParams } from '@/utils/types';
 
-export const IMAGE_FILE_QUERY = ` {
-...,
-'lqip': content.asset->metadata.lqip,
-'dimensions': content.asset->metadata.dimensions,
-'originalFilename': content.asset->originalFilename,
-}`;
-
-export const PHOTO_CATEGORY_QUERY = `
-*[_type == "photoCategory"] {
-  ...,
-  thumbnail-> ${IMAGE_FILE_QUERY},
-  collections[]-> {
-    _type,
-    _id,
-    title,
-    'slug': slug.current,
-    thumbnail-> ${IMAGE_FILE_QUERY},
-  },
-}`;
-
-export const PHOTO_COLLECTION_QUERY = (slug: string) => `
-*[_type == "photoCollection" && slug.current == "${slug}"][0] {
-  _type,
-  _id,
-  title,
-  'slug': slug.current,
-  thumbnail-> ${IMAGE_FILE_QUERY},
-  photos[]-> ${IMAGE_FILE_QUERY},
-}`;
-
 export const PHOTOS_QUERY = (filters: SearchParams) => {
   const filterStrings = Object.entries(filters).map(([filter, value]) => {
     if (!value) return '';
@@ -65,6 +35,53 @@ export const PHOTO_QUERY = (id: string) => `
   'tags': opt.media.tags[]->name.current,
 }
 `;
+
+export const PHOTO_COUNT_QUERY = `
+count(*[_type == "sanity.imageAsset" && references(*[_type == 'media.tag' && name.current == 'type:Photo']._id)])
+`;
+
+export const PHOTO_BY_IDX_QUERY = (idx: number) => `
+*[_type == "sanity.imageAsset" && references(*[_type == 'media.tag' && name.current == 'type:Photo']._id)][${idx}] {
+  ...,
+  'tags': opt.media.tags[]->name.current,
+}
+`;
+
+export const PHOTO_CATEGORY_QUERY = `
+*[_type == "photoCategory"] {
+  ...,
+  collections[]-> {
+    _type,
+    _id,
+    title,
+    'slug': slug.current,
+    'thumbnail': thumbnail.asset-> {
+      ...,
+      'tags': opt.media.tags[]->name.current,
+    },
+  },
+}`;
+
+export const PHOTO_COLLECTION_QUERY = (slug: string) => `
+*[_type == "photoCollection" && slug.current == "${slug}"][0] {
+  _type,
+  _id,
+  title,
+  type,
+  'slug': slug.current,
+  'thumbnail': thumbnail.asset-> {
+    ...,
+    'tags': opt.media.tags[]->name.current,
+  },
+  photos[] {
+    _key,
+    ...asset-> {
+      ...,
+      'tags': opt.media.tags[]->name.current,
+    },
+  },
+  filters[],
+}`;
 
 export const EXIF_QUERY = `
 *[_type == "sanity.imageAsset" && references(*[_type == 'media.tag' && name.current == 'type:Photo']._id)].metadata.exif

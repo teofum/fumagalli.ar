@@ -19,10 +19,13 @@ export default function Collapsible({
       className={cn('flex flex-col', className)}
       {...props}
     >
-      <CollapsiblePrimitive.Trigger className="group border-b border-current p-4 hover:bg-[rgb(from_currentcolor_r_g_b/20%)] transition-colors duration-200">
+      <CollapsiblePrimitive.Trigger className="group border-b border-current p-4 hover:bg-current/20 transition-colors duration-200">
         <div className="flex flex-row items-center justify-between">
           <div>{title}</div>
-          <ChevronDown className="group-data-[state='open']:rotate-180 transition-transform duration-200" />
+          <ChevronDown
+            size={20}
+            className="group-data-[state='open']:rotate-180 transition-transform duration-200"
+          />
         </div>
       </CollapsiblePrimitive.Trigger>
 

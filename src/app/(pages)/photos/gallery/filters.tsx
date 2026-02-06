@@ -14,8 +14,8 @@ import { Check, ChevronDown, X } from 'lucide-react';
 
 import { SearchParams } from '@/utils/types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ExifStats } from './fetch-exif-stats';
-import { getLensDisplayName } from './get-lens-name';
+import { ExifStats } from '../fetch-exif-stats';
+import { getLensDisplayName } from '../get-lens-name';
 
 function FilterCombobox({
   tags,
@@ -142,9 +142,10 @@ export default function Filters({
   // Lens tags are handled specially
   const { lens, ...tags } = allTags;
 
-  const displayTags = Object.keys(tags).filter((group) => group !== 'type');
+  const displayTags = Object.keys(tags).filter(
+    (group) => group !== 'type' && !group.startsWith('_'),
+  );
   const basicTags = displayTags.filter((tag) => BASIC_TAGS.includes(tag));
-  const otherTags = displayTags.filter((tag) => !BASIC_TAGS.includes(tag));
 
   const lensOptions = [...new Set([...exif.lenses, ...(lens ?? [])])];
 
