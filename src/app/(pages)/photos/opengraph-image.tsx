@@ -11,8 +11,8 @@ export const runtime = 'edge';
 // Image metadata
 export const alt = 'Photo of the day';
 export const size = {
-  width: 1200,
-  height: 800,
+  width: 1080,
+  height: 720,
 };
 
 export const contentType = 'image/jpeg';
@@ -45,7 +45,7 @@ export default async function Image() {
           src={sanityImage(photoOfTheDay._id)
             .width(size.width)
             .height(size.height)
-            .quality(80)
+            .quality(70)
             .url()}
         />
 
