@@ -97,11 +97,13 @@ export default function Desktop() {
    * flashing
    */
   useLayoutEffect(() => {
-    document.documentElement.className = theme.cssClass;
+    document.documentElement.classList.add('desktop-root');
+    document.documentElement.classList.add(theme.cssClass);
     document.documentElement.style.setProperty('overflow', 'hidden');
 
     return () => {
-      document.documentElement.className = '';
+      document.documentElement.classList.remove(theme.cssClass);
+      document.documentElement.classList.remove('desktop-root');
       document.documentElement.style.removeProperty('overflow');
     };
   }, [theme.cssClass]);

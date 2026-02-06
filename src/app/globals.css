@@ -9,7 +9,7 @@
 
 @layer base {
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not(.desktop-root) {
       @apply bg-stone-950;
 
       --theme-desktop: 0 64 64;
