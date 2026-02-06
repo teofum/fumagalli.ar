@@ -29,11 +29,6 @@ export default async function Photos({ searchParams }: ServerComponentProps) {
         Photography
       </h1>
 
-      <p className="mb-4">
-        My work as an amateur photographer. Click on any image for a detail
-        view.
-      </p>
-
       <Collapsible
         title={`Filters ${filterCount ? `(${filterCount})` : ''}`}
         className="mb-6 sticky top-0 z-100 bg-default"
