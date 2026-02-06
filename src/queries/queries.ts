@@ -67,6 +67,7 @@ export const PHOTO_COLLECTION_QUERY = (slug: string) => `
   _type,
   _id,
   title,
+  type,
   'slug': slug.current,
   'thumbnail': thumbnail.asset-> {
     ...,

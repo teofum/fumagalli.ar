@@ -80,9 +80,16 @@ export const photoCollectionBaseSchema = z.object({
 
 export type PhotoCollectionBase = z.infer<typeof photoCollectionBaseSchema>;
 
+const filterSchema = z.object({
+  _key: z.string(),
+  tag: z.string(),
+  values: z.string().array(),
+});
+
 export const photoCollectionSchema = photoCollectionBaseSchema.extend({
   type: z.enum(['photos', 'filters']),
-  photos: photoSchema.array().optional(),
+  photos: photoSchema.array().nullable(),
+  filters: filterSchema.array().nullable(),
 });
 
 export type PhotoCollection = z.infer<typeof photoCollectionSchema>;

@@ -1,3 +1,4 @@
+import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import z from 'zod';
 
@@ -7,21 +8,15 @@ import {
   PHOTO_COUNT_QUERY,
   PHOTOS_QUERY,
 } from '@/queries/queries';
-import { Photo, photoCategorySchema, photoSchema } from '@/schemas/photos';
-import { sanityImage } from '@/utils/sanity.image';
+import { photoCategorySchema, photoSchema } from '@/schemas/photos';
 import { sanityClient } from '@/utils/sanity.server';
-import { SearchParams, ServerComponentProps } from '@/utils/types';
 
-import { fetchTags } from './fetch-tags';
 import Collapsible from '@/components/pages/Collapsible';
 import { PhotoThumbnail } from './photo-thumbnail';
-import { ChevronRight } from 'lucide-react';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 export default async function Photos() {
-  const tags = await fetchTags();
-
   const today = Math.floor(new Date().getTime() / MS_PER_DAY);
   const hash = today ^ (0x9e3779b9 + (today << 6) + (today >> 2));
 
@@ -46,7 +41,7 @@ export default async function Photos() {
 
       <div className="flex flex-col gap-2">
         <div className="">
-          <h2 className="text-content-xl sm:text-content-2xl font-semibold mb-2 mt-4">
+          <h2 className="text-content-xl sm:text-content-2xl font-semibold mb-2 mt-8">
             Featured photos
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -69,7 +64,7 @@ export default async function Photos() {
         </Link>
 
         <div className="">
-          <h2 className="text-content-xl sm:text-content-2xl font-semibold mb-2 mt-4">
+          <h2 className="text-content-xl sm:text-content-2xl font-semibold mb-2 mt-8">
             Photo of the day
           </h2>
           <PhotoThumbnail
@@ -82,8 +77,8 @@ export default async function Photos() {
         </div>
 
         <div className="">
-          <h2 className="text-content-xl sm:text-content-2xl font-semibold mb-2 mt-4">
-            Categories
+          <h2 className="text-content-xl sm:text-content-2xl font-semibold mb-2 mt-8">
+            Collections
           </h2>
 
           {photoCategories.map((cat) => (
