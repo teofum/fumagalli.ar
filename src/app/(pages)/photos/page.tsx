@@ -86,7 +86,7 @@ export default async function Photos() {
 
           {photoCategories.map((cat) => (
             <Collapsible key={cat._id} title={cat.title}>
-              <div className="grid grid-cols-2 gap-2 mt-2">
+              <div className="grid grid-cols-2 gap-2 my-2">
                 {cat.collections.map((collection) => (
                   <PhotoThumbnail
                     key={collection._id}
