@@ -1,8 +1,7 @@
 import { ImageResponse } from 'next/og';
-import z from 'zod';
 
 import { PHOTO_BY_IDX_QUERY, PHOTO_COUNT_QUERY } from '@/queries/queries';
-import { photoSchema } from '@/schemas/photos';
+import { Photo } from '@/schemas/photos';
 import { sanityClient } from '@/utils/sanity.server';
 import { sanityImage } from '@/utils/sanity.image';
 
@@ -31,10 +30,10 @@ export default async function Image() {
   const today = Math.floor(new Date().getTime() / MS_PER_DAY);
   const hash = today ^ (0x9e3779b9 + (today << 6) + (today >> 2));
 
-  const count = z.number().parse(await sanityClient.fetch(PHOTO_COUNT_QUERY));
-  const photoOfTheDay = photoSchema.parse(
-    await sanityClient.fetch(PHOTO_BY_IDX_QUERY(hash % count)),
-  );
+  const count = (await sanityClient.fetch(PHOTO_COUNT_QUERY)) as number;
+  const photoOfTheDay = (await sanityClient.fetch(
+    PHOTO_BY_IDX_QUERY(hash % count),
+  )) as Photo;
 
   return new ImageResponse(
     (
@@ -45,7 +44,7 @@ export default async function Image() {
           src={sanityImage(photoOfTheDay._id)
             .width(size.width)
             .height(size.height)
-            .quality(70)
+            .quality(80)
             .url()}
         />
 
