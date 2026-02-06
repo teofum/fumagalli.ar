@@ -1,4 +1,10 @@
+import { Metadata } from 'next';
+
 import Link from '@/components/pages/link';
+
+export const metadata: Metadata = {
+  title: 'Photos – Teo Fumagalli',
+};
 
 export default function PhotosLayout({
   children,
