@@ -1,14 +1,15 @@
 import { ImageResponse } from 'next/og';
 
-import { PHOTO_BY_IDX_QUERY, PHOTO_COUNT_QUERY } from '@/queries/queries';
+import { PHOTO_QUERY } from '@/queries/queries';
 import { Photo } from '@/schemas/photos';
 import { sanityClient } from '@/utils/sanity.server';
 import { sanityImage } from '@/utils/sanity.image';
+import { ServerComponentProps } from '@/utils/types';
 
 export const runtime = 'edge';
 
 // Image metadata
-export const alt = 'Photo of the day';
+export const alt = 'A photo';
 export const size = {
   width: 1080,
   height: 720,
@@ -16,24 +17,21 @@ export const size = {
 
 export const contentType = 'image/jpeg';
 
-const MS_PER_DAY = 1000 * 60 * 60 * 24;
+export default async function Image({ params }: ServerComponentProps) {
+  const { id } = await params;
 
-export default async function Image() {
   const dmSerifDisplayData = await fetch(
-    new URL('../../../../public/font/dm-serif-display.ttf', import.meta.url),
+    new URL(
+      '../../../../../../public/font/dm-serif-display.ttf',
+      import.meta.url,
+    ),
   ).then((res) => res.arrayBuffer());
 
   const plexSansData = await fetch(
-    new URL('../../../../public/font/plex-sans.ttf', import.meta.url),
+    new URL('../../../../../../public/font/plex-sans.ttf', import.meta.url),
   ).then((res) => res.arrayBuffer());
 
-  const today = Math.floor(new Date().getTime() / MS_PER_DAY);
-  const hash = today ^ (0x9e3779b9 + (today << 6) + (today >> 2));
-
-  const count = (await sanityClient.fetch(PHOTO_COUNT_QUERY)) as number;
-  const photoOfTheDay = (await sanityClient.fetch(
-    PHOTO_BY_IDX_QUERY(hash % count),
-  )) as Photo;
+  const photo = (await sanityClient.fetch(PHOTO_QUERY(id as string))) as Photo;
 
   return new ImageResponse(
     (
@@ -41,7 +39,7 @@ export default async function Image() {
         <img
           style={{ aspectRatio: '3/2', objectFit: 'cover' }}
           alt={alt}
-          src={sanityImage(photoOfTheDay._id)
+          src={sanityImage(photo._id)
             .width(size.width)
             .height(size.height)
             .quality(80)
