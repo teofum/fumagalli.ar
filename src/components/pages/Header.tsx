@@ -21,7 +21,7 @@ export default function Header() {
   const pathname = usePathname();
 
   const fragments = pathname.split('/');
-  const routes = fragments.map((fragment, i) => ({
+  const routes = fragments.slice(0, 3).map((fragment, i) => ({
     name: fragment || 'home',
     path: `${fragments.slice(0, i + 1).join('/')}` || '/home',
   }));

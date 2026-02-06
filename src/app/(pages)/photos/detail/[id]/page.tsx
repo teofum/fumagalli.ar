@@ -21,7 +21,7 @@ import { sanityImage } from '@/utils/sanity.image';
 import { sanityClient } from '@/utils/sanity.server';
 import { ServerComponentProps } from '@/utils/types';
 
-import { getLensDisplayName } from '../get-lens-name';
+import { getLensDisplayName } from '../../get-lens-name';
 
 export default async function Photos({ params }: ServerComponentProps) {
   const { id } = await params;
@@ -111,8 +111,8 @@ export default async function Photos({ params }: ServerComponentProps) {
 
             <Camera size={20} />
             <span>
-              <Link href={`/photos?camera=${camera}`}>{camera}</Link> /{' '}
-              <Link href={`/photos?lens=${lens}`}>
+              <Link href={`/photos/gallery?camera=${camera}`}>{camera}</Link> /{' '}
+              <Link href={`/photos/gallery?lens=${lens}`}>
                 {getLensDisplayName(lens)}
               </Link>
             </span>
@@ -121,7 +121,7 @@ export default async function Photos({ params }: ServerComponentProps) {
               <>
                 <Film size={20} />
                 <span>
-                  <Link href={`/photos?film=${film}`}>{film}</Link>
+                  <Link href={`/photos/gallery?film=${film}`}>{film}</Link>
                 </span>
               </>
             ) : null}

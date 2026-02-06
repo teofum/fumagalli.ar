@@ -1,8 +1,5 @@
-import Link from 'next/link';
-
 import { PHOTOS_QUERY } from '@/queries/queries';
 import { Photo, photoSchema } from '@/schemas/photos';
-import { sanityImage } from '@/utils/sanity.image';
 import { sanityClient } from '@/utils/sanity.server';
 import { SearchParams, ServerComponentProps } from '@/utils/types';
 
@@ -60,14 +57,18 @@ export default async function Photos({ searchParams }: ServerComponentProps) {
 
       <Collapsible
         title={`Filters ${filterCount ? `(${filterCount})` : ''}`}
-        className="mb-6 sticky top-0 z-100 bg-default backdrop-blur-lg"
+        className="mb-6 sticky top-0 z-100 bg-default"
       >
         <Filters tags={tags} defaultValues={filters} exif={exif} />
       </Collapsible>
 
       <div className="grid grid-cols-2 gap-2">
         {photos.map((photo) => (
-          <PhotoThumbnail key={photo._id} photo={photo} />
+          <PhotoThumbnail
+            key={photo._id}
+            photo={photo}
+            href="/photos/detail/{id}"
+          />
         ))}
       </div>
     </div>

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ReactNode } from 'react';
 
 import { Photo } from '@/schemas/photos';
 import { sanityImage } from '@/utils/sanity.image';
@@ -8,7 +9,8 @@ export type PhotoThumbnailProps = {
   width?: number;
   height?: number;
   quality?: number;
-  hrefPrefix?: string;
+  href?: string;
+  children?: ReactNode;
 };
 
 export function PhotoThumbnail({
@@ -16,12 +18,13 @@ export function PhotoThumbnail({
   width = 480,
   height = 320,
   quality = 80,
-  hrefPrefix = '',
+  href = '',
+  children = null,
 }: PhotoThumbnailProps) {
   return (
     <Link
       key={photo._id}
-      href={`${hrefPrefix}${photo._id}`}
+      href={href.replace('{id}', photo._id)}
       className="block relative overflow-hidden group"
     >
       <img
@@ -41,6 +44,8 @@ export function PhotoThumbnail({
           .url()}
         loading="lazy"
       />
+
+      {children}
     </Link>
   );
 }

@@ -1,35 +1,5 @@
 import { SearchParams } from '@/utils/types';
 
-export const IMAGE_QUERY = ` {
-...,
-'lqip': asset->metadata.lqip,
-'dimensions': asset->metadata.dimensions,
-'originalFilename': asset->originalFilename,
-}`;
-
-export const PHOTO_CATEGORY_QUERY = `
-*[_type == "photoCategory"] {
-  ...,
-  collections[]-> {
-    _type,
-    _id,
-    title,
-    'slug': slug.current,
-    thumbnail ${IMAGE_QUERY},
-  },
-}`;
-
-export const PHOTO_COLLECTION_QUERY = (slug: string) => `
-*[_type == "photoCollection" && slug.current == "${slug}"][0] {
-  _type,
-  _id,
-  title,
-  'slug': slug.current,
-  thumbnail ${IMAGE_QUERY},
-  photos[] ${IMAGE_QUERY},
-  filters[],
-}`;
-
 export const PHOTOS_QUERY = (filters: SearchParams) => {
   const filterStrings = Object.entries(filters).map(([filter, value]) => {
     if (!value) return '';
@@ -76,6 +46,41 @@ export const PHOTO_BY_IDX_QUERY = (idx: number) => `
   'tags': opt.media.tags[]->name.current,
 }
 `;
+
+export const PHOTO_CATEGORY_QUERY = `
+*[_type == "photoCategory"] {
+  ...,
+  collections[]-> {
+    _type,
+    _id,
+    title,
+    'slug': slug.current,
+    'thumbnail': thumbnail.asset-> {
+      ...,
+      'tags': opt.media.tags[]->name.current,
+    },
+  },
+}`;
+
+export const PHOTO_COLLECTION_QUERY = (slug: string) => `
+*[_type == "photoCollection" && slug.current == "${slug}"][0] {
+  _type,
+  _id,
+  title,
+  'slug': slug.current,
+  'thumbnail': thumbnail.asset-> {
+    ...,
+    'tags': opt.media.tags[]->name.current,
+  },
+  photos[] {
+    _key,
+    ...asset-> {
+      ...,
+      'tags': opt.media.tags[]->name.current,
+    },
+  },
+  filters[],
+}`;
 
 export const EXIF_QUERY = `
 *[_type == "sanity.imageAsset" && references(*[_type == 'media.tag' && name.current == 'type:Photo']._id)].metadata.exif

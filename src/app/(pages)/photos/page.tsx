@@ -3,10 +3,11 @@ import z from 'zod';
 
 import {
   PHOTO_BY_IDX_QUERY,
+  PHOTO_CATEGORY_QUERY,
   PHOTO_COUNT_QUERY,
   PHOTOS_QUERY,
 } from '@/queries/queries';
-import { Photo, photoSchema } from '@/schemas/photos';
+import { Photo, photoCategorySchema, photoSchema } from '@/schemas/photos';
 import { sanityImage } from '@/utils/sanity.image';
 import { sanityClient } from '@/utils/sanity.server';
 import { SearchParams, ServerComponentProps } from '@/utils/types';
@@ -33,6 +34,10 @@ export default async function Photos() {
     .array()
     .parse(await sanityClient.fetch(PHOTOS_QUERY({ _tag: 'featured' })));
 
+  const photoCategories = photoCategorySchema
+    .array()
+    .parse(await sanityClient.fetch(PHOTO_CATEGORY_QUERY));
+
   return (
     <div className="max-w-3xl mx-auto">
       <h1 className="font-title text-content-4xl sm:text-content-6xl mb-8">
@@ -49,7 +54,7 @@ export default async function Photos() {
               <PhotoThumbnail
                 key={photo._id}
                 photo={photo}
-                hrefPrefix="photos/"
+                href="/photos/detail/{id}"
               />
             ))}
           </div>
@@ -69,7 +74,7 @@ export default async function Photos() {
           </h2>
           <PhotoThumbnail
             photo={photoOfTheDay}
-            hrefPrefix="photos/"
+            href="/photos/detail/{id}"
             width={768}
             height={512}
             quality={90}
@@ -81,16 +86,23 @@ export default async function Photos() {
             Categories
           </h2>
 
-          <Collapsible title="Places" className="bg-default backdrop-blur-lg">
-            {tags.place.map((tag) => (
-              <div key={tag}>{tag}</div>
-            ))}
-          </Collapsible>
-          <Collapsible title="Subjects" className="bg-default backdrop-blur-lg">
-            {tags.subject.map((tag) => (
-              <div key={tag}>{tag}</div>
-            ))}
-          </Collapsible>
+          {photoCategories.map((cat) => (
+            <Collapsible key={cat._id} title={cat.title} className="bg-default">
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                {cat.collections.map((collection) => (
+                  <PhotoThumbnail
+                    key={collection._id}
+                    photo={collection.thumbnail}
+                    href={`/photos/${collection.slug}`}
+                  >
+                    <div className="absolute bottom-0 left-0 w-full py-3 px-6 bg-black/20 text-white font-medium backdrop-blur-xl">
+                      {collection.title}
+                    </div>
+                  </PhotoThumbnail>
+                ))}
+              </div>
+            </Collapsible>
+          ))}
         </div>
       </div>
     </div>
