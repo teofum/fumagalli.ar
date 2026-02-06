@@ -16,6 +16,9 @@ import { PhotoThumbnail } from './photo-thumbnail';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
+// Revalidate the page once every hour, this ensures content is reasonably fresh
+export const revalidate = 3600;
+
 export default async function Photos() {
   const today = Math.floor(new Date().getTime() / MS_PER_DAY);
   const hash = today ^ (0x9e3779b9 + (today << 6) + (today >> 2));
