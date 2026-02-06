@@ -1,22 +1,21 @@
 import { SearchParams } from '@/utils/types';
 
-export const IMAGE_FILE_QUERY = ` {
+export const IMAGE_QUERY = ` {
 ...,
-'lqip': content.asset->metadata.lqip,
-'dimensions': content.asset->metadata.dimensions,
-'originalFilename': content.asset->originalFilename,
+'lqip': asset->metadata.lqip,
+'dimensions': asset->metadata.dimensions,
+'originalFilename': asset->originalFilename,
 }`;
 
 export const PHOTO_CATEGORY_QUERY = `
 *[_type == "photoCategory"] {
   ...,
-  thumbnail-> ${IMAGE_FILE_QUERY},
   collections[]-> {
     _type,
     _id,
     title,
     'slug': slug.current,
-    thumbnail-> ${IMAGE_FILE_QUERY},
+    thumbnail ${IMAGE_QUERY},
   },
 }`;
 
@@ -26,8 +25,9 @@ export const PHOTO_COLLECTION_QUERY = (slug: string) => `
   _id,
   title,
   'slug': slug.current,
-  thumbnail-> ${IMAGE_FILE_QUERY},
-  photos[]-> ${IMAGE_FILE_QUERY},
+  thumbnail ${IMAGE_QUERY},
+  photos[] ${IMAGE_QUERY},
+  filters[],
 }`;
 
 export const PHOTOS_QUERY = (filters: SearchParams) => {
@@ -61,6 +61,17 @@ export const PHOTOS_QUERY = (filters: SearchParams) => {
 
 export const PHOTO_QUERY = (id: string) => `
 *[_type == "sanity.imageAsset" && _id == "${id}"][0] {
+  ...,
+  'tags': opt.media.tags[]->name.current,
+}
+`;
+
+export const PHOTO_COUNT_QUERY = `
+count(*[_type == "sanity.imageAsset" && references(*[_type == 'media.tag' && name.current == 'type:Photo']._id)])
+`;
+
+export const PHOTO_BY_IDX_QUERY = (idx: number) => `
+*[_type == "sanity.imageAsset" && references(*[_type == 'media.tag' && name.current == 'type:Photo']._id)][${idx}] {
   ...,
   'tags': opt.media.tags[]->name.current,
 }
