@@ -47,7 +47,7 @@ export default async function Projects() {
                     />
                   ) : null}
 
-                  <div className="absolute left-0 bottom-0 w-full bg-default/20 pixelate-bg py-3 px-6 text-white">
+                  <div className="absolute left-0 bottom-0 w-full bg-black/20 py-3 px-6 text-white font-medium backdrop-blur-xl">
                     {project.name}
                   </div>
                 </Link>

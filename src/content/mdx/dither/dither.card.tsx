@@ -2,7 +2,7 @@ export default function DitherCard() {
   return (
     <div
       className="
-        min-w-60 aspect-3/2 relative border border-default
+        min-w-60 aspect-3/2 relative border
         flex flex-col justify-end group overflow-hidden
       "
     >
@@ -15,7 +15,7 @@ export default function DitherCard() {
         alt=""
       />
 
-      <div className="bg-default/50 p-4 relative transition group-hover:bg-default/70">
+      <div className="bg-white/50 dark:bg-slate-950/50 p-4 relative transition group-hover:bg-white/70 group-hover:dark:bg-slate-950/70">
         <h1 className="font-title text-content-3xl transition group-hover:scale-[1.02] group-hover:text-link">
           A Visual Introduction to
           <div

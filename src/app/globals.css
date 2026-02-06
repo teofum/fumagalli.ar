@@ -1,18 +1,48 @@
-@import "../styles/tailwind.css";
-@import "../styles/font.css";
-@import "../styles/theme.css";
-@import "../styles/components.css";
-@import "../styles/article.css";
-@import "../styles/static.css";
-@import "../styles/utils.css";
-@import "../styles/js-dos.css";
+@import '../styles/tailwind.css';
+@import '../styles/font.css';
+@import '../styles/theme.css';
+@import '../styles/components.css';
+@import '../styles/article.css';
+@import '../styles/static.css';
+@import '../styles/utils.css';
+@import '../styles/js-dos.css';
 
 @layer base {
-  /*@media (prefers-color-scheme: dark) {
-    :root:not([class]) {
-      @apply theme-dark;
+  @media (prefers-color-scheme: dark) {
+    :root {
+      @apply bg-stone-950;
+
+      --theme-desktop: 0 64 64;
+      --theme-background: 40 40 40;
+      --theme-highlight: 96 96 32;
+      --theme-codeblock: 28 28 28;
+
+      --theme-surface: 64 64 64;
+      --theme-dark: 32 32 32;
+      --theme-darker: 0 0 0;
+      --theme-light: 104 104 104;
+      --theme-lighter: 144 144 144;
+
+      --theme-title: 222 222 222;
+      --theme-text: 222 222 222;
+      --theme-heading: var(--theme-text);
+      --theme-heading-2: var(--theme-heading);
+      --theme-heading-3: var(--theme-heading);
+
+      --theme-text-light: 128 128 128;
+      --theme-text-disabled: 0 0 0;
+      --theme-text-disabled-shadow: var(--theme-light);
+      --theme-text-accent: 255 255 128;
+
+      --theme-text-link: 97 149 209;
+      --theme-text-visited: 161 77 203;
+
+      --theme-selection-bg: 255 255 128;
+      --theme-selection-text: 0 0 0;
+
+      --theme-border: 128 128 128;
     }
-  }*/
+  }
 
   body {
     @apply text-base text-default selection:bg-selection selection:text-selection;

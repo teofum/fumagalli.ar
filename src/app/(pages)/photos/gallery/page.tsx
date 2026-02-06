@@ -31,7 +31,7 @@ export default async function Photos({ searchParams }: ServerComponentProps) {
 
       <Collapsible
         title={`Filters ${filterCount ? `(${filterCount})` : ''}`}
-        className="mb-6 sticky top-0 z-100 bg-default"
+        className="mb-6 sticky top-0 z-100 bg-white dark:bg-stone-950"
       >
         <Filters tags={tags} defaultValues={filters} exif={exif} />
       </Collapsible>

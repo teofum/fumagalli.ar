@@ -35,11 +35,12 @@ export default async function PostsIndexRoute() {
         Writing
       </h1>
 
-      <h2 className="heading2">Interactive articles</h2>
+      <h2 className="text-content-xl sm:text-content-2xl font-semibold mb-2 mt-8">
+        Interactive articles
+      </h2>
       <p className="mb-4">
         These are detailed, interactive deep-dives into a topic I find
-        interesting. They take a long time to write and code, so don&apos;t
-        expect a lot of them.
+        interesting.
       </p>
 
       <div className="grid grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-2">
@@ -51,7 +52,9 @@ export default async function PostsIndexRoute() {
         </Link>
       </div>
 
-      <h2 className="heading2">Other articles</h2>
+      <h2 className="text-content-xl sm:text-content-2xl font-semibold mb-2 mt-8">
+        Other articles
+      </h2>
 
       <ul>
         {articles.map((post) => (

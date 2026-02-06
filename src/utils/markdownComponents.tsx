@@ -1,4 +1,4 @@
-import RetroLink from "@/components/ui/Link";
+import RetroLink from '@/components/ui/Link';
 
 export const markdownComponents = {
   h1: (props: React.PropsWithChildren) => (
