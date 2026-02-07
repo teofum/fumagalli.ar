@@ -25,7 +25,10 @@ export default async function Post({
   );
 
   return (
-    <article className="max-w-3xl mx-auto pb-16">
+    <article className="max-w-2xl mx-auto pb-16">
+      <h1 className="font-title text-content-4xl lg:text-content-5xl text-h1 mb-8">
+        {article.title}
+      </h1>
       <CustomPortableText value={article.content} />
     </article>
   );
