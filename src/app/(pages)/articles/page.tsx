@@ -17,6 +17,9 @@ const ARTICLES_QUERY = `
   'fileDate': file->_createdAt,
 }`;
 
+// Revalidate the page once every hour, this ensures content is reasonably fresh
+export const revalidate = 3600;
+
 export default async function PostsIndexRoute() {
   const data = articleSchema
     .array()
