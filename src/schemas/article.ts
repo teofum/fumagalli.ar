@@ -7,7 +7,7 @@ export const articleSchema = z.object({
   _id: z.string(),
   title: z.string(),
   slug: z.string(),
-  legacyDate: z.string().optional(),
+  legacyDate: z.string().nullable(),
   fileDate: z.string(),
 });
 
