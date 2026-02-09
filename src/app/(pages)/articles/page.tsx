@@ -32,7 +32,7 @@ export default async function PostsIndexRoute() {
   articles.sort(dateCompareFn);
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto pb-16">
       <h1 className="font-title text-content-4xl sm:text-content-6xl mb-8">
         Writing
       </h1>
@@ -54,7 +54,7 @@ export default async function PostsIndexRoute() {
         </Link>
       </div>
 
-      <h2 className="text-content-xl sm:text-content-2xl font-semibold mb-4 mt-8">
+      <h2 className="text-content-xl sm:text-content-2xl font-semibold md:mb-4 mt-8">
         Blog
       </h2>
 
@@ -63,7 +63,7 @@ export default async function PostsIndexRoute() {
           <li key={post.slug} className="border-b">
             <Link
               href={`articles/${post.slug}`}
-              className="flex flex-row p-2 gap-2 hover:bg-text/10 transition-colors"
+              className="flex flex-row items-center md:items-start py-2 md:px-2 gap-2 hover:bg-text/10 transition-colors"
             >
               {post.thumbnail ? (
                 <img
@@ -76,8 +76,8 @@ export default async function PostsIndexRoute() {
                     .url()}
                 />
               ) : null}
-              <div className="flex flex-col p-2 grow">
-                <div className="flex flex-row items-baseline">
+              <div className="flex flex-col p-2 grow gap-2">
+                <div className="flex flex-col md:flex-row items-start md:items-baseline gap-2">
                   <span className="grow font-medium text-content-base/5">
                     {post.title}
                   </span>
