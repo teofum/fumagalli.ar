@@ -2,7 +2,7 @@ export default function DitherCard() {
   return (
     <div
       className="
-        min-w-60 aspect-3/2 relative border
+        min-w-60 aspect-3/2 relative rounded-md
         flex flex-col justify-center group overflow-hidden
       "
     >

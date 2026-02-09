@@ -3,6 +3,7 @@ import DitherCard from '@/content/mdx/dither/dither.card';
 import Dither2Card from '@/content/mdx/dither2/dither2.card';
 import { articleSchema } from '@/schemas/article';
 import { sanityClient } from '@/utils/sanity.server';
+import { sanityImage } from '@/utils/sanity.image';
 
 const dateCompareFn = (a: { date: Date }, b: { date: Date }) => {
   return b.date.getTime() - a.date.getTime();
@@ -10,9 +11,7 @@ const dateCompareFn = (a: { date: Date }, b: { date: Date }) => {
 
 const ARTICLES_QUERY = `
 *[_type == "article"] {
-  _id,
-  title,
-  slug,
+  ...,
   legacyDate,
   'fileDate': file->_createdAt,
 }`;
@@ -42,7 +41,7 @@ export default async function PostsIndexRoute() {
         Interactive articles
       </h2>
       <p className="mb-4">
-        These are detailed, interactive deep-dives into a topic I find
+        These are detailed, interactive deep-dives into topics I find
         interesting.
       </p>
 
@@ -55,25 +54,52 @@ export default async function PostsIndexRoute() {
         </Link>
       </div>
 
-      <h2 className="text-content-xl sm:text-content-2xl font-semibold mb-2 mt-8">
-        Other articles
+      <h2 className="text-content-xl sm:text-content-2xl font-semibold mb-4 mt-8">
+        Blog
       </h2>
 
       <ul>
         {articles.map((post) => (
-          <li key={post.slug} className="border-t last:border-b">
+          <li key={post.slug} className="border-b">
             <Link
               href={`articles/${post.slug}`}
-              className="flex flex-row p-4 gap-4 hover:bg-text/10 transition-colors"
+              className="flex flex-row p-2 gap-2 hover:bg-text/10 transition-colors"
             >
-              <span className="w-20">
-                {post.date.toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit',
-                })}
-              </span>
-              <span className="grow">{post.title}</span>
+              {post.thumbnail ? (
+                <img
+                  className="w-20 h-20"
+                  alt=""
+                  src={sanityImage(post.thumbnail)
+                    .width(80)
+                    .height(80)
+                    .dpr(2)
+                    .url()}
+                />
+              ) : null}
+              <div className="flex flex-col p-2 grow">
+                <div className="flex flex-row items-baseline">
+                  <span className="grow font-medium text-content-base/5">
+                    {post.title}
+                  </span>
+                  <div className="flex flex-row items-baseline">
+                    {post.tags.map((tag) => (
+                      <div
+                        key={tag}
+                        className="px-2 border rounded-full text-content-xs/5"
+                      >
+                        {tag}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <span className="w-20 text-current/60 text-content-sm">
+                  {post.date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  })}
+                </span>
+              </div>
             </Link>
           </li>
         ))}
