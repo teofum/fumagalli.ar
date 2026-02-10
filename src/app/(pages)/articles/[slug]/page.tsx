@@ -25,7 +25,7 @@ export default async function Post({
 
   return (
     <article className="max-w-2xl mx-auto pb-16">
-      <div className="relative -mx-8 px-8 pb-4 mb-8 flex flex-col justify-end aspect-4/3 md:aspect-2/1 overflow-hidden rounded-md">
+      <div className="relative -mx-4 px-4 md:-mx-8 md:px-8 pb-4 mb-8 flex flex-col justify-end aspect-4/3 md:aspect-2/1 overflow-hidden md:rounded-md">
         {article.thumbnail ? (
           <img
             className="absolute inset-0 w-full h-full object-cover"

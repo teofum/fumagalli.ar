@@ -1,35 +1,16 @@
 import Link from 'next/link';
+
 import DitherCard from '@/content/mdx/dither/dither.card';
 import Dither2Card from '@/content/mdx/dither2/dither2.card';
-import { articleSchema } from '@/schemas/article';
-import { sanityClient } from '@/utils/sanity.server';
 import { sanityImage } from '@/utils/sanity.image';
 
-const dateCompareFn = (a: { date: Date }, b: { date: Date }) => {
-  return b.date.getTime() - a.date.getTime();
-};
-
-const ARTICLES_QUERY = `
-*[_type == "article"] {
-  ...,
-  legacyDate,
-  'fileDate': file->_createdAt,
-}`;
+import fetchArticles from './fetch-articles';
 
 // Revalidate the page once every hour, this ensures content is reasonably fresh
 export const revalidate = 3600;
 
 export default async function PostsIndexRoute() {
-  const data = articleSchema
-    .array()
-    .parse(await sanityClient.fetch(ARTICLES_QUERY));
-
-  const articles = data.map(({ fileDate, legacyDate, ...article }) => ({
-    ...article,
-    date: new Date(legacyDate ?? fileDate),
-  }));
-
-  articles.sort(dateCompareFn);
+  const articles = await fetchArticles();
 
   return (
     <div className="max-w-3xl mx-auto pb-16">

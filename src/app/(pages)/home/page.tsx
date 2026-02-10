@@ -1,17 +1,128 @@
-import Image from 'next/image';
+import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
+import z from 'zod';
 
-import Button, { LinkButton } from '@/components/ui/Button';
-import Close from '@/components/ui/icons/Close';
-import RetroLink from '@/components/ui/Link';
-import Webring from '@/components/ui/Webring';
+import { PHOTO_BY_IDX_QUERY, PHOTO_COUNT_QUERY } from '@/queries/queries';
+import { photoSchema } from '@/schemas/photos';
+import { sanityImage } from '@/utils/sanity.image';
+import { sanityClient } from '@/utils/sanity.server';
+
+import fetchArticles from '../articles/fetch-articles';
+import { PhotoThumbnail } from '../photos/photo-thumbnail';
 
 const resources = '/fs/Applications/intro/resources';
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
-export default function Home() {
+export default async function Home() {
+  const articles = await fetchArticles();
+  const latestArticle = articles[0];
+
+  const today = Math.floor(new Date().getTime() / MS_PER_DAY);
+  const hash = today ^ (0x9e3779b9 + (today << 6) + (today >> 2));
+
+  const count = z.number().parse(await sanityClient.fetch(PHOTO_COUNT_QUERY));
+  const photoOfTheDay = photoSchema.parse(
+    await sanityClient.fetch(PHOTO_BY_IDX_QUERY(hash % count)),
+  );
+
   return (
     <main className="p-4">
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-surface bevel-window p-1 flex flex-col font-sans text-base">
+      <div className="max-w-3xl mx-auto pb-16">
+        <p className="text-content-sm">Hi there! My name is</p>
+        <h1 className="font-title text-content-5xl md:text-content-6xl mt-2 mb-4">
+          Teo Fumagalli
+        </h1>
+        <p className="text-content-sm">
+          I&apos;m a programmer, UI designer and amateur photographer based in
+          Buenos Aires, Argentina. I do a bit of everything, but my professional
+          background is in web development and my primary interest in rendering
+          and graphics programming.
+        </p>
+
+        <h2 className="text-content-lg md:text-content-xl font-semibold mb-2 mt-8">
+          Photo of the day
+        </h2>
+
+        <PhotoThumbnail
+          photo={photoOfTheDay}
+          href="/photos/detail/{id}"
+          width={768}
+          height={512}
+          quality={90}
+        />
+
+        <Link
+          href="/photos"
+          className="flex flex-row items-center justify-between p-4 hover:bg-current/20 border-b font-medium"
+        >
+          <span>Photography</span>
+          <ChevronRight size={20} />
+        </Link>
+
+        <h2 className="text-content-lg md:text-content-xl font-semibold mb-2 mt-8">
+          Latest article
+        </h2>
+
+        <div className="border-b">
+          <Link
+            href={`articles/${latestArticle.slug}`}
+            className="flex flex-row items-center md:items-start py-2 md:px-2 gap-2 hover:bg-text/10 transition-colors"
+          >
+            {latestArticle.thumbnail ? (
+              <img
+                className="w-20 h-20"
+                alt=""
+                src={sanityImage(latestArticle.thumbnail)
+                  .width(80)
+                  .height(80)
+                  .dpr(2)
+                  .url()}
+              />
+            ) : null}
+            <div className="flex flex-col p-2 grow gap-2">
+              <div className="flex flex-col md:flex-row items-start md:items-baseline gap-2">
+                <span className="grow font-medium text-content-base/5">
+                  {latestArticle.title}
+                </span>
+                <div className="flex flex-row items-baseline">
+                  {latestArticle.tags.map((tag) => (
+                    <div
+                      key={tag}
+                      className="px-2 border rounded-full text-content-xs/5"
+                    >
+                      {tag}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <span className="w-20 text-current/60 text-content-sm">
+                {latestArticle.date.toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                })}
+              </span>
+            </div>
+          </Link>
+        </div>
+
+        <Link
+          href="/articles"
+          className="flex flex-row items-center justify-between p-4 hover:bg-current/20 border-b font-medium"
+        >
+          <span>Blog</span>
+          <ChevronRight size={20} />
+        </Link>
+
+        <Link
+          href="/projects"
+          className="flex flex-row items-center justify-between p-4 hover:bg-current/20 border-b font-medium"
+        >
+          <span>Work</span>
+          <ChevronRight size={20} />
+        </Link>
+
+        {/*<div className="bg-surface bevel-window p-1 flex flex-col font-sans text-base">
           <div className="select-none flex flex-row items-center gap-2 px-0.5 py-px mb-0.5">
             <Image
               width={16}
@@ -115,7 +226,7 @@ export default function Home() {
               className="self-end h-100 [image-rendering:pixelated]"
             />
           </div>
-        </div>
+        </div>*/}
       </div>
     </main>
   );
