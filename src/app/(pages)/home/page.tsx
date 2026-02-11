@@ -10,8 +10,10 @@ import { sanityClient } from '@/utils/sanity.server';
 import fetchArticles from '../articles/fetch-articles';
 import { PhotoThumbnail } from '../photos/photo-thumbnail';
 
-const resources = '/fs/Applications/intro/resources';
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+// Revalidate the page once every hour, this ensures content is reasonably fresh
+export const revalidate = 3600;
 
 export default async function Home() {
   const articles = await fetchArticles();
