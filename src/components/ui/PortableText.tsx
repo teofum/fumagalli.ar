@@ -19,15 +19,21 @@ export const portableTextComponents: PortableTextComponents = {
   types: {
     image: ({ value, isInline }) => {
       return (
-        <img
-          className="mt-2 rounded-md"
-          src={sanityImage(value)
-            .width(isInline ? 100 : 1280)
-            .fit('max')
-            .url()}
-          alt={value.alt || ''}
-          loading="lazy"
-        />
+        <div className="mt-2 relative rounded-md overflow-hidden">
+          <img
+            src={sanityImage(value)
+              .width(isInline ? 100 : 1280)
+              .fit('max')
+              .url()}
+            alt={value.alt || ''}
+            loading="lazy"
+          />
+          {value.caption ? (
+            <div className="text-content-sm/5 absolute bottom-0 left-0 w-full p-2 bg-black/60 backdrop-blur-xl italic">
+              {value.caption}
+            </div>
+          ) : null}
+        </div>
       );
     },
     code: ({ value }) => {

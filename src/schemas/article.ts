@@ -16,5 +16,14 @@ export const articleSchema = z.object({
 });
 
 export const fullArticleSchema = articleSchema.extend({
-  content: z.union([blockSchema, imageSchema, codeSchema]).array(),
+  content: z
+    .union([
+      blockSchema,
+      imageSchema.extend({
+        alt: z.string().optional(),
+        caption: z.string().optional(),
+      }),
+      codeSchema,
+    ])
+    .array(),
 });
