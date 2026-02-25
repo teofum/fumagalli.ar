@@ -48,25 +48,30 @@ export default async function PostsIndexRoute() {
             >
               {post.thumbnail ? (
                 <img
-                  className="w-20 h-20"
+                  className="w-20 h-20 md:w-26 md:h-26 rounded"
                   alt=""
                   src={sanityImage(post.thumbnail)
-                    .width(80)
-                    .height(80)
+                    .width(120)
+                    .height(120)
                     .dpr(2)
                     .url()}
                 />
               ) : null}
               <div className="flex flex-col p-2 grow gap-2">
-                <div className="flex flex-col md:flex-row items-start md:items-baseline gap-2">
-                  <span className="grow font-medium text-content-base/5">
-                    {post.title}
-                  </span>
-                  <div className="flex flex-row items-baseline">
+                <div className="flex flex-col md:flex-row items-start gap-2">
+                  <div className="flex flex-col items-start gap-2">
+                    <span className="grow font-medium text-content-base/5">
+                      {post.title}
+                    </span>
+                    <span className="min-h-4 text-content-sm/4 text-current/60 text-balance">
+                      {post.description}
+                    </span>
+                  </div>
+                  <div className="flex flex-row items-baseline mt-1 md:mt-0">
                     {post.tags.map((tag) => (
                       <div
                         key={tag}
-                        className="px-2 border rounded-full text-content-xs/5"
+                        className="px-2 border rounded-full text-content-xs/5 whitespace-nowrap"
                       >
                         {tag}
                       </div>

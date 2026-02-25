@@ -10,6 +10,7 @@ export const articleSchema = z.object({
   slug: z.string(),
   tags: z.string().array(),
   thumbnail: imageSchema.optional(),
+  description: z.string().optional(),
   legacyDate: z.string().nullable(),
   fileDate: z.string(),
 });
