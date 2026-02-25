@@ -13,14 +13,9 @@ const ARTICLES_QUERY = `
 }`;
 
 export default async function fetchArticles() {
-  const data = articleSchema
+  const articles = articleSchema
     .array()
     .parse(await sanityClient.fetch(ARTICLES_QUERY));
-
-  const articles = data.map(({ fileDate, legacyDate, ...article }) => ({
-    ...article,
-    date: new Date(legacyDate ?? fileDate),
-  }));
 
   articles.sort(dateCompareFn);
 

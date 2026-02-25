@@ -9,6 +9,7 @@ import { sanityClient } from '@/utils/sanity.server';
 
 import fetchArticles from '../articles/fetch-articles';
 import { PhotoThumbnail } from '../photos/photo-thumbnail';
+import ArticleItem from '../article-item';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -66,46 +67,7 @@ export default async function Home() {
         </h2>
 
         <div className="border-b">
-          <Link
-            href={`articles/${latestArticle.slug}`}
-            className="flex flex-row items-center md:items-start py-2 md:px-2 gap-2 hover:bg-text/10 transition-colors"
-          >
-            {latestArticle.thumbnail ? (
-              <img
-                className="w-20 h-20"
-                alt=""
-                src={sanityImage(latestArticle.thumbnail)
-                  .width(80)
-                  .height(80)
-                  .dpr(2)
-                  .url()}
-              />
-            ) : null}
-            <div className="flex flex-col p-2 grow gap-2">
-              <div className="flex flex-col md:flex-row items-start md:items-baseline gap-2">
-                <span className="grow font-medium text-content-base/5">
-                  {latestArticle.title}
-                </span>
-                <div className="flex flex-row items-baseline">
-                  {latestArticle.tags.map((tag) => (
-                    <div
-                      key={tag}
-                      className="px-2 border rounded-full text-content-xs/5"
-                    >
-                      {tag}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <span className="w-20 text-current/60 text-content-sm">
-                {latestArticle.date.toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit',
-                })}
-              </span>
-            </div>
-          </Link>
+          <ArticleItem post={latestArticle} />
         </div>
 
         <Link
