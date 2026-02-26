@@ -22,16 +22,7 @@ export const articleSchema = z
 
 export const fullArticleSchema = articleSchema.and(
   z.object({
-    content: z
-      .union([
-        blockSchema,
-        imageSchema.extend({
-          alt: z.string().optional(),
-          caption: z.string().optional(),
-        }),
-        codeSchema,
-      ])
-      .array(),
+    content: z.union([blockSchema, imageSchema, codeSchema]).array(),
   }),
 );
 

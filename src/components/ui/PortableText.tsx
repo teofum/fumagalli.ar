@@ -85,9 +85,7 @@ export const portableTextComponents: PortableTextComponents = {
       </RetroLink>
     ),
     code: ({ children }) => (
-      <code className="bg-codeblock px-1 rounded-sm text-gray-900 dark:text-gray-100 font-mono">
-        {children}
-      </code>
+      <code className="bg-codeblock px-1 rounded-sm font-mono">{children}</code>
     ),
   },
   // pre: (props) => (

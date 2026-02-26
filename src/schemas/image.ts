@@ -6,6 +6,8 @@ const imageSchema = z.object({
     _type: z.string(),
     _ref: z.string(),
   }),
+  alt: z.string().optional(),
+  caption: z.string().optional(),
 });
 
 export default imageSchema;
