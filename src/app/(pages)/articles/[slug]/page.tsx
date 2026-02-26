@@ -56,11 +56,6 @@ export default async function Post({ params }: ServerComponentProps) {
         <h1 className="relative font-title text-content-4xl md:text-content-5xl text-balance">
           {article.title}
         </h1>
-        {article.description ? (
-          <p className="relative text-content-sm/5 mt-4 -m-2 md:-mx-4 p-2 md:px-4 rounded text-balance bg-white/70 dark:bg-stone-950/70 text-current/70">
-            {article.description}
-          </p>
-        ) : null}
       </div>
       <CustomPortableText value={article.content} />
     </article>

@@ -22,14 +22,16 @@ export const portableTextComponents: PortableTextComponents = {
         <div className="mt-2 relative rounded-md overflow-hidden">
           <img
             src={sanityImage(value)
-              .width(isInline ? 100 : 1280)
+              .width(isInline ? 100 : 672)
+              .dpr(2)
               .fit('max')
+              .quality(100)
               .url()}
             alt={value.alt || ''}
             loading="lazy"
           />
           {value.caption ? (
-            <div className="text-content-sm/5 absolute bottom-0 left-0 w-full p-2 bg-black/60 backdrop-blur-xl italic">
+            <div className="text-content-sm/5 p-2 bg-current/10 italic">
               {value.caption}
             </div>
           ) : null}
