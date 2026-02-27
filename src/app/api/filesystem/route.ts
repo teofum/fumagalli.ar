@@ -71,6 +71,12 @@ async function fetchPhotoCollection(slug: string) {
   );
 
   const photos = await fetchCollectionPhotos(collection);
+  photos.sort(
+    (a, b) =>
+      (a.metadata.exif.dateTime?.getTime() ?? 0) -
+      (b.metadata.exif.dateTime?.getTime() ?? 0),
+  );
+
   const parentFolder = await fetchFolder(PHOTOS_ROOT_ID);
   const folder: Folder = {
     _id: `@photo_collection:${slug}`,

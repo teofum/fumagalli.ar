@@ -32,7 +32,7 @@ export function useImageSize(file: ImageFile) {
   } = useSystemStore();
 
   const scaling = Math.min(
-    1 / Math.max(originalWidth / imageSize, originalHeight / imageSize),
+    1 / Math.min(originalWidth / imageSize, originalHeight / imageSize),
     1,
   );
 
