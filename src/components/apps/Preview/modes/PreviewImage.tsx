@@ -83,12 +83,11 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
   const zoomTo = (mode: 'fit' | 'fill') => {
     if (!viewportRef.current || !imageRef.current) return;
 
-    const { naturalWidth, naturalHeight } = imageRef.current;
     const { width, height } = viewportRef.current.getBoundingClientRect();
 
     // Account for image border and scrollbar
-    const zoomToFitWidth = (width - 18) / naturalWidth;
-    const zoomToFitHeight = (height - 18) / naturalHeight;
+    const zoomToFitWidth = (width - 18) / imageWidth;
+    const zoomToFitHeight = (height - 18) / imageHeight;
 
     setZoom(
       mode === 'fit'

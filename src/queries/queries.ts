@@ -53,6 +53,8 @@ export const PHOTO_CATEGORY_QUERY = `
   collections[]-> {
     _type,
     _id,
+    _createdAt,
+    _updatedAt,
     title,
     'slug': slug.current,
     'thumbnail': thumbnail.asset-> {
@@ -66,6 +68,8 @@ export const PHOTO_COLLECTION_QUERY = (slug: string) => `
 *[_type == "photoCollection" && slug.current == "${slug}"][0] {
   _type,
   _id,
+  _createdAt,
+  _updatedAt,
   title,
   type,
   'slug': slug.current,
@@ -81,6 +85,21 @@ export const PHOTO_COLLECTION_QUERY = (slug: string) => `
     },
   },
   filters[],
+}`;
+
+export const PHOTO_COLLECTIONS_QUERY = `
+*[_type == "photoCollection"] {
+  _type,
+  _id,
+  _createdAt,
+  _updatedAt,
+  title,
+  type,
+  'slug': slug.current,
+  'thumbnail': thumbnail.asset-> {
+    ...,
+    'tags': opt.media.tags[]->name.current,
+  },
 }`;
 
 export const EXIF_QUERY = `

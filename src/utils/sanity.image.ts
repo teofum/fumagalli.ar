@@ -32,22 +32,11 @@ export function useImageSize(file: ImageFile) {
   } = useSystemStore();
 
   const scaling = Math.min(
-    1 / Math.max(originalWidth / imageSize, originalHeight / imageSize),
+    1 / Math.min(originalWidth / imageSize, originalHeight / imageSize),
     1,
   );
 
   return [originalWidth * scaling, originalHeight * scaling];
-}
-
-export function getImageUrl(file: ImageFile) {
-  // Get the width and height from the asset URL
-  const [width, height] = getImageSize(file);
-  if (!width || !height) return;
-
-  // TODO: allow adjusting this somewhere?
-  if (width >= height)
-    return sanityImage(file.content).width(2000).quality(80).url();
-  else return sanityImage(file.content).height(2000).quality(80).url();
 }
 
 export function useImageUrl(file: ImageFile) {
@@ -59,8 +48,7 @@ export function useImageUrl(file: ImageFile) {
   const [width, height] = getImageSize(file);
   if (!width || !height) return;
 
-  // TODO: allow adjusting this somewhere?
-  if (width >= height)
+  if (width < height)
     return sanityImage(file.content)
       .width(Math.min(width, size))
       .quality(quality)
