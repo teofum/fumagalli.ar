@@ -9,7 +9,7 @@ import {
   defaultTheme,
   type ThemeCustomization,
   type SystemTheme,
-} from '@/components/apps/ThemeSettings/types';
+} from '@/components/apps/theme-settings/types';
 
 import {
   defaultFilesSettings,
@@ -22,15 +22,15 @@ import {
 import {
   defaultSolitaireSettings,
   type SolitaireSettings,
-} from '@/components/apps/Solitaire/types';
+} from '@/components/apps/the-solitaire/types';
 import {
   defaultSudokuSettings,
   type SudokuSettings,
-} from '@/components/apps/Sudoku/types';
+} from '@/components/apps/the-sudoku/types';
 import {
   defaultDitherLabSettings,
   type DitherLabSettings,
-} from '@/components/apps/DitherLab/types';
+} from '@/components/apps/dither-lab/types';
 import {
   defaultPaintSettings,
   type PaintSettings,
@@ -38,11 +38,11 @@ import {
 import {
   defaultHelpSettings,
   type HelpSettings,
-} from '@/components/apps/Help/types';
+} from '@/components/apps/the-help/types';
 import {
   defaultSystemSettings,
   type SystemSettings,
-} from '@/components/apps/SystemSettings/types';
+} from '@/components/apps/system-settings/types';
 
 const MAX_FILE_HISTORY = 10; // Number of last accessed files to keep
 const MAX_DIR_HISTORY = 10; // Number of last accessed directories to keep

@@ -4,19 +4,19 @@ import useDesktopStore from '@/stores/desktop';
 import useSystemStore from '@/stores/system';
 import useFileHandler from '@/hooks/use-file-handler';
 
-import { about } from '../apps/About';
+import { about } from '../apps/the-about';
 import { intro } from '../apps/Intro';
 import { minesweeper } from '../apps/Minesweeper';
 import { files } from '../apps/Files';
-import { sudoku } from '../apps/Sudoku';
-import { solitaire } from '../apps/Solitaire';
-import { themeSettings } from '../apps/ThemeSettings';
+import { sudoku } from '../apps/the-sudoku';
+import { solitaire } from '../apps/the-solitaire';
+import { themeSettings } from '../apps/theme-settings';
 import { dosEmu } from '../apps/DOSEmu';
-import { ditherLab } from '../apps/DitherLab';
+import { ditherLab } from '../apps/dither-lab';
 import { DOS_GAMES } from '../apps/DOSEmu/types';
-import { help } from '../apps/Help';
+import { help } from '../apps/the-help';
 import { paint } from '../apps/Paint';
-import { systemSettings } from '../apps/SystemSettings';
+import { systemSettings } from '../apps/system-settings';
 
 const ICON_PATH = '/fs/System Files/Icons/Start';
 

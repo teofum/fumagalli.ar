@@ -1,7 +1,7 @@
 import { dosEmu } from '@/components/apps/DOSEmu';
 import { DOS_GAMES } from '@/components/apps/DOSEmu/types';
-import { preview } from '@/components/apps/Preview';
-import { previewSupportedFileTypes } from '@/components/apps/Preview/types';
+import { preview } from '@/components/apps/the-preview';
+import { previewSupportedFileTypes } from '@/components/apps/the-preview/types';
 import { getApp } from '@/components/apps/renderApp';
 import { AnyFile } from '@/schemas/file';
 import type { ItemStub } from '@/schemas/folder';

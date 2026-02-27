@@ -1,26 +1,26 @@
-import About, { about } from './About';
+import About, { about } from './the-about';
 import Intro, { intro } from './Intro';
 import Files, { files } from './Files';
 import type { FilesState } from './Files/types';
-import Preview, { preview } from './Preview';
-import type { PreviewState } from './Preview/types';
-import Help, { help } from './Help';
-import type { HelpState } from './Help/types';
+import Preview, { preview } from './the-preview';
+import type { PreviewState } from './the-preview/types';
+import Help, { help } from './the-help';
+import type { HelpState } from './the-help/types';
 import Minesweeper, { minesweeper } from './Minesweeper';
 import MinesweeperCustomDifficulty, {
   mine_difficulty,
-} from './Minesweeper/modals/CustomDifficulty';
-import type { MinesweeperCustomDifficultyState } from './Minesweeper/modals/CustomDifficulty';
-import Sudoku, { sudoku } from './Sudoku';
-import Solitaire, { solitaire } from './Solitaire';
+} from './Minesweeper/modals/custom-difficulty';
+import type { MinesweeperCustomDifficultyState } from './Minesweeper/modals/custom-difficulty';
+import Sudoku, { sudoku } from './the-sudoku';
+import Solitaire, { solitaire } from './the-solitaire';
 import SolitaireDeckSelect, {
   solitaire_deck,
-} from './Solitaire/modals/DeckSelect';
-import ThemeSettings, { themeSettings } from './ThemeSettings';
+} from './the-solitaire/modals/deck-select';
+import ThemeSettings, { themeSettings } from './theme-settings';
 import DOSEmu, { dosEmu } from './DOSEmu';
 import type { DOSEmuState } from './DOSEmu/types';
-import DitherLab, { ditherLab } from './DitherLab';
-import type { DitherLabState } from './DitherLab/types';
+import DitherLab, { ditherLab } from './dither-lab';
+import type { DitherLabState } from './dither-lab/types';
 import MessageBox, { messageBox } from './MessageBox';
 import type { MessageBoxState } from './MessageBox/types';
 import Paint, { paint } from './Paint';
@@ -30,7 +30,7 @@ import PaintStretchAndSkew, {
   paint_stretchAndSkew,
 } from './Paint/modals/StretchAndSkew';
 import type { PaintStretchAndSkewState } from './Paint/modals/StretchAndSkew';
-import SystemSettings, { systemSettings } from './SystemSettings';
+import SystemSettings, { systemSettings } from './system-settings';
 
 export const applications = [
   { Component: About, meta: about },
