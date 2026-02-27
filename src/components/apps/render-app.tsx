@@ -1,35 +1,37 @@
-import About, { about } from './the-about';
-import Intro, { intro } from './Intro';
-import Files, { files } from './Files';
-import type { FilesState } from './Files/types';
-import Preview, { preview } from './the-preview';
-import type { PreviewState } from './the-preview/types';
-import Help, { help } from './the-help';
-import type { HelpState } from './the-help/types';
-import Minesweeper, { minesweeper } from './Minesweeper';
+import About, { about } from './about';
+import Intro, { intro } from './intro';
+import Files, { files } from './files';
+import type { FilesState } from './files/types';
+import Preview, { preview } from './preview';
+import type { PreviewState } from './preview/types';
+import Help, { help } from './help';
+import type { HelpState } from './help/types';
+import Minesweeper, { minesweeper } from './minesweeper';
 import MinesweeperCustomDifficulty, {
   mine_difficulty,
-} from './Minesweeper/modals/custom-difficulty';
-import type { MinesweeperCustomDifficultyState } from './Minesweeper/modals/custom-difficulty';
-import Sudoku, { sudoku } from './the-sudoku';
-import Solitaire, { solitaire } from './the-solitaire';
+  type MinesweeperCustomDifficultyState,
+} from './minesweeper/modals/custom-difficulty';
+import Sudoku, { sudoku } from './sudoku';
+import Solitaire, { solitaire } from './solitaire';
 import SolitaireDeckSelect, {
   solitaire_deck,
-} from './the-solitaire/modals/deck-select';
+} from './solitaire/modals/deck-select';
 import ThemeSettings, { themeSettings } from './theme-settings';
-import DOSEmu, { dosEmu } from './DOSEmu';
-import type { DOSEmuState } from './DOSEmu/types';
+import DOSEmu, { dosEmu } from './dos-emu';
+import type { DOSEmuState } from './dos-emu/types';
 import DitherLab, { ditherLab } from './dither-lab';
 import type { DitherLabState } from './dither-lab/types';
-import MessageBox, { messageBox } from './MessageBox';
-import type { MessageBoxState } from './MessageBox/types';
-import Paint, { paint } from './Paint';
-import PaintImageSize, { paint_imageSize } from './Paint/modals/ImageSize';
-import type { PaintImageSizeState } from './Paint/modals/ImageSize';
+import MessageBox, { messageBox } from './message-box';
+import type { MessageBoxState } from './message-box/types';
+import Paint, { paint } from './paint';
+import PaintImageSize, {
+  paint_imageSize,
+  type PaintImageSizeState,
+} from './paint/modals/image-size';
 import PaintStretchAndSkew, {
   paint_stretchAndSkew,
-} from './Paint/modals/StretchAndSkew';
-import type { PaintStretchAndSkewState } from './Paint/modals/StretchAndSkew';
+  type PaintStretchAndSkewState,
+} from './paint/modals/stretch-and-skew';
 import SystemSettings, { systemSettings } from './system-settings';
 
 export const applications = [

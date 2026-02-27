@@ -1,10 +1,10 @@
-import { useRef } from "react";
+import { useRef } from 'react';
 
-import { useWindow } from "@/components/desktop/Window/context";
-import { files } from "@/components/apps/Files";
-import Menu from "@/components/ui/Menu";
+import { useWindow } from '@/components/desktop/Window/context';
+import { files } from '@/components/apps/files';
+import Menu from '@/components/ui/Menu';
 
-import { usePaintState } from "../context";
+import { usePaintState } from '../context';
 
 interface PaintFileMenuProps {
   clear: () => void;
@@ -20,12 +20,12 @@ export default function PaintFileMenu({ clear }: PaintFileMenuProps) {
     clear();
 
     const history: ImageData[] = [];
-    const ctx = canvas?.getContext("2d");
+    const ctx = canvas?.getContext('2d');
     if (canvas && ctx)
       history.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
 
     setState({
-      filename: "untitled",
+      filename: 'untitled',
       selection: null,
       history,
       undoCount: 0,
@@ -36,13 +36,13 @@ export default function PaintFileMenu({ clear }: PaintFileMenuProps) {
     const img = new Image();
 
     img.addEventListener(
-      "load",
+      'load',
       () => {
         if (canvas) {
           canvas.width = img.naturalWidth;
           canvas.height = img.naturalHeight;
 
-          const ctx = canvas.getContext("2d");
+          const ctx = canvas.getContext('2d');
           ctx?.drawImage(img, 0, 0);
 
           const history: ImageData[] = [];
@@ -71,7 +71,7 @@ export default function PaintFileMenu({ clear }: PaintFileMenuProps) {
       const file = input.files[0];
       openImage(
         URL.createObjectURL(file),
-        file.name.split(".").slice(0, -1).join("."),
+        file.name.split('.').slice(0, -1).join('.'),
       );
     }
   };
@@ -82,11 +82,11 @@ export default function PaintFileMenu({ clear }: PaintFileMenuProps) {
   const open = () => {
     modal(
       files({
-        typeFilter: ["fileImage"],
+        typeFilter: ['fileImage'],
         modalCallback: (stub) => {
           openImage(
             `/api/safeimage?id=${stub._id}`,
-            stub.name.split(".").slice(0, -1).join("."),
+            stub.name.split('.').slice(0, -1).join('.'),
           );
         },
       }),
@@ -96,14 +96,14 @@ export default function PaintFileMenu({ clear }: PaintFileMenuProps) {
   const download = () => {
     if (!canvas) return;
     const dataUrl = canvas
-      .toDataURL("image/png")
-      .replace("image/png", "image/octet-stream");
+      .toDataURL('image/png')
+      .replace('image/png', 'image/octet-stream');
 
     const filename = `${state.filename}.png`;
 
-    const link = document.createElement("a");
-    link.setAttribute("download", filename);
-    link.setAttribute("href", dataUrl);
+    const link = document.createElement('a');
+    link.setAttribute('download', filename);
+    link.setAttribute('href', dataUrl);
     link.click();
   };
 

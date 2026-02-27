@@ -1,2 +1,2 @@
-export { default } from './the-preview';
+export { default } from './preview';
 export { preview } from './preview.init';

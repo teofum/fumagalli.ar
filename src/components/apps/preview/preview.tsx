@@ -5,7 +5,7 @@ import Menu from '@/components/ui/Menu';
 import useDesktopStore from '@/stores/desktop';
 import useFetch from '@/hooks/use-fetch';
 
-import { files } from '@/components/apps/Files';
+import { files } from '@/components/apps/files';
 import PreviewImage from './modes/preview-image';
 import PreviewMDX from './modes/preview-mdx';
 import PreviewRichText from './modes/preview-rich-text';

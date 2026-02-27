@@ -1,2 +1,2 @@
-export { default } from './the-sudoku';
+export { default } from './sudoku';
 export { sudoku } from './sudoku.init';

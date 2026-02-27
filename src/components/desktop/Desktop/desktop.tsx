@@ -1,27 +1,29 @@
 'use client';
 
-import { useEffect, useLayoutEffect } from 'react';
-import Window from '../Window';
-import Taskbar from '../Taskbar';
-import useDesktopStore from '@/stores/desktop';
-import { about } from '@/components/apps/the-about';
-import { intro } from '@/components/apps/Intro';
 import cn from 'classnames';
-import useSystemStore from '@/stores/system';
 import parseCSSColor from 'parse-css-color';
-import { files } from '@/components/apps/Files';
-import { minesweeper } from '@/components/apps/Minesweeper';
-import { sudoku } from '@/components/apps/the-sudoku';
-import { solitaire } from '@/components/apps/the-solitaire';
-import { dosEmu } from '@/components/apps/DOSEmu';
+import { useEffect, useLayoutEffect } from 'react';
+
+import { about } from '@/components/apps/about';
 import { ditherLab } from '@/components/apps/dither-lab';
-import { DOS_GAMES } from '@/components/apps/DOSEmu/types';
-import { paint } from '@/components/apps/Paint';
-import ContextMenu from '@/components/ui/ContextMenu';
+import { dosEmu } from '@/components/apps/dos-emu';
+import { DOS_GAMES } from '@/components/apps/dos-emu/types';
+import { files } from '@/components/apps/files';
+import { intro } from '@/components/apps/intro';
+import { minesweeper } from '@/components/apps/minesweeper';
+import { paint } from '@/components/apps/paint';
+import { applications } from '@/components/apps/render-app';
+import { solitaire } from '@/components/apps/solitaire';
+import { sudoku } from '@/components/apps/sudoku';
 import { themeSettings } from '@/components/apps/theme-settings';
-import ShutdownDialog from './ShutdownDialog';
+import ContextMenu from '@/components/ui/ContextMenu';
+import useDesktopStore from '@/stores/desktop';
+import useSystemStore from '@/stores/system';
+
+import Taskbar from '../Taskbar';
+import Window from '../Window';
 import MobileDialog from './MobileDialog';
-import { applications } from '@/components/apps/renderApp';
+import ShutdownDialog from './ShutdownDialog';
 
 let initialized = false;
 

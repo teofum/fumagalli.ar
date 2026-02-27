@@ -1,7 +1,7 @@
 import useDesktopStore from '@/stores/desktop';
 import Button from '@/components/ui/Button';
 import { Tab, TabContent, Tabs, TabsList } from '@/components/ui/Tabs';
-import { files } from '../Files';
+import { files } from '../files';
 import RetroLink from '@/components/ui/Link';
 import Webring from '@/components/ui/Webring';
 import Image from 'next/image';

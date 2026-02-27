@@ -1,2 +1,2 @@
-export { default } from './the-solitaire';
+export { default } from './solitaire';
 export { solitaire } from './solitaire.init';

@@ -14,19 +14,19 @@ import {
 import {
   defaultFilesSettings,
   type FilesSettings,
-} from '@/components/apps/Files/types';
+} from '@/components/apps/files/types';
 import {
   defaultMinesweeperSettings,
   type MinesweeperSettings,
-} from '@/components/apps/Minesweeper/types';
+} from '@/components/apps/minesweeper/types';
 import {
   defaultSolitaireSettings,
   type SolitaireSettings,
-} from '@/components/apps/the-solitaire/types';
+} from '@/components/apps/solitaire/types';
 import {
   defaultSudokuSettings,
   type SudokuSettings,
-} from '@/components/apps/the-sudoku/types';
+} from '@/components/apps/sudoku/types';
 import {
   defaultDitherLabSettings,
   type DitherLabSettings,
@@ -34,11 +34,11 @@ import {
 import {
   defaultPaintSettings,
   type PaintSettings,
-} from '@/components/apps/Paint/types';
+} from '@/components/apps/paint/types';
 import {
   defaultHelpSettings,
   type HelpSettings,
-} from '@/components/apps/the-help/types';
+} from '@/components/apps/help/types';
 import {
   defaultSystemSettings,
   type SystemSettings,

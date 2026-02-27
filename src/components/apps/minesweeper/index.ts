@@ -1,2 +1,2 @@
-export { default } from './the-minesweeper';
+export { default } from './minesweeper';
 export { minesweeper } from './minesweeper.init';

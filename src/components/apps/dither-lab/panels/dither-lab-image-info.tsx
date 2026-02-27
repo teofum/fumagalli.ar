@@ -1,9 +1,9 @@
-import { useAppState } from "@/components/desktop/Window/context";
-import Button from "@/components/ui/Button";
-import Collapsible from "@/components/ui/Collapsible";
-import getReadableSize from "@/components/apps/Files/utils/getReadableSize";
-import Menu from "@/components/ui/Menu";
-import ArrowDown from "@/components/ui/icons/ArrowDown";
+import { useAppState } from '@/components/desktop/Window/context';
+import Button from '@/components/ui/Button';
+import Collapsible from '@/components/ui/Collapsible';
+import getReadableSize from '@/components/apps/files/utils/getReadableSize';
+import Menu from '@/components/ui/Menu';
+import ArrowDown from '@/components/ui/icons/ArrowDown';
 
 interface DitherLabImageInfoProps {
   upload: () => void;
@@ -14,14 +14,14 @@ export default function DitherLabImageInfo({
   upload,
   open,
 }: DitherLabImageInfoProps) {
-  const [state] = useAppState("dither");
+  const [state] = useAppState('dither');
 
   return (
     <Collapsible defaultOpen title="Source Image">
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center">
           <span className="grow min-w-0 overflow-hidden text-ellipsis">
-            {state.image?.filename || "No image"}
+            {state.image?.filename || 'No image'}
           </span>
 
           <div className="flex flex-row w-20">
@@ -35,7 +35,7 @@ export default function DitherLabImageInfo({
                     <ArrowDown />
                   </Button>
                 }
-                contentProps={{ align: "end", className: "min-w-20" }}
+                contentProps={{ align: 'end', className: 'min-w-20' }}
               >
                 <Menu.Item label="Upload from computer" onSelect={upload} />
                 <Menu.Item label="Browse files" onSelect={open} />
