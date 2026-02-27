@@ -23,7 +23,7 @@ import {
   PaletteType,
 } from '@/dither/palettes/types';
 import { generatePalette } from '@/dither/paletteGen/PaletteGenerator';
-import { messageBox } from '../MessageBox';
+import { messageBox } from '../message-box';
 import { Toolbar } from '@/components/ui/Toolbar';
 import Win4bRGBI from '@/dither/palettes/Win4bRGBI';
 
