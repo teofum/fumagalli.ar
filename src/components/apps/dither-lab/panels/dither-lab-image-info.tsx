@@ -1,7 +1,7 @@
 import { useAppState } from '@/components/desktop/Window/context';
 import Button from '@/components/ui/Button';
 import Collapsible from '@/components/ui/Collapsible';
-import getReadableSize from '@/components/apps/files/utils/getReadableSize';
+import getReadableSize from '@/components/apps/files/utils/get-readable-size';
 import Menu from '@/components/ui/Menu';
 import ArrowDown from '@/components/ui/icons/ArrowDown';
 
