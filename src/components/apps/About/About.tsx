@@ -1,4 +1,5 @@
-import { version } from "@/../package.json";
+import { version } from '@/../package.json';
+import RetroLink from '@/components/ui/Link';
 
 export default function About() {
   return (
@@ -11,14 +12,14 @@ export default function About() {
       <p>TeOS v{version}</p>
       <p>Website by Teo Fumagalli</p>
       <p>
-        Source code on{" "}
-        <a
+        Source code on{' '}
+        <RetroLink
           href="https://github.com/teofum/fumagalli.ar"
           target="_blank"
           rel="noreferrer noopener"
         >
           GitHub
-        </a>
+        </RetroLink>
       </p>
     </div>
   );
