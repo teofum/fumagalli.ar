@@ -1,32 +1,11 @@
-import { PHOTOS_QUERY, PHOTO_COLLECTION_QUERY } from '@/queries/queries';
-import {
-  PhotoCollection,
-  photoCollectionSchema,
-  photoSchema,
-} from '@/schemas/photos';
+import { PHOTO_COLLECTION_QUERY } from '@/queries/queries';
+import { photoCollectionSchema } from '@/schemas/photos';
 import { sanityClient } from '@/utils/sanity.server';
-import { SearchParams, ServerComponentProps } from '@/utils/types';
+import { ServerComponentProps } from '@/utils/types';
+import { fetchCollectionPhotos } from '@/utils/fetch-collection-photos';
 
 import { PhotoThumbnail } from '../photo-thumbnail';
 import getSortFn from '../sort';
-
-async function fetchCollectionPhotos(collection: PhotoCollection) {
-  switch (collection.type) {
-    case 'photos': {
-      return collection.photos ?? [];
-    }
-    case 'filters': {
-      const filters: SearchParams = {};
-      for (const filter of collection.filters ?? []) {
-        filters[filter.tag] = filter.values;
-      }
-
-      return photoSchema
-        .array()
-        .parse(await sanityClient.fetch(PHOTOS_QUERY(filters)));
-    }
-  }
-}
 
 export default async function PhotoCollectionPage({
   params,

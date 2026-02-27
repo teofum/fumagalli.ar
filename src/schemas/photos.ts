@@ -73,6 +73,8 @@ export type Photo = z.infer<typeof photoSchema>;
 export const photoCollectionBaseSchema = z.object({
   _type: z.literal('photoCollection'),
   _id: z.string(),
+  _createdAt: z.string(),
+  _updatedAt: z.string(),
   title: z.string(),
   slug: z.string(),
   thumbnail: photoSchema,
