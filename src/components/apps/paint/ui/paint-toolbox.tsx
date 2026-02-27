@@ -1,12 +1,12 @@
 import Divider from '@/components/ui/Divider';
 import { ToggleButton, ToggleGroup } from '@/components/ui/ToggleGroup';
 import { brushes } from '../brushes';
-import BrushIcons from '../icons/the-brush';
+import BrushIcons from '../icons/brush';
 import { ZOOM_STOPS } from '../brushes/zoom';
 import cn from 'classnames';
-import AirbrushIcons from '../icons/the-airbrush';
+import AirbrushIcons from '../icons/airbrush';
 import { usePaintContext } from '../context';
-import Brushes from '../icons/the-brushes';
+import Brushes from '../icons/brushes';
 import { CSSProperties } from 'react';
 
 // const resources = '/fs/Applications/paint/resources';

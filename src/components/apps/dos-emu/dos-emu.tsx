@@ -4,7 +4,7 @@ import type { DosPlayer as Instance } from 'js-dos';
 import { useAppState, useWindow } from '@/components/desktop/Window/context';
 import DosPlayer from './dos-player';
 import Menu from '@/components/ui/Menu';
-import { files } from '../the-files';
+import { files } from '../files';
 
 export default function DOSEmu() {
   const { close, modal } = useWindow();

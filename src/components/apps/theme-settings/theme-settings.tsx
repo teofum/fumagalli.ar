@@ -7,7 +7,7 @@ import ColorPicker from '@/components/ui/ColorPicker';
 import parseCSSColor from 'parse-css-color';
 import { useState } from 'react';
 import GroupBox from '@/components/ui/GroupBox';
-import Monitor from './the-monitor';
+import Monitor from './monitor';
 
 const DEFAULT_BACKGROUNDS = [
   'Black Thatch',
