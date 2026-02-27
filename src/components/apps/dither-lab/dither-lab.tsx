@@ -8,7 +8,7 @@ import DitherLabResizeOptions from './panels/dither-lab-resize-options';
 import GlRenderer from './renderers/gl-renderer';
 import DitherLabRenderOptions from './panels/dither-lab-render-options';
 import DitherLabPaletteSelect from './panels/dither-lab-palette-select';
-import { files } from '../Files';
+import { files } from '../files';
 import Menu from '@/components/ui/Menu';
 import Button from '@/components/ui/Button';
 import { useAppSettings } from '@/hooks/use-app-settings';

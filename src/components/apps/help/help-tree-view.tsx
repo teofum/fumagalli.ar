@@ -7,7 +7,7 @@ import type { AnyFile } from '@/schemas/file';
 import ScrollContainer from '@/components/ui/ScrollContainer';
 import TreeLess from '@/components/ui/icons/TreeLess';
 import TreeMore from '@/components/ui/icons/TreeMore';
-import useFolder from '../Files/utils/useFolder';
+import useFolder from '../files/utils/use-folder';
 
 const HELP_ROOT = '2de4d52e-d1ca-4c9a-b9a4-7937e06c9bcf';
 
