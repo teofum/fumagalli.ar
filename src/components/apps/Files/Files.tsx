@@ -20,7 +20,7 @@ import FilesListView from './views/FilesListView';
 import FilesDetailsView from './views/FilesDetailsView';
 import FilesTreeView from './views/FilesTreeView';
 import FilesColumnsView from './views/FilesColumnsView';
-import AddressBar from './AddressBar';
+import AddressBar from './address-bar';
 import useFetch from '@/hooks/use-fetch';
 
 const MAX_HISTORY = 1000;
