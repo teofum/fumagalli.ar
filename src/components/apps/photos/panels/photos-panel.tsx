@@ -55,12 +55,13 @@ function PhotoThumbnail({ photo, idx, size = 128 }: PhotoThumbnailProps) {
 }
 
 export default function PhotosPanel() {
-  const [state, update] = useAppState('photos');
+  const [state] = useAppState('photos');
 
   const { load, data: photos } = useFetch<Photo[]>();
 
   useEffect(() => {
     if (state.collection) load(`/api/photos/collection/${state.collection}`);
+    else load('/api/photos');
   }, [load, state.collection]);
 
   return (
