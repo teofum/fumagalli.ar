@@ -12,9 +12,11 @@ type PhotoCategoryProps = {
 };
 
 function PhotoCategory({ category }: PhotoCategoryProps) {
-  const [expanded, setExpanded] = useState(false);
-
   const [state, update] = useAppState('photos');
+
+  const [expanded, setExpanded] = useState(
+    category.collections.some((c) => c.slug === state.collection),
+  );
 
   return (
     <li className="bevel bg-surface p-1">
