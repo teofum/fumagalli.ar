@@ -4,7 +4,7 @@ export type PhotosSettings = {
 
   sortBy: 'date' | 'filename';
   sort: 'asc' | 'desc';
-  viewMode: 'grid' | 'loupe';
+  viewMode: 'grid' | 'details' | 'loupe';
 };
 
 export const defaultPhotosSettings: PhotosSettings = {
