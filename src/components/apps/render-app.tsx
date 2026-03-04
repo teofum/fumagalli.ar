@@ -1,28 +1,20 @@
 import About, { about } from './about';
-import Intro, { intro } from './intro';
+import DitherLab, { ditherLab } from './dither-lab';
+import type { DitherLabState } from './dither-lab/types';
+import DOSEmu, { dosEmu } from './dos-emu';
+import type { DOSEmuState } from './dos-emu/types';
 import Files, { files } from './files';
 import type { FilesState } from './files/types';
-import Preview, { preview } from './preview';
-import type { PreviewState } from './preview/types';
 import Help, { help } from './help';
 import type { HelpState } from './help/types';
+import Intro, { intro } from './intro';
+import MessageBox, { messageBox } from './message-box';
+import type { MessageBoxState } from './message-box/types';
 import Minesweeper, { minesweeper } from './minesweeper';
 import MinesweeperCustomDifficulty, {
   mine_difficulty,
   type MinesweeperCustomDifficultyState,
 } from './minesweeper/modals/custom-difficulty';
-import Sudoku, { sudoku } from './sudoku';
-import Solitaire, { solitaire } from './solitaire';
-import SolitaireDeckSelect, {
-  solitaire_deck,
-} from './solitaire/modals/deck-select';
-import ThemeSettings, { themeSettings } from './theme-settings';
-import DOSEmu, { dosEmu } from './dos-emu';
-import type { DOSEmuState } from './dos-emu/types';
-import DitherLab, { ditherLab } from './dither-lab';
-import type { DitherLabState } from './dither-lab/types';
-import MessageBox, { messageBox } from './message-box';
-import type { MessageBoxState } from './message-box/types';
 import Paint, { paint } from './paint';
 import PaintImageSize, {
   paint_imageSize,
@@ -32,12 +24,23 @@ import PaintStretchAndSkew, {
   paint_stretchAndSkew,
   type PaintStretchAndSkewState,
 } from './paint/modals/stretch-and-skew';
+import Photos, { photos } from './photos';
+import { PhotosState } from './photos/types';
+import Preview, { preview } from './preview';
+import type { PreviewState } from './preview/types';
+import Solitaire, { solitaire } from './solitaire';
+import SolitaireDeckSelect, {
+  solitaire_deck,
+} from './solitaire/modals/deck-select';
+import Sudoku, { sudoku } from './sudoku';
 import SystemSettings, { systemSettings } from './system-settings';
+import ThemeSettings, { themeSettings } from './theme-settings';
 
 export const applications = [
   { Component: About, meta: about },
   { Component: Intro, meta: intro },
   { Component: Files, meta: files() },
+  { Component: Photos, meta: photos },
   { Component: Preview, meta: preview() },
   { Component: Help, meta: help() },
   { Component: Minesweeper, meta: minesweeper },
@@ -65,6 +68,7 @@ export interface AppStateTypes {
   mine_difficulty: MinesweeperCustomDifficultyState;
   paint_imageSize: PaintImageSizeState;
   paint_stretchAndSkew: PaintStretchAndSkewState;
+  photos: PhotosState;
 }
 
 export type AppState<AppType extends string> =

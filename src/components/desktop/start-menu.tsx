@@ -1,22 +1,24 @@
-import Button from '../ui/Button';
-import Menu from '../ui/Menu';
+import useFileHandler from '@/hooks/use-file-handler';
 import useDesktopStore from '@/stores/desktop';
 import useSystemStore from '@/stores/system';
-import useFileHandler from '@/hooks/use-file-handler';
+
+import Button from '../ui/Button';
+import Menu from '../ui/Menu';
 
 import { about } from '../apps/about';
+import { ditherLab } from '../apps/dither-lab';
+import { dosEmu } from '../apps/dos-emu';
+import { DOS_GAMES } from '../apps/dos-emu/types';
+import { files } from '../apps/files';
+import { help } from '../apps/help';
 import { intro } from '../apps/intro';
 import { minesweeper } from '../apps/minesweeper';
-import { files } from '../apps/files';
-import { sudoku } from '../apps/sudoku';
-import { solitaire } from '../apps/solitaire';
-import { themeSettings } from '../apps/theme-settings';
-import { dosEmu } from '../apps/dos-emu';
-import { ditherLab } from '../apps/dither-lab';
-import { DOS_GAMES } from '../apps/dos-emu/types';
-import { help } from '../apps/help';
 import { paint } from '../apps/paint';
+import { photos } from '../apps/photos';
+import { solitaire } from '../apps/solitaire';
+import { sudoku } from '../apps/sudoku';
 import { systemSettings } from '../apps/system-settings';
+import { themeSettings } from '../apps/theme-settings';
 
 const ICON_PATH = '/fs/System Files/Icons/Start';
 
@@ -72,6 +74,7 @@ export default function StartMenu() {
               {[
                 files({ folderId: '949f9fc6-19d4-479a-a1ec-c4a80cffb3a6' }),
                 paint,
+                photos,
                 ditherLab(),
                 about,
                 intro,

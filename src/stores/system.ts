@@ -40,6 +40,10 @@ import {
   type HelpSettings,
 } from '@/components/apps/help/types';
 import {
+  defaultPhotosSettings,
+  type PhotosSettings,
+} from '@/components/apps/photos/types';
+import {
   defaultSystemSettings,
   type SystemSettings,
 } from '@/components/apps/system-settings/types';
@@ -54,17 +58,17 @@ const SCHEMA_VERSION = 2;
 
 // V2: Switched to Sanity for content
 
-export interface FileAccess {
+export type FileAccess = {
   time: number;
   item: AnyFile;
-}
+};
 
-export interface DirectoryAccess {
+export type DirectoryAccess = {
   time: number;
   item: Folder;
-}
+};
 
-interface SystemState {
+type SystemState = {
   appSettings: {
     files: FilesSettings;
     solitaire: SolitaireSettings;
@@ -73,6 +77,7 @@ interface SystemState {
     dither: DitherLabSettings;
     paint: PaintSettings;
     help: HelpSettings;
+    photos: PhotosSettings;
   };
   fileHistory: FileAccess[];
   dirHistory: DirectoryAccess[];
@@ -81,7 +86,7 @@ interface SystemState {
   settings: SystemSettings;
 
   _schema: number;
-}
+};
 
 export type AppWithSettings = keyof SystemState['appSettings'];
 export type AppSettings<T extends AppWithSettings> =
@@ -92,7 +97,7 @@ export type UpdateAppSettingsAction = <T extends AppWithSettings>(
   settings: Partial<AppSettings<T>>,
 ) => void;
 
-interface SystemActions {
+type SystemActions = {
   // Application settings
   updateAppSettings: UpdateAppSettingsAction;
 
@@ -104,7 +109,7 @@ interface SystemActions {
   updateTheme: (theme: SystemTheme) => void;
   updateThemeCustomizations: (theme: Partial<ThemeCustomization>) => void;
   updateSettings: (settings: SystemSettings) => void;
-}
+};
 
 /**
  * System store handles system-wide "background" persistent state, like
@@ -124,6 +129,7 @@ const useSystemStore = create<SystemState & SystemActions>()(
         dither: defaultDitherLabSettings,
         paint: defaultPaintSettings,
         help: defaultHelpSettings,
+        photos: defaultPhotosSettings,
       },
       fileHistory: [],
       dirHistory: [],
