@@ -1,3 +1,5 @@
+import { Photo } from '@/schemas/photos';
+
 export type PhotosSettings = {
   leftPanel: boolean;
   rightPanel: boolean;
@@ -19,9 +21,11 @@ export const defaultPhotosSettings: PhotosSettings = {
 export type PhotosState = {
   collection: string | null;
   filters: { [key: string]: string[] };
+  selected: Photo | null;
 };
 
 export const defaultPhotosState: PhotosState = {
   collection: null,
   filters: {},
+  selected: null,
 };

@@ -15,7 +15,7 @@ import { Check, ChevronDown, X } from 'lucide-react';
 import { SearchParams } from '@/utils/types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ExifStats } from '../fetch-exif-stats';
-import { getLensDisplayName } from '../get-lens-name';
+import { getLensDisplayName } from '../../../../utils/photos/get-lens-name';
 
 function FilterCombobox({
   tags,

@@ -82,7 +82,7 @@ export default function CollectionsPanel() {
   const selected = state.collection === null;
 
   return (
-    <div className="w-52 flex flex-col gap-0.5">
+    <div className="w-52 min-w-52 flex flex-col gap-0.5">
       <div className="bevel-inset p-0.5">
         <div className="bevel bg-surface p-1">
           <button

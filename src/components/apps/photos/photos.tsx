@@ -7,7 +7,7 @@ export default function Photos() {
   const [settings, set] = useAppSettings('photos');
 
   return (
-    <div className="flex flex-col gap-0.5">
+    <div className="flex flex-col gap-0.5 min-h-0 min-w-0">
       <Menu.Bar>
         <Menu.Menu trigger={<Menu.Trigger>View</Menu.Trigger>}>
           <Menu.Sub label="Mode">
@@ -25,9 +25,9 @@ export default function Photos() {
         </Menu.Menu>
       </Menu.Bar>
 
-      <div className="flex flex-row items-stretch gap-0.5 grow min-h-0">
+      <div className="flex flex-row items-stretch gap-0.5 grow min-h-0 min-w-0">
         <CollectionsPanel />
-        <PhotosPanel />
+        <PhotosPanel viewMode={settings.viewMode} />
         <div className="bevel-inset p-0.5">
           <div className="bevel bg-surface p-1">hello</div>
         </div>
