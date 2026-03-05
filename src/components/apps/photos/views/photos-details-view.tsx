@@ -27,6 +27,11 @@ export default function PhotosDetailsView({ photos }: PhotosViewProps) {
             </th>
             <th className="p-0">
               <Button className="w-full py-0 px-2 text-left">
+                <span>Dimensions</span>
+              </Button>
+            </th>
+            <th className="p-0">
+              <Button className="w-full py-0 px-2 text-left">
                 <span>Date</span>
               </Button>
             </th>
@@ -85,6 +90,8 @@ export default function PhotosDetailsView({ photos }: PhotosViewProps) {
               iso,
             } = getPhotoDetails(photo);
 
+            const dims = photo.metadata.dimensions;
+
             return (
               <tr key={photo._id}>
                 <td className="min-w-8 w-8 max-w-8 p-0">
@@ -98,6 +105,9 @@ export default function PhotosDetailsView({ photos }: PhotosViewProps) {
                 <td className="px-1 whitespace-nowrap">{i + 1}</td>
                 <td className="px-1 whitespace-nowrap">
                   {photo.originalFilename}
+                </td>
+                <td className="px-1 whitespace-nowrap">
+                  {dims.width}x{dims.height}
                 </td>
                 <td className="px-1 whitespace-nowrap">{date}</td>
                 <td className="px-1 whitespace-nowrap">{camera}</td>
