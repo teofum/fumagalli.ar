@@ -31,7 +31,7 @@ export default function PhotosPanel({ viewMode }: PhotosPanelProps) {
   }));
 
   useEffect(() => {
-    if (state.collection) load(`/api/photos/collection/${state.collection}`);
+    if (state.collection) load(`/api/photos/${state.collection}`);
     else load('/api/photos');
   }, [load, state.collection]);
 
