@@ -1,0 +1,16 @@
+import ScrollContainer from '@/components/ui/ScrollContainer';
+
+import PhotoThumbnail from './photo-thumbnail';
+import { PhotosViewProps } from './props';
+
+export default function PhotosGridView({ photos }: PhotosViewProps) {
+  return (
+    <ScrollContainer hide="x" className="grow">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))]">
+        {photos?.map((photo, i) => (
+          <PhotoThumbnail key={photo._id} photo={photo} idx={i + 1} />
+        ))}
+      </div>
+    </ScrollContainer>
+  );
+}
