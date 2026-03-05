@@ -1,12 +1,20 @@
 import { useAppState } from '@/components/desktop/Window/context';
 import ScrollContainer from '@/components/ui/ScrollContainer';
-import { sanityImage } from '@/utils/sanity.image';
+import { sanityImage, useImageSize2 } from '@/utils/sanity.image';
 
 import PhotoThumbnail from './photo-thumbnail';
 import { PhotosViewProps } from './props';
 
 export default function PhotosLoupeView({ photos }: PhotosViewProps) {
   const [state] = useAppState('photos');
+
+  const [width, height] = useImageSize2(
+    state.selected?.metadata.dimensions ?? {
+      width: 0,
+      height: 0,
+      aspectRatio: 0,
+    },
+  );
 
   return (
     <div className="grow flex flex-col min-w-0 gap-0.5">
@@ -29,8 +37,8 @@ export default function PhotosLoupeView({ photos }: PhotosViewProps) {
                   }}
                   alt=""
                   src={sanityImage(photo._id)
-                    .width(photo.metadata.dimensions.width)
-                    .height(photo.metadata.dimensions.height)
+                    .width(width)
+                    .height(height)
                     .dpr(2)
                     .quality(90)
                     .url()}

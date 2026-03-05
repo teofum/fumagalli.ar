@@ -9,6 +9,7 @@ type PhotoThumbnailProps = {
   idx: number;
   size?: number;
   variant?: 'normal' | 'medium' | 'small';
+  onDoubleClick?: () => void;
 };
 
 export default function PhotoThumbnail({
@@ -16,6 +17,7 @@ export default function PhotoThumbnail({
   idx,
   size = 128,
   variant = 'normal',
+  onDoubleClick,
 }: PhotoThumbnailProps) {
   const [state, update] = useAppState('photos');
   const selected = state.selected?._id === photo._id;
@@ -36,6 +38,7 @@ export default function PhotoThumbnail({
         'p-0.5': variant === 'small',
       })}
       onClick={select}
+      onDoubleClick={onDoubleClick}
     >
       {variant !== 'small' ? (
         <div className="absolute top-px left-px font-display text-2xl/6 text-surface-dark">

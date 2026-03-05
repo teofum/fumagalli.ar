@@ -11,9 +11,10 @@ import PhotosLoupeView from '../views/photos-loupe-view';
 
 type PhotosPanelProps = {
   viewMode: PhotosSettings['viewMode'];
+  loupe?: () => void;
 };
 
-export default function PhotosPanel({ viewMode }: PhotosPanelProps) {
+export default function PhotosPanel({ viewMode, loupe }: PhotosPanelProps) {
   const [state] = useAppState('photos');
 
   const { load, data } = useFetch<Photo[]>();
@@ -37,7 +38,8 @@ export default function PhotosPanel({ viewMode }: PhotosPanelProps) {
 
   if (!photos) return <div>No photos</div>;
 
-  if (viewMode === 'grid') return <PhotosGridView photos={photos} />;
+  if (viewMode === 'grid')
+    return <PhotosGridView photos={photos} loupe={loupe} />;
   if (viewMode === 'loupe') return <PhotosLoupeView photos={photos} />;
-  return <PhotosDetailsView photos={photos} />;
+  return <PhotosDetailsView photos={photos} loupe={loupe} />;
 }

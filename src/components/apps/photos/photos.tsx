@@ -27,7 +27,10 @@ export default function Photos() {
 
       <div className="flex flex-row items-stretch gap-0.5 grow min-h-0 min-w-0">
         <CollectionsPanel />
-        <PhotosPanel viewMode={settings.viewMode} />
+        <PhotosPanel
+          viewMode={settings.viewMode}
+          loupe={() => set({ viewMode: 'loupe' })}
+        />
         <div className="bevel-inset p-0.5">
           <div className="bevel bg-surface p-1">hello</div>
         </div>

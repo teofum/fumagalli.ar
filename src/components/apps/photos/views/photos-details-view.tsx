@@ -1,3 +1,4 @@
+import { useAppState } from '@/components/desktop/Window/context';
 import Button from '@/components/ui/Button';
 import ScrollContainer from '@/components/ui/ScrollContainer';
 import { getLensDisplayName } from '@/utils/photos/get-lens-name';
@@ -5,8 +6,11 @@ import getPhotoDetails from '@/utils/photos/get-photo-details';
 
 import PhotoThumbnail from './photo-thumbnail';
 import { PhotosViewProps } from './props';
+import cn from 'classnames';
 
-export default function PhotosDetailsView({ photos }: PhotosViewProps) {
+export default function PhotosDetailsView({ photos, loupe }: PhotosViewProps) {
+  const [state, update] = useAppState('photos');
+
   return (
     <ScrollContainer className="grow min-w-0">
       <table className="p-1 select-none min-w-full">
@@ -91,9 +95,19 @@ export default function PhotosDetailsView({ photos }: PhotosViewProps) {
             } = getPhotoDetails(photo);
 
             const dims = photo.metadata.dimensions;
+            const selected = state.selected?._id === photo._id;
+            const select = () => update({ selected: photo });
 
             return (
-              <tr key={photo._id}>
+              <tr
+                key={photo._id}
+                className={cn({
+                  'bg-selection text-selection outline-1 outline-dotted outline-(--theme-text)':
+                    selected,
+                })}
+                onClick={select}
+                onDoubleClick={loupe}
+              >
                 <td className="min-w-8 w-8 max-w-8 p-0">
                   <PhotoThumbnail
                     photo={photo}
