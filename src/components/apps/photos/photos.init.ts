@@ -9,6 +9,8 @@ export const photos: WindowInit<'photos'> = {
   title: 'Photos',
   icon: 'photos',
 
-  minWidth: 320,
+  minWidth: 720,
   width: 720,
+  minHeight: 400,
+  height: 480,
 };
