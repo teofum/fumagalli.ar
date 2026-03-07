@@ -24,6 +24,7 @@ import Taskbar from '../Taskbar';
 import Window from '../Window';
 import MobileDialog from './MobileDialog';
 import ShutdownDialog from './ShutdownDialog';
+import { photos } from '@/components/apps/photos';
 
 let initialized = false;
 
@@ -205,6 +206,12 @@ export default function Desktop() {
                 title="Paint"
                 y={2}
                 open={() => launch(paint)}
+              />
+              <DesktopIcon
+                iconUrl="/fs/Applications/photos/icon_32.png"
+                title="Photos"
+                y={2}
+                open={() => launch(photos)}
               />
               <DesktopIcon
                 iconUrl="/fs/Applications/mine/icon_32.png"
