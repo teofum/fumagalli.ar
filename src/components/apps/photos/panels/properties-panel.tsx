@@ -1,4 +1,5 @@
 import { useAppState } from '@/components/desktop/Window/context';
+import RetroLink from '@/components/ui/Link';
 import { getLensDisplayName } from '@/utils/photos/get-lens-name';
 import getPhotoDetails from '@/utils/photos/get-photo-details';
 import { sanityImage } from '@/utils/sanity.image';
@@ -43,6 +44,10 @@ function PhotoProperties() {
       }
 
       <div className="bold">{photo.originalFilename}</div>
+
+      <RetroLink href={`https://cdn.sanity.io/${photo.path}`}>
+        View original file
+      </RetroLink>
 
       <div className="flex flex-col">
         <div className="bold mt-1">Dimensions</div>
