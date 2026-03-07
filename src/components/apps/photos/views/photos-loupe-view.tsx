@@ -11,7 +11,6 @@ import { PhotosSettings } from '../types';
 type LoupeViewProps = PhotosViewProps & {
   viewportRef: RefObject<HTMLDivElement | null>;
   imageRef: RefObject<HTMLImageElement | null>;
-  viewMode: PhotosSettings['viewMode'];
   filmStrip: PhotosSettings['filmStrip'];
 };
 
