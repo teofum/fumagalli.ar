@@ -1,3 +1,5 @@
+import { RefObject } from 'react';
+
 import { useAppState } from '@/components/desktop/Window/context';
 import ScrollContainer from '@/components/ui/ScrollContainer';
 import { sanityImage, useImageSize2 } from '@/utils/sanity.image';
@@ -5,9 +7,17 @@ import { sanityImage, useImageSize2 } from '@/utils/sanity.image';
 import PhotoThumbnail from './photo-thumbnail';
 import { PhotosViewProps } from './props';
 
-export default function PhotosLoupeView({ photos }: PhotosViewProps) {
-  const [state] = useAppState('photos');
+type LoupeViewProps = PhotosViewProps & {
+  viewportRef: RefObject<HTMLDivElement | null>;
+  imageRef: RefObject<HTMLImageElement | null>;
+};
 
+export default function PhotosLoupeView({
+  photos,
+  viewportRef,
+  imageRef,
+}: LoupeViewProps) {
+  const [state] = useAppState('photos');
   const [width, height] = useImageSize2(
     state.selected?.metadata.dimensions ?? {
       width: 0,
@@ -16,14 +26,16 @@ export default function PhotosLoupeView({ photos }: PhotosViewProps) {
     },
   );
 
+  const zoom = state.zoom ?? 1;
+
   return (
     <div className="grow flex flex-col min-w-0 min-h-0 gap-0.5">
-      <ScrollContainer className="grow">
+      <ScrollContainer className="grow" ref={viewportRef}>
         {state.selected ? (
           // funny hack to force react to rerender this component when selection changes
           [state.selected].map((photo) => (
-            <div key={photo._id}>
-              <div className="relative">
+            <div key={photo._id} className="scroll-center">
+              <div className="flex w-min border border-default bg-surface-light bg-checkered-lg select-none relative">
                 <img
                   className="absolute inset-0 w-full h-full object-cover [image-rendering:auto]"
                   alt=""
@@ -33,9 +45,13 @@ export default function PhotosLoupeView({ photos }: PhotosViewProps) {
                 <img
                   className="relative w-full object-cover [image-rendering:auto]"
                   style={{
-                    aspectRatio: photo.metadata.dimensions.aspectRatio,
+                    width: width * zoom,
+                    minWidth: width * zoom,
+                    height: height * zoom,
+                    minHeight: height * zoom,
                   }}
                   alt=""
+                  ref={imageRef}
                   src={sanityImage(photo._id)
                     .width(width)
                     .height(height)
@@ -51,6 +67,7 @@ export default function PhotosLoupeView({ photos }: PhotosViewProps) {
           <div>No photo selected</div>
         )}
       </ScrollContainer>
+
       <ScrollContainer hide="y" className="shrink-0">
         <div className="flex flex-row">
           {photos?.map((photo, i) => (

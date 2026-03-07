@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 
 import { useAppState, useWindow } from '@/components/desktop/Window/context';
-import Button from '@/components/ui/Button';
 import Menu from '@/components/ui/Menu';
 import ScrollContainer from '@/components/ui/ScrollContainer';
 import { Toolbar, ToolbarGroup } from '@/components/ui/Toolbar';
@@ -11,6 +10,7 @@ import { useImageSize, useImageUrl } from '@/utils/sanity.image';
 
 import { MAX_INITIAL_SIZE, UI_SIZE, ZOOM_STOPS } from '../constants';
 import type { PreviewModeProps } from '../types';
+import ZoomControls from '@/components/ui/zoom-controls';
 
 export default function PreviewImage({ commonMenu }: PreviewModeProps) {
   const { id, minWidth, minHeight } = useWindow();
@@ -121,45 +121,13 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
 
       <ToolbarGroup>
         <Toolbar>
-          <span className="px-2">Zoom</span>
-          <div className="bg-default bevel-content p-0.5 flex flex-row">
-            <Button
-              className="py-0.5 px-1.5"
-              onClick={zoomOut}
-              disabled={zoom <= (ZOOM_STOPS.at(0) ?? 0)}
-            >
-              <span>-</span>
-            </Button>
-            <div className="py-0.5 px-2 w-12">{(zoom * 100).toFixed(0)}%</div>
-            <Button
-              className="py-0.5 px-1.5"
-              onClick={zoomIn}
-              disabled={zoom >= (ZOOM_STOPS.at(-1) ?? 0)}
-            >
-              <span>+</span>
-            </Button>
-          </div>
-          <Button
-            variant="light"
-            className="py-1 px-2"
-            onClick={() => setZoom(1)}
-          >
-            Reset
-          </Button>
-          <Button
-            variant="light"
-            className="py-1 px-2"
-            onClick={() => zoomTo('fit')}
-          >
-            Fit
-          </Button>
-          <Button
-            variant="light"
-            className="py-1 px-2"
-            onClick={() => zoomTo('fill')}
-          >
-            Fill
-          </Button>
+          <ZoomControls
+            zoom={zoom}
+            setZoom={setZoom}
+            zoomIn={zoomIn}
+            zoomOut={zoomOut}
+            zoomTo={zoomTo}
+          />
         </Toolbar>
       </ToolbarGroup>
 

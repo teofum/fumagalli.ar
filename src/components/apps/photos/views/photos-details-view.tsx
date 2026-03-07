@@ -129,7 +129,7 @@ export default function PhotosDetailsView({ photos, loupe }: PhotosViewProps) {
                   {getLensDisplayName(lens)}
                 </td>
                 <td className="px-1 whitespace-nowrap">{focalLength}</td>
-                <td className="px-1 whitespace-nowrap">{film}</td>
+                <td className="px-1 whitespace-nowrap">{film ?? 'N/A'}</td>
                 <td className="px-1 whitespace-nowrap">{aperture}</td>
                 <td className="px-1 whitespace-nowrap">{shutterSpeed}</td>
                 <td className="px-1 whitespace-nowrap">{iso}</td>

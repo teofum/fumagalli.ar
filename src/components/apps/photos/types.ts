@@ -24,10 +24,14 @@ export type PhotosState = {
   collection: string | null;
   filters: { [key: string]: string[] };
   selected: Photo | null;
+
+  zoom: number | null;
 };
 
 export const defaultPhotosState: PhotosState = {
   collection: null,
   filters: {},
   selected: null,
+
+  zoom: null,
 };

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { RefObject, useEffect } from 'react';
 
 import { useAppState } from '@/components/desktop/Window/context';
 import useFetch from '@/hooks/use-fetch';
@@ -12,9 +12,16 @@ import PhotosLoupeView from '../views/photos-loupe-view';
 type PhotosPanelProps = {
   viewMode: PhotosSettings['viewMode'];
   loupe?: () => void;
+  viewportRef: RefObject<HTMLDivElement | null>;
+  imageRef: RefObject<HTMLImageElement | null>;
 };
 
-export default function PhotosPanel({ viewMode, loupe }: PhotosPanelProps) {
+export default function PhotosPanel({
+  viewMode,
+  loupe,
+  viewportRef,
+  imageRef,
+}: PhotosPanelProps) {
   const [state] = useAppState('photos');
 
   const { load, data } = useFetch<Photo[]>();
@@ -40,6 +47,13 @@ export default function PhotosPanel({ viewMode, loupe }: PhotosPanelProps) {
 
   if (viewMode === 'grid')
     return <PhotosGridView photos={photos} loupe={loupe} />;
-  if (viewMode === 'loupe') return <PhotosLoupeView photos={photos} />;
+  if (viewMode === 'loupe')
+    return (
+      <PhotosLoupeView
+        photos={photos}
+        viewportRef={viewportRef}
+        imageRef={imageRef}
+      />
+    );
   return <PhotosDetailsView photos={photos} loupe={loupe} />;
 }

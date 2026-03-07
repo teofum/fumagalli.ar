@@ -1,13 +1,23 @@
+import { useRef } from 'react';
+
+import Divider from '@/components/ui/Divider';
 import Menu from '@/components/ui/Menu';
+import { ToggleGroup, ToggleIconButton } from '@/components/ui/ToggleGroup';
+import { Toolbar, ToolbarGroup } from '@/components/ui/Toolbar';
+import ZoomControls from '@/components/ui/zoom-controls';
+import { useAppSettings } from '@/hooks/use-app-settings';
+
 import CollectionsPanel from './panels/collections-panel';
 import PhotosPanel from './panels/photos-panel';
-import { useAppSettings } from '@/hooks/use-app-settings';
-import { Toolbar, ToolbarGroup } from '@/components/ui/Toolbar';
-import Divider from '@/components/ui/Divider';
-import { ToggleGroup, ToggleIconButton } from '@/components/ui/ToggleGroup';
+import useZoom from './use-zoom';
 
 export default function Photos() {
   const [settings, set] = useAppSettings('photos');
+
+  const viewportRef = useRef<HTMLDivElement | null>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
+
+  const zoom = useZoom(viewportRef, imageRef);
 
   return (
     <div className="flex flex-col gap-0.5 min-h-0 min-w-0">
@@ -58,6 +68,8 @@ export default function Photos() {
           </ToggleGroup>
 
           <Divider orientation="vertical" className="m-0.5" />
+
+          {settings.viewMode === 'loupe' ? <ZoomControls {...zoom} /> : null}
         </Toolbar>
       </ToolbarGroup>
 
@@ -66,6 +78,8 @@ export default function Photos() {
         <PhotosPanel
           viewMode={settings.viewMode}
           loupe={() => set({ viewMode: 'loupe' })}
+          viewportRef={viewportRef}
+          imageRef={imageRef}
         />
         <div className="bevel-inset p-0.5">
           <div className="bevel bg-surface p-1">hello</div>
