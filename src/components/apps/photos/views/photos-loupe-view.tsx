@@ -73,7 +73,10 @@ export default function PhotosLoupeView({
 
       {filmStrip ? (
         <ScrollContainer hide="y" className="shrink-0">
-          <div className="flex flex-row">
+          {photos.length === 0 ? (
+            <div className="scroll-center h-20">No photos</div>
+          ) : null}
+          <div className="flex flex-row select-none">
             {photos?.map((photo, i) => (
               <div className="w-20 h-20" key={photo._id}>
                 <PhotoThumbnail

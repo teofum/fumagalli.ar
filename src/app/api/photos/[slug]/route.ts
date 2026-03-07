@@ -13,6 +13,13 @@ export async function GET(
   const search = request.nextUrl.searchParams;
 
   const sort = search.get('sort');
+  const filters: { [key: string]: string[] } = {};
+  for (const [key, value] of search.entries()) {
+    if (key != 'sort') {
+      filters[key] = [...(filters[key] ?? []), value];
+    }
+  }
+
   const { slug } = await params;
 
   const collection = photoCollectionSchema.parse(
@@ -22,5 +29,13 @@ export async function GET(
   const photos = await fetchCollectionPhotos(collection);
   photos.sort(getSortFn(sort ?? undefined));
 
-  return Response.json(photos);
+  return Response.json(
+    photos.filter((photo) =>
+      Object.entries(filters).every(([tag, values]) =>
+        values
+          .map((value) => `${tag}:${value}`)
+          .some((tag) => photo.tags.includes(tag)),
+      ),
+    ),
+  );
 }

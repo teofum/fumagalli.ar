@@ -41,15 +41,15 @@ export default function PhotosPanel({
   }));
 
   useEffect(() => {
-    if (state.collection) {
-      load(`/api/photos/${state.collection}`);
-    } else {
-      const query = Object.entries(state.filters)
-        .map(([tag, values]) =>
-          values.map((value) => `${tag}=${value}`).join('&'),
-        )
-        .join('&');
+    const query = Object.entries(state.filters)
+      .map(([tag, values]) =>
+        values.map((value) => `${tag}=${value}`).join('&'),
+      )
+      .join('&');
 
+    if (state.collection) {
+      load(`/api/photos/${state.collection}?${query}`);
+    } else {
       load(`/api/photos?${query}`);
     }
   }, [load, state.collection, state.filters]);

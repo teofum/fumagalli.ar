@@ -19,10 +19,10 @@ function ComboBoxItem({
 }: Omit<ComboboxOptionProps, 'children'> & { children: ReactNode }) {
   return (
     <ComboboxOption
-      className="px-1 py-0.5 data-focus:bg-selection data-focus:text-selection hover:bg-selection hover:text-selection group flex flex-row items-center gap-1"
+      className="pr-1 py-0.5 data-focus:bg-selection data-focus:text-selection hover:bg-selection hover:text-selection group flex flex-row items-center gap-1"
       {...props}
     >
-      <Check className="not-group-data-selected:opacity-0" />
+      <Check className="not-group-data-selected:opacity-0 shrink-0" />
       {children}
     </ComboboxOption>
   );
