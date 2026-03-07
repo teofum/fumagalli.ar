@@ -9,7 +9,7 @@ function PhotoProperties() {
 
   const photo = state.selected;
 
-  if (!photo) return <div>No photo selected</div>;
+  if (!photo) return <div className="p-2">No photo selected</div>;
 
   const { dimensions, lqip } = photo.metadata;
   const { camera, lens, film, focalLength, date, aperture, shutterSpeed, iso } =

@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
+import cn from 'classnames';
 
 import { useAppState } from '@/components/desktop/Window/context';
 import Divider from '@/components/ui/Divider';
 import ScrollContainer from '@/components/ui/ScrollContainer';
 import useFetch from '@/hooks/use-fetch';
 import type { PhotoCategory, PhotoCollectionBase } from '@/schemas/photos';
+
+import Filters from './filters';
 
 type PhotoCollectionProps = {
   collection: PhotoCollectionBase;
@@ -22,9 +25,12 @@ function PhotoCollection({ collection }: PhotoCollectionProps) {
   }, [load, collection.slug]);
 
   return (
-    <li key={collection._id} className="pl-2 py-0.5">
+    <li
+      key={collection._id}
+      className={cn('pl-2 p-1', { 'bevel-light-inset bg-checkered': selected })}
+    >
       <button
-        className="button w-full flex flex-row items-start relative z-1 group"
+        className="button bg-transparent w-full flex flex-row items-start relative z-1 group"
         onClick={select}
       >
         <span className="relative min-w-4 outline-none!">
@@ -43,7 +49,7 @@ function PhotoCollection({ collection }: PhotoCollectionProps) {
         <span className="self-center ml-1 group-focus:bg-selection group-focus:text-selection">
           {collection.title}
         </span>
-        <span className="self-center ml-auto mr-1 text-light outline-none!">
+        <span className="self-center ml-auto text-light outline-none!">
           {count ?? '--'}
         </span>
       </button>
@@ -103,34 +109,37 @@ export default function CollectionsPanel() {
 
   return (
     <div className="w-52 min-w-52 flex flex-col gap-0.5">
+      <div className="bold px-2 select-none">Filters</div>
+      <Filters />
+
       <div className="bold px-2 select-none">Catalog</div>
-      <div className="bevel-inset p-0.5">
-        <div className="bevel bg-surface p-1">
-          <button
-            className="button w-full flex flex-row items-start relative z-1 group"
-            onClick={() => update({ collection: null })}
-          >
-            <span className="relative min-w-4 outline-none!">
-              <img
-                className="w-4 h-4"
-                src={`/assets/icons/directory_${selected ? 'open' : 'closed'}.png`}
-                alt=""
-              />
-              <span
-                className="absolute inset-0 bg-selection/50 hidden group-focus:inline"
-                style={{
-                  WebkitMaskImage: `url('/assets/icons/directory_${selected ? 'open' : 'closed'}.png')`,
-                }}
-              />
-            </span>
-            <span className="self-center ml-1 group-focus:bg-selection group-focus:text-selection">
-              All photos
-            </span>
-            <span className="self-center ml-auto mr-1 text-light outline-none!">
-              {count ?? '--'}
-            </span>
-          </button>
-        </div>
+      <div
+        className={cn('p-1', { 'bevel-light-inset bg-checkered': selected })}
+      >
+        <button
+          className="button bg-transparent w-full flex flex-row items-start relative z-1 group"
+          onClick={() => update({ collection: null })}
+        >
+          <span className="relative min-w-4 outline-none!">
+            <img
+              className="w-4 h-4"
+              src={`/assets/icons/directory_${selected ? 'open' : 'closed'}.png`}
+              alt=""
+            />
+            <span
+              className="absolute inset-0 bg-selection/50 hidden group-focus:inline"
+              style={{
+                WebkitMaskImage: `url('/assets/icons/directory_${selected ? 'open' : 'closed'}.png')`,
+              }}
+            />
+          </span>
+          <span className="self-center ml-1 group-focus:bg-selection group-focus:text-selection">
+            All photos
+          </span>
+          <span className="self-center ml-auto mr-1 text-light outline-none!">
+            {count ?? '--'}
+          </span>
+        </button>
       </div>
 
       <div className="bold px-2 select-none">Collections</div>

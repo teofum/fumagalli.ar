@@ -67,7 +67,7 @@ export default function PhotosLoupeView({
             </div>
           ))
         ) : (
-          <div>No photo selected</div>
+          <div className="scroll-center">No photo selected</div>
         )}
       </ScrollContainer>
 

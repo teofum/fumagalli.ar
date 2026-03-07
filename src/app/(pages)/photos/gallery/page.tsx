@@ -1,11 +1,11 @@
 import Collapsible from '@/components/pages/Collapsible';
 import { PHOTOS_QUERY } from '@/queries/queries';
 import { photoSchema } from '@/schemas/photos';
+import { fetchExifStats } from '@/utils/photos/fetch-exif-stats';
+import { fetchTags } from '@/utils/photos/fetch-tags';
 import { sanityClient } from '@/utils/sanity.server';
 import { ServerComponentProps } from '@/utils/types';
 
-import { fetchExifStats } from '../fetch-exif-stats';
-import { fetchTags } from '../fetch-tags';
 import { PhotoThumbnail } from '../photo-thumbnail';
 import getSortFn from '../sort';
 import Filters from './filters';
