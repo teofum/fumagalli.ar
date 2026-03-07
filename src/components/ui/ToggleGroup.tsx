@@ -40,18 +40,26 @@ export const ToggleGroup = forwardRef<HTMLDivElement, ToggleGroupProps>(
   },
 );
 
-type ToggleItemProps = { noInset?: boolean } & React.ComponentProps<
-  typeof ToggleGroupPrimitive.Item
->;
+type ToggleItemProps = {
+  noInset?: boolean;
+  variant?: 'normal' | 'light';
+} & React.ComponentProps<typeof ToggleGroupPrimitive.Item>;
 
 export const ToggleButton = forwardRef<HTMLButtonElement, ToggleItemProps>(
   function ToggleGroupItem(
-    { children, className, noInset = false, ...props },
+    { children, className, variant = 'normal', noInset = false, ...props },
     ref,
   ) {
     return (
       <ToggleGroupPrimitive.Item
-        className={cn('button button-normal toggle-button group', className)}
+        className={cn(
+          'button toggle-button group',
+          {
+            'button-normal': variant === 'normal',
+            'button-light': variant === 'light',
+          },
+          className,
+        )}
         ref={ref}
         {...props}
       >
@@ -71,3 +79,41 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleItemProps>(
     );
   },
 );
+
+type ToggleIconButtonProps = React.ComponentProps<typeof ToggleButton> & {
+  label?: string | null;
+  imageUrl: string;
+};
+
+export const ToggleIconButton = forwardRef<
+  HTMLButtonElement,
+  ToggleIconButtonProps
+>(function ToggleIconButton(
+  { className, imageUrl, label = null, children, ...props },
+  ref,
+) {
+  return (
+    <ToggleButton
+      ref={ref}
+      className={cn('p-0.5 min-w-7', className, {
+        'w-14': label !== null,
+      })}
+      {...props}
+    >
+      <div className="relative mx-auto w-fit group-disabled:text-disabled">
+        <img
+          className="grayscale group-hover:grayscale-0 group-data-[state=on]:grayscale-0"
+          src={imageUrl}
+          alt=""
+        />
+        <span
+          className="absolute inset-0 bg-disabled hidden group-disabled:inline"
+          style={{
+            WebkitMaskImage: `url('${imageUrl}')`,
+          }}
+        />
+      </div>
+      {label !== null ? <span>{label}</span> : null}
+    </ToggleButton>
+  );
+});

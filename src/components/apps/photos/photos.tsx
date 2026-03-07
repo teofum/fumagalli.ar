@@ -2,6 +2,9 @@ import Menu from '@/components/ui/Menu';
 import CollectionsPanel from './panels/collections-panel';
 import PhotosPanel from './panels/photos-panel';
 import { useAppSettings } from '@/hooks/use-app-settings';
+import { Toolbar, ToolbarGroup } from '@/components/ui/Toolbar';
+import Divider from '@/components/ui/Divider';
+import { ToggleGroup, ToggleIconButton } from '@/components/ui/ToggleGroup';
 
 export default function Photos() {
   const [settings, set] = useAppSettings('photos');
@@ -24,6 +27,39 @@ export default function Photos() {
           </Menu.Sub>
         </Menu.Menu>
       </Menu.Bar>
+
+      <ToolbarGroup>
+        <Toolbar>
+          <ToggleGroup
+            type="single"
+            value={settings.viewMode}
+            onValueChange={(val) =>
+              set({ viewMode: val as typeof settings.viewMode })
+            }
+          >
+            <ToggleIconButton
+              variant="light"
+              value="grid"
+              imageUrl="/assets/icons/photos_view_grid.png"
+              label={settings.buttons === 'large' ? 'Grid' : null}
+            />
+            <ToggleIconButton
+              variant="light"
+              value="loupe"
+              imageUrl="/assets/icons/photos_view_loupe.png"
+              label={settings.buttons === 'large' ? 'Loupe' : null}
+            />
+            <ToggleIconButton
+              variant="light"
+              value="details"
+              imageUrl="/assets/icons/photos_view_details.png"
+              label={settings.buttons === 'large' ? 'Details' : null}
+            />
+          </ToggleGroup>
+
+          <Divider orientation="vertical" className="m-0.5" />
+        </Toolbar>
+      </ToolbarGroup>
 
       <div className="flex flex-row items-stretch gap-0.5 grow min-h-0 min-w-0">
         <CollectionsPanel />

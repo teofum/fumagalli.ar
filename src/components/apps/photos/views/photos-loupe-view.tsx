@@ -17,7 +17,7 @@ export default function PhotosLoupeView({ photos }: PhotosViewProps) {
   );
 
   return (
-    <div className="grow flex flex-col min-w-0 gap-0.5">
+    <div className="grow flex flex-col min-w-0 min-h-0 gap-0.5">
       <ScrollContainer className="grow">
         {state.selected ? (
           // funny hack to force react to rerender this component when selection changes
