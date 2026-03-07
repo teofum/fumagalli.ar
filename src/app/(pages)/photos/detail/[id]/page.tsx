@@ -22,6 +22,7 @@ import { sanityClient } from '@/utils/sanity.server';
 import { ServerComponentProps } from '@/utils/types';
 import { getLensDisplayName } from '@/utils/photos/get-lens-name';
 import getPhotoDetails from '@/utils/photos/get-photo-details';
+import { getLensFallbackFocalLength } from '@/utils/photos/get-lens-focal-length';
 
 export default async function Photos({ params }: ServerComponentProps) {
   const { id } = await params;
@@ -34,6 +35,7 @@ export default async function Photos({ params }: ServerComponentProps) {
   const vertical = dimensions.aspectRatio <= 1;
 
   const { camera, lens, film, shutterSpeed } = getPhotoDetails(photo);
+  const focalLength = exif.focalLength ?? getLensFallbackFocalLength(lens);
 
   return (
     <>
@@ -106,10 +108,10 @@ export default async function Photos({ params }: ServerComponentProps) {
               </>
             ) : null}
 
-            {exif.focalLength ? (
+            {focalLength ? (
               <>
                 <SquareFunction size={20} />
-                <span>{exif.focalLength}mm</span>
+                <span>{focalLength}mm</span>
               </>
             ) : null}
 

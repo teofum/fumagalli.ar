@@ -1,4 +1,5 @@
 import { Photo } from '@/schemas/photos';
+import { getLensFallbackFocalLength } from './get-lens-focal-length';
 
 export default function getPhotoDetails(photo: Photo) {
   const exif = photo.metadata.exif;
@@ -10,6 +11,7 @@ export default function getPhotoDetails(photo: Photo) {
     photo.tags.find((tag) => tag.startsWith('lens:'))?.split(':')[1] ??
     exif.lens;
   const film = photo.tags.find((tag) => tag.startsWith('film:'))?.split(':')[1];
+  const focalLength = exif.focalLength ?? getLensFallbackFocalLength(lens);
 
   const formatShutterSpeed = (ss: number) => {
     if (ss > 1 || [0.3, 0.4, 0.6, 0.7, 0.8, 0.9].includes(ss))
@@ -30,7 +32,7 @@ export default function getPhotoDetails(photo: Photo) {
     camera,
     lens,
     film,
-    focalLength: formatWithFallback((s) => `${s}mm`, exif.focalLength, 'N/A'),
+    focalLength: formatWithFallback((s) => `${s}mm`, focalLength, 'N/A'),
     shutterSpeed: formatWithFallback(
       formatShutterSpeed,
       exif.shutterSpeed,
