@@ -1,1 +1,1 @@
-export { default } from './Desktop.client';
+export { default } from './desktop';

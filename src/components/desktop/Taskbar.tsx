@@ -1,10 +1,10 @@
-import cn from "classnames";
+import cn from 'classnames';
 
-import useDesktopStore from "@/stores/desktop";
-import Button from "@/components/ui/Button";
-import StartMenu from "./StartMenu";
-import Divider from "../ui/Divider";
-import Clock from "./Clock";
+import useDesktopStore from '@/stores/desktop';
+import Button from '@/components/ui/Button';
+import StartMenu from './start-menu';
+import Divider from '../ui/Divider';
+import Clock from './Clock';
 
 export default function Taskbar() {
   const { windows, focus } = useDesktopStore();
@@ -20,9 +20,9 @@ export default function Taskbar() {
           {windows.map((window, i) => (
             <Button
               key={window.id}
-              className={cn("p-1 pr-2 basis-40 shrink min-w-12", {
-                "bevel-semilight": !window.focused,
-                "bevel-inset bg-checkered": window.focused,
+              className={cn('p-1 pr-2 basis-40 shrink min-w-12', {
+                'bevel-semilight': !window.focused,
+                'bevel-inset bg-checkered': window.focused,
               })}
               data-active={window.focused ? true : undefined}
               onClick={() => focus(window.id)}
@@ -35,7 +35,7 @@ export default function Taskbar() {
                 />
                 <span
                   className={cn(
-                    "whitespace-nowrap overflow-hidden text-ellipsis",
+                    'whitespace-nowrap overflow-hidden text-ellipsis',
                     { bold: window.focused },
                   )}
                 >

@@ -1,9 +1,9 @@
-import type { PropsWithChildren } from "react";
-import { createContext, useCallback, useContext } from "react";
+import type { PropsWithChildren } from 'react';
+import { createContext, useCallback, useContext } from 'react';
 
-import useDesktopStore from "@/stores/desktop";
-import type { AppState, AppStateTypes } from "@/components/apps/renderApp";
-import type { WindowInit, WindowProps } from "./Window";
+import useDesktopStore from '@/stores/desktop';
+import type { AppState, AppStateTypes } from '@/components/apps/render-app';
+import type { WindowInit, WindowProps } from './Window';
 
 interface WindowContextType<T extends string, P extends string>
   extends WindowProps<T> {
@@ -51,7 +51,7 @@ export function useWindow<T extends string, P extends string = string>(
 ) {
   const context = useContext(WindowContext);
   if (!context)
-    throw new Error("useWindow() must be used inside Window context");
+    throw new Error('useWindow() must be used inside Window context');
 
   if (appType && context.appType !== appType)
     throw new Error(
@@ -76,7 +76,7 @@ export function useAppState<T extends keyof AppStateTypes>(appType: T) {
 
 export function useParentState<P extends keyof AppStateTypes>(parentType: P) {
   const { setWindowProps } = useDesktopStore();
-  const { parent } = useWindow("", parentType);
+  const { parent } = useWindow('', parentType);
 
   if (!parent)
     throw new Error(`useParentState() must be used within modal window.`);

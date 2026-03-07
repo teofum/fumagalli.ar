@@ -1,8 +1,8 @@
-import { dosEmu } from '@/components/apps/DOSEmu';
-import { DOS_GAMES } from '@/components/apps/DOSEmu/types';
-import { preview } from '@/components/apps/Preview';
-import { previewSupportedFileTypes } from '@/components/apps/Preview/types';
-import { getApp } from '@/components/apps/renderApp';
+import { dosEmu } from '@/components/apps/dos-emu';
+import { DOS_GAMES } from '@/components/apps/dos-emu/types';
+import { preview } from '@/components/apps/preview';
+import { previewSupportedFileTypes } from '@/components/apps/preview/types';
+import { getApp } from '@/components/apps/render-app';
 import { AnyFile } from '@/schemas/file';
 import type { ItemStub } from '@/schemas/folder';
 import useDesktopStore from '@/stores/desktop';

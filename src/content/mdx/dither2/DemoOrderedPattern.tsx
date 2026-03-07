@@ -7,7 +7,7 @@ import { ToggleGroup, ToggleButton } from '@/components/ui/ToggleGroup';
 import Switch from '@/components/ui/Switch';
 import Slider from '@/components/ui/Slider';
 import NicePalette from '@/dither/palettes/NicePalette';
-import { mapFns } from '@/components/apps/DitherLab/process';
+import { mapFns } from '@/components/apps/dither-lab/process';
 
 const shader = `
 precision mediump float;

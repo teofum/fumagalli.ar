@@ -1,7 +1,7 @@
 'use client';
 
 import cn from 'classnames';
-import { preview } from '@/components/apps/Preview';
+import { preview } from '@/components/apps/preview';
 import useDesktopStore from '@/stores/desktop';
 
 function file(name: string) {

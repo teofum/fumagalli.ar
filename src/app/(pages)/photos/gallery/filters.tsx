@@ -9,13 +9,13 @@ import {
   Field,
   Label,
 } from '@headlessui/react';
-import { useState } from 'react';
 import { Check, ChevronDown, X } from 'lucide-react';
-
-import { SearchParams } from '@/utils/types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ExifStats } from '../fetch-exif-stats';
-import { getLensDisplayName } from '../get-lens-name';
+import { useState } from 'react';
+
+import { ExifStats } from '@/utils/photos/fetch-exif-stats';
+import { getLensDisplayName } from '@/utils/photos/get-lens-name';
+import { SearchParams } from '@/utils/types';
 
 function FilterCombobox({
   tags,

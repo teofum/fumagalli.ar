@@ -20,8 +20,9 @@ import { photoSchema } from '@/schemas/photos';
 import { sanityImage } from '@/utils/sanity.image';
 import { sanityClient } from '@/utils/sanity.server';
 import { ServerComponentProps } from '@/utils/types';
-
-import { getLensDisplayName } from '../../get-lens-name';
+import { getLensDisplayName } from '@/utils/photos/get-lens-name';
+import getPhotoDetails from '@/utils/photos/get-photo-details';
+import { getLensFallbackFocalLength } from '@/utils/photos/get-lens-focal-length';
 
 export default async function Photos({ params }: ServerComponentProps) {
   const { id } = await params;
@@ -33,27 +34,8 @@ export default async function Photos({ params }: ServerComponentProps) {
 
   const vertical = dimensions.aspectRatio <= 1;
 
-  const camera =
-    photo.tags.find((tag) => tag.startsWith('camera:'))?.split(':')[1] ??
-    'Unknown';
-  const lens =
-    photo.tags.find((tag) => tag.startsWith('lens:'))?.split(':')[1] ??
-    exif.lens;
-  const film = photo.tags.find((tag) => tag.startsWith('film:'))?.split(':')[1];
-
-  const formatShutterSpeed = (ss: number) => {
-    if (ss > 1) return `${ss} seconds`;
-    else if (ss === 1) return `1 second`;
-    return `1/${1 / ss} second`;
-  };
-
-  function formatWithFallback<T>(
-    fmt: (s: T) => string,
-    str: T | undefined,
-    fallback: string,
-  ) {
-    return str !== undefined ? fmt(str) : fallback;
-  }
+  const { camera, lens, film, shutterSpeed } = getPhotoDetails(photo);
+  const focalLength = exif.focalLength ?? getLensFallbackFocalLength(lens);
 
   return (
     <>
@@ -126,10 +108,10 @@ export default async function Photos({ params }: ServerComponentProps) {
               </>
             ) : null}
 
-            {exif.focalLength ? (
+            {focalLength ? (
               <>
                 <SquareFunction size={20} />
-                <span>{exif.focalLength}mm</span>
+                <span>{focalLength}mm</span>
               </>
             ) : null}
 
@@ -143,16 +125,14 @@ export default async function Photos({ params }: ServerComponentProps) {
             {exif.shutterSpeed ? (
               <>
                 <CircleGauge size={20} />
-                <span>{formatShutterSpeed(exif.shutterSpeed)}</span>
+                <span>{shutterSpeed}</span>
               </>
             ) : null}
 
-            {exif.focalLength ? (
+            {exif.iso ? (
               <>
                 <Contrast size={20} />
-                <span>
-                  {formatWithFallback((s) => `ISO ${s}`, exif.iso, 'N/A')}
-                </span>
+                <span>ISO {exif.iso}</span>
               </>
             ) : null}
 

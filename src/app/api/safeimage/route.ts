@@ -1,4 +1,6 @@
+import { PHOTO_QUERY } from '@/queries/queries';
 import { imageFileSchema } from '@/schemas/file';
+import { photoSchema } from '@/schemas/photos';
 import { sanityImage } from '@/utils/sanity.image';
 import { sanityClient } from '@/utils/sanity.server';
 
@@ -18,9 +20,25 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const fileId = url.searchParams.get('id') ?? '';
 
-  const response = await sanityClient.fetch(fileQuery(fileId));
-  const data = imageFileSchema.parse(response);
+  if (fileId.startsWith('@')) {
+    const [type, id] = fileId.slice(1).split(':');
+    switch (type) {
+      case 'photo':
+        const photo = photoSchema.parse(
+          await sanityClient.fetch(PHOTO_QUERY(id)),
+        );
 
-  const imageUrl = sanityImage(data.content).width(2000).url();
-  return fetch(imageUrl);
+        const imageUrl = sanityImage(photo._id).width(2000).quality(100).url();
+        return fetch(imageUrl);
+      default:
+        throw new Error('Invalid resource type');
+    }
+  } else {
+    const data = imageFileSchema.parse(
+      await sanityClient.fetch(fileQuery(fileId)),
+    );
+
+    const imageUrl = sanityImage(data.content).width(2000).quality(100).url();
+    return fetch(imageUrl);
+  }
 }

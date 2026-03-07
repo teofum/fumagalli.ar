@@ -1,18 +1,18 @@
-import { memo, useRef } from "react";
-import { ErrorBoundary } from "react-error-boundary";
-import cn from "classnames";
+import { memo, useRef } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import cn from 'classnames';
 
-import useMoveWindow from "./useMoveWindow";
-import useResizeWindow from "./useResizeWindow";
-import Button from "@/components/ui/Button";
-import AppOutlet, { type AppState } from "@/components/apps/renderApp";
-import { WindowProvider } from "./context";
-import useDesktopStore from "@/stores/desktop";
-import Restore from "@/components/ui/icons/Restore";
-import Max from "@/components/ui/icons/Max";
-import Close from "@/components/ui/icons/Close";
-import ApplicationError from "@/components/ui/ApplicationError";
-import { WindowSizingMode } from "./WindowSizingMode";
+import useMoveWindow from './useMoveWindow';
+import useResizeWindow from './useResizeWindow';
+import Button from '@/components/ui/Button';
+import AppOutlet, { type AppState } from '@/components/apps/render-app';
+import { WindowProvider } from './context';
+import useDesktopStore from '@/stores/desktop';
+import Restore from '@/components/ui/icons/Restore';
+import Max from '@/components/ui/icons/Max';
+import Close from '@/components/ui/icons/Close';
+import ApplicationError from '@/components/ui/ApplicationError';
+import { WindowSizingMode } from './WindowSizingMode';
 
 export interface WindowProps<AppType extends string> {
   id: string;
@@ -53,16 +53,16 @@ export interface WindowProps<AppType extends string> {
 
 export type WindowInit<AppType extends string> = Omit<
   Partial<WindowProps<AppType>>,
-  "id" | "focused" | "order" | "parentId" | "children"
+  'id' | 'focused' | 'order' | 'parentId' | 'children'
 > &
-  Pick<WindowProps<AppType>, "appType" | "appState">;
+  Pick<WindowProps<AppType>, 'appType' | 'appState'>;
 
 export type AnyWindowProps = WindowProps<string>;
 
 function getSizeValue(mode: WindowSizingMode, value: number) {
-  if (mode === WindowSizingMode.AUTO) return "auto";
-  if (mode === WindowSizingMode.MIN_CONTENT) return "min-content";
-  if (mode === WindowSizingMode.MAX_CONTENT) return "max-content";
+  if (mode === WindowSizingMode.AUTO) return 'auto';
+  if (mode === WindowSizingMode.MIN_CONTENT) return 'min-content';
+  if (mode === WindowSizingMode.MAX_CONTENT) return 'max-content';
   return `${value}px`;
 }
 
@@ -78,10 +78,10 @@ function getWindowStyleProps<AppType extends string>({
 }: WindowProps<AppType>) {
   if (maximized)
     return {
-      top: "0",
-      left: "0",
-      width: "100%",
-      height: "calc(100% - 30px)",
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: 'calc(100% - 30px)',
       zIndex: order,
     };
 
@@ -109,14 +109,14 @@ export default function Window<T extends string>(props: WindowProps<T>) {
   const windowRef = useRef<HTMLDivElement>(null);
 
   const moveHandler = useMoveWindow(props, windowRef);
-  const resizeHandlerNW = useResizeWindow(props, windowRef, "nw");
-  const resizeHandlerN = useResizeWindow(props, windowRef, "n");
-  const resizeHandlerNE = useResizeWindow(props, windowRef, "ne");
-  const resizeHandlerE = useResizeWindow(props, windowRef, "e");
-  const resizeHandlerSE = useResizeWindow(props, windowRef, "se");
-  const resizeHandlerS = useResizeWindow(props, windowRef, "s");
-  const resizeHandlerSW = useResizeWindow(props, windowRef, "sw");
-  const resizeHandlerW = useResizeWindow(props, windowRef, "w");
+  const resizeHandlerNW = useResizeWindow(props, windowRef, 'nw');
+  const resizeHandlerN = useResizeWindow(props, windowRef, 'n');
+  const resizeHandlerNE = useResizeWindow(props, windowRef, 'ne');
+  const resizeHandlerE = useResizeWindow(props, windowRef, 'e');
+  const resizeHandlerSE = useResizeWindow(props, windowRef, 'se');
+  const resizeHandlerS = useResizeWindow(props, windowRef, 's');
+  const resizeHandlerSW = useResizeWindow(props, windowRef, 'sw');
+  const resizeHandlerW = useResizeWindow(props, windowRef, 'w');
 
   const canResizeEW = props.sizingX === WindowSizingMode.RESIZABLE;
   const canResizeNS = props.sizingY === WindowSizingMode.RESIZABLE;
@@ -129,15 +129,15 @@ export default function Window<T extends string>(props: WindowProps<T>) {
     <div
       key="handle-nw"
       className={cn(
-        "cursor-nwse-resize row-start-1 col-start-1",
-        "origin-top-left scale-[2]",
+        'cursor-nwse-resize row-start-1 col-start-1',
+        'origin-top-left scale-[2]',
         { hidden: !canResizeNSEW },
       )}
       onPointerDown={resizeHandlerNW}
     />,
     <div
       key="handle-n"
-      className={cn("cursor-ns-resize row-start-1 col-start-2", {
+      className={cn('cursor-ns-resize row-start-1 col-start-2', {
         hidden: !canResizeNS,
       })}
       onPointerDown={resizeHandlerN}
@@ -145,22 +145,22 @@ export default function Window<T extends string>(props: WindowProps<T>) {
     <div
       key="handle-ne"
       className={cn(
-        "cursor-nesw-resize row-start-1 col-start-3",
-        "origin-top-right scale-[2]",
+        'cursor-nesw-resize row-start-1 col-start-3',
+        'origin-top-right scale-[2]',
         { hidden: !canResizeNSEW },
       )}
       onPointerDown={resizeHandlerNE}
     />,
     <div
       key="handle-w"
-      className={cn("cursor-ew-resize row-start-2 col-start-1", {
+      className={cn('cursor-ew-resize row-start-2 col-start-1', {
         hidden: !canResizeEW,
       })}
       onPointerDown={resizeHandlerW}
     />,
     <div
       key="handle-e"
-      className={cn("cursor-ew-resize row-start-2 col-start-3", {
+      className={cn('cursor-ew-resize row-start-2 col-start-3', {
         hidden: !canResizeEW,
       })}
       onPointerDown={resizeHandlerE}
@@ -168,15 +168,15 @@ export default function Window<T extends string>(props: WindowProps<T>) {
     <div
       key="handle-sw"
       className={cn(
-        "cursor-nesw-resize row-start-3 col-start-1",
-        "origin-bottom-left scale-[2]",
+        'cursor-nesw-resize row-start-3 col-start-1',
+        'origin-bottom-left scale-[2]',
         { hidden: !canResizeNSEW },
       )}
       onPointerDown={resizeHandlerSW}
     />,
     <div
       key="handle-s"
-      className={cn("cursor-ns-resize row-start-3 col-start-2", {
+      className={cn('cursor-ns-resize row-start-3 col-start-2', {
         hidden: !canResizeNS,
       })}
       onPointerDown={resizeHandlerS}
@@ -184,17 +184,17 @@ export default function Window<T extends string>(props: WindowProps<T>) {
     <div
       key="handle-se"
       className={cn(
-        "cursor-nwse-resize row-start-3 col-start-3",
-        "origin-bottom-right scale-[2]",
+        'cursor-nwse-resize row-start-3 col-start-3',
+        'origin-bottom-right scale-[2]',
         { hidden: !canResizeNSEW },
       )}
       onPointerDown={resizeHandlerSE}
     />,
   ];
 
-  const titlebarSpacerClass = cn("flex-1 h-1.5 border-t border-b", {
-    "border-light": active,
-    "border-disabled drop-shadow-disabled": !active,
+  const titlebarSpacerClass = cn('flex-1 h-1.5 border-t border-b', {
+    'border-light': active,
+    'border-disabled drop-shadow-disabled': !active,
   });
 
   /**
@@ -210,7 +210,7 @@ export default function Window<T extends string>(props: WindowProps<T>) {
       "
       style={getWindowStyleProps(props)}
       onPointerDown={() => focus(id)}
-      data-state={active ? "active" : "inactive"}
+      data-state={active ? 'active' : 'inactive'}
     >
       <div className="col-start-2 row-start-2 grid grid-rows-[1.125rem_calc(100%-1.125rem)]">
         <div
@@ -223,8 +223,8 @@ export default function Window<T extends string>(props: WindowProps<T>) {
           <div className={titlebarSpacerClass} />
 
           <span
-            className={cn("text-title bold", {
-              "text-disabled": !active,
+            className={cn('text-title bold', {
+              'text-disabled': !active,
             })}
           >
             {title}

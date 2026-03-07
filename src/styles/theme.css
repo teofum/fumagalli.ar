@@ -26,7 +26,7 @@
     --theme-text-disabled-shadow: var(--theme-lighter);
     --theme-text-accent: 0 0 128;
 
-    --theme-text-link: 0 102 204;
+    --theme-text-link: 0 80 160;
     --theme-text-visited: 85 26 139;
 
     --theme-selection-bg: 0 0 128;
@@ -58,7 +58,7 @@
     --theme-text-disabled-shadow: var(--theme-lighter);
     --theme-text-accent: 0 0 128;
 
-    --theme-text-link: 0 102 204;
+    --theme-text-link: 0 80 160;
     --theme-text-visited: 85 26 139;
 
     --theme-selection-bg: 0 72 144;
@@ -90,7 +90,7 @@
     --theme-text-disabled-shadow: var(--theme-light);
     --theme-text-accent: 16 64 48;
 
-    --theme-text-link: 0 102 204;
+    --theme-text-link: 0 80 160;
     --theme-text-visited: 85 26 139;
 
     --theme-selection-bg: 32 96 64;
