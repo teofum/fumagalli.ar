@@ -3,6 +3,7 @@ import { Photo } from '@/schemas/photos';
 export type PhotosSettings = {
   leftPanel: boolean;
   rightPanel: boolean;
+  filmStrip: boolean;
   buttons: 'large' | 'icon';
 
   sortBy: 'date' | 'filename';
@@ -13,6 +14,7 @@ export type PhotosSettings = {
 export const defaultPhotosSettings: PhotosSettings = {
   leftPanel: true,
   rightPanel: false,
+  filmStrip: true,
   buttons: 'large',
 
   sortBy: 'date',

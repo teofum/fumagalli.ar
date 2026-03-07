@@ -41,6 +41,12 @@ export default function Photos() {
             </Menu.RadioGroup>
           </Menu.Sub>
 
+          <Menu.CheckboxItem
+            label="Film strip"
+            checked={settings.filmStrip}
+            onCheckedChange={(checked) => set({ filmStrip: checked })}
+          />
+
           <Menu.Separator />
 
           <Menu.Sub label="Toolbar">
@@ -117,6 +123,7 @@ export default function Photos() {
         {settings.leftPanel ? <CollectionsPanel /> : null}
         <PhotosPanel
           viewMode={settings.viewMode}
+          filmStrip={settings.filmStrip}
           loupe={() => set({ viewMode: 'loupe' })}
           viewportRef={viewportRef}
           imageRef={imageRef}

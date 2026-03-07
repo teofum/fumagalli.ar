@@ -6,16 +6,19 @@ import { sanityImage, useImageSize2 } from '@/utils/sanity.image';
 
 import PhotoThumbnail from './photo-thumbnail';
 import { PhotosViewProps } from './props';
+import { PhotosSettings } from '../types';
 
 type LoupeViewProps = PhotosViewProps & {
   viewportRef: RefObject<HTMLDivElement | null>;
   imageRef: RefObject<HTMLImageElement | null>;
+  viewMode: PhotosSettings['viewMode'];
 };
 
 export default function PhotosLoupeView({
   photos,
   viewportRef,
   imageRef,
+  filmStrip,
 }: LoupeViewProps) {
   const [state] = useAppState('photos');
   const [width, height] = useImageSize2(
@@ -68,20 +71,22 @@ export default function PhotosLoupeView({
         )}
       </ScrollContainer>
 
-      <ScrollContainer hide="y" className="shrink-0">
-        <div className="flex flex-row">
-          {photos?.map((photo, i) => (
-            <div className="w-20 h-20" key={photo._id}>
-              <PhotoThumbnail
-                photo={photo}
-                idx={i + 1}
-                size={80}
-                variant="medium"
-              />
-            </div>
-          ))}
-        </div>
-      </ScrollContainer>
+      {filmStrip ? (
+        <ScrollContainer hide="y" className="shrink-0">
+          <div className="flex flex-row">
+            {photos?.map((photo, i) => (
+              <div className="w-20 h-20" key={photo._id}>
+                <PhotoThumbnail
+                  photo={photo}
+                  idx={i + 1}
+                  size={80}
+                  variant="medium"
+                />
+              </div>
+            ))}
+          </div>
+        </ScrollContainer>
+      ) : null}
     </div>
   );
 }

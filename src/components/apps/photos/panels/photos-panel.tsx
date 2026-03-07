@@ -11,6 +11,7 @@ import PhotosLoupeView from '../views/photos-loupe-view';
 
 type PhotosPanelProps = {
   viewMode: PhotosSettings['viewMode'];
+  filmStrip: PhotosSettings['filmStrip'];
   loupe?: () => void;
   viewportRef: RefObject<HTMLDivElement | null>;
   imageRef: RefObject<HTMLImageElement | null>;
@@ -18,6 +19,7 @@ type PhotosPanelProps = {
 
 export default function PhotosPanel({
   viewMode,
+  filmStrip,
   loupe,
   viewportRef,
   imageRef,
@@ -53,6 +55,7 @@ export default function PhotosPanel({
         photos={photos}
         viewportRef={viewportRef}
         imageRef={imageRef}
+        filmStrip={filmStrip}
       />
     );
   return <PhotosDetailsView photos={photos} loupe={loupe} />;
