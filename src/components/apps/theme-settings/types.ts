@@ -19,7 +19,7 @@ export const themes: SystemTheme[] = [
     cssClass: 'theme-dark',
   },
   {
-    name: 'Champagne',
+    name: 'Y2K',
     cssClass: 'theme-champagne',
   },
   {
@@ -27,8 +27,20 @@ export const themes: SystemTheme[] = [
     cssClass: 'theme-jade',
   },
   {
+    name: 'Air',
+    cssClass: 'theme-air',
+  },
+  {
+    name: 'Industrial',
+    cssClass: 'theme-industrial',
+  },
+  {
     name: 'Steel',
     cssClass: 'theme-steel',
+  },
+  {
+    name: 'Forest',
+    cssClass: 'theme-wood',
   },
   {
     name: 'Midnight',

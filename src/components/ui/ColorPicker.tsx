@@ -137,7 +137,7 @@ export default function ColorPicker({
       <Popover.Trigger asChild>
         <div
           className={cn(
-            'min-w-12 w-full h-6 bevel-content p-0.5 flex flex-row items-center',
+            'min-w-12 w-full h-6 bevel-content p-0.5 flex flex-row items-center bg-default',
             className,
           )}
           style={{
