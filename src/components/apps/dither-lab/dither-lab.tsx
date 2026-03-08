@@ -441,6 +441,7 @@ export default function DitherLab() {
           setStatus={setStatus}
           setRenderTime={setRenderTime}
           viewportRef={viewportRef}
+          save={download}
         >
           <Toolbar className="grow">
             <Button variant="light" className="p-1" onClick={download}>
