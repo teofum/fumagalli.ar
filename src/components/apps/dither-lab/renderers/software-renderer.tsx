@@ -9,6 +9,7 @@ import Button from '@/components/ui/Button';
 import type { RendererProps } from './gl-renderer';
 import ScrollContainer from '@/components/ui/ScrollContainer';
 import { Toolbar, ToolbarGroup } from '@/components/ui/Toolbar';
+import DitherLabContextMenu from '../components/dither-lab-context-menu';
 
 export default function SoftwareRenderer({
   rt,
@@ -18,6 +19,7 @@ export default function SoftwareRenderer({
   setStatus,
   setRenderTime,
   viewportRef,
+  save,
   children,
 }: RendererProps) {
   const [state, setState] = useAppState('dither');
@@ -116,16 +118,18 @@ export default function SoftwareRenderer({
       </ToolbarGroup>
 
       <ScrollContainer className="grow min-w-0 min-h-0" ref={viewportRef}>
-        <div className="scroll-center">
-          <canvas
-            ref={(el) => setRt(el)}
-            className={cn('border border-default', { hidden: !img })}
-            width={state.renderWidth}
-            height={state.renderHeight}
-            style={{ minWidth: `${state.renderWidth * state.zoom + 2}px` }}
-          />
-          {!img ? <div>No image loaded</div> : null}
-        </div>
+        <DitherLabContextMenu save={save}>
+          <div className="scroll-center">
+            <canvas
+              ref={(el) => setRt(el)}
+              className={cn('border border-default', { hidden: !img })}
+              width={state.renderWidth}
+              height={state.renderHeight}
+              style={{ minWidth: `${state.renderWidth * state.zoom + 2}px` }}
+            />
+            {!img ? <div>No image loaded</div> : null}
+          </div>
+        </DitherLabContextMenu>
       </ScrollContainer>
     </div>
   );
