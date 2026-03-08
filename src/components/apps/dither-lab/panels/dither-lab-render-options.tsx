@@ -1,8 +1,8 @@
-import cn from "classnames";
+import cn from 'classnames';
 
-import { useAppState } from "@/components/desktop/Window/context";
-import Collapsible from "@/components/ui/Collapsible";
-import { Select, SelectItem } from "@/components/ui/Select";
+import { useAppState } from '@/components/desktop/Window/context';
+import Collapsible from '@/components/ui/Collapsible';
+import { Select, SelectItem } from '@/components/ui/Select';
 import {
   type DitherProcessRangeOption,
   type DitherGlProcess,
@@ -10,19 +10,19 @@ import {
   mapFns,
   reverseMapFns,
   softwareProcess,
-} from "../process";
-import Divider from "@/components/ui/Divider";
-import Slider from "@/components/ui/Slider";
-import { DitherLabDevice } from "../types";
-import { THREADS_AUTO_MAX } from "@/dither/renderers/useSoftwareRenderer";
+} from '../process';
+import Divider from '@/components/ui/Divider';
+import Slider from '@/components/ui/Slider';
+import { DitherLabDevice } from '../types';
+import { THREADS_AUTO_MAX } from '@/dither/renderers/use-software-renderer';
 
 interface RangeOptionProps {
-  type: "settings" | "uniforms";
+  type: 'settings' | 'uniforms';
   option: DitherProcessRangeOption;
 }
 
 function RangeOption({ type, option }: RangeOptionProps) {
-  const [state, setState] = useAppState("dither");
+  const [state, setState] = useAppState('dither');
 
   const value = Number(state[type][option.name] ?? option.min);
   let defaultValue = value;
@@ -47,14 +47,14 @@ function RangeOption({ type, option }: RangeOptionProps) {
         max={option.max}
         step={option.step}
       />
-      {option.name === "threads" ? (
+      {option.name === 'threads' ? (
         <div
-          className={cn("w-8 text-end", {
-            "text-[#008000]": value === 0,
-            "text-[#C00000]": value > THREADS_AUTO_MAX,
+          className={cn('w-8 text-end', {
+            'text-[#008000]': value === 0,
+            'text-[#C00000]': value > THREADS_AUTO_MAX,
           })}
         >
-          {value === 0 ? "A" : value.toFixed(0)}
+          {value === 0 ? 'A' : value.toFixed(0)}
         </div>
       ) : (
         <div className="w-8 text-end">{value.toFixed(2)}</div>
@@ -64,7 +64,7 @@ function RangeOption({ type, option }: RangeOptionProps) {
 }
 
 export default function DitherLabRenderOptions() {
-  const [state, setState] = useAppState("dither");
+  const [state, setState] = useAppState('dither');
   const processes =
     state.device === DitherLabDevice.GL ? gpuProcess : softwareProcess;
   const process = processes[state.process];
@@ -84,7 +84,7 @@ export default function DitherLabRenderOptions() {
         <div className="flex flex-row gap-1 items-center">
           <div className="w-12">Device</div>
           <Select
-            triggerProps={{ className: "grow" }}
+            triggerProps={{ className: 'grow' }}
             value={state.device}
             onValueChange={(value) => selectDevice(value as DitherLabDevice)}
           >
@@ -99,7 +99,7 @@ export default function DitherLabRenderOptions() {
         <div className="flex flex-row gap-1 items-center">
           <div className="w-12">Process</div>
           <Select
-            triggerProps={{ className: "grow" }}
+            triggerProps={{ className: 'grow' }}
             value={state.process}
             onValueChange={(value) => setState({ process: value })}
           >
@@ -114,14 +114,14 @@ export default function DitherLabRenderOptions() {
         <Divider />
 
         {process.settings.map((setting) =>
-          setting.type === "select" ? (
+          setting.type === 'select' ? (
             <div
               key={setting.name}
               className="flex flex-row gap-1 items-center"
             >
               <div className="w-12">{setting.displayName}</div>
               <Select
-                triggerProps={{ className: "grow" }}
+                triggerProps={{ className: 'grow' }}
                 value={state.settings[setting.name] as string}
                 onValueChange={(value) =>
                   setState({

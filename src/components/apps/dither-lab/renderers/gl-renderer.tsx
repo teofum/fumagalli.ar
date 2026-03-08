@@ -5,7 +5,7 @@ import { useAppState } from '@/components/desktop/Window/context';
 
 import useGlRenderer, {
   type RenderSettings,
-} from '@/dither/renderers/useGlRenderer';
+} from '@/dither/renderers/use-gl-renderer';
 import { gpuProcess } from '../process';
 import ScrollContainer from '@/components/ui/ScrollContainer';
 import { ToolbarGroup } from '@/components/ui/Toolbar';

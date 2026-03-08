@@ -1,8 +1,8 @@
-import getPaletteColors from "@/dither/utils/paletteColors";
-import PaintColors from "@/dither/palettes/Paint";
+import getPaletteColors from '@/dither/utils/palette-colors';
+import PaintColors from '@/dither/palettes/Paint';
 
-import { usePaintContext } from "../context";
-import cn from "classnames";
+import { usePaintContext } from '../context';
+import cn from 'classnames';
 
 const PAINT_COLORS = getPaletteColors(PaintColors);
 
@@ -13,7 +13,7 @@ export default function PaintColor() {
   const [br, bg, bb] = state.bgColor;
 
   return (
-    <div className={cn("flex flex-row py-3", { hidden: !settings.colorBox })}>
+    <div className={cn('flex flex-row py-3', { hidden: !settings.colorBox })}>
       <button
         className="button bg-checkered bevel-content w-8 h-8 relative"
         onClick={() =>

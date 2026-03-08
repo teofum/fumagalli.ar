@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import DemoImageBase, { NULL_PALETTE } from './DemoImageBase';
-import useGlRenderer from '@/dither/renderers/useGlRenderer';
+import useGlRenderer from '@/dither/renderers/use-gl-renderer';
 import { ToggleButton, ToggleGroup } from '@/components/ui/ToggleGroup';
 import Switch from '@/components/ui/Switch';
 

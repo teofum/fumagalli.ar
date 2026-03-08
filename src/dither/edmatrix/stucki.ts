@@ -1,4 +1,4 @@
-import { ErrorDiffusionMatrix } from '../software/errorDiffusion';
+import { ErrorDiffusionMatrix } from '../software/error-diffusion';
 
 const stucki: ErrorDiffusionMatrix = [
   { x: 1, y: 0, w: 8 / 42 },

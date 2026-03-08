@@ -1,8 +1,8 @@
 import edMatrices from '../edmatrix';
 import type { Palette } from '../palettes/types';
-import { linear2srgb, srgb2linear } from '../utils/colorUtils';
-import getPaletteColors from '../utils/paletteColors';
-import { paletteMap } from '../utils/paletteMap';
+import { linear2srgb, srgb2linear } from '../utils/color-utils';
+import getPaletteColors from '../utils/palette-colors';
+import { paletteMap } from '../utils/palette-map';
 import type { ProgressFn, SoftwareRenderProcess } from './types';
 
 const vec3distance = (a: number[], b: number[]): number => {

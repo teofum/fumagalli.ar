@@ -3,7 +3,7 @@ import cn from 'classnames';
 
 import { useAppState } from '@/components/desktop/Window/context';
 
-import useSoftwareRenderer from '@/dither/renderers/useSoftwareRenderer';
+import useSoftwareRenderer from '@/dither/renderers/use-software-renderer';
 import type softwareRenderProcess from '@/dither/software';
 import Button from '@/components/ui/Button';
 import type { RendererProps } from './gl-renderer';

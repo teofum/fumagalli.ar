@@ -9,6 +9,7 @@ enum RenderEvent {
 
 interface RenderWorkerMsg {
   msg: RenderEvent;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params: any;
 }
 

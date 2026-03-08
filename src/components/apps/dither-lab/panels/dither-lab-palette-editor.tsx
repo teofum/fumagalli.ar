@@ -9,7 +9,9 @@ import {
   PaletteGroup,
   PaletteType,
 } from '@/dither/palettes/types';
-import getPaletteColors, { getPaletteSize } from '@/dither/utils/paletteColors';
+import getPaletteColors, {
+  getPaletteSize,
+} from '@/dither/utils/palette-colors';
 import Divider from '@/components/ui/Divider';
 import { useSyncedAppSettings } from '@/hooks/use-app-settings';
 import Win4bRGBI from '@/dither/palettes/Win4bRGBI';

@@ -1,5 +1,5 @@
-import floydSteinberg from './floydSteinberg';
-import minAverageError from './minAverageError';
+import floydSteinberg from './floyd-steinberg';
+import minAverageError from './min-average-error';
 import sierra from './sierra';
 import simple from './simple';
 import stucki from './stucki';
