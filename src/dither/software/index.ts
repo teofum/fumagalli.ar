@@ -1,4 +1,4 @@
-import errorDiffusion from './errorDiffusion';
+import errorDiffusion from './error-diffusion';
 import pattern from './pattern';
 
 const softwareRenderProcess = {

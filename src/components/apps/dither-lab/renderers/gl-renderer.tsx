@@ -5,10 +5,11 @@ import { useAppState } from '@/components/desktop/Window/context';
 
 import useGlRenderer, {
   type RenderSettings,
-} from '@/dither/renderers/useGlRenderer';
+} from '@/dither/renderers/use-gl-renderer';
 import { gpuProcess } from '../process';
 import ScrollContainer from '@/components/ui/ScrollContainer';
 import { ToolbarGroup } from '@/components/ui/Toolbar';
+import DitherLabContextMenu from '../components/dither-lab-context-menu';
 
 const clistSize: { [key: string]: number | undefined } = {
   high: 64,
@@ -26,6 +27,7 @@ export type RendererProps = React.PropsWithChildren<{
   >;
   setRenderTime: React.Dispatch<React.SetStateAction<number>>;
   viewportRef: React.RefObject<HTMLDivElement | null>;
+  save: () => void;
 }>;
 
 export default function GlRenderer({
@@ -33,6 +35,7 @@ export default function GlRenderer({
   setRt,
   img,
   viewportRef,
+  save,
   children,
 }: RendererProps) {
   const [state, setState] = useAppState('dither');
@@ -112,16 +115,18 @@ export default function GlRenderer({
       <ToolbarGroup className="flex flex-row">{children}</ToolbarGroup>
 
       <ScrollContainer className="grow min-w-0 min-h-0" ref={viewportRef}>
-        <div className="scroll-center">
-          <canvas
-            ref={(el) => setRt(el)}
-            className={cn('border border-default', { hidden: !img })}
-            width={state.renderWidth}
-            height={state.renderHeight}
-            style={{ minWidth: `${state.renderWidth * state.zoom + 2}px` }}
-          />
-          {!img ? <div>No image loaded</div> : null}
-        </div>
+        <DitherLabContextMenu save={save}>
+          <div className="scroll-center">
+            <canvas
+              ref={(el) => setRt(el)}
+              className={cn('border border-default', { hidden: !img })}
+              width={state.renderWidth}
+              height={state.renderHeight}
+              style={{ minWidth: `${state.renderWidth * state.zoom + 2}px` }}
+            />
+            {!img ? <div>No image loaded</div> : null}
+          </div>
+        </DitherLabContextMenu>
       </ScrollContainer>
     </div>
   );

@@ -1,20 +1,20 @@
-import autosizeViewport from "@/utils/gl/autosizeViewport";
-import createShader from "@/utils/gl/createShader";
-import enableAndBindAttrib from "@/utils/gl/enableAndBindAttrib";
-import linkProgram from "@/utils/gl/linkProgram";
-import tex2DFromData from "@/utils/gl/tex2DFromData";
-import tex2DFromImage from "@/utils/gl/tex2DFromImage";
+import autosizeViewport from '@/utils/gl/autosizeViewport';
+import createShader from '@/utils/gl/createShader';
+import enableAndBindAttrib from '@/utils/gl/enableAndBindAttrib';
+import linkProgram from '@/utils/gl/linkProgram';
+import tex2DFromData from '@/utils/gl/tex2DFromData';
+import tex2DFromImage from '@/utils/gl/tex2DFromImage';
 
-import shaders from "../shaders";
-import thresholds from "../thresholdMaps";
-import makeRandomThreshold from "../thresholdMaps/makeRandomThreshold";
-import { useCallback, useMemo } from "react";
-import type { Palette } from "../palettes/types";
-import getPaletteColors, { getPaletteSize } from "../utils/paletteColors";
+import shaders from '../shaders';
+import thresholds from '../thresholdMaps';
+import makeRandomThreshold from '../thresholdMaps/makeRandomThreshold';
+import { useCallback, useMemo } from 'react';
+import type { Palette } from '../palettes/types';
+import getPaletteColors, { getPaletteSize } from '../utils/palette-colors';
 
 export interface RenderSettings {
   clistSize?: number;
-  threshold?: keyof typeof thresholds | "random";
+  threshold?: keyof typeof thresholds | 'random';
 }
 
 const POSITIONS = [-1, 1, -1, -1, 1, 1, -1, -1, 1, -1, 1, 1];
@@ -31,7 +31,7 @@ export default function useGlRenderer(
   const gl = useMemo(() => {
     if (!rt) return null;
 
-    const gl = rt.getContext("webgl2", { preserveDrawingBuffer: true });
+    const gl = rt.getContext('webgl2', { preserveDrawingBuffer: true });
     if (!gl) return;
     return gl;
   }, [rt]);
@@ -48,7 +48,7 @@ export default function useGlRenderer(
   const program = useMemo(() => {
     if (!gl) return null;
 
-    console.log("Compiling shaders...");
+    console.log('Compiling shaders...');
 
     const fragSource = shader
       .replace(/\$/g, paletteSize.toString()) // Replace '$' symbol in source with palette size
@@ -62,20 +62,20 @@ export default function useGlRenderer(
 
   const render = useCallback(() => {
     if (!rt || !img || !gl || !program) return;
-    console.log("Rendering...");
+    console.log('Rendering...');
 
     autosizeViewport(gl);
 
     // Get attribute locations
-    const positionLocation = gl.getAttribLocation(program, "a_position");
-    const texCoordLocation = gl.getAttribLocation(program, "a_texCoord");
+    const positionLocation = gl.getAttribLocation(program, 'a_position');
+    const texCoordLocation = gl.getAttribLocation(program, 'a_texCoord');
 
     // Get uniform locations
-    const u_palette = gl.getUniformLocation(program, "u_palette");
-    const u_texSize = gl.getUniformLocation(program, "u_texSize");
-    const u_image = gl.getUniformLocation(program, "u_image");
-    const u_threshold = gl.getUniformLocation(program, "u_threshold");
-    const u_thres_size = gl.getUniformLocation(program, "u_thres_size");
+    const u_palette = gl.getUniformLocation(program, 'u_palette');
+    const u_texSize = gl.getUniformLocation(program, 'u_texSize');
+    const u_image = gl.getUniformLocation(program, 'u_image');
+    const u_threshold = gl.getUniformLocation(program, 'u_threshold');
+    const u_thres_size = gl.getUniformLocation(program, 'u_thres_size');
 
     // Custom uniforms, shader-dependent
     const uniformLocations: { [key: string]: WebGLUniformLocation | null } = {};
@@ -94,9 +94,9 @@ export default function useGlRenderer(
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(TEXCOORDS), gl.STATIC_DRAW);
 
     const threshold =
-      settings.threshold === "random"
+      settings.threshold === 'random'
         ? makeRandomThreshold(Math.max(rt.width, rt.height))
-        : thresholds[settings.threshold ?? "bayer8"];
+        : thresholds[settings.threshold ?? 'bayer8'];
 
     // Load image to texture 0 and threshold matrix to texture 1
     tex2DFromImage(gl, img);

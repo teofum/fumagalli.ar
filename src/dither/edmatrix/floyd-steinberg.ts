@@ -1,4 +1,4 @@
-import { ErrorDiffusionMatrix } from '../software/errorDiffusion';
+import { ErrorDiffusionMatrix } from '../software/error-diffusion';
 
 const floydSteinberg: ErrorDiffusionMatrix = [
   { x: 1, y: 0, w: 7 / 16 },

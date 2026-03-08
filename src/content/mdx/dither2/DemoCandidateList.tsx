@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import useGlRenderer from '@/dither/renderers/useGlRenderer';
+import useGlRenderer from '@/dither/renderers/use-gl-renderer';
 import DemoImageBase from '../dither/DemoImageBase';
 import {
   type Palette,
@@ -9,7 +9,7 @@ import {
   PaletteType,
 } from '@/dither/palettes/types';
 import ColorPicker from '@/components/ui/ColorPicker';
-import { getPaletteColor } from '@/dither/utils/paletteColors';
+import { getPaletteColor } from '@/dither/utils/palette-colors';
 
 const shader = `
 precision mediump float;

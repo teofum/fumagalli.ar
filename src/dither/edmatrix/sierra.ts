@@ -1,4 +1,4 @@
-import { ErrorDiffusionMatrix } from '../software/errorDiffusion';
+import { ErrorDiffusionMatrix } from '../software/error-diffusion';
 
 const sierra: ErrorDiffusionMatrix = [
   { x: 1, y: 0, w: 5 / 32 },

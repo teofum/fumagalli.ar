@@ -1,7 +1,7 @@
 'use client';
 
 import type { Palette } from '@/dither/palettes/types';
-import getPaletteColors from '@/dither/utils/paletteColors';
+import getPaletteColors from '@/dither/utils/palette-colors';
 
 type PaletteSwatchesProps = {
   palette: Palette;

@@ -1,8 +1,8 @@
 import type { Palette } from '../palettes/types';
 import thresholds from '../thresholdMaps';
-import { luma_srgb1 } from '../utils/colorUtils';
+import { luma_srgb1 } from '../utils/color-utils';
 import { gammaCorrect } from '../utils/gamma';
-import getPaletteColors from '../utils/paletteColors';
+import getPaletteColors from '../utils/palette-colors';
 import type { ProgressFn, SoftwareRenderProcess } from './types';
 
 const vec3distance = (a: number[], b: number[]): number => {

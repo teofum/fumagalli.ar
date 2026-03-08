@@ -9,6 +9,7 @@ enum RenderEvent {
 
 interface RenderWorkerMsg {
   msg: RenderEvent;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params: any;
 }
 
@@ -40,12 +41,13 @@ export default class RenderWorker {
   }
 
   constructor() {
-    this.worker = new Worker('/workers/worker.js');
+    this.worker = new Worker(new URL('../workers/worker.ts', import.meta.url));
 
     this.worker.onmessage = (ev: MessageEvent) => {
       const msg = ev.data as RenderWorkerMsg;
       switch (msg.msg) {
         case RenderEvent.Progress:
+          console.log('progress');
           if (this.onprogress)
             this.onprogress({
               ...msg.params,
@@ -56,6 +58,7 @@ export default class RenderWorker {
           break;
 
         case RenderEvent.Done:
+          console.log('done');
           if (this.onfinish)
             this.onfinish({
               data: msg.params.result,
@@ -66,6 +69,7 @@ export default class RenderWorker {
           break;
 
         case RenderEvent.Error:
+          console.log('error');
           if (this.onerror) this.onerror(msg.params.error);
           this.busy = false;
           break;
@@ -82,6 +86,7 @@ export default class RenderWorker {
     if (this.busy) return false;
     this.busy = true;
 
+    console.log('start');
     this.worker.postMessage({
       dataIn: part.data,
       process,
@@ -92,6 +97,7 @@ export default class RenderWorker {
   }
 
   public terminate(): void {
+    console.log('stopped');
     this.worker.terminate();
   }
 }
