@@ -41,7 +41,7 @@ export default function getPhotoDetails(photo: Photo) {
     aperture: formatWithFallback((s) => `f/${s}`, exif.aperture, 'N/A'),
     iso: formatWithFallback((s) => `${s}`, exif.iso, 'N/A'),
     date: formatWithFallback(
-      (s) => s.toLocaleDateString(),
+      (s) => new Date(s).toLocaleDateString(),
       exif.dateTime,
       'N/A',
     ),

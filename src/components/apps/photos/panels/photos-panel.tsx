@@ -54,7 +54,8 @@ export default function PhotosPanel({
     }
   }, [load, state.collection, state.filters]);
 
-  if (!photos) return <div>No photos</div>;
+  if (!photos)
+    return <div className="grow grid place-items-center">Loading...</div>;
 
   if (viewMode === 'grid')
     return <PhotosGridView photos={photos} loupe={loupe} />;
