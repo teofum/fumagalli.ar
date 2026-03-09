@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import useImage from '@/components/apps/dither-lab/utils/use-image';
+import { useAppState } from '@/components/desktop/Window/context';
 import autosizeViewport from '@/utils/gl/autosizeViewport';
 import enableAndBindAttrib from '@/utils/gl/enableAndBindAttrib';
 import tex2DFromImage from '@/utils/gl/tex2DFromImage';
 import useWebGL from '@/utils/gl/use-webgl';
 
 import usePalette from '../utils/use-palette';
-import useWebGLProgram from '../utils/use-webgl-program';
-import { useAppState } from '@/components/desktop/Window/context';
-import useThresholdMap from '../utils/use-threshold-map';
 import useRenderSettings from '../utils/use-render-settings';
+import useThresholdMap from '../utils/use-threshold-map';
+import useWebGLProgram from '../utils/use-webgl-program';
 
 const POSITIONS = [-1, 1, -1, -1, 1, 1, -1, -1, 1, -1, 1, 1];
 const TEXCOORDS = [0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0];
