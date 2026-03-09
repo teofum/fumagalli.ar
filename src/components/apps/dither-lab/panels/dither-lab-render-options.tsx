@@ -14,7 +14,7 @@ import {
 import Divider from '@/components/ui/Divider';
 import Slider from '@/components/ui/Slider';
 import { DitherLabDevice } from '../types';
-import { THREADS_AUTO_MAX } from '@/dither/renderers/use-software-renderer';
+import { THREADS_AUTO_MAX } from '@/components/apps/dither-lab/dither/renderers/use-software-renderer';
 
 interface RangeOptionProps {
   type: 'settings' | 'uniforms';

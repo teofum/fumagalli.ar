@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import DemoImageBase, { NULL_PALETTE } from './DemoImageBase';
-import useGlRenderer from '@/dither/renderers/use-gl-renderer';
+import useGlRenderer from '@/components/apps/dither-lab/dither/renderers/use-gl-renderer';
 import Slider from '@/components/ui/Slider';
 import Switch from '@/components/ui/Switch';
 

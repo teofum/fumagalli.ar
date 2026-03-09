@@ -5,7 +5,7 @@ import {
   PaletteType,
   type Palette,
   PaletteGroup,
-} from '@/dither/palettes/types';
+} from '@/components/apps/dither-lab/dither/palettes/types';
 
 export const NULL_PALETTE: Palette = {
   name: '',

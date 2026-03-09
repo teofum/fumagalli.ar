@@ -6,13 +6,13 @@ import Button from '@/components/ui/Button';
 import Menu from '@/components/ui/Menu';
 import ScrollContainer from '@/components/ui/ScrollContainer';
 import { Toolbar } from '@/components/ui/Toolbar';
-import palettes from '@/dither/palettes';
+import palettes from '@/components/apps/dither-lab/dither/palettes';
 import {
   type Palette,
   PaletteGroup,
   PaletteType,
-} from '@/dither/palettes/types';
-import Win4bRGBI from '@/dither/palettes/Win4bRGBI';
+} from '@/components/apps/dither-lab/dither/palettes/types';
+import Win4bRGBI from '@/components/apps/dither-lab/dither/palettes/Win4bRGBI';
 import { useAppSettings } from '@/hooks/use-app-settings';
 import ZoomControls from '@/components/ui/zoom-controls';
 

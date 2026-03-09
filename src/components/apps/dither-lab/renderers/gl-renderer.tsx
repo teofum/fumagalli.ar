@@ -4,10 +4,9 @@ import cn from 'classnames';
 import { useAppState } from '@/components/desktop/Window/context';
 import useGlRenderer, {
   type RenderSettings,
-} from '@/dither/renderers/use-gl-renderer';
+} from '@/components/apps/dither-lab/dither/renderers/use-gl-renderer';
 import ScrollContainer from '@/components/ui/ScrollContainer';
 import { ToolbarGroup } from '@/components/ui/Toolbar';
-import { useDitherLabImageStore } from '@/stores/dither-lab.store';
 
 import { gpuProcess } from '../process';
 import DitherLabContextMenu from '../components/dither-lab-context-menu';
