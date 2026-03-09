@@ -1,10 +1,12 @@
-import { useAppState } from "@/components/desktop/Window/context";
-import Collapsible from "@/components/ui/Collapsible";
-import Input from "@/components/ui/Input";
-import { Select, SelectItem } from "@/components/ui/Select";
+import { useAppState } from '@/components/desktop/Window/context';
+import Collapsible from '@/components/ui/Collapsible';
+import Input from '@/components/ui/Input';
+import { Select, SelectItem } from '@/components/ui/Select';
+
+import { DitherLabState } from '../types';
 
 export default function DitherLabResizeOptions() {
-  const [state, setState] = useAppState("dither");
+  const [state, setState] = useAppState('dither');
 
   const updateWidth = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const width = Number(ev.target.value);
@@ -21,7 +23,9 @@ export default function DitherLabResizeOptions() {
       <div className="flex flex-col gap-2">
         <Select
           value={state.resizeMode}
-          onValueChange={(value) => setState({ resizeMode: value as any })}
+          onValueChange={(value) =>
+            setState({ resizeMode: value as DitherLabState['resizeMode'] })
+          }
         >
           <SelectItem value="none">Keep original size</SelectItem>
           <SelectItem value="fit">Resize to fit</SelectItem>
@@ -33,14 +37,14 @@ export default function DitherLabResizeOptions() {
             className="grow"
             defaultValue={state.width}
             onChange={updateWidth}
-            disabled={state.resizeMode === "none"}
+            disabled={state.resizeMode === 'none'}
           />
           <span>x</span>
           <Input
             className="grow"
             defaultValue={state.height}
             onChange={updateHeight}
-            disabled={state.resizeMode === "none"}
+            disabled={state.resizeMode === 'none'}
           />
         </div>
       </div>

@@ -1,15 +1,15 @@
-import Win4bRGBI from "@/dither/palettes/Win4bRGBI";
-import { type Palette, PaletteGroup } from "@/dither/palettes/types";
+import Win4bRGBI from '@/dither/palettes/Win4bRGBI';
+import { type Palette, PaletteGroup } from '@/dither/palettes/types';
 
 export enum DitherLabDevice {
-  GL = "WebGL",
-  SOFTWARE = "Software",
+  GL = 'WebGL',
+  SOFTWARE = 'Software',
 }
 
 export interface DitherLabSettings {
   showStatusBar: boolean;
   showPaletteEditor: boolean;
-  panelSide: "left" | "right";
+  panelSide: 'left' | 'right';
 
   customPalettes: Palette[];
 }
@@ -17,21 +17,15 @@ export interface DitherLabSettings {
 export const defaultDitherLabSettings: DitherLabSettings = {
   showStatusBar: true,
   showPaletteEditor: false,
-  panelSide: "right",
+  panelSide: 'right',
 
   customPalettes: [],
 };
 
 export interface DitherLabState {
-  image?: {
-    filename: string;
-    url: string;
-    size: number;
-  };
-  naturalWidth?: number;
-  naturalHeight?: number;
+  image?: string;
 
-  resizeMode: "none" | "fit" | "stretch";
+  resizeMode: 'none' | 'fit' | 'stretch';
   width: number;
   height: number;
   renderWidth: number;
@@ -52,7 +46,7 @@ export interface DitherLabState {
 }
 
 export const defaultDitherLabState: DitherLabState = {
-  resizeMode: "fit",
+  resizeMode: 'fit',
   width: 400,
   height: 300,
   renderWidth: 0,
@@ -65,12 +59,12 @@ export const defaultDitherLabState: DitherLabState = {
 
   device: DitherLabDevice.GL,
 
-  process: "pattern",
+  process: 'pattern',
   settings: {
-    quality: "high",
-    threshold: "bayer8",
+    quality: 'high',
+    threshold: 'bayer8',
 
-    matrix: "floydSteinberg",
+    matrix: 'floydSteinberg',
     error_mult: 1, // Used by ED process
     err_mult: 0.2, // Used by Pattern process
     gamma: 2.2,

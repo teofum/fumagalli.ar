@@ -4,12 +4,13 @@ import enableAndBindAttrib from '@/utils/gl/enableAndBindAttrib';
 import linkProgram from '@/utils/gl/linkProgram';
 import tex2DFromData from '@/utils/gl/tex2DFromData';
 import tex2DFromImage from '@/utils/gl/tex2DFromImage';
+import useImage from '@/components/apps/dither-lab/utils/use-image';
 
+import { useCallback, useMemo } from 'react';
+import type { Palette } from '../palettes/types';
 import shaders from '../shaders';
 import thresholds from '../thresholdMaps';
 import makeRandomThreshold from '../thresholdMaps/makeRandomThreshold';
-import { useCallback, useMemo } from 'react';
-import type { Palette } from '../palettes/types';
 import getPaletteColors, { getPaletteSize } from '../utils/palette-colors';
 
 export interface RenderSettings {
@@ -22,12 +23,13 @@ const TEXCOORDS = [0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0];
 
 export default function useGlRenderer(
   rt: HTMLCanvasElement | null,
-  img: HTMLImageElement | null,
   shader: string,
   palette: Palette,
   settings: RenderSettings,
   uniforms: { [key: string]: number },
 ) {
+  const image = useImage();
+
   const gl = useMemo(() => {
     if (!rt) return null;
 
@@ -60,8 +62,8 @@ export default function useGlRenderer(
     return linkProgram(gl, vert, frag);
   }, [gl, shader, settings.clistSize, paletteSize]);
 
-  const render = useCallback(() => {
-    if (!rt || !img || !gl || !program) return;
+  const render = useCallback(async () => {
+    if (!rt || !image || !gl || !program) return;
     console.log('Rendering...');
 
     autosizeViewport(gl);
@@ -99,7 +101,7 @@ export default function useGlRenderer(
         : thresholds[settings.threshold ?? 'bayer8'];
 
     // Load image to texture 0 and threshold matrix to texture 1
-    tex2DFromImage(gl, img);
+    await tex2DFromImage(gl, image);
     tex2DFromData(
       gl,
       threshold.size,
@@ -143,7 +145,7 @@ export default function useGlRenderer(
 
     // Execute program
     gl.drawArrays(gl.TRIANGLES, 0, 6);
-  }, [rt, img, gl, program, settings, uniforms, colors]);
+  }, [rt, image, gl, program, settings, uniforms, colors]);
 
   return { render };
 }

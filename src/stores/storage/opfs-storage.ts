@@ -4,12 +4,12 @@ type OPFSStorageOptions = {
   rootPath: string;
 };
 
-type StorageItem<TMetadata> = {
+export type StorageItem<TMetadata> = {
   meta: TMetadata;
   data: Uint8Array<ArrayBuffer>;
 };
 
-type StorageState<T> = {
+export type StorageState<T> = {
   items: { [key: string]: T };
 };
 

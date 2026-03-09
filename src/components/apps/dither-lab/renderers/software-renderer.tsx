@@ -14,7 +14,6 @@ import DitherLabContextMenu from '../components/dither-lab-context-menu';
 export default function SoftwareRenderer({
   rt,
   setRt,
-  img,
   status,
   setStatus,
   setRenderTime,
@@ -26,7 +25,6 @@ export default function SoftwareRenderer({
 
   const renderer = useSoftwareRenderer(
     rt,
-    img,
     state.process as keyof typeof softwareRenderProcess,
     state.palette,
     state.settings,
@@ -100,7 +98,6 @@ export default function SoftwareRenderer({
           <Button
             className="py-1 px-2 w-20"
             onClick={status === 'rendering' ? stop : render}
-            disabled={!img}
           >
             <div className="flex flex-row items-center justify-center gap-1">
               <span>{status === 'rendering' ? 'Stop' : 'Render'}</span>
@@ -122,12 +119,12 @@ export default function SoftwareRenderer({
           <div className="scroll-center">
             <canvas
               ref={(el) => setRt(el)}
-              className={cn('border border-default', { hidden: !img })}
+              className={cn('border border-default', { hidden: !state.image })}
               width={state.renderWidth}
               height={state.renderHeight}
               style={{ minWidth: `${state.renderWidth * state.zoom + 2}px` }}
             />
-            {!img ? <div>No image loaded</div> : null}
+            {!state.image ? <div>No image loaded</div> : null}
           </div>
         </DitherLabContextMenu>
       </ScrollContainer>

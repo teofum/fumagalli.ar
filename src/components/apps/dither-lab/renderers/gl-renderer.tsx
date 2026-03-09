@@ -2,14 +2,16 @@ import { useEffect, useMemo } from 'react';
 import cn from 'classnames';
 
 import { useAppState } from '@/components/desktop/Window/context';
-
 import useGlRenderer, {
   type RenderSettings,
 } from '@/dither/renderers/use-gl-renderer';
-import { gpuProcess } from '../process';
 import ScrollContainer from '@/components/ui/ScrollContainer';
 import { ToolbarGroup } from '@/components/ui/Toolbar';
+import { useDitherLabImageStore } from '@/stores/dither-lab.store';
+
+import { gpuProcess } from '../process';
 import DitherLabContextMenu from '../components/dither-lab-context-menu';
+import useImage from '../utils/use-image';
 
 const clistSize: { [key: string]: number | undefined } = {
   high: 64,
@@ -20,7 +22,6 @@ const clistSize: { [key: string]: number | undefined } = {
 export type RendererProps = React.PropsWithChildren<{
   rt: HTMLCanvasElement | null;
   setRt: React.Dispatch<React.SetStateAction<HTMLCanvasElement | null>>;
-  img: HTMLImageElement | null;
   status: 'ready' | 'rendering' | 'done';
   setStatus: React.Dispatch<
     React.SetStateAction<'ready' | 'rendering' | 'done'>
@@ -33,12 +34,12 @@ export type RendererProps = React.PropsWithChildren<{
 export default function GlRenderer({
   rt,
   setRt,
-  img,
   viewportRef,
   save,
   children,
 }: RendererProps) {
-  const [state, setState] = useAppState('dither');
+  const [state, update] = useAppState('dither');
+  const image = useImage();
 
   const settings = useMemo<RenderSettings>(
     () => ({
@@ -53,20 +54,14 @@ export default function GlRenderer({
 
   const { render } = useGlRenderer(
     rt,
-    img,
     process.shader,
     state.palette,
     settings,
     state.uniforms,
   );
-  useEffect(render, [
-    render,
-    state.renderWidth,
-    state.renderHeight,
-    rt,
-    img,
-    img?.src,
-  ]);
+  useEffect(() => {
+    render();
+  }, [render, state.renderWidth, state.renderHeight, rt]);
 
   useEffect(() => {
     console.log('resize');
@@ -74,7 +69,7 @@ export default function GlRenderer({
     // Get the DOM element for the render target canvas
     if (!rt) return;
 
-    const [iw, ih] = [state.naturalWidth ?? 0, state.naturalHeight ?? 0];
+    const [iw, ih] = [image?.meta.width ?? 0, image?.meta.height ?? 0];
     let [renderWidth, renderHeight] = [0, 0];
 
     switch (state.resizeMode) {
@@ -98,17 +93,9 @@ export default function GlRenderer({
     }
 
     if (renderWidth !== rt.width || renderHeight !== rt.height) {
-      setState({ renderWidth, renderHeight });
+      update({ renderWidth, renderHeight });
     }
-  }, [
-    state.height,
-    state.width,
-    state.resizeMode,
-    state.naturalWidth,
-    state.naturalHeight,
-    setState,
-    rt,
-  ]);
+  }, [state.height, state.width, state.resizeMode, update, image, rt]);
 
   return (
     <div className="grow flex flex-col gap-0.5 min-w-0">
@@ -119,12 +106,12 @@ export default function GlRenderer({
           <div className="scroll-center">
             <canvas
               ref={(el) => setRt(el)}
-              className={cn('border border-default', { hidden: !img })}
+              className={cn('border border-default', { hidden: !state.image })}
               width={state.renderWidth}
               height={state.renderHeight}
               style={{ minWidth: `${state.renderWidth * state.zoom + 2}px` }}
             />
-            {!img ? <div>No image loaded</div> : null}
+            {!state.image ? <div>No image loaded</div> : null}
           </div>
         </DitherLabContextMenu>
       </ScrollContainer>
