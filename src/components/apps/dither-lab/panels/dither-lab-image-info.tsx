@@ -6,7 +6,7 @@ import ArrowDown from '@/components/ui/icons/ArrowDown';
 import useImage from '../utils/use-image';
 
 function getDataUrl(imageData: Uint8Array<ArrayBuffer>) {
-  return undefined; // todo
+  return window.URL.createObjectURL(new Blob([imageData]));
 }
 
 type DitherLabImageInfoProps = {
