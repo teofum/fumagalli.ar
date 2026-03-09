@@ -1,7 +1,6 @@
 import cn from 'classnames';
 import { useEffect } from 'react';
 
-import type softwareRenderProcess from '@/components/apps/dither-lab/dither/software';
 import useSoftwareRenderer from '@/components/apps/dither-lab/renderers/use-software-renderer';
 import { useAppState } from '@/components/desktop/Window/context';
 import Button from '@/components/ui/Button';
