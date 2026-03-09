@@ -8,7 +8,7 @@ export default function useImage() {
   const [state] = useAppState('dither');
 
   const image = useMemo(
-    () => (state.image ? imageStore.items['image'] : null),
+    () => (state.image ? imageStore.items[state.image] : null),
     [imageStore.items, state.image],
   );
 

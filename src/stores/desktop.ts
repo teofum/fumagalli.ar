@@ -255,7 +255,9 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
                   : window,
               ),
             };
-          } else return { windows: windows.filter((w) => w.id !== id) };
+          } else {
+            return { windows: windows.filter((w) => w.id !== id) };
+          }
         }),
       moveAndResize: (id, data, parentId) =>
         set(({ windows }) => {

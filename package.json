@@ -52,6 +52,7 @@
     "react-dom": "19.2.3",
     "react-error-boundary": "^6.1.0",
     "react-syntax-highlighter": "^16.1.0",
+    "sha256-uint8array": "^0.10.7",
     "ts-deepmerge": "^7.0.3",
     "zod": "^4.3.6",
     "zustand": "^5.0.10"

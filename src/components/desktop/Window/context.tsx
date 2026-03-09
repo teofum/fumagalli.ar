@@ -5,15 +5,14 @@ import useDesktopStore from '@/stores/desktop';
 import type { AppState, AppStateTypes } from '@/components/apps/render-app';
 import type { WindowInit, WindowProps } from './Window';
 
-interface WindowContextType<T extends string, P extends string>
-  extends WindowProps<T> {
+type WindowContextType<T extends string, P extends string> = WindowProps<T> & {
   focus: () => void;
   toggleMaximized: () => void;
   close: () => void;
   modal: <T extends string>(init: WindowInit<T>) => void;
 
   parent?: WindowProps<P>;
-}
+};
 
 const WindowContext = createContext<WindowContextType<string, string>>(
   {} as WindowContextType<string, string>,
