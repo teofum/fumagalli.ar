@@ -1,39 +1,32 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import useImage from '@/components/apps/dither-lab/utils/use-image';
 import autosizeViewport from '@/utils/gl/autosizeViewport';
 import enableAndBindAttrib from '@/utils/gl/enableAndBindAttrib';
-import tex2DFromData from '@/utils/gl/tex2DFromData';
 import tex2DFromImage from '@/utils/gl/tex2DFromImage';
 import useWebGL from '@/utils/gl/use-webgl';
 
-import thresholds from '../dither/thresholdMaps';
-import makeRandomThreshold from '../dither/thresholdMaps/makeRandomThreshold';
 import usePalette from '../utils/use-palette';
-import useWebGLProgram from '../utils/use-program';
+import useWebGLProgram from '../utils/use-webgl-program';
 import { useAppState } from '@/components/desktop/Window/context';
-
-export interface RenderSettings {
-  clistSize?: number;
-  threshold?: keyof typeof thresholds | 'random';
-}
+import useThresholdMap from '../utils/use-threshold-map';
+import useRenderSettings from '../utils/use-render-settings';
 
 const POSITIONS = [-1, 1, -1, -1, 1, 1, -1, -1, 1, -1, 1, 1];
 const TEXCOORDS = [0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0];
 
-export default function useGlRenderer(
-  rt: HTMLCanvasElement | null,
-  settings: RenderSettings,
-) {
+export default function useGlRenderer(rt: HTMLCanvasElement | null) {
   const [state] = useAppState('dither');
   const { uniforms } = state;
 
   const gl = useWebGL(rt);
   const image = useImage();
   const palette = usePalette();
+  const settings = useRenderSettings();
   const program = useWebGLProgram(gl, palette, settings);
+  const threshold = useThresholdMap(gl, rt, settings);
 
-  const render = useCallback(async () => {
+  const render = useCallback(() => {
     if (!rt || !image || !gl || !program) return;
     console.log('Rendering...');
 
@@ -66,26 +59,6 @@ export default function useGlRenderer(
     gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(TEXCOORDS), gl.STATIC_DRAW);
 
-    const threshold =
-      settings.threshold === 'random'
-        ? makeRandomThreshold(Math.max(rt.width, rt.height))
-        : thresholds[settings.threshold ?? 'bayer8'];
-
-    // Load image to texture 0 and threshold matrix to texture 1
-    await tex2DFromImage(gl, image);
-    tex2DFromData(
-      gl,
-      threshold.size,
-      threshold.size,
-      threshold.data,
-      {
-        format: gl.LUMINANCE,
-        internalFormat: gl.LUMINANCE,
-        type: gl.UNSIGNED_BYTE,
-      },
-      gl.TEXTURE1,
-    );
-
     // Clear framebuffer
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -98,7 +71,7 @@ export default function useGlRenderer(
     if (u_texSize) gl.uniform2f(u_texSize, gl.canvas.width, gl.canvas.height);
     if (u_image) gl.uniform1i(u_image, 0);
     if (u_threshold) gl.uniform1i(u_threshold, 1);
-    if (u_thres_size) gl.uniform1f(u_thres_size, threshold.size);
+    if (u_thres_size) gl.uniform1f(u_thres_size, threshold!.size);
 
     Object.keys(uniforms).forEach((key) => {
       gl.uniform1f(uniformLocations[key], uniforms[key]);
@@ -116,7 +89,30 @@ export default function useGlRenderer(
 
     // Execute program
     gl.drawArrays(gl.TRIANGLES, 0, 6);
-  }, [rt, image, gl, program, settings, uniforms, palette.colors]);
+  }, [rt, image, gl, program, uniforms, palette.colors, threshold]);
+
+  // Load image to texture 0 and ensure a render happens AFTER texture is loaded
+  const [textureIdx, setTextureIdx] = useState(0);
+  const lastRenderedTexture = useRef(0);
+
+  useEffect(() => {
+    if (!gl || !image) return;
+
+    const loadTexture = async () => {
+      console.log('Loading texture...');
+      await tex2DFromImage(gl, image);
+      setTextureIdx((i) => i + 1);
+    };
+
+    loadTexture();
+  }, [gl, image]);
+
+  useEffect(() => {
+    if (textureIdx > lastRenderedTexture.current) {
+      lastRenderedTexture.current = textureIdx;
+      render();
+    }
+  }, [render, textureIdx]);
 
   return { render };
 }

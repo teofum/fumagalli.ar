@@ -1,22 +1,13 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import cn from 'classnames';
 
 import { useAppState } from '@/components/desktop/Window/context';
-import useGlRenderer, {
-  type RenderSettings,
-} from '@/components/apps/dither-lab/renderers/use-gl-renderer';
+import useGlRenderer from '@/components/apps/dither-lab/renderers/use-gl-renderer';
 import ScrollContainer from '@/components/ui/ScrollContainer';
 import { ToolbarGroup } from '@/components/ui/Toolbar';
 
-import { gpuProcess } from '../process';
 import DitherLabContextMenu from '../components/dither-lab-context-menu';
 import useImage from '../utils/use-image';
-
-const clistSize: { [key: string]: number | undefined } = {
-  high: 64,
-  medium: 16,
-  low: 4,
-};
 
 export type RendererProps = React.PropsWithChildren<{
   rt: HTMLCanvasElement | null;
@@ -40,16 +31,7 @@ export default function GlRenderer({
   const [state, update] = useAppState('dither');
   const image = useImage();
 
-  const settings = useMemo<RenderSettings>(
-    () => ({
-      clistSize: clistSize[state.settings.quality] ?? 64,
-      threshold:
-        (state.settings.threshold as RenderSettings['threshold']) ?? 'bayer8',
-    }),
-    [state.settings],
-  );
-
-  const { render } = useGlRenderer(rt, settings);
+  const { render } = useGlRenderer(rt);
   useEffect(() => {
     render();
   }, [render, state.renderWidth, state.renderHeight, rt]);
