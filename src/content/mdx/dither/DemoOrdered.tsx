@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import useGlRenderer from '@/components/apps/dither-lab/dither/renderers/use-gl-renderer';
+import useGlRenderer from '@/components/apps/dither-lab/renderers/use-gl-renderer';
 import DemoImageBase, { NULL_PALETTE } from './DemoImageBase';
 import { ToggleGroup, ToggleButton } from '@/components/ui/ToggleGroup';
 import Switch from '@/components/ui/Switch';

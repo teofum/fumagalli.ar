@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { useAppState } from '@/components/desktop/Window/context';
 import useGlRenderer, {
   type RenderSettings,
-} from '@/components/apps/dither-lab/dither/renderers/use-gl-renderer';
+} from '@/components/apps/dither-lab/renderers/use-gl-renderer';
 import ScrollContainer from '@/components/ui/ScrollContainer';
 import { ToolbarGroup } from '@/components/ui/Toolbar';
 
@@ -49,15 +49,7 @@ export default function GlRenderer({
     [state.settings],
   );
 
-  const process = useMemo(() => gpuProcess[state.process], [state.process]);
-
-  const { render } = useGlRenderer(
-    rt,
-    process.shader,
-    state.palette,
-    settings,
-    state.uniforms,
-  );
+  const { render } = useGlRenderer(rt, settings);
   useEffect(() => {
     render();
   }, [render, state.renderWidth, state.renderHeight, rt]);

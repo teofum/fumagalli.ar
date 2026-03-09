@@ -1,17 +1,17 @@
+import { useCallback } from 'react';
+
+import useImage from '@/components/apps/dither-lab/utils/use-image';
 import autosizeViewport from '@/utils/gl/autosizeViewport';
-import createShader from '@/utils/gl/createShader';
 import enableAndBindAttrib from '@/utils/gl/enableAndBindAttrib';
-import linkProgram from '@/utils/gl/linkProgram';
 import tex2DFromData from '@/utils/gl/tex2DFromData';
 import tex2DFromImage from '@/utils/gl/tex2DFromImage';
-import useImage from '@/components/apps/dither-lab/utils/use-image';
+import useWebGL from '@/utils/gl/use-webgl';
 
-import { useCallback, useMemo } from 'react';
-import type { Palette } from '../palettes/types';
-import shaders from '../shaders';
-import thresholds from '../thresholdMaps';
-import makeRandomThreshold from '../thresholdMaps/makeRandomThreshold';
-import getPaletteColors, { getPaletteSize } from '../utils/palette-colors';
+import thresholds from '../dither/thresholdMaps';
+import makeRandomThreshold from '../dither/thresholdMaps/makeRandomThreshold';
+import usePalette from '../utils/use-palette';
+import useWebGLProgram from '../utils/use-program';
+import { useAppState } from '@/components/desktop/Window/context';
 
 export interface RenderSettings {
   clistSize?: number;
@@ -23,44 +23,15 @@ const TEXCOORDS = [0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0];
 
 export default function useGlRenderer(
   rt: HTMLCanvasElement | null,
-  shader: string,
-  palette: Palette,
   settings: RenderSettings,
-  uniforms: { [key: string]: number },
 ) {
+  const [state] = useAppState('dither');
+  const { uniforms } = state;
+
+  const gl = useWebGL(rt);
   const image = useImage();
-
-  const gl = useMemo(() => {
-    if (!rt) return null;
-
-    const gl = rt.getContext('webgl2', { preserveDrawingBuffer: true });
-    if (!gl) return;
-    return gl;
-  }, [rt]);
-
-  const colors = useMemo(
-    () =>
-      getPaletteColors(palette)
-        .flat()
-        .map((n) => n / 255),
-    [palette],
-  );
-  const paletteSize = useMemo(() => getPaletteSize(palette), [palette]);
-
-  const program = useMemo(() => {
-    if (!gl) return null;
-
-    console.log('Compiling shaders...');
-
-    const fragSource = shader
-      .replace(/\$/g, paletteSize.toString()) // Replace '$' symbol in source with palette size
-      .replace(/%/g, (settings.clistSize || 64).toString()); // Replace '%' symbol in source with clist size
-
-    const vert = createShader(gl, gl.VERTEX_SHADER, shaders.imageVert);
-    const frag = createShader(gl, gl.FRAGMENT_SHADER, fragSource);
-
-    return linkProgram(gl, vert, frag);
-  }, [gl, shader, settings.clistSize, paletteSize]);
+  const palette = usePalette();
+  const program = useWebGLProgram(gl, palette, settings);
 
   const render = useCallback(async () => {
     if (!rt || !image || !gl || !program) return;
@@ -123,7 +94,7 @@ export default function useGlRenderer(
     gl.useProgram(program);
 
     // Set uniforms
-    if (u_palette) gl.uniform3fv(u_palette, colors);
+    if (u_palette) gl.uniform3fv(u_palette, palette.colors);
     if (u_texSize) gl.uniform2f(u_texSize, gl.canvas.width, gl.canvas.height);
     if (u_image) gl.uniform1i(u_image, 0);
     if (u_threshold) gl.uniform1i(u_threshold, 1);
@@ -145,7 +116,7 @@ export default function useGlRenderer(
 
     // Execute program
     gl.drawArrays(gl.TRIANGLES, 0, 6);
-  }, [rt, image, gl, program, settings, uniforms, colors]);
+  }, [rt, image, gl, program, settings, uniforms, palette.colors]);
 
   return { render };
 }

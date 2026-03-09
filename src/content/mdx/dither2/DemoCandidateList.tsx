@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import useGlRenderer from '@/components/apps/dither-lab/dither/renderers/use-gl-renderer';
+import useGlRenderer from '@/components/apps/dither-lab/renderers/use-gl-renderer';
 import DemoImageBase from '../dither/DemoImageBase';
 import {
   type Palette,

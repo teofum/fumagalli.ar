@@ -1,4 +1,4 @@
-import { THREADS_AVAILABLE } from '@/components/apps/dither-lab/dither/renderers/use-software-renderer';
+import { THREADS_AVAILABLE } from '@/components/apps/dither-lab/renderers/use-software-renderer';
 import shaders from '@/components/apps/dither-lab/dither/shaders';
 
 export interface DitherProcessOptionBase {

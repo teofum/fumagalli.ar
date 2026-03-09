@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import useGlRenderer from '@/components/apps/dither-lab/dither/renderers/use-gl-renderer';
+import useGlRenderer from '@/components/apps/dither-lab/renderers/use-gl-renderer';
 import { NULL_PALETTE } from '../dither/DemoImageBase';
 import Slider from '@/components/ui/Slider';
 

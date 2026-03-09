@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useRef } from 'react';
-import type { Palette } from '../palettes/types';
-import softwareRenderProcess from '../software';
-import { getPaletteSize } from '../utils/palette-colors';
-import RenderWorker, { type ImagePart } from '../software/render-worker';
+import type { Palette } from '../dither/palettes/types';
+import softwareRenderProcess from '../dither/software';
+import { getPaletteSize } from '../dither/utils/palette-colors';
+import RenderWorker, { type ImagePart } from '../dither/software/render-worker';
 
 export const THREADS_AVAILABLE = navigator.hardwareConcurrency;
 export const THREADS_AUTO_MAX = Math.max(~~(THREADS_AVAILABLE / 2), 1);
