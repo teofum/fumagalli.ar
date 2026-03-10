@@ -46,16 +46,17 @@ export default async function Post({ params }: ServerComponentProps) {
             className="absolute inset-0 w-full h-full object-cover"
             alt=""
             src={sanityImage(article.thumbnail)
-              .width(600)
-              .height(300)
-              .quality(50)
+              .width(800)
+              .quality(90)
+              .dpr(2)
               .url()}
           />
         ) : null}
-        <div className="absolute inset-0 backdrop-blur-2xl bg-white/50 dark:bg-stone-950/50" />
-        <h1 className="relative font-title text-content-4xl md:text-content-5xl text-balance">
-          {article.title}
-        </h1>
+        <div className="absolute bottom-0 left-0 p-4 md:px-8 md:py-6 w-full backdrop-blur-2xl bg-white/50 dark:bg-stone-950/50">
+          <h1 className="font-title text-content-4xl md:text-content-5xl text-balance">
+            {article.title}
+          </h1>
+        </div>
       </div>
       <CustomPortableText value={article.content} />
     </article>
