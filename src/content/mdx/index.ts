@@ -1,16 +1,16 @@
-import dither from './dither/dither.mdx';
-import dither2 from './dither2/dither2.mdx';
+import introductionToDithering from '@/app/(pages)/articles/mdx/introduction-to-dithering/page.mdx';
+import ditheringColor from '@/app/(pages)/articles/mdx/dithering-color/page.mdx';
 
 const mdx = [
   {
     title: 'A Visual Introduction to Dithering',
     slug: 'introduction-to-dithering',
-    Component: dither,
+    Component: introductionToDithering,
   },
   {
     title: 'Dithering in Color',
     slug: 'dithering-color',
-    Component: dither2,
+    Component: ditheringColor,
   },
 ];
 

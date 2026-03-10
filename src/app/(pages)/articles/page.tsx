@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import DitherCard from '@/content/mdx/dither/dither.card';
-import Dither2Card from '@/content/mdx/dither2/dither2.card';
+import DitherCard from '@/app/(pages)/articles/mdx/introduction-to-dithering/dither.card';
+import Dither2Card from '@/app/(pages)/articles/mdx/dithering-color/dither2.card';
 
 import fetchArticles from './fetch-articles';
 import ArticleItem from '../article-item';
