@@ -391,7 +391,7 @@ export default function DitherLab() {
                 : 'Rendering...'}
           </div>
           <div className="py-0.5 px-2 bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden flex-1">
-            {state.image ?? ''}
+            {image?.meta.filename ?? ''}
           </div>
           <div className="py-0.5 px-2 bevel-light-inset text-ellipsis whitespace-nowrap overflow-hidden flex-1">
             {state.renderWidth}x{state.renderHeight}
