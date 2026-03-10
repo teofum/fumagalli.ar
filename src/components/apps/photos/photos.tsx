@@ -1,7 +1,9 @@
-import { useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
+import { useAppState } from '@/components/desktop/Window/context';
 import Divider from '@/components/ui/Divider';
 import Menu from '@/components/ui/Menu';
+import { ToggleIconButton } from '@/components/ui/ToggleButton';
 import {
   ToggleGroup,
   ToggleIconButton as ToggleGroupIconButton,
@@ -9,20 +11,25 @@ import {
 import { Toolbar, ToolbarGroup } from '@/components/ui/Toolbar';
 import ZoomControls from '@/components/ui/zoom-controls';
 import { useAppSettings } from '@/hooks/use-app-settings';
+import useZoom from '@/hooks/use-zoom';
 
 import CollectionsPanel from './panels/collections-panel';
 import PhotosPanel from './panels/photos-panel';
-import useZoom from './use-zoom';
-import { ToggleIconButton } from '@/components/ui/ToggleButton';
 import PropertiesPanel from './panels/properties-panel';
 
 export default function Photos() {
   const [settings, set] = useAppSettings('photos');
+  const [state, update] = useAppState('photos');
 
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
-  const zoom = useZoom(viewportRef, imageRef);
+  const setZoom = useCallback((zoom: number) => update({ zoom }), [update]);
+  const zoom = useZoom(state.zoom ?? 1, setZoom, viewportRef, imageRef);
+
+  useEffect(() => {
+    if (!state.zoom) zoom.zoomTo('fit');
+  }, [state.zoom, zoom]);
 
   return (
     <div className="flex flex-col gap-0.5 min-h-0 min-w-0">
