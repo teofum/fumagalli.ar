@@ -16,7 +16,7 @@ async function getImageSize(file: Blob) {
 
 export default function useImageUploader() {
   const { modal } = useWindow();
-  const [state, update] = useAppState('dither');
+  const [, update] = useAppState('dither');
   const imageStore = useDitherLabImageStore();
 
   const loadImageFromFile = async (

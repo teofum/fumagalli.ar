@@ -21,7 +21,7 @@
     "paths": {
       "@/*": ["./src/*"],
     },
-    "types": ["@types/wicg-file-system-access"],
+    "types": ["@types/wicg-file-system-access", "mdx"],
   },
   "include": [
     "next-env.d.ts",
