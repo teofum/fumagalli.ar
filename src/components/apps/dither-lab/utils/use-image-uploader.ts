@@ -4,6 +4,7 @@ import { files } from '@/components/apps/files';
 import { messageBox } from '@/components/apps/message-box';
 import { useAppState, useWindow } from '@/components/desktop/Window/context';
 import { useDitherLabImageStore } from '@/stores/dither-lab.store';
+import { openFile } from '@/utils/file';
 
 async function getImageSize(file: Blob) {
   const bmp = await createImageBitmap(file);
@@ -65,12 +66,9 @@ export default function useImageUploader() {
     }
   };
 
-  const uploadHandler = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    const input = ev.target;
-    if (input?.files) {
-      const file = input.files[0];
-      loadImageFromFile(file.name, file);
-    }
+  const upload = async () => {
+    const file = await openFile(['image/png', 'image/jpeg', 'image/webp']);
+    if (file) loadImageFromFile(file.name, file);
   };
 
   const open = () => {
@@ -83,5 +81,5 @@ export default function useImageUploader() {
     );
   };
 
-  return { uploadHandler, open };
+  return { upload, open };
 }

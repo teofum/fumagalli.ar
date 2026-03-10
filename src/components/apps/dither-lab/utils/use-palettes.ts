@@ -12,6 +12,7 @@ import {
 } from '../dither/palettes/types';
 import Win4bRGBI from '../dither/palettes/Win4bRGBI';
 import useImage from './use-image';
+import { openFile } from '@/utils/file';
 
 export default function usePalettes(rt: HTMLCanvasElement | null) {
   const [state, update] = useAppState('dither');
@@ -72,10 +73,9 @@ export default function usePalettes(rt: HTMLCanvasElement | null) {
       update({ paletteGroup: PaletteGroup.User, palette: newPalettes[0] });
   };
 
-  const importHandler = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    const input = ev.target;
-    if (input?.files) {
-      const file = input.files[0];
+  const upload = async () => {
+    const file = await openFile(['image/png', 'image/jpeg', 'image/webp']);
+    if (file) {
       const reader = new FileReader();
 
       reader.addEventListener(
@@ -145,5 +145,5 @@ export default function usePalettes(rt: HTMLCanvasElement | null) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allPalettes, rt, state.paletteName]);
 
-  return { palettes: allPalettes, importHandler, clear };
+  return { palettes: allPalettes, upload, clear };
 }

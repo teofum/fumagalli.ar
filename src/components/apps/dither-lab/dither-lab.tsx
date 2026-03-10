@@ -30,10 +30,7 @@ export default function DitherLab() {
   const [settings, set] = useAppSettings('dither');
   const image = useImage();
 
-  const hiddenInputRef = useRef<HTMLInputElement>(null);
-  const importHiddenInputRef = useRef<HTMLInputElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
-
   const [rt, setRt] = useState<HTMLCanvasElement | null>(null);
 
   const [status, setStatus] = useState<'ready' | 'rendering' | 'done'>('ready');
@@ -42,14 +39,12 @@ export default function DitherLab() {
   /*
    * Image loading
    */
-  const { uploadHandler, open } = useImageUploader();
-  const upload = () => hiddenInputRef.current?.click();
+  const { upload, open } = useImageUploader();
 
   /*
    * Palettes
    */
   const palettes = usePalettes(rt);
-  const importPalettes = () => importHiddenInputRef.current?.click();
 
   /*
    * Output saving
@@ -93,19 +88,6 @@ export default function DitherLab() {
 
   return (
     <div className="flex flex-col gap-0.5 min-w-0 select-none">
-      <input
-        type="file"
-        className="hidden"
-        ref={hiddenInputRef}
-        onChange={uploadHandler}
-      />
-      <input
-        type="file"
-        className="hidden"
-        ref={importHiddenInputRef}
-        onChange={palettes.importHandler}
-      />
-
       <Menu.Bar>
         <Menu.Menu trigger={<Menu.Trigger>File</Menu.Trigger>}>
           <Menu.Item label="Upload..." onSelect={upload} />
@@ -169,7 +151,7 @@ export default function DitherLab() {
         </Menu.Menu>
 
         <Menu.Menu trigger={<Menu.Trigger>Palettes</Menu.Trigger>}>
-          <Menu.Item label="Import..." onSelect={importPalettes} />
+          <Menu.Item label="Import..." onSelect={palettes.upload} />
 
           <Menu.Separator />
 
@@ -209,7 +191,7 @@ export default function DitherLab() {
               <DitherLabResizeOptions />
               <DitherLabPaletteSelect
                 openEditor={() => set({ showPaletteEditor: true })}
-                importPalettes={importPalettes}
+                importPalettes={palettes.upload}
               />
               <DitherLabRenderOptions />
             </div>
