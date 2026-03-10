@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import useGlRenderer from '@/dither/renderers/use-gl-renderer';
-import { NULL_PALETTE } from '../dither/DemoImageBase';
+
 import Slider from '@/components/ui/Slider';
+import { useGlDemoRenderer } from '@/components/apps/dither-lab/renderers/use-gl-renderer';
+
+import { NULL_PALETTE } from '../dither/DemoImageBase';
 
 const shader = `
 precision mediump float;
@@ -42,7 +44,7 @@ const DemoOrdered = () => {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const [img, setImg] = useState<HTMLImageElement | null>(null);
 
-  const { render } = useGlRenderer(
+  const { render } = useGlDemoRenderer(
     canvas,
     img,
     shader,
@@ -52,6 +54,7 @@ const DemoOrdered = () => {
   );
   useEffect(() => {
     if (canvas && img) {
+      // eslint-disable-next-line react-hooks/immutability
       canvas.width = img.offsetWidth;
       canvas.height = img.offsetHeight;
     }

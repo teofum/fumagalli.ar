@@ -1,27 +1,31 @@
-import { useAppState } from '@/components/desktop/Window/context';
+import getReadableSize from '@/components/apps/files/utils/get-readable-size';
 import Button from '@/components/ui/Button';
 import Collapsible from '@/components/ui/Collapsible';
-import getReadableSize from '@/components/apps/files/utils/get-readable-size';
 import Menu from '@/components/ui/Menu';
 import ArrowDown from '@/components/ui/icons/ArrowDown';
+import useImage from '../utils/use-image';
 
-interface DitherLabImageInfoProps {
+function getDataUrl(imageData: Uint8Array<ArrayBuffer>) {
+  return window.URL.createObjectURL(new Blob([imageData]));
+}
+
+type DitherLabImageInfoProps = {
   upload: () => void;
   open: () => void;
-}
+};
 
 export default function DitherLabImageInfo({
   upload,
   open,
 }: DitherLabImageInfoProps) {
-  const [state] = useAppState('dither');
+  const image = useImage();
 
   return (
     <Collapsible defaultOpen title="Source Image">
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center">
           <span className="grow min-w-0 overflow-hidden text-ellipsis">
-            {state.image?.filename || 'No image'}
+            {image?.meta.filename || 'No image'}
           </span>
 
           <div className="flex flex-row w-20">
@@ -45,25 +49,28 @@ export default function DitherLabImageInfo({
         </div>
 
         <div className="bg-default bevel-light-inset p-px">
-          {state.image ? (
-            <img src={state.image.url} alt={state.image.filename} />
+          {image ? (
+            <img
+              src={image.meta.url ?? getDataUrl(image.data)}
+              alt={image.meta.filename}
+            />
           ) : (
             <div className="text-center p-8">No preview available</div>
           )}
         </div>
 
-        {state.image ? (
+        {image ? (
           <div className="flex flex-col">
             <div className="flex flex-row justify-between">
               <span>File Size</span>
-              <span>{getReadableSize(state.image.size)}</span>
+              <span>{getReadableSize(image.data.length)}</span>
             </div>
 
-            {state.naturalWidth ? (
+            {image ? (
               <div className="flex flex-row justify-between">
                 <span>Dimensions</span>
                 <span>
-                  {state.naturalWidth}x{state.naturalHeight}
+                  {image.meta.width}x{image.meta.height}
                 </span>
               </div>
             ) : null}

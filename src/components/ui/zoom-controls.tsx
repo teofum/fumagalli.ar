@@ -1,6 +1,6 @@
 import Button from '@/components/ui/Button';
 
-export const ZOOM_STOPS = [
+export const DEFAULT_ZOOM_STOPS = [
   0.05, 0.1, 0.25, 0.33, 0.5, 0.67, 0.75, 1, 1.25, 1.5, 2, 4, 8, 16, 32, 64,
 ];
 
@@ -10,6 +10,7 @@ type ZoomControlsProps = {
   zoomIn: () => void;
   zoomOut: () => void;
   zoomTo: (mode: 'fit' | 'fill') => void;
+  stops?: number[];
 };
 
 export default function ZoomControls({
@@ -18,6 +19,7 @@ export default function ZoomControls({
   zoomIn,
   zoomOut,
   zoomTo,
+  stops = DEFAULT_ZOOM_STOPS,
 }: ZoomControlsProps) {
   return (
     <>
@@ -26,7 +28,7 @@ export default function ZoomControls({
         <Button
           className="py-0.5 px-1.5"
           onClick={zoomOut}
-          disabled={zoom <= (ZOOM_STOPS.at(0) ?? 0)}
+          disabled={zoom <= (stops.at(0) ?? 0)}
         >
           <span>-</span>
         </Button>
@@ -34,7 +36,7 @@ export default function ZoomControls({
         <Button
           className="py-0.5 px-1.5"
           onClick={zoomIn}
-          disabled={zoom >= (ZOOM_STOPS.at(-1) ?? 0)}
+          disabled={zoom >= (stops.at(-1) ?? 0)}
         >
           <span>+</span>
         </Button>

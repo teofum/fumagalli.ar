@@ -5,15 +5,14 @@ import useDesktopStore from '@/stores/desktop';
 import type { AppState, AppStateTypes } from '@/components/apps/render-app';
 import type { WindowInit, WindowProps } from './Window';
 
-interface WindowContextType<T extends string, P extends string>
-  extends WindowProps<T> {
+type WindowContextType<T extends string, P extends string> = WindowProps<T> & {
   focus: () => void;
   toggleMaximized: () => void;
   close: () => void;
   modal: <T extends string>(init: WindowInit<T>) => void;
 
   parent?: WindowProps<P>;
-}
+};
 
 const WindowContext = createContext<WindowContextType<string, string>>(
   {} as WindowContextType<string, string>,
@@ -62,13 +61,17 @@ export function useWindow<T extends string, P extends string = string>(
 }
 
 export function useAppState<T extends keyof AppStateTypes>(appType: T) {
-  const { setWindowProps } = useDesktopStore();
+  const { updateWindowProps } = useDesktopStore();
   const { appState, id, parentId } = useWindow(appType);
 
   const setState = useCallback(
     (state: Partial<AppState<T>>) =>
-      setWindowProps<T>(id, { appState: { ...appState, ...state } }, parentId),
-    [id, parentId, appState, setWindowProps],
+      updateWindowProps<T>(
+        id,
+        (w) => ({ appState: { ...w.appState, ...state } }),
+        parentId,
+      ),
+    [id, parentId, updateWindowProps],
   );
 
   return [appState, setState] as const;

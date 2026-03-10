@@ -1,12 +1,12 @@
-import { nanoid } from "nanoid";
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { merge } from "ts-deepmerge";
+import { nanoid } from 'nanoid';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { merge } from 'ts-deepmerge';
 
-import type { AnyWindowProps } from "@/components/desktop/Window/Window";
-import type { WindowProps, WindowInit } from "../components/desktop/Window";
-import { WindowSizingMode } from "../components/desktop/Window/WindowSizingMode";
-import clamp from "@/utils/clamp";
+import type { AnyWindowProps } from '@/components/desktop/Window/Window';
+import type { WindowProps, WindowInit } from '../components/desktop/Window';
+import { WindowSizingMode } from '../components/desktop/Window/WindowSizingMode';
+import clamp from '@/utils/clamp';
 
 // Schema version, ensures incompatible data isn't loaded
 // CHANGING THIS WILL WIPE ALL DATA FOR EVERYONE.
@@ -17,8 +17,8 @@ const SCHEMA_VERSION = 3;
 // V3: Switched to Sanity for content
 
 const defaultWindowProps = {
-  title: "New Window",
-  icon: "app",
+  title: 'New Window',
+  icon: 'app',
 
   children: [],
 
@@ -51,7 +51,7 @@ function createWindow<T extends string>(
     parentId: parent?.id,
   };
 
-  const desktopEl = document.querySelector("#desktop") as HTMLDivElement;
+  const desktopEl = document.querySelector('#desktop') as HTMLDivElement;
   const desktop = desktopEl.getBoundingClientRect();
 
   const maxTop = Math.max(0, desktop.height - window.height);
@@ -109,29 +109,34 @@ function findWindow(windows: AnyWindowProps[], id: string, parentId?: string) {
  */
 function updateWindow<T extends string>(
   windows: AnyWindowProps[],
-  target: WindowProps<T>,
-  data: Partial<WindowProps<T>>,
+  target: AnyWindowProps,
+  updater: (window: WindowProps<T>) => Partial<WindowProps<T>>,
 ): AnyWindowProps[] {
+  const update = (window: AnyWindowProps) => ({
+    ...window,
+    ...updater(window as WindowProps<T>),
+  });
+
   if (target.parentId) {
     return windows.map((window) =>
       window.id === target.parentId
         ? {
             ...window,
             children: window.children.map((window) =>
-              window.id === target.id ? { ...window, ...data } : window,
+              window.id === target.id ? update(window) : window,
             ),
           }
         : window,
     );
   } else {
     return windows.map((window) =>
-      window.id === target.id ? { ...window, ...data } : window,
+      window.id === target.id ? update(window) : window,
     );
   }
 }
 
 export type WindowSizeProps = Partial<
-  Pick<AnyWindowProps, "top" | "left" | "width" | "height">
+  Pick<AnyWindowProps, 'top' | 'left' | 'width' | 'height'>
 >;
 
 interface DesktopState {
@@ -152,6 +157,11 @@ interface DesktopActions {
   setWindowProps: <T extends string>(
     id: string,
     data: Partial<WindowProps<T>>,
+    parentId?: string,
+  ) => void;
+  updateWindowProps: <T extends string>(
+    id: string,
+    updater: (props: WindowProps<T>) => Partial<WindowProps<T>>,
     parentId?: string,
   ) => void;
 
@@ -227,9 +237,9 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
           if (!target || !target.maximizable) return {};
 
           return {
-            windows: updateWindow(windows, target, {
-              maximized: !target.maximized,
-            }),
+            windows: updateWindow(windows, target, (w) => ({
+              maximized: !w.maximized,
+            })),
           };
         }),
       close: (id, parentId) =>
@@ -245,33 +255,44 @@ const useDesktopStore = create<DesktopState & DesktopActions>()(
                   : window,
               ),
             };
-          } else return { windows: windows.filter((w) => w.id !== id) };
+          } else {
+            return { windows: windows.filter((w) => w.id !== id) };
+          }
         }),
       moveAndResize: (id, data, parentId) =>
         set(({ windows }) => {
           const target = findWindow(windows, id, parentId);
           if (!target) return {};
 
-          return { windows: updateWindow(windows, target, data) };
+          return { windows: updateWindow(windows, target, () => data) };
         }),
       setTitle: (id, title, parentId) =>
         set(({ windows }) => {
           const target = findWindow(windows, id, parentId);
           if (!target) return {};
 
-          return { windows: updateWindow(windows, target, { title }) };
+          return { windows: updateWindow(windows, target, () => ({ title })) };
         }),
       setWindowProps: (id, data, parentId) =>
         set(({ windows }) => {
           const target = findWindow(windows, id, parentId);
           if (!target) return {};
 
-          return { windows: updateWindow(windows, target, data) };
+          return { windows: updateWindow(windows, target, () => data) };
+        }),
+      updateWindowProps: (id, updater, parentId) =>
+        set(({ windows }) => {
+          const target = findWindow(windows, id, parentId);
+          if (!target) return {};
+
+          return {
+            windows: updateWindow(windows, target, updater),
+          };
         }),
       openShutdown: (open = true) => set(() => ({ shutdownDialog: open })),
     }),
     {
-      name: "desktop-storage",
+      name: 'desktop-storage',
       merge: (persisted, current) => {
         const stored = persisted as typeof current;
 

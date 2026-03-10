@@ -3,7 +3,7 @@ import { RefObject, useCallback, useEffect } from 'react';
 import { useAppState } from '@/components/desktop/Window/context';
 import { useImageSize2 } from '@/utils/sanity.image';
 
-import { ZOOM_STOPS } from '@/components/ui/zoom-controls';
+import { DEFAULT_ZOOM_STOPS } from '@/components/ui/zoom-controls';
 
 export default function useZoom(
   viewportRef: RefObject<HTMLDivElement | null>,
@@ -22,12 +22,14 @@ export default function useZoom(
   const setZoom = useCallback((zoom: number) => update({ zoom }), [update]);
 
   const zoomOut = useCallback(() => {
-    const nextZoomStop = ZOOM_STOPS.filter((stop) => stop < zoom).at(-1);
+    const nextZoomStop = DEFAULT_ZOOM_STOPS.filter((stop) => stop < zoom).at(
+      -1,
+    );
     setZoom(nextZoomStop ?? 1);
   }, [setZoom, zoom]);
 
   const zoomIn = useCallback(() => {
-    const nextZoomStop = ZOOM_STOPS.filter((stop) => stop > zoom).at(0);
+    const nextZoomStop = DEFAULT_ZOOM_STOPS.filter((stop) => stop > zoom).at(0);
     setZoom(nextZoomStop ?? 1);
   }, [setZoom, zoom]);
 

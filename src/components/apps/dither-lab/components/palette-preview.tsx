@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import cn from 'classnames';
 
 import { useAppState } from '@/components/desktop/Window/context';
-import getPaletteColors from '@/dither/utils/palette-colors';
+import getPaletteColors from '@/components/apps/dither-lab/dither/utils/palette-colors';
 
 export default function PalettePreview() {
   const [state] = useAppState('dither');
