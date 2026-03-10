@@ -2,13 +2,13 @@ export default function Header() {
   return (
     <div
       className="
-        -mx-4 md:-mx-8 mb-8 aspect-4/3 md:aspect-2/1 overflow-hidden md:rounded-md max-w-none
+        -mx-4 -mt-4 @2xl:mt-0 @2xl:-mx-8 mb-8 aspect-4/3 @2xl:aspect-2/1 overflow-hidden @2xl:rounded-md max-w-none
         flex flex-col justify-end
         bg-[url('/fs/Documents/Articles/assets/dither/header.png')]
         bg-cover [image-rendering:pixelated]
       "
     >
-      <div className="bg-white/50 dark:bg-stone-950/50 p-4 pt-6 backdrop-blur-xs">
+      <div className="bg-default/50 p-4 pt-6 backdrop-blur-xs">
         <div className="max-w-lg mx-auto">
           <h1 className="font-title text-[1.75rem]/8 sm:text-content-4xl">
             A Visual Introduction to
