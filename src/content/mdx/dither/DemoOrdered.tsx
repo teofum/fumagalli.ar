@@ -1,11 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import useGlRenderer from '@/components/apps/dither-lab/renderers/use-gl-renderer';
-import DemoImageBase, { NULL_PALETTE } from './DemoImageBase';
-import { ToggleGroup, ToggleButton } from '@/components/ui/ToggleGroup';
-import Switch from '@/components/ui/Switch';
+
+import thresholds from '@/components/apps/dither-lab/dither/thresholdMaps';
+import { useGlDemoRenderer } from '@/components/apps/dither-lab/renderers/use-gl-renderer';
 import Slider from '@/components/ui/Slider';
+import Switch from '@/components/ui/Switch';
+import { ToggleButton, ToggleGroup } from '@/components/ui/ToggleGroup';
+
+import DemoImageBase, { NULL_PALETTE } from './DemoImageBase';
 
 const shaderMono = `
 precision mediump float;
@@ -91,16 +94,17 @@ const DemoOrdered = ({
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const [img, setImg] = useState<HTMLImageElement | null>(null);
 
-  const { render } = useGlRenderer(
+  const { render } = useGlDemoRenderer(
     canvas,
     img,
     color ? shaderColor : shaderMono,
     NULL_PALETTE,
-    { threshold: `${type}${size}` as any },
+    { threshold: `${type}${size}` as keyof typeof thresholds },
     { u_gamma: gamma },
   );
   useEffect(() => {
     if (canvas && img) {
+      // eslint-disable-next-line react-hooks/immutability
       canvas.width = img.offsetWidth;
       canvas.height = img.offsetHeight;
     }

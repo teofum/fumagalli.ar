@@ -1,15 +1,17 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import useGlRenderer from '@/components/apps/dither-lab/renderers/use-gl-renderer';
-import DemoImageBase from '../dither/DemoImageBase';
+
 import {
   type Palette,
   PaletteGroup,
   PaletteType,
 } from '@/components/apps/dither-lab/dither/palettes/types';
-import ColorPicker from '@/components/ui/ColorPicker';
 import { getPaletteColor } from '@/components/apps/dither-lab/dither/utils/palette-colors';
+import { useGlDemoRenderer } from '@/components/apps/dither-lab/renderers/use-gl-renderer';
+import ColorPicker from '@/components/ui/ColorPicker';
+
+import DemoImageBase from '../dither/DemoImageBase';
 
 const shader = `
 precision mediump float;
@@ -61,7 +63,7 @@ const DemoOrdered = () => {
     ]);
   };
 
-  const { render } = useGlRenderer(
+  const { render } = useGlDemoRenderer(
     canvas,
     img,
     shader,
@@ -71,6 +73,7 @@ const DemoOrdered = () => {
   );
   useEffect(() => {
     if (canvas && img) {
+      // eslint-disable-next-line react-hooks/immutability
       canvas.width = img.offsetWidth;
       canvas.height = img.offsetHeight;
     }

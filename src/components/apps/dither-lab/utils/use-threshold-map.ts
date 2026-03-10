@@ -4,7 +4,7 @@ import tex2DFromData from '@/utils/gl/tex2DFromData';
 
 import thresholds from '../dither/thresholdMaps';
 import makeRandomThreshold from '../dither/thresholdMaps/makeRandomThreshold';
-import { RenderSettings } from '../renderers/use-gl-renderer';
+import { RenderSettings } from './use-render-settings';
 
 export default function useThresholdMap(
   gl: WebGL2RenderingContext | null,

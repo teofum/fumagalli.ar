@@ -1,26 +1,18 @@
 import { useMemo } from 'react';
 
-import { useAppState } from '@/components/desktop/Window/context';
 import createShader from '@/utils/gl/createShader';
 import linkProgram from '@/utils/gl/linkProgram';
 
-import { gpuProcess } from '../process';
-import { PaletteData } from './use-palette';
-import { RenderSettings } from '../renderers/use-gl-renderer';
 import shaders from '../dither/shaders';
+import { PaletteData } from './use-palette';
+import { RenderSettings } from './use-render-settings';
 
 export default function useWebGLProgram(
   gl: WebGL2RenderingContext | null,
   palette: PaletteData,
   settings: RenderSettings,
+  shader: string,
 ) {
-  const [state] = useAppState('dither');
-
-  const shader = useMemo(
-    () => gpuProcess[state.process].shader,
-    [state.process],
-  );
-
   const program = useMemo(() => {
     if (!gl) return null;
 

@@ -1,13 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import useGlRenderer from '@/components/apps/dither-lab/renderers/use-gl-renderer';
-import DemoImageBase from '../dither/DemoImageBase';
-import { ToggleGroup, ToggleButton } from '@/components/ui/ToggleGroup';
-import Switch from '@/components/ui/Switch';
-import Slider from '@/components/ui/Slider';
+
 import NicePalette from '@/components/apps/dither-lab/dither/palettes/NicePalette';
+import thresholds from '@/components/apps/dither-lab/dither/thresholdMaps';
 import { mapFns } from '@/components/apps/dither-lab/process';
+import { useGlDemoRenderer } from '@/components/apps/dither-lab/renderers/use-gl-renderer';
+import Slider from '@/components/ui/Slider';
+import Switch from '@/components/ui/Switch';
+import { ToggleButton, ToggleGroup } from '@/components/ui/ToggleGroup';
+
+import DemoImageBase from '../dither/DemoImageBase';
 
 const shader = `
 precision mediump float;
@@ -125,12 +128,12 @@ const DemoOrdered = ({
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const [img, setImg] = useState<HTMLImageElement | null>(null);
 
-  const { render } = useGlRenderer(
+  const { render } = useGlDemoRenderer(
     canvas,
     img,
     shader,
     NicePalette,
-    { threshold: `${type}${size}` as any },
+    { threshold: `${type}${size}` as keyof typeof thresholds },
     {
       u_gamma: 2.2,
       u_useGamma: gamma ? 1 : 0,
@@ -139,6 +142,7 @@ const DemoOrdered = ({
   );
   useEffect(() => {
     if (canvas && img) {
+      // eslint-disable-next-line react-hooks/immutability
       canvas.width = img.offsetWidth;
       canvas.height = img.offsetHeight;
     }

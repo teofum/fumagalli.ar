@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import DemoImageBase, { NULL_PALETTE } from './DemoImageBase';
-import useGlRenderer from '@/components/apps/dither-lab/renderers/use-gl-renderer';
-import { ToggleButton, ToggleGroup } from '@/components/ui/ToggleGroup';
+
+import { useGlDemoRenderer } from '@/components/apps/dither-lab/renderers/use-gl-renderer';
 import Switch from '@/components/ui/Switch';
+import { ToggleButton, ToggleGroup } from '@/components/ui/ToggleGroup';
+
+import DemoImageBase, { NULL_PALETTE } from './DemoImageBase';
 
 const shader = `
 precision mediump float;
@@ -58,7 +60,7 @@ export default function DemoPatternImage({
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const [img, setImg] = useState<HTMLImageElement | null>(null);
 
-  const { render } = useGlRenderer(
+  const { render } = useGlDemoRenderer(
     canvas,
     img,
     shader,
@@ -72,6 +74,7 @@ export default function DemoPatternImage({
   );
   useEffect(() => {
     if (canvas && img) {
+      // eslint-disable-next-line react-hooks/immutability
       canvas.width = img.offsetWidth;
       canvas.height = img.offsetHeight;
     }

@@ -2,6 +2,7 @@
 
 import cn from 'classnames';
 import { useEffect, useState } from 'react';
+
 import Slider from '@/components/ui/Slider';
 
 // Precalculated random array
@@ -168,6 +169,7 @@ export default function DemoThreshold() {
           <canvas
             className="w-64 h-40"
             ref={(el) => {
+              // eslint-disable-next-line react-hooks/immutability
               canvas = el;
             }}
           />
