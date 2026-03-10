@@ -21,6 +21,7 @@ import { DitherLabDevice, DitherLabSettings } from './types';
 import useImage from './utils/use-image';
 import useImageUploader from './utils/use-image-uploader';
 import usePalettes from './utils/use-palettes';
+import { saveFile } from '@/utils/file';
 
 const ZOOM_STOPS = [1, 1.5, 2, 3, 4, 6, 8, 16, 32, 64];
 
@@ -51,18 +52,19 @@ export default function DitherLab() {
    */
   const download = () => {
     if (!rt || !image) return;
-    const dataUrl = rt
-      .toDataURL('image/png')
-      .replace('image/png', 'image/octet-stream');
 
-    let filename = image.meta.filename.split('.').slice(0, -1).join('.');
+    rt.toBlob((blob) => {
+      if (!blob) return;
 
-    filename = `${filename} - ${state.palette.name}.png`;
+      let filename = image.meta.filename.split('.').slice(0, -1).join('.');
+      filename = `${filename} - ${state.palette.name}.png`;
 
-    const link = document.createElement('a');
-    link.setAttribute('download', filename);
-    link.setAttribute('href', dataUrl);
-    link.click();
+      saveFile({
+        suggestedName: filename,
+        types: [{ accept: { ['image/png']: ['.png'] } }],
+        data: blob,
+      });
+    });
   };
 
   /*
