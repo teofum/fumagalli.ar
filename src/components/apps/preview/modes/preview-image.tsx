@@ -1,22 +1,23 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useAppState, useWindow } from '@/components/desktop/Window/context';
 import Menu from '@/components/ui/Menu';
 import ScrollContainer from '@/components/ui/ScrollContainer';
 import { Toolbar, ToolbarGroup } from '@/components/ui/Toolbar';
+import ZoomControls from '@/components/ui/zoom-controls';
+import useZoom from '@/hooks/use-zoom';
 import type { ImageFile } from '@/schemas/file';
 import useDesktopStore from '@/stores/desktop';
 import { useImageSize, useImageUrl } from '@/utils/sanity.image';
 
-import { MAX_INITIAL_SIZE, UI_SIZE, ZOOM_STOPS } from '../constants';
+import { MAX_INITIAL_SIZE, UI_SIZE } from '../constants';
 import type { PreviewModeProps } from '../types';
-import ZoomControls from '@/components/ui/zoom-controls';
 
 export default function PreviewImage({ commonMenu }: PreviewModeProps) {
   const { id, minWidth, minHeight } = useWindow();
   const { moveAndResize } = useDesktopStore();
 
-  const [state, setState] = useAppState('preview');
+  const [state, update] = useAppState('preview');
 
   if (state.file?._type !== 'fileImage') throw new Error('Wrong file type');
   const imageUrl = useImageUrl(state.file as ImageFile);
@@ -25,76 +26,50 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const zoom = state.zoom ?? 1;
-  const setZoom = (zoom: number) => {
-    setState({ ...state, zoom });
-  };
+  const setZoom = (zoom: number) => update({ zoom });
+  const zoom = useZoom(state.zoom ?? 1, setZoom, viewportRef, imageRef);
 
-  if (!state.zoom) {
-    // Calculate max size to autosize window
-    const { innerWidth, innerHeight } = window;
-    const maxWidth = Math.min(innerWidth / 2, MAX_INITIAL_SIZE.x);
-    const maxHeight = Math.min(innerHeight / 2, MAX_INITIAL_SIZE.y);
+  useEffect(() => {
+    if (!state.zoom) {
+      // Calculate max size to autosize window
+      const { innerWidth, innerHeight } = window;
+      const maxWidth = Math.min(innerWidth / 2, MAX_INITIAL_SIZE.x);
+      const maxHeight = Math.min(innerHeight / 2, MAX_INITIAL_SIZE.y);
 
-    if (imageWidth > maxWidth || imageHeight > maxHeight) {
-      // Zoom to fit in the max sized viewport
-      const zoomToFitWidth = maxWidth / imageWidth;
-      const zoomToFitHeight = maxHeight / imageHeight;
+      if (imageWidth > maxWidth || imageHeight > maxHeight) {
+        // Zoom to fit in the max sized viewport
+        const zoomToFitWidth = maxWidth / imageWidth;
+        const zoomToFitHeight = maxHeight / imageHeight;
 
-      setState({
-        ...state,
-        zoom: Math.min(zoomToFitWidth, zoomToFitHeight),
-      });
+        update({
+          ...state,
+          zoom: Math.min(zoomToFitWidth, zoomToFitHeight),
+        });
 
-      // Calculate actual size image ended up with
-      let actualWidth = maxWidth;
-      let actualHeight = maxHeight;
+        // Calculate actual size image ended up with
+        let actualWidth = maxWidth;
+        let actualHeight = maxHeight;
 
-      if (zoomToFitWidth < zoomToFitHeight) {
-        actualHeight = (maxWidth * imageHeight) / imageWidth;
+        if (zoomToFitWidth < zoomToFitHeight) {
+          actualHeight = (maxWidth * imageHeight) / imageWidth;
+        } else {
+          actualWidth = (maxHeight * imageWidth) / imageHeight;
+        }
+
+        // And size window to the size the image ended up with
+        moveAndResize(id, {
+          width: actualWidth + UI_SIZE.x,
+          height: actualHeight + UI_SIZE.y,
+        });
       } else {
-        actualWidth = (maxHeight * imageWidth) / imageHeight;
+        // Size window to image
+        const width = Math.max(minWidth, imageWidth + UI_SIZE.x);
+        const height = Math.max(minHeight, imageHeight + UI_SIZE.y);
+
+        moveAndResize(id, { width, height });
       }
-
-      // And size window to the size the image ended up with
-      moveAndResize(id, {
-        width: actualWidth + UI_SIZE.x,
-        height: actualHeight + UI_SIZE.y,
-      });
-    } else {
-      // Size window to image
-      const width = Math.max(minWidth, imageWidth + UI_SIZE.x);
-      const height = Math.max(minHeight, imageHeight + UI_SIZE.y);
-
-      moveAndResize(id, { width, height });
     }
-  }
-
-  const zoomOut = () => {
-    const nextZoomStop = ZOOM_STOPS.filter((stop) => stop < zoom).at(-1);
-    setZoom(nextZoomStop ?? 1);
-  };
-
-  const zoomIn = () => {
-    const nextZoomStop = ZOOM_STOPS.filter((stop) => stop > zoom).at(0);
-    setZoom(nextZoomStop ?? 1);
-  };
-
-  const zoomTo = (mode: 'fit' | 'fill') => {
-    if (!viewportRef.current || !imageRef.current) return;
-
-    const { width, height } = viewportRef.current.getBoundingClientRect();
-
-    // Account for image border and scrollbar
-    const zoomToFitWidth = (width - 18) / imageWidth;
-    const zoomToFitHeight = (height - 18) / imageHeight;
-
-    setZoom(
-      mode === 'fit'
-        ? Math.min(zoomToFitWidth, zoomToFitHeight)
-        : Math.max(zoomToFitWidth, zoomToFitHeight),
-    );
-  };
+  });
 
   return (
     <>
@@ -114,20 +89,17 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
 
           <Menu.Separator />
 
-          <Menu.Item label="Zoom to fit" onSelect={() => zoomTo('fit')} />
-          <Menu.Item label="Zoom to fill" onSelect={() => zoomTo('fill')} />
+          <Menu.Item label="Zoom to fit" onSelect={() => zoom.zoomTo('fit')} />
+          <Menu.Item
+            label="Zoom to fill"
+            onSelect={() => zoom.zoomTo('fill')}
+          />
         </Menu.Menu>
       </Menu.Bar>
 
       <ToolbarGroup>
         <Toolbar>
-          <ZoomControls
-            zoom={zoom}
-            setZoom={setZoom}
-            zoomIn={zoomIn}
-            zoomOut={zoomOut}
-            zoomTo={zoomTo}
-          />
+          <ZoomControls {...zoom} />
         </Toolbar>
       </ToolbarGroup>
 
@@ -148,10 +120,10 @@ export default function PreviewImage({ commonMenu }: PreviewModeProps) {
               src={imageUrl}
               alt={state.file.name}
               style={{
-                width: imageWidth * zoom,
-                minWidth: imageWidth * zoom,
-                height: imageHeight * zoom,
-                minHeight: imageHeight * zoom,
+                width: imageWidth * zoom.zoom,
+                minWidth: imageWidth * zoom.zoom,
+                height: imageHeight * zoom.zoom,
+                minHeight: imageHeight * zoom.zoom,
               }}
             />
           </div>

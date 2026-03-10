@@ -2,6 +2,7 @@ import { createImageUrlBuilder, SanityImageSource } from '@sanity/image-url';
 import type { ImageFile } from '@/schemas/file';
 import useSystemStore from '@/stores/system';
 import { Photo } from '@/schemas/photos';
+import { useMemo } from 'react';
 
 const imageBuilder = createImageUrlBuilder({
   projectId: 'y9lopbef',
@@ -27,17 +28,19 @@ export function getImageSize(file: ImageFile) {
 }
 
 export function useImageSize(file: ImageFile) {
-  const [originalWidth, originalHeight] = getImageSize(file);
   const {
     settings: { imageSize },
   } = useSystemStore();
 
-  const scaling = Math.min(
-    1 / Math.min(originalWidth / imageSize, originalHeight / imageSize),
-    1,
-  );
+  return useMemo(() => {
+    const [originalWidth, originalHeight] = getImageSize(file);
+    const scaling = Math.min(
+      1 / Math.min(originalWidth / imageSize, originalHeight / imageSize),
+      1,
+    );
 
-  return [originalWidth * scaling, originalHeight * scaling];
+    return [originalWidth * scaling, originalHeight * scaling];
+  }, [file, imageSize]);
 }
 
 export function useImageSize2(dims: Photo['metadata']['dimensions']) {
