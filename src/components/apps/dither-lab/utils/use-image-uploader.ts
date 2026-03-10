@@ -30,8 +30,8 @@ export default function useImageUploader() {
     // the same name are uploaded
     const hash = createHash().update(data).digest('hex');
     const imageId = url
-      ? `url__${url.replace('/', '_')}`
-      : `file__${filename}__${hash}`;
+      ? `url::${url.replaceAll('/', '_')}`
+      : `file::${filename}::${hash}`;
 
     if (!imageStore.items[imageId]) {
       imageStore.addImage(imageId, {
@@ -43,7 +43,7 @@ export default function useImageUploader() {
   };
 
   const loadImageFromURL = async (filename: string, url: string) => {
-    const imageId = `url__${url.replace('/', '_')}`;
+    const imageId = `url::${url.replaceAll('/', '_')}`;
     if (imageStore.items[imageId]) {
       update({ image: imageId });
       return;
