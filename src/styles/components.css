@@ -212,13 +212,6 @@
   @apply bg-surface bevel p-0.5;
 }
 
-@utility article {
-  /* Article components */
-  &.mdx > :not(:first-child) {
-    @apply max-w-3xl mx-auto;
-  }
-}
-
 @utility mdx {
   /* Article components */
   &.article > :not(:first-child) {
@@ -244,7 +237,6 @@
 }
 
 @layer components {
-
   @keyframes menu-slide-down {
     0% {
       transform: translateY(-100%);

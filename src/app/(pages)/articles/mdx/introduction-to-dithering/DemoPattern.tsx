@@ -74,6 +74,7 @@ export default function DemoPattern({
         <canvas
           className="w-48 h-48"
           ref={(el) => {
+            // eslint-disable-next-line react-hooks/immutability
             canvas = el;
           }}
         />

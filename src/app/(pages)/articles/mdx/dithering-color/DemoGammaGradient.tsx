@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Slider from '@/components/ui/Slider';
 import { useGlDemoRenderer } from '@/components/apps/dither-lab/renderers/use-gl-renderer';
 
-import { NULL_PALETTE } from '../dither/DemoImageBase';
+import { NULL_PALETTE } from '../introduction-to-dithering/DemoImageBase';
 
 const shader = `
 precision mediump float;

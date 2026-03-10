@@ -4,40 +4,30 @@ import { useEffect, useState } from 'react';
 
 import NicePalette from '@/components/apps/dither-lab/dither/palettes/NicePalette';
 import thresholds from '@/components/apps/dither-lab/dither/thresholdMaps';
+import { mapFns } from '@/components/apps/dither-lab/process';
 import { useGlDemoRenderer } from '@/components/apps/dither-lab/renderers/use-gl-renderer';
 import Slider from '@/components/ui/Slider';
 import Switch from '@/components/ui/Switch';
 import { ToggleButton, ToggleGroup } from '@/components/ui/ToggleGroup';
 
-import DemoImageBase from '../dither/DemoImageBase';
+import DemoImageBase from '../introduction-to-dithering/DemoImageBase';
 
 const shader = `
 precision mediump float;
 
 #define PALETTE_SIZE $ // $ is replaced in JS before compiling
+#define CLIST_SIZE % // Candidate list size, higher is better quality but slower
 
 uniform vec3 u_palette[PALETTE_SIZE];
 uniform vec2 u_texSize;
 uniform float u_gamma;
+uniform float u_useGamma;
 uniform sampler2D u_image;
 uniform sampler2D u_threshold;
 uniform float u_thres_size;
-uniform float u_variance;
-uniform float u_enableMixPenalty;
-uniform float u_enableRMH;
+uniform float u_err_mult;
 
 varying vec2 v_texCoord;
-
-struct ColorMix {
-  vec3 color1;
-  vec3 color2;
-  float ratio;
-};
-
-float mixError(vec3 target, vec3 cmix, float compDist, float rmh) {
-  return length(target - cmix)
-    + compDist * (abs(rmh) + 0.5) * float(PALETTE_SIZE) / (10.0 * pow(2.0, u_variance));
-}
 
 vec3 gamma(vec3 color) {
   return vec3(
@@ -56,49 +46,60 @@ vec3 ungamma(vec3 color) {
   );
 }
 
+float compare(vec3 c1, vec3 c2) {
+  return length(c1 - c2);
+}
+
+float luma(vec3 color) {
+  return color.x * 0.299 + color.y * 0.587 + color.z * 0.114;
+}
+
 void main() {
   vec2 thresholdCoord = fract(v_texCoord * u_texSize / u_thres_size);
   float threshold = texture2D(u_threshold, thresholdCoord).x;
 
   vec3 color = texture2D(u_image, v_texCoord).xyz;
+  if (u_useGamma > 0.0) color = gamma(color);
 
-  vec3 cmix = vec3(0.0);
-  vec3 c1 = vec3(0.0);
-  vec3 c2 = vec3(0.0);
-  vec3 g1 = vec3(0.0);
-  vec3 g2 = vec3(0.0);
-  ColorMix bestMix = ColorMix(vec3(0.0), vec3(0.0), 0.33);
-  float minError = 999999999.0; // absurdly large number
+  vec3 error = vec3(0.0);
+  vec3 clist[CLIST_SIZE];
+  for (int i = 0; i < CLIST_SIZE; i++) {
+    vec3 target = color + error * u_err_mult;
+    vec3 candidate = vec3(0.0);
+    float dMin = 999999999.0; // Absurdly large number
 
-  for(int i1 = 0; i1 < PALETTE_SIZE; i1++) {
-    for(int i2 = 0; i2 < PALETTE_SIZE; i2++) {
-      if(i2 < i1)
-        continue;
-
-      c1 = u_palette[i1];
-      c2 = u_palette[i2];
-
-      g1 = gamma(c1);
-      g2 = gamma(c2);
-
-      for(int ratio = 0; ratio < 64; ratio++) {
-        if(i1 == i2 && ratio > 0)
-          break;
-        float r64 = float(ratio) / 64.0;
-        cmix = g1 + r64 * (g2 - g1);
-
-        float cdist = length(c2 - c1) * u_enableMixPenalty;
-        float rmh = u_enableRMH == 1.0 ? r64 - 0.5 : 0.5;
-        float error = mixError(color, ungamma(cmix), cdist, rmh);
-        if(error < minError) {
-          minError = error;
-          bestMix = ColorMix(c1, c2, r64);
-        }
+    for (int j = 0; j < PALETTE_SIZE; j++) {
+      vec3 test = u_palette[j];
+      if (u_useGamma > 0.0) test = gamma(test);
+      float d = compare(target, test);
+      if (d < dMin) {
+        dMin = d;
+        candidate = test;
       }
+    }
+
+    clist[i] = candidate;
+    error += color - candidate;
+  }
+
+  for (int i = 1; i < CLIST_SIZE; i++) {
+    for (int j = CLIST_SIZE; j > 0; j--) {
+      if (j > i) continue;
+      if (luma(clist[j-1]) <= luma(clist[j])) break;
+      vec3 temp = clist[j-1];
+      clist[j-1] = clist[j];
+      clist[j] = temp;
     }
   }
 
-  color = threshold < bestMix.ratio ? bestMix.color2 : bestMix.color1;
+  int index = int(threshold * float(CLIST_SIZE));
+  if (threshold == 1.0) index = CLIST_SIZE - 1;
+
+  for (int i = 0; i < CLIST_SIZE; i++) {
+    if (i == index) color = clist[i];
+  }
+
+  if (u_useGamma > 0.0) color = ungamma(color);
 
   gl_FragColor = vec4(color, 1.0);
 }`;
@@ -107,25 +108,22 @@ interface DemoOrderedProps {
   type: 'bayer' | 'blueNoise' | 'halftone';
   sizes?: { name: string; value: string }[];
   initial?: string;
-  gammaSlider?: boolean;
-  useVariance?: boolean;
-  useRatio?: boolean;
   imageUrl?: string;
+  gamma?: boolean;
+  errorSlider?: boolean;
 }
 
 const DemoOrdered = ({
   type,
   sizes,
   initial,
-  gammaSlider = false,
-  useVariance = false,
-  useRatio = false,
   imageUrl,
+  gamma = false,
+  errorSlider = false,
 }: DemoOrderedProps) => {
   const [size, setSize] = useState(initial ?? '8');
   const [original, setOriginal] = useState(false);
-  const [gamma, setGamma] = useState(2.2);
-  const [variance, setVariance] = useState(3);
+  const [errorCoeff, setErrorCoeff] = useState(5);
 
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const [img, setImg] = useState<HTMLImageElement | null>(null);
@@ -137,10 +135,9 @@ const DemoOrdered = ({
     NicePalette,
     { threshold: `${type}${size}` as keyof typeof thresholds },
     {
-      u_gamma: gamma,
-      u_variance: variance,
-      u_enableMixPenalty: useVariance ? 1 : 0,
-      u_enableRMH: useRatio ? 1 : 0,
+      u_gamma: 2.2,
+      u_useGamma: gamma ? 1 : 0,
+      u_err_mult: mapFns.dither(errorCoeff),
     },
   );
   useEffect(() => {
@@ -182,28 +179,17 @@ const DemoOrdered = ({
         </label>
       )}
 
-      {gammaSlider && (
+      {errorSlider && (
         <label className="demo-label">
-          <span className="w-16">gamma={gamma.toFixed(2)}</span>
-          <Slider
-            min={1}
-            max={4.5}
-            step={0.05}
-            value={gamma}
-            onValueChange={setGamma}
-          />
-        </label>
-      )}
-
-      {useVariance && (
-        <label className="demo-label">
-          <span className="w-16">var={variance.toFixed(2)}</span>
+          <span className="w-16">
+            ec={mapFns.dither(errorCoeff).toFixed(2)}
+          </span>
           <Slider
             min={0}
-            max={10}
-            step={0.05}
-            value={variance}
-            onValueChange={setVariance}
+            max={9}
+            step={1}
+            value={errorCoeff}
+            onValueChange={setErrorCoeff}
           />
         </label>
       )}

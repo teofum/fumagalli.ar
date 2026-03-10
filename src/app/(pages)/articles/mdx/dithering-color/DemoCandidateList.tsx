@@ -11,7 +11,7 @@ import { getPaletteColor } from '@/components/apps/dither-lab/dither/utils/palet
 import { useGlDemoRenderer } from '@/components/apps/dither-lab/renderers/use-gl-renderer';
 import ColorPicker from '@/components/ui/ColorPicker';
 
-import DemoImageBase from '../dither/DemoImageBase';
+import DemoImageBase from '../introduction-to-dithering/DemoImageBase';
 
 const shader = `
 precision mediump float;
