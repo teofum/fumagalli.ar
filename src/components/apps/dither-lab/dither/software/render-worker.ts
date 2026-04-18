@@ -1,5 +1,5 @@
 import type softwareRenderProcess from '.';
-import type { Palette } from '../palettes/types';
+import type { Palette } from '../../../../../utils/palettes/types';
 
 enum RenderEvent {
   Progress,

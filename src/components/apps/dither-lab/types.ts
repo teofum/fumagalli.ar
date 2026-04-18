@@ -1,8 +1,5 @@
-import Win4bRGBI from '@/components/apps/dither-lab/dither/palettes/Win4bRGBI';
-import {
-  type Palette,
-  PaletteGroup,
-} from '@/components/apps/dither-lab/dither/palettes/types';
+import Win4bRGBI from '@/utils/palettes/Win4bRGBI';
+import { type Palette, PaletteGroup } from '@/utils/palettes/types';
 
 export enum DitherLabDevice {
   GL = 'WebGL',

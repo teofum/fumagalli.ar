@@ -4,13 +4,13 @@ import { useAppState } from '@/components/desktop/Window/context';
 import { useAppSettings } from '@/hooks/use-app-settings';
 
 import { generatePalette } from '../dither/paletteGen/PaletteGenerator';
-import palettes from '../dither/palettes';
+import palettes from '../../../../utils/palettes';
 import {
   type Palette,
   PaletteGroup,
   PaletteType,
-} from '../dither/palettes/types';
-import Win4bRGBI from '../dither/palettes/Win4bRGBI';
+} from '../../../../utils/palettes/types';
+import Win4bRGBI from '../../../../utils/palettes/Win4bRGBI';
 import useImage from './use-image';
 import { openFile } from '@/utils/file';
 

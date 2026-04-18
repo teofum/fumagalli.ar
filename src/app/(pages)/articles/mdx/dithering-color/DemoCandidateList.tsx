@@ -6,7 +6,7 @@ import {
   type Palette,
   PaletteGroup,
   PaletteType,
-} from '@/components/apps/dither-lab/dither/palettes/types';
+} from '@/utils/palettes/types';
 import { getPaletteColor } from '@/components/apps/dither-lab/dither/utils/palette-colors';
 import { useGlDemoRenderer } from '@/components/apps/dither-lab/renderers/use-gl-renderer';
 import ColorPicker from '@/components/ui/ColorPicker';

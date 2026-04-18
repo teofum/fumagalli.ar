@@ -1,4 +1,8 @@
-import { type Palette, PaletteGroup, PaletteType } from '../palettes/types';
+import {
+  type Palette,
+  PaletteGroup,
+  PaletteType,
+} from '../../../../../utils/palettes/types';
 import ColorNode from './ColorNode';
 import type NodeLike from './NodeLike';
 

@@ -13,7 +13,7 @@ import useRenderSettings, {
 } from '../utils/use-render-settings';
 import useThresholdMap from '../utils/use-threshold-map';
 import useWebGLProgram from '../utils/use-webgl-program';
-import { Palette } from '../dither/palettes/types';
+import { Palette } from '../../../../utils/palettes/types';
 import getPaletteColors from '../dither/utils/palette-colors';
 import useShader from '../utils/use-shader';
 

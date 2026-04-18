@@ -1,4 +1,4 @@
-import type { Palette } from '../palettes/types';
+import type { Palette } from '../../../../../utils/palettes/types';
 import type { ProgressFn } from '../software/types';
 import softwareRenderProcess from '../software';
 import { initGammaLUT } from '../utils/gamma';

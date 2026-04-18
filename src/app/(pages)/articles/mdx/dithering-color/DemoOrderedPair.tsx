@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import NicePalette from '@/components/apps/dither-lab/dither/palettes/NicePalette';
+import NicePalette from '@/utils/palettes/NicePalette';
 import thresholds from '@/components/apps/dither-lab/dither/thresholdMaps';
 import { useGlDemoRenderer } from '@/components/apps/dither-lab/renderers/use-gl-renderer';
 import Slider from '@/components/ui/Slider';

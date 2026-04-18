@@ -6,8 +6,8 @@ import Collapsible from '@/components/ui/Collapsible';
 import { Select, SelectItem } from '@/components/ui/Select';
 
 import PalettePreview from '../components/palette-preview';
-import palettes from '@/components/apps/dither-lab/dither/palettes';
-import { PaletteGroup } from '@/components/apps/dither-lab/dither/palettes/types';
+import palettes from '@/utils/palettes';
+import { PaletteGroup } from '@/utils/palettes/types';
 import { useSyncedAppSettings } from '@/hooks/use-app-settings';
 import cn from 'classnames';
 import ArrowLeft from '@/components/ui/icons/ArrowLeft';

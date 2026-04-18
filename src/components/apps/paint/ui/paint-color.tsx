@@ -1,5 +1,5 @@
 import getPaletteColors from '@/components/apps/dither-lab/dither/utils/palette-colors';
-import PaintColors from '@/components/apps/dither-lab/dither/palettes/Paint';
+import PaintColors from '@/utils/palettes/Paint';
 
 import { usePaintContext } from '../context';
 import cn from 'classnames';

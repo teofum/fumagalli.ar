@@ -1,5 +1,5 @@
 import edMatrices from '../edmatrix';
-import type { Palette } from '../palettes/types';
+import type { Palette } from '../../../../../utils/palettes/types';
 import { linear2srgb, srgb2linear } from '../utils/color-utils';
 import getPaletteColors from '../utils/palette-colors';
 import { paletteMap } from '../utils/palette-map';

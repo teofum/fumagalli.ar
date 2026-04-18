@@ -1,4 +1,4 @@
-import { type Palette, PaletteType } from '../palettes/types';
+import { type Palette, PaletteType } from '../../../../../utils/palettes/types';
 
 const getMixerColor = (palette: Palette, index: number): number[] => {
   const header = palette.data.slice(0, 4);

@@ -8,13 +8,13 @@ import {
   type Palette,
   PaletteGroup,
   PaletteType,
-} from '@/components/apps/dither-lab/dither/palettes/types';
+} from '@/utils/palettes/types';
 import getPaletteColors, {
   getPaletteSize,
 } from '@/components/apps/dither-lab/dither/utils/palette-colors';
 import Divider from '@/components/ui/Divider';
 import { useSyncedAppSettings } from '@/hooks/use-app-settings';
-import Win4bRGBI from '@/components/apps/dither-lab/dither/palettes/Win4bRGBI';
+import Win4bRGBI from '@/utils/palettes/Win4bRGBI';
 import Input from '@/components/ui/Input';
 import { useEffect, useState } from 'react';
 import ColorPicker from '@/components/ui/ColorPicker';

@@ -1,4 +1,4 @@
-import type { Palette } from '../palettes/types';
+import type { Palette } from '../../../../../utils/palettes/types';
 import thresholds from '../thresholdMaps';
 import { luma_srgb1 } from '../utils/color-utils';
 import { gammaCorrect } from '../utils/gamma';

@@ -1,4 +1,4 @@
-import type { Palette } from '../palettes/types';
+import type { Palette } from '../../../../../utils/palettes/types';
 
 export type ProgressFn = (
   current: number,
