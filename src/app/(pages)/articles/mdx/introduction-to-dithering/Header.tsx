@@ -11,7 +11,7 @@ export default function Header() {
       <div className="bg-default/50 p-4 pt-6 backdrop-blur-xs">
         <div className="max-w-lg mx-auto">
           <h1 className="font-title text-[1.75rem]/8 sm:text-content-4xl">
-            A Visual Introduction to
+            A Visual Introduction to<span className="sr-only"> dithering</span>
             <div
               className="
                 w-full aspect-188/41 bg-current my-4
