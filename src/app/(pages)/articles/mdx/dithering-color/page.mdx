@@ -12,6 +12,12 @@ import DemoOrderedPattern from './DemoOrderedPattern';
 import DemoCandidateList from './DemoCandidateList';
 import Header from './Header';
 
+export const metadata = {
+  title: 'Introduction to dithering in color — Teo Fumagalli',
+  description:
+    'This follow-up article explains how dithering can be made to work with arbitrary color palettes.',
+};
+
 <Header />
 
 In the [first part](/articles/dither) of this series, we learned what dithering is, why we might want to use it, and a few different ways to apply dithering to an image. So far we've only seen pure black and white implementations. In this article we'll dive deeper into proper implementation of dithering algorithms, taking a look at some issues we skipped over last time and the color versions of these algorithms.

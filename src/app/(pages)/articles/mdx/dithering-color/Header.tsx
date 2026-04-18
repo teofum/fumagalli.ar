@@ -14,6 +14,7 @@ export default function Header() {
         <div className="max-w-lg mx-auto">
           <h1 className="font-title text-[1.75rem]/8 sm:text-content-3xl">
             A Visual Introduction to dithering in
+            <span className="sr-only"> color</span>
             <img
               src="/fs/Documents/Articles/assets/dither2/title.png"
               alt="Color Dithering"
